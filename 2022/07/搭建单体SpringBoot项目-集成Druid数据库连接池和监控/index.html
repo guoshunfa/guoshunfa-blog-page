@@ -1,0 +1,747 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+  <meta charset="utf-8">
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-transform" />
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="format-detection" content="telephone=no,email=no,adress=no">
+  <!-- Color theme for statusbar -->
+  <meta name="theme-color" content="#000000" />
+  <!-- 强制页面在当前窗口以独立页面显示,防止别人在框架里调用页面 -->
+  <meta http-equiv="window-target" content="_top" />
+  
+  
+  <title>搭建单体SpringBoot项目 集成Druid数据库连接池和监控 | guoshunfa</title>
+  <meta name="description" content="druid 官网github地址  Druid Spring Boot Starter 用于帮助你在Spring Boot项目中轻松集成Druid数据库连接池和监控。 如何使用 在 Spring Boot 项目中加入druid-spring-boot-starter依赖 (点击查询最新版本)  Maven  12345&lt;dependency&gt;   &lt;groupId&gt;com">
+<meta property="og:type" content="article">
+<meta property="og:title" content="搭建单体SpringBoot项目 集成Druid数据库连接池和监控">
+<meta property="og:url" content="https://guoshunfa.com/2022/07/%E6%90%AD%E5%BB%BA%E5%8D%95%E4%BD%93SpringBoot%E9%A1%B9%E7%9B%AE-%E9%9B%86%E6%88%90Druid%E6%95%B0%E6%8D%AE%E5%BA%93%E8%BF%9E%E6%8E%A5%E6%B1%A0%E5%92%8C%E7%9B%91%E6%8E%A7/index.html">
+<meta property="og:site_name" content="guoshunfa">
+<meta property="og:description" content="druid 官网github地址  Druid Spring Boot Starter 用于帮助你在Spring Boot项目中轻松集成Druid数据库连接池和监控。 如何使用 在 Spring Boot 项目中加入druid-spring-boot-starter依赖 (点击查询最新版本)  Maven  12345&lt;dependency&gt;   &lt;groupId&gt;com">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://file.pandacode.cn/blog/202211031429633.jpg">
+<meta property="article:published_time" content="2022-07-01T04:01:01.000Z">
+<meta property="article:modified_time" content="2024-01-28T11:41:39.250Z">
+<meta property="article:author" content="guoshunfa">
+<meta property="article:tag" content="数据库">
+<meta property="article:tag" content="SpringBoot">
+<meta property="article:tag" content="集成">
+<meta property="article:tag" content="Druid">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://file.pandacode.cn/blog/202211031429633.jpg">
+  <!-- Canonical links -->
+  <link rel="canonical" href="https://guoshunfa.com/2022/07/%E6%90%AD%E5%BB%BA%E5%8D%95%E4%BD%93SpringBoot%E9%A1%B9%E7%9B%AE-%E9%9B%86%E6%88%90Druid%E6%95%B0%E6%8D%AE%E5%BA%93%E8%BF%9E%E6%8E%A5%E6%B1%A0%E5%92%8C%E7%9B%91%E6%8E%A7/index.html">
+  
+    <link rel="alternate" href="/atom.xml" title="guoshunfa" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="favicon.jpg" type="image/x-icon">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  
+  
+    <link href="//cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.3.5/dist/jquery.fancybox.min.css" rel="stylesheet">
+  
+  
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1.7.2/dist/gitalk.min.css">
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body class="main-center" itemscope itemtype="http://schema.org/WebPage">
+  <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+  <div class="slimContent">
+    <div class="navbar-header">
+      
+      
+      <div class="profile-block text-center">
+        <a id="avatar" href="https://github.com/guoshunfa" target="_blank">
+          <img class="img-circle img-rotate" src="/images/avatar.jpg" width="200" height="200">
+        </a>
+        <h2 id="name" class="hidden-xs hidden-sm">郭顺发</h2>
+        <h3 id="title" class="hidden-xs hidden-sm hidden-md">创业中......</h3>
+        <small id="location" class="text-muted hidden-xs hidden-sm"><i class="icon icon-map-marker"></i> 深圳, China</small>
+      </div>
+      
+      <div class="search" id="search-form-wrap">
+
+    <form class="search-form sidebar-form">
+        <div class="input-group">
+            <input type="text" class="search-form-input form-control" placeholder="搜索" />
+            <span class="input-group-btn">
+                <button type="submit" class="search-form-submit btn btn-flat" onclick="return false;"><i class="icon icon-search"></i></button>
+            </span>
+        </div>
+    </form>
+    <div class="ins-search">
+  <div class="ins-search-mask"></div>
+  <div class="ins-search-container">
+    <div class="ins-input-wrapper">
+      <input type="text" class="ins-search-input" placeholder="想要查找什么..." x-webkit-speech />
+      <button type="button" class="close ins-close ins-selectable" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="ins-section-wrapper">
+      <div class="ins-section-container"></div>
+    </div>
+  </div>
+</div>
+
+
+</div>
+      <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <nav id="main-navbar" class="collapse navbar-collapse" itemscope itemtype="http://schema.org/SiteNavigationElement" role="navigation">
+      <ul class="nav navbar-nav main-nav menu-highlight">
+        
+        
+        <li class="menu-item menu-item-首页">
+          <a href="/.">
+            
+            <i class="icon icon-home-fill"></i>
+            
+            <span class="menu-title">首页</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-归档">
+          <a href="/archives">
+            
+            <i class="icon icon-archives-fill"></i>
+            
+            <span class="menu-title">归档</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-分类">
+          <a href="/categories">
+            
+            <i class="icon icon-folder"></i>
+            
+            <span class="menu-title">分类</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-标签">
+          <a href="/tags">
+            
+            <i class="icon icon-tags"></i>
+            
+            <span class="menu-title">标签</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-github仓库">
+          <a href="/repository">
+            
+            <i class="icon icon-project"></i>
+            
+            <span class="menu-title">github仓库</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-工具箱">
+          <a href="/tools">
+            
+            <i class="icon icon-book-fill"></i>
+            
+            <span class="menu-title">工具箱</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-友链">
+          <a href="/links">
+            
+            <i class="icon icon-friendship"></i>
+            
+            <span class="menu-title">友链</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-关于">
+          <a href="/about">
+            
+            <i class="icon icon-cup-fill"></i>
+            
+            <span class="menu-title">关于</span>
+          </a>
+        </li>
+        
+      </ul>
+      
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/guoshunfa" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="https://gitee.com/guoshunfa" target="_blank" title="Gitee" data-toggle=tooltip data-placement=top><i class="icon icon-gitee"></i></a></li>
+        
+        <li><a href="https://juejin.cn/user/166781500267015" target="_blank" title="Juejin" data-toggle=tooltip data-placement=top><i class="icon icon-juejin"></i></a></li>
+        
+        <li><a href="https://cloud.tencent.com/developer/user/7784141" target="_blank" title="Code" data-toggle=tooltip data-placement=top><i class="icon icon-code"></i></a></li>
+        
+        <li><a href="/atom.xml" target="_blank" title="Rss" data-toggle=tooltip data-placement=top><i class="icon icon-rss"></i></a></li>
+        
+    </ul>
+
+    </nav>
+  </div>
+</header>
+
+  
+    <aside class="sidebar" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    
+      <div class="widget">
+    <h3 class="widget-title">公告</h3>
+    <div class="widget-body">
+        <div id="board">
+            <div class="content">
+                <p>欢迎来到www.guoshunfa.com。</p><hr/><a target="_blank" rel="noopener" href="https://www.oracle.com/cn/java/">前往Java官网<a/><br/><a target="_blank" rel="noopener" href="https://spring.io/">前往Spring官网<a/>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget-body">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/HTML-CSS-JavaScript/">HTML/CSS/JavaScript</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Java/">Java</a><span class="category-list-count">17</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Python/">Python</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/SpringBoot/">SpringBoot</a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Swift/">Swift</a><span class="category-list-count">29</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%88%9B%E4%B8%9A/">创业</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%A4%8D%E7%9B%98/">复盘</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%A8%B1%E4%B9%90/">娱乐</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%8A%80%E6%9C%AF/">技术</a><span class="category-list-count">27</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%8A%80%E6%9C%AF/%E6%90%AD%E5%BB%BA%E5%8D%95%E4%BD%93SpringBoot%E9%A1%B9%E7%9B%AE/">搭建单体SpringBoot项目</a><span class="category-list-count">21</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%90%AD%E5%BB%BA%E5%8D%95%E4%BD%93SpringBoot%E9%A1%B9%E7%9B%AE/">搭建单体SpringBoot项目</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/">数据库</a><span class="category-list-count">17</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%9C%8D%E5%8A%A1/">服务</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%9C%8D%E5%8A%A1-%E7%BB%84%E4%BB%B6/">服务&组件</a><span class="category-list-count">27</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%AE%A1%E7%90%86/">服务器管理</a><span class="category-list-count">21</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E7%AE%97%E6%B3%95/">算法</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E8%BD%AF%E4%BB%B6%E4%BD%BF%E7%94%A8/">软件使用</a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E8%BD%AF%E4%BB%B6%E6%8A%80%E6%9C%AF%E6%A1%86%E6%9E%B6/">软件技术框架</a><span class="category-list-count">44</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E9%98%85%E8%AF%BB/">阅读</a><span class="category-list-count">2</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget-body">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/AJAX/" rel="tag">AJAX</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Activiti7/" rel="tag">Activiti7</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Arthas/" rel="tag">Arthas</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CSS/" rel="tag">CSS</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Curl/" rel="tag">Curl</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Debug/" rel="tag">Debug</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Docker/" rel="tag">Docker</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Druid/" rel="tag">Druid</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Electron/" rel="tag">Electron</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Expect/" rel="tag">Expect</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/FastJson/" rel="tag">FastJson</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/FreeMarker/" rel="tag">FreeMarker</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Git/" rel="tag">Git</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Gitlab/" rel="tag">Gitlab</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/GitlabRunner/" rel="tag">GitlabRunner</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/HTML-CSS-JavaScript/" rel="tag">HTML&#x2F;CSS&#x2F;JavaScript</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hook/" rel="tag">Hook</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Http/" rel="tag">Http</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hutool/" rel="tag">Hutool</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/IDEA/" rel="tag">IDEA</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JS/" rel="tag">JS</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JVM/" rel="tag">JVM</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Jar/" rel="tag">Jar</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java/" rel="tag">Java</a><span class="tag-list-count">27</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Jdk/" rel="tag">Jdk</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Jenkins/" rel="tag">Jenkins</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Jmeter/" rel="tag">Jmeter</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Json/" rel="tag">Json</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Jsoup/" rel="tag">Jsoup</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Kafka/" rel="tag">Kafka</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Leetcode/" rel="tag">Leetcode</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux/" rel="tag">Linux</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Logback/" rel="tag">Logback</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Mac/" rel="tag">Mac</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Maven/" rel="tag">Maven</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MongoDB/" rel="tag">MongoDB</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MyBatis/" rel="tag">MyBatis</a><span class="tag-list-count">7</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Mybatis/" rel="tag">Mybatis</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MybatisPlus/" rel="tag">MybatisPlus</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Mysql/" rel="tag">Mysql</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Nano/" rel="tag">Nano</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Nexus/" rel="tag">Nexus</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Nginx/" rel="tag">Nginx</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Opengrok/" rel="tag">Opengrok</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Oracle/" rel="tag">Oracle</a><span class="tag-list-count">22</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Profile/" rel="tag">Profile</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/PubSubJS/" rel="tag">PubSubJS</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Python/" rel="tag">Python</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Quartz/" rel="tag">Quartz</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/RESTful/" rel="tag">RESTful</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/React/" rel="tag">React</a><span class="tag-list-count">7</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Redis/" rel="tag">Redis</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SQL/" rel="tag">SQL</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SVN/" rel="tag">SVN</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Scheduled/" rel="tag">Scheduled</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Scrapy/" rel="tag">Scrapy</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Shell/" rel="tag">Shell</a><span class="tag-list-count">9</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Spel%E8%A1%A8%E8%BE%BE%E5%BC%8F/" rel="tag">Spel表达式</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Spring/" rel="tag">Spring</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SpringBoot/" rel="tag">SpringBoot</a><span class="tag-list-count">34</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SpringEvent/" rel="tag">SpringEvent</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SpringMVC/" rel="tag">SpringMVC</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SpringSecurity/" rel="tag">SpringSecurity</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Stream/" rel="tag">Stream</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Swagger/" rel="tag">Swagger</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Swift/" rel="tag">Swift</a><span class="tag-list-count">29</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/TestNG/" rel="tag">TestNG</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Tomcat/" rel="tag">Tomcat</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/UI%E7%BB%84%E4%BB%B6%E5%BA%93/" rel="tag">UI组件库</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Validator/" rel="tag">Validator</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Vue/" rel="tag">Vue</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Vuepress/" rel="tag">Vuepress</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Wordpress/" rel="tag">Wordpress</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/XML/" rel="tag">XML</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/assert/" rel="tag">assert</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/docker/" rel="tag">docker</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/gitlab/" rel="tag">gitlab</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/homebrew/" rel="tag">homebrew</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/iframe/" rel="tag">iframe</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java/" rel="tag">java</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/lambda/" rel="tag">lambda</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/less/" rel="tag">less</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/" rel="tag">linux</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mac/" rel="tag">mac</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mybatis-plus/" rel="tag">mybatis-plus</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mysql/" rel="tag">mysql</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/oracle/" rel="tag">oracle</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/pom-xml/" rel="tag">pom.xml</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/quartz/" rel="tag">quartz</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/settings-xml/" rel="tag">settings.xml</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/spring-boot/" rel="tag">spring-boot</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ssh/" rel="tag">ssh</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sshpass/" rel="tag">sshpass</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/yum/" rel="tag">yum</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%B9%90%E8%A7%82%E9%94%81/" rel="tag">乐观锁</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BB%8B%E7%BB%8D/" rel="tag">介绍</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%86%85%E7%BD%91/" rel="tag">内网</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%86%85%E7%BD%91%E7%A9%BF%E9%80%8F/" rel="tag">内网穿透</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%8A%A0%E5%AF%86/" rel="tag">加密</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%8F%8D%E7%BC%96%E8%AF%91%E5%B7%A5%E5%85%B7/" rel="tag">反编译工具</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%9B%BE%E5%BA%8A/" rel="tag">图床</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%9F%BA%E7%A1%80/" rel="tag">基础</a><span class="tag-list-count">29</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%AD%98%E5%82%A8%E5%87%BD%E6%95%B0/" rel="tag">存储函数</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%AD%98%E5%82%A8%E8%BF%87%E7%A8%8B/" rel="tag">存储过程</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%AE%9A%E6%97%B6%E5%99%A8/" rel="tag">定时器</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%AE%9D%E5%A1%94/" rel="tag">宝塔</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%B9%B6%E5%8F%91/" rel="tag">并发</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%BC%82%E5%B8%B8/" rel="tag">异常</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%BF%83%E7%90%86/" rel="tag">心理</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%80%BB%E7%BB%93/" rel="tag">总结</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%8C%81%E4%B9%85%E5%B1%82%E6%A1%86%E6%9E%B6/" rel="tag">持久层框架</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%8E%A5%E5%8F%A3/" rel="tag">接口</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%8F%92%E4%BB%B6/" rel="tag">插件</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/" rel="tag">数据库</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%96%AD%E8%A8%80/" rel="tag">断言</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%A0%91%E8%8E%93%E6%B4%BE/" rel="tag">树莓派</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%A0%91%E8%8E%93%E6%B4%BE4B/" rel="tag">树莓派4B</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%A6%82%E5%BF%B5/" rel="tag">概念</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%A8%A1%E7%89%88%E5%BC%95%E6%93%8E/" rel="tag">模版引擎</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%B3%9B%E5%9E%8B/" rel="tag">泛型</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%B5%8B%E8%AF%95/" rel="tag">测试</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%88%AC%E8%99%AB/" rel="tag">爬虫</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%94%A8%E6%88%B7%E6%9D%83%E9%99%90%E9%AA%8C%E8%AF%81/" rel="tag">用户权限验证</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%9F%A5%E8%AF%86/" rel="tag">知识</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%AE%97%E6%B3%95/" rel="tag">算法</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%B1%BB/" rel="tag">类</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BB%84%E4%BB%B6%E5%BA%93/" rel="tag">组件库</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%84%9A%E6%9C%AC/" rel="tag">脚本</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%87%AA%E5%8A%A8%E5%8C%96%E6%B5%8B%E8%AF%95/" rel="tag">自动化测试</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%8B%A5%E4%BE%9D/" rel="tag">若依</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/" rel="tag">解决方案</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" rel="tag">设计模式</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/" rel="tag">读书笔记</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%B7%A8%E5%9F%9F/" rel="tag">跨域</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%83%A8%E7%BD%B2/" rel="tag">部署</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9B%86%E6%88%90/" rel="tag">集成</a><span class="tag-list-count">14</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1/" rel="tag">面向对象</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9F%A9%E5%89%A7/" rel="tag">韩剧</a><span class="tag-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget-body tagcloud">
+      <a href="/tags/AJAX/" style="font-size: 13px;">AJAX</a> <a href="/tags/Activiti7/" style="font-size: 13.17px;">Activiti7</a> <a href="/tags/Arthas/" style="font-size: 13px;">Arthas</a> <a href="/tags/CSS/" style="font-size: 13px;">CSS</a> <a href="/tags/Curl/" style="font-size: 13px;">Curl</a> <a href="/tags/Debug/" style="font-size: 13px;">Debug</a> <a href="/tags/Docker/" style="font-size: 13.42px;">Docker</a> <a href="/tags/Druid/" style="font-size: 13px;">Druid</a> <a href="/tags/Electron/" style="font-size: 13.08px;">Electron</a> <a href="/tags/Expect/" style="font-size: 13px;">Expect</a> <a href="/tags/FastJson/" style="font-size: 13px;">FastJson</a> <a href="/tags/FreeMarker/" style="font-size: 13px;">FreeMarker</a> <a href="/tags/Git/" style="font-size: 13.08px;">Git</a> <a href="/tags/Gitlab/" style="font-size: 13.25px;">Gitlab</a> <a href="/tags/GitlabRunner/" style="font-size: 13.08px;">GitlabRunner</a> <a href="/tags/HTML-CSS-JavaScript/" style="font-size: 13.17px;">HTML/CSS/JavaScript</a> <a href="/tags/Hook/" style="font-size: 13px;">Hook</a> <a href="/tags/Http/" style="font-size: 13px;">Http</a> <a href="/tags/Hutool/" style="font-size: 13px;">Hutool</a> <a href="/tags/IDEA/" style="font-size: 13.25px;">IDEA</a> <a href="/tags/JS/" style="font-size: 13.08px;">JS</a> <a href="/tags/JVM/" style="font-size: 13px;">JVM</a> <a href="/tags/Jar/" style="font-size: 13.08px;">Jar</a> <a href="/tags/Java/" style="font-size: 13.83px;">Java</a> <a href="/tags/Jdk/" style="font-size: 13px;">Jdk</a> <a href="/tags/Jenkins/" style="font-size: 13px;">Jenkins</a> <a href="/tags/Jmeter/" style="font-size: 13px;">Jmeter</a> <a href="/tags/Json/" style="font-size: 13px;">Json</a> <a href="/tags/Jsoup/" style="font-size: 13px;">Jsoup</a> <a href="/tags/Kafka/" style="font-size: 13.25px;">Kafka</a> <a href="/tags/Leetcode/" style="font-size: 13.33px;">Leetcode</a> <a href="/tags/Linux/" style="font-size: 13px;">Linux</a> <a href="/tags/Logback/" style="font-size: 13px;">Logback</a> <a href="/tags/Mac/" style="font-size: 13px;">Mac</a> <a href="/tags/Maven/" style="font-size: 13.42px;">Maven</a> <a href="/tags/MongoDB/" style="font-size: 13.42px;">MongoDB</a> <a href="/tags/MyBatis/" style="font-size: 13.5px;">MyBatis</a> <a href="/tags/Mybatis/" style="font-size: 13.17px;">Mybatis</a> <a href="/tags/MybatisPlus/" style="font-size: 13.08px;">MybatisPlus</a> <a href="/tags/Mysql/" style="font-size: 13.25px;">Mysql</a> <a href="/tags/Nano/" style="font-size: 13px;">Nano</a> <a href="/tags/Nexus/" style="font-size: 13.08px;">Nexus</a> <a href="/tags/Nginx/" style="font-size: 13.08px;">Nginx</a> <a href="/tags/Opengrok/" style="font-size: 13px;">Opengrok</a> <a href="/tags/Oracle/" style="font-size: 13.75px;">Oracle</a> <a href="/tags/Profile/" style="font-size: 13px;">Profile</a> <a href="/tags/PubSubJS/" style="font-size: 13px;">PubSubJS</a> <a href="/tags/Python/" style="font-size: 13.17px;">Python</a> <a href="/tags/Quartz/" style="font-size: 13.08px;">Quartz</a> <a href="/tags/RESTful/" style="font-size: 13px;">RESTful</a> <a href="/tags/React/" style="font-size: 13.5px;">React</a> <a href="/tags/Redis/" style="font-size: 13.17px;">Redis</a> <a href="/tags/SQL/" style="font-size: 13.25px;">SQL</a> <a href="/tags/SVN/" style="font-size: 13px;">SVN</a> <a href="/tags/Scheduled/" style="font-size: 13px;">Scheduled</a> <a href="/tags/Scrapy/" style="font-size: 13px;">Scrapy</a> <a href="/tags/Shell/" style="font-size: 13.58px;">Shell</a> <a href="/tags/Spel%E8%A1%A8%E8%BE%BE%E5%BC%8F/" style="font-size: 13px;">Spel表达式</a> <a href="/tags/Spring/" style="font-size: 13.33px;">Spring</a> <a href="/tags/SpringBoot/" style="font-size: 14px;">SpringBoot</a> <a href="/tags/SpringEvent/" style="font-size: 13px;">SpringEvent</a> <a href="/tags/SpringMVC/" style="font-size: 13px;">SpringMVC</a> <a href="/tags/SpringSecurity/" style="font-size: 13.17px;">SpringSecurity</a> <a href="/tags/Stream/" style="font-size: 13px;">Stream</a> <a href="/tags/Swagger/" style="font-size: 13.08px;">Swagger</a> <a href="/tags/Swift/" style="font-size: 13.92px;">Swift</a> <a href="/tags/TestNG/" style="font-size: 13px;">TestNG</a> <a href="/tags/Tomcat/" style="font-size: 13px;">Tomcat</a> <a href="/tags/UI%E7%BB%84%E4%BB%B6%E5%BA%93/" style="font-size: 13px;">UI组件库</a> <a href="/tags/Validator/" style="font-size: 13px;">Validator</a> <a href="/tags/Vue/" style="font-size: 13px;">Vue</a> <a href="/tags/Vuepress/" style="font-size: 13.25px;">Vuepress</a> <a href="/tags/Wordpress/" style="font-size: 13px;">Wordpress</a> <a href="/tags/XML/" style="font-size: 13px;">XML</a> <a href="/tags/assert/" style="font-size: 13px;">assert</a> <a href="/tags/docker/" style="font-size: 13px;">docker</a> <a href="/tags/gitlab/" style="font-size: 13px;">gitlab</a> <a href="/tags/homebrew/" style="font-size: 13px;">homebrew</a> <a href="/tags/iframe/" style="font-size: 13px;">iframe</a> <a href="/tags/java/" style="font-size: 13px;">java</a> <a href="/tags/lambda/" style="font-size: 13px;">lambda</a> <a href="/tags/less/" style="font-size: 13px;">less</a> <a href="/tags/linux/" style="font-size: 13.25px;">linux</a> <a href="/tags/mac/" style="font-size: 13.25px;">mac</a> <a href="/tags/mybatis-plus/" style="font-size: 13px;">mybatis-plus</a> <a href="/tags/mysql/" style="font-size: 13px;">mysql</a> <a href="/tags/oracle/" style="font-size: 13px;">oracle</a> <a href="/tags/pom-xml/" style="font-size: 13px;">pom.xml</a> <a href="/tags/quartz/" style="font-size: 13px;">quartz</a> <a href="/tags/settings-xml/" style="font-size: 13px;">settings.xml</a> <a href="/tags/spring-boot/" style="font-size: 13px;">spring-boot</a> <a href="/tags/ssh/" style="font-size: 13px;">ssh</a> <a href="/tags/sshpass/" style="font-size: 13px;">sshpass</a> <a href="/tags/yum/" style="font-size: 13px;">yum</a> <a href="/tags/%E4%B9%90%E8%A7%82%E9%94%81/" style="font-size: 13px;">乐观锁</a> <a href="/tags/%E4%BB%8B%E7%BB%8D/" style="font-size: 13px;">介绍</a> <a href="/tags/%E5%86%85%E7%BD%91/" style="font-size: 13px;">内网</a> <a href="/tags/%E5%86%85%E7%BD%91%E7%A9%BF%E9%80%8F/" style="font-size: 13px;">内网穿透</a> <a href="/tags/%E5%8A%A0%E5%AF%86/" style="font-size: 13.08px;">加密</a> <a href="/tags/%E5%8F%8D%E7%BC%96%E8%AF%91%E5%B7%A5%E5%85%B7/" style="font-size: 13px;">反编译工具</a> <a href="/tags/%E5%9B%BE%E5%BA%8A/" style="font-size: 13px;">图床</a> <a href="/tags/%E5%9F%BA%E7%A1%80/" style="font-size: 13.92px;">基础</a> <a href="/tags/%E5%AD%98%E5%82%A8%E5%87%BD%E6%95%B0/" style="font-size: 13px;">存储函数</a> <a href="/tags/%E5%AD%98%E5%82%A8%E8%BF%87%E7%A8%8B/" style="font-size: 13.08px;">存储过程</a> <a href="/tags/%E5%AE%9A%E6%97%B6%E5%99%A8/" style="font-size: 13px;">定时器</a> <a href="/tags/%E5%AE%9D%E5%A1%94/" style="font-size: 13.08px;">宝塔</a> <a href="/tags/%E5%B9%B6%E5%8F%91/" style="font-size: 13px;">并发</a> <a href="/tags/%E5%BC%82%E5%B8%B8/" style="font-size: 13px;">异常</a> <a href="/tags/%E5%BF%83%E7%90%86/" style="font-size: 13.08px;">心理</a> <a href="/tags/%E6%80%BB%E7%BB%93/" style="font-size: 13px;">总结</a> <a href="/tags/%E6%8C%81%E4%B9%85%E5%B1%82%E6%A1%86%E6%9E%B6/" style="font-size: 13.17px;">持久层框架</a> <a href="/tags/%E6%8E%A5%E5%8F%A3/" style="font-size: 13px;">接口</a> <a href="/tags/%E6%8F%92%E4%BB%B6/" style="font-size: 13px;">插件</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/" style="font-size: 13.33px;">数据库</a> <a href="/tags/%E6%96%AD%E8%A8%80/" style="font-size: 13px;">断言</a> <a href="/tags/%E6%A0%91%E8%8E%93%E6%B4%BE/" style="font-size: 13.08px;">树莓派</a> <a href="/tags/%E6%A0%91%E8%8E%93%E6%B4%BE4B/" style="font-size: 13px;">树莓派4B</a> <a href="/tags/%E6%A6%82%E5%BF%B5/" style="font-size: 13px;">概念</a> <a href="/tags/%E6%A8%A1%E7%89%88%E5%BC%95%E6%93%8E/" style="font-size: 13px;">模版引擎</a> <a href="/tags/%E6%B3%9B%E5%9E%8B/" style="font-size: 13.08px;">泛型</a> <a href="/tags/%E6%B5%8B%E8%AF%95/" style="font-size: 13.33px;">测试</a> <a href="/tags/%E7%88%AC%E8%99%AB/" style="font-size: 13.08px;">爬虫</a> <a href="/tags/%E7%94%A8%E6%88%B7%E6%9D%83%E9%99%90%E9%AA%8C%E8%AF%81/" style="font-size: 13px;">用户权限验证</a> <a href="/tags/%E7%9F%A5%E8%AF%86/" style="font-size: 13px;">知识</a> <a href="/tags/%E7%AE%97%E6%B3%95/" style="font-size: 13.08px;">算法</a> <a href="/tags/%E7%B1%BB/" style="font-size: 13px;">类</a> <a href="/tags/%E7%BB%84%E4%BB%B6%E5%BA%93/" style="font-size: 13px;">组件库</a> <a href="/tags/%E8%84%9A%E6%9C%AC/" style="font-size: 13.25px;">脚本</a> <a href="/tags/%E8%87%AA%E5%8A%A8%E5%8C%96%E6%B5%8B%E8%AF%95/" style="font-size: 13px;">自动化测试</a> <a href="/tags/%E8%8B%A5%E4%BE%9D/" style="font-size: 13px;">若依</a> <a href="/tags/%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/" style="font-size: 13.08px;">解决方案</a> <a href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" style="font-size: 13px;">设计模式</a> <a href="/tags/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/" style="font-size: 13.08px;">读书笔记</a> <a href="/tags/%E8%B7%A8%E5%9F%9F/" style="font-size: 13px;">跨域</a> <a href="/tags/%E9%83%A8%E7%BD%B2/" style="font-size: 13px;">部署</a> <a href="/tags/%E9%9B%86%E6%88%90/" style="font-size: 13.67px;">集成</a> <a href="/tags/%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1/" style="font-size: 13px;">面向对象</a> <a href="/tags/%E9%9F%A9%E5%89%A7/" style="font-size: 13px;">韩剧</a>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget-body">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/07/">七月 2024</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/07/">七月 2023</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/06/">六月 2023</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/01/">一月 2023</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/11/">十一月 2022</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/10/">十月 2022</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/07/">七月 2022</a><span class="archive-list-count">181</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/06/">六月 2022</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/07/">七月 2020</a><span class="archive-list-count">17</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget-body">
+      <ul class="recent-post-list list-unstyled ">
+        
+          <li>
+            
+            <div class="item-thumb">
+              <a href="/2024/07/%E4%B8%8D%E5%8D%B7%E5%AD%A6%E5%8E%86%E5%92%8C%E8%83%8C%E6%99%AF%E7%9A%84%E8%B5%9B%E9%81%93%EF%BC%8C%E4%B9%9F%E8%83%BD%E6%9C%88%E5%85%A5%E8%BF%87%E4%B8%87%EF%BC%9F/" class="thumb">
+    
+    
+        <span class="thumb-image thumb-none"></span>
+    
+</a>
+
+            </div>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/%E5%88%9B%E4%B8%9A/">创业</a>
+              </p>
+              <p class="item-title">
+                <a href="/2024/07/%E4%B8%8D%E5%8D%B7%E5%AD%A6%E5%8E%86%E5%92%8C%E8%83%8C%E6%99%AF%E7%9A%84%E8%B5%9B%E9%81%93%EF%BC%8C%E4%B9%9F%E8%83%BD%E6%9C%88%E5%85%A5%E8%BF%87%E4%B8%87%EF%BC%9F/" class="title">不卷学历和背景的赛道，也能月入过万？</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2024-07-11T05:45:20.000Z" itemprop="datePublished">2024-07-11</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-thumb">
+              <a href="/2024/07/%E5%9B%9E%E9%A1%BE%E5%B7%A5%E4%BD%9C%E8%BF%99%E5%87%A0%E5%B9%B4/" class="thumb">
+    
+    
+        <span class="thumb-image thumb-none"></span>
+    
+</a>
+
+            </div>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/%E5%A4%8D%E7%9B%98/">复盘</a>
+              </p>
+              <p class="item-title">
+                <a href="/2024/07/%E5%9B%9E%E9%A1%BE%E5%B7%A5%E4%BD%9C%E8%BF%99%E5%87%A0%E5%B9%B4/" class="title">回顾工作这几年</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2024-07-09T06:19:23.000Z" itemprop="datePublished">2024-07-09</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-thumb">
+              <a href="/2023/07/SpringBoot3%E9%9B%86%E6%88%90Quartz%E6%9E%81%E7%AE%80%E7%89%88/" class="thumb">
+    
+    
+        <span style="background-image:url(/2023/07/SpringBoot3集成Quartz极简版/logo-quartz-scheduler.png)" alt="SpringBoot3集成Quartz极简版" class="thumb-image"></span>
+    
+</a>
+
+            </div>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/SpringBoot/">SpringBoot</a>
+              </p>
+              <p class="item-title">
+                <a href="/2023/07/SpringBoot3%E9%9B%86%E6%88%90Quartz%E6%9E%81%E7%AE%80%E7%89%88/" class="title">SpringBoot3集成Quartz极简版</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2023-07-18T01:14:01.000Z" itemprop="datePublished">2023-07-18</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-thumb">
+              <a href="/2023/07/SpringBoot3%E9%9B%86%E6%88%90Quartz%E8%AF%A6%E7%BB%86%E7%89%88/" class="thumb">
+    
+    
+        <span style="background-image:url(/2023/07/SpringBoot3集成Quartz极简版/logo-quartz-scheduler.png)" alt="SpringBoot3集成Quartz详细版" class="thumb-image"></span>
+    
+</a>
+
+            </div>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/SpringBoot/">SpringBoot</a>
+              </p>
+              <p class="item-title">
+                <a href="/2023/07/SpringBoot3%E9%9B%86%E6%88%90Quartz%E8%AF%A6%E7%BB%86%E7%89%88/" class="title">SpringBoot3集成Quartz详细版</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2023-07-18T01:14:01.000Z" itemprop="datePublished">2023-07-18</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-thumb">
+              <a href="/2023/07/SpringBoot3%E9%9B%86%E6%88%90Swagger/" class="thumb">
+    
+    
+        <span style="background-image:url(/2023/07/SpringBoot3集成Swagger/swagger_logo.svg)" alt="SpringBoot3集成Swagger" class="thumb-image"></span>
+    
+</a>
+
+            </div>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/SpringBoot/">SpringBoot</a>
+              </p>
+              <p class="item-title">
+                <a href="/2023/07/SpringBoot3%E9%9B%86%E6%88%90Swagger/" class="title">SpringBoot3集成Swagger</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2023-07-11T06:52:01.000Z" itemprop="datePublished">2023-07-11</time>
+              </p>
+            </div>
+          </li>
+          
+      </ul>
+    </div>
+  </div>
+  
+
+    
+  </div>
+</aside>
+
+  
+  
+<main class="main" role="main">
+  <div class="content">
+  <article id="post-软件开发/场景/搭建单体SpringBoot项目/24集成数据库/搭建单体SpringBoot项目-集成Druid数据库连接池和监控" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
+    
+    <div class="article-header">
+      
+        
+  
+    <h1 class="article-title" itemprop="name">
+      搭建单体SpringBoot项目 集成Druid数据库连接池和监控
+    </h1>
+  
+
+      
+      <div class="article-meta">
+        <span class="article-date">
+    <i class="icon icon-calendar-check"></i>
+	<a href="/2022/07/%E6%90%AD%E5%BB%BA%E5%8D%95%E4%BD%93SpringBoot%E9%A1%B9%E7%9B%AE-%E9%9B%86%E6%88%90Druid%E6%95%B0%E6%8D%AE%E5%BA%93%E8%BF%9E%E6%8E%A5%E6%B1%A0%E5%92%8C%E7%9B%91%E6%8E%A7/" class="article-date">
+	  <time datetime="2022-07-01T04:01:01.000Z" itemprop="datePublished">2022-07-01</time>
+	</a>
+</span>
+        
+  <span class="article-category">
+    <i class="icon icon-folder"></i>
+    <a class="article-category-link" href="/categories/%E6%8A%80%E6%9C%AF/">技术</a>►<a class="article-category-link" href="/categories/%E6%8A%80%E6%9C%AF/%E6%90%AD%E5%BB%BA%E5%8D%95%E4%BD%93SpringBoot%E9%A1%B9%E7%9B%AE/">搭建单体SpringBoot项目</a>
+  </span>
+
+        
+  <span class="article-tag">
+    <i class="icon icon-tags"></i>
+	<a class="article-tag-link-link" href="/tags/Druid/" rel="tag">Druid</a>, <a class="article-tag-link-link" href="/tags/SpringBoot/" rel="tag">SpringBoot</a>, <a class="article-tag-link-link" href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/" rel="tag">数据库</a>, <a class="article-tag-link-link" href="/tags/%E9%9B%86%E6%88%90/" rel="tag">集成</a>
+  </span>
+
+
+        
+	<span class="article-read hidden-xs">
+	    <i class="icon icon-eye-fill" aria-hidden="true"></i>
+	    <span id="busuanzi_container_page_pv">
+			<span id="busuanzi_value_page_pv">0</span>
+		</span>
+	</span>
+
+
+        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2022/07/%E6%90%AD%E5%BB%BA%E5%8D%95%E4%BD%93SpringBoot%E9%A1%B9%E7%9B%AE-%E9%9B%86%E6%88%90Druid%E6%95%B0%E6%8D%AE%E5%BA%93%E8%BF%9E%E6%8E%A5%E6%B1%A0%E5%92%8C%E7%9B%91%E6%8E%A7/#comments" class="article-comment-link">评论</a></span>
+        
+	
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">字数统计: 1.8k(字)</span>
+	
+	
+		<span class="post-readcount hidden-xs" itemprop="timeRequired">阅读时长: 8(分)</span>
+	
+
+      </div>
+    </div>
+    <div class="article-entry marked-body" itemprop="articleBody">
+      
+        <blockquote>
+<p><a target="_blank" rel="noopener" href="https://github.com/alibaba/druid">druid 官网github地址</a></p>
+</blockquote>
+<p>Druid Spring Boot Starter 用于帮助你在Spring Boot项目中轻松集成Druid数据库连接池和监控。</p>
+<h2 id="如何使用"><a href="#如何使用" class="headerlink" title="如何使用"></a>如何使用</h2><ol>
+<li><p>在 Spring Boot 项目中加入<code>druid-spring-boot-starter</code>依赖 (<a target="_blank" rel="noopener" href="https://mvnrepository.com/artifact/com.alibaba/druid-spring-boot-starter">点击查询最新版本</a>)</p>
+<p> <code>Maven</code></p>
+ <figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">   <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>com.alibaba<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">   <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>druid-spring-boot-starter<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">   <span class="tag">&lt;<span class="name">version</span>&gt;</span>1.1.17<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p> <code>Gradle</code></p>
+ <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">compile &#x27;com.alibaba:druid-spring-boot-starter:1.1.17&#x27;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>添加配置</p>
+ <figure class="highlight properties"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">spring.datasource.url</span>= <span class="string"></span></span><br><span class="line"><span class="attr">spring.datasource.username</span>=<span class="string"></span></span><br><span class="line"><span class="attr">spring.datasource.password</span>=<span class="string"></span></span><br><span class="line"><span class="comment"># ...其他配置（可选，不是必须的，使用内嵌数据库的话上述三项也可省略不填）</span></span><br></pre></td></tr></table></figure></li>
+</ol>
+<h2 id="配置属性"><a href="#配置属性" class="headerlink" title="配置属性"></a>配置属性</h2><p>Druid Spring Boot Starter 配置属性的名称完全遵照 Druid，你可以通过 Spring Boot 配置文件来配置Druid数据库连接池和监控，如果没有配置则使用默认值。</p>
+<ul>
+<li>JDBC 配置</li>
+</ul>
+<figure class="highlight properties"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 数据库地址</span></span><br><span class="line"><span class="attr">spring.datasource.druid.url</span>= <span class="string"># 或spring.datasource.url= </span></span><br><span class="line"><span class="comment"># 数据库用户名</span></span><br><span class="line"><span class="attr">spring.datasource.druid.username</span>= <span class="string"># 或spring.datasource.username=</span></span><br><span class="line"><span class="comment"># 数据库密码</span></span><br><span class="line"><span class="attr">spring.datasource.druid.password</span>= <span class="string"># 或spring.datasource.password=</span></span><br><span class="line"><span class="attr">spring.datasource.druid.driver-class-name</span>= <span class="string">#或 spring.datasource.driver-class-name=</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>连接池配置</li>
+</ul>
+<figure class="highlight properties"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 数据库连接池初始值</span></span><br><span class="line"><span class="attr">spring.datasource.druid.initial-size</span>=<span class="string"></span></span><br><span class="line"><span class="comment"># 数据库连接池最大值</span></span><br><span class="line"><span class="attr">spring.datasource.druid.max-active</span>=<span class="string"></span></span><br><span class="line"><span class="comment"># 数据库连接池最小空闲值</span></span><br><span class="line"><span class="attr">spring.datasource.druid.min-idle</span>=<span class="string"></span></span><br><span class="line"><span class="comment"># 获取连接时最大等待时间，单位毫秒(1分钟)</span></span><br><span class="line"><span class="attr">spring.datasource.druid.max-wait</span>=<span class="string"></span></span><br><span class="line"></span><br><span class="line"><span class="attr">spring.datasource.druid.pool-prepared-statements</span>=<span class="string"></span></span><br><span class="line"><span class="attr">spring.datasource.druid.max-pool-prepared-statement-per-connection-size</span>= <span class="string"></span></span><br><span class="line"><span class="attr">spring.datasource.druid.max-open-prepared-statements</span>= <span class="string">#和上面的等价</span></span><br><span class="line"><span class="attr">spring.datasource.druid.validation-query</span>=<span class="string"></span></span><br><span class="line"><span class="attr">spring.datasource.druid.validation-query-timeout</span>=<span class="string"></span></span><br><span class="line"><span class="attr">spring.datasource.druid.test-on-borrow</span>=<span class="string"></span></span><br><span class="line"><span class="attr">spring.datasource.druid.test-on-return</span>=<span class="string"></span></span><br><span class="line"><span class="attr">spring.datasource.druid.test-while-idle</span>=<span class="string"></span></span><br><span class="line"><span class="attr">spring.datasource.druid.time-between-eviction-runs-millis</span>=<span class="string"></span></span><br><span class="line"><span class="attr">spring.datasource.druid.min-evictable-idle-time-millis</span>=<span class="string"></span></span><br><span class="line"><span class="attr">spring.datasource.druid.max-evictable-idle-time-millis</span>=<span class="string"></span></span><br><span class="line"><span class="attr">spring.datasource.druid.filters</span>= <span class="string">#配置多个英文逗号分隔</span></span><br><span class="line"><span class="attr">....//more</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>监控配置</li>
+</ul>
+<figure class="highlight properties"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># WebStatFilter配置，说明请参考Druid Wiki，配置_配置WebStatFilter</span></span><br><span class="line"><span class="attr">spring.datasource.druid.web-stat-filter.enabled</span>= <span class="string">#是否启用StatFilter默认值false</span></span><br><span class="line"><span class="attr">spring.datasource.druid.web-stat-filter.url-pattern</span>=<span class="string"></span></span><br><span class="line"><span class="attr">spring.datasource.druid.web-stat-filter.exclusions</span>=<span class="string"></span></span><br><span class="line"><span class="attr">spring.datasource.druid.web-stat-filter.session-stat-enable</span>=<span class="string"></span></span><br><span class="line"><span class="attr">spring.datasource.druid.web-stat-filter.session-stat-max-count</span>=<span class="string"></span></span><br><span class="line"><span class="attr">spring.datasource.druid.web-stat-filter.principal-session-name</span>=<span class="string"></span></span><br><span class="line"><span class="attr">spring.datasource.druid.web-stat-filter.principal-cookie-name</span>=<span class="string"></span></span><br><span class="line"><span class="attr">spring.datasource.druid.web-stat-filter.profile-enable</span>=<span class="string"></span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment"># StatViewServlet配置，说明请参考Druid Wiki，配置_StatViewServlet配置</span></span><br><span class="line"><span class="attr">spring.datasource.druid.stat-view-servlet.enabled</span>= <span class="string">#是否启用StatViewServlet（监控页面）默认值为false（考虑到安全问题默认并未启动，如需启用建议设置密码或白名单以保障安全）</span></span><br><span class="line"><span class="attr">spring.datasource.druid.stat-view-servlet.url-pattern</span>=<span class="string"></span></span><br><span class="line"><span class="attr">spring.datasource.druid.stat-view-servlet.reset-enable</span>=<span class="string"></span></span><br><span class="line"><span class="attr">spring.datasource.druid.stat-view-servlet.login-username</span>=<span class="string"></span></span><br><span class="line"><span class="attr">spring.datasource.druid.stat-view-servlet.login-password</span>=<span class="string"></span></span><br><span class="line"><span class="attr">spring.datasource.druid.stat-view-servlet.allow</span>=<span class="string"></span></span><br><span class="line"><span class="attr">spring.datasource.druid.stat-view-servlet.deny</span>=<span class="string"></span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment"># Spring监控配置，说明请参考Druid Github Wiki，配置_Druid和Spring关联监控配置</span></span><br><span class="line"><span class="attr">spring.datasource.druid.aop-patterns</span>= <span class="string"># Spring监控AOP切入点，如x.y.z.service.*,配置多个英文逗号分隔</span></span><br></pre></td></tr></table></figure>
+
+<p>Druid Spring Boot Starter 不仅限于对以上配置属性提供支持，<a target="_blank" rel="noopener" href="https://github.com/alibaba/druid/blob/master/src/main/java/com/alibaba/druid/pool/DruidDataSource.java"><code>DruidDataSource</code></a> 内提供<code>setter</code>方法的可配置属性都将被支持。你可以参考WIKI文档或通过IDE输入提示来进行配置。配置文件的格式你可以选择<code>.properties</code>或<code>.yml</code>，效果是一样的，在配置较多的情况下推荐使用<code>.yml</code>。</p>
+<h2 id="如何配置多数据源"><a href="#如何配置多数据源" class="headerlink" title="如何配置多数据源"></a>如何配置多数据源</h2><ol>
+<li>添加配置</li>
+</ol>
+<figure class="highlight properties"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">spring.datasource.url</span>=<span class="string"></span></span><br><span class="line"><span class="attr">spring.datasource.username</span>=<span class="string"></span></span><br><span class="line"><span class="attr">spring.datasource.password</span>=<span class="string"></span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment"># Druid 数据源配置，继承spring.datasource.* 配置，相同则覆盖</span></span><br><span class="line"><span class="attr">...</span></span><br><span class="line"><span class="attr">spring.datasource.druid.initial-size</span>=<span class="string">5</span></span><br><span class="line"><span class="attr">spring.datasource.druid.max-active</span>=<span class="string">5</span></span><br><span class="line"><span class="attr">...</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment"># Druid 数据源 1 配置，继承spring.datasource.druid.* 配置，相同则覆盖</span></span><br><span class="line"><span class="attr">...</span></span><br><span class="line"><span class="attr">spring.datasource.druid.one.max-active</span>=<span class="string">10</span></span><br><span class="line"><span class="attr">spring.datasource.druid.one.max-wait</span>=<span class="string">10000</span></span><br><span class="line"><span class="attr">...</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment"># Druid 数据源 2 配置，继承spring.datasource.druid.* 配置，相同则覆盖</span></span><br><span class="line"><span class="attr">...</span></span><br><span class="line"><span class="attr">spring.datasource.druid.two.max-active</span>=<span class="string">20</span></span><br><span class="line"><span class="attr">spring.datasource.druid.two.max-wait</span>=<span class="string">20000</span></span><br><span class="line"><span class="attr">...</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>强烈注意</strong>：Spring Boot 2.X 版本不再支持配置继承，多数据源的话每个数据源的所有配置都需要单独配置，否则配置不会生效</p>
+<ol>
+<li>创建数据源</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Primary</span></span><br><span class="line"><span class="meta">@Bean</span></span><br><span class="line"><span class="meta">@ConfigurationProperties(&quot;spring.datasource.druid.one&quot;)</span></span><br><span class="line"><span class="keyword">public</span> DataSource <span class="title function_">dataSourceOne</span><span class="params">()</span>&#123;</span><br><span class="line">    <span class="keyword">return</span> DruidDataSourceBuilder.create().build();</span><br><span class="line">&#125;</span><br><span class="line"><span class="meta">@Bean</span></span><br><span class="line"><span class="meta">@ConfigurationProperties(&quot;spring.datasource.druid.two&quot;)</span></span><br><span class="line"><span class="keyword">public</span> DataSource <span class="title function_">dataSourceTwo</span><span class="params">()</span>&#123;</span><br><span class="line">    <span class="keyword">return</span> DruidDataSourceBuilder.create().build();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="如何配置-Filter"><a href="#如何配置-Filter" class="headerlink" title="如何配置 Filter"></a>如何配置 Filter</h2><p>你可以通过 <code>spring.datasource.druid.filters=stat,wall,log4j ...</code> 的方式来启用相应的内置Filter，不过这些Filter都是默认配置。如果默认配置不能满足你的需求，你可以放弃这种方式，通过配置文件来配置Filter，下面是例子。</p>
+<figure class="highlight properties"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 配置StatFilter </span></span><br><span class="line"><span class="attr">spring.datasource.druid.filter.stat.enabled</span>=<span class="string">true</span></span><br><span class="line"><span class="attr">spring.datasource.druid.filter.stat.db-type</span>=<span class="string">h2</span></span><br><span class="line"><span class="attr">spring.datasource.druid.filter.stat.log-slow-sql</span>=<span class="string">true</span></span><br><span class="line"><span class="attr">spring.datasource.druid.filter.stat.slow-sql-millis</span>=<span class="string">2000</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment"># 配置WallFilter </span></span><br><span class="line"><span class="attr">spring.datasource.druid.filter.wall.enabled</span>=<span class="string">true</span></span><br><span class="line"><span class="attr">spring.datasource.druid.filter.wall.db-type</span>=<span class="string">h2</span></span><br><span class="line"><span class="attr">spring.datasource.druid.filter.wall.config.delete-allow</span>=<span class="string">false</span></span><br><span class="line"><span class="attr">spring.datasource.druid.filter.wall.config.drop-table-allow</span>=<span class="string">false</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment"># 其他 Filter 配置不再演示</span></span><br></pre></td></tr></table></figure>
+
+<p>目前为以下 Filter 提供了配置支持，请参考文档或者根据IDE提示（<code>spring.datasource.druid.filter.*</code>）进行配置。</p>
+<ul>
+<li>StatFilter</li>
+<li>WallFilter</li>
+<li>ConfigFilter</li>
+<li>EncodingConvertFilter</li>
+<li>Slf4jLogFilter</li>
+<li>Log4jFilter</li>
+<li>Log4j2Filter</li>
+<li>CommonsLogFilter</li>
+</ul>
+<p>要想使自定义 Filter 配置生效需要将对应 Filter 的 <code>enabled</code> 设置为 <code>true</code> ，Druid Spring Boot Starter 默认禁用 StatFilter，你也可以将其 <code>enabled</code> 设置为 <code>true</code> 来启用它。</p>
+<h2 id="如何获取-Druid-的监控数据"><a href="#如何获取-Druid-的监控数据" class="headerlink" title="如何获取 Druid 的监控数据"></a>如何获取 Druid 的监控数据</h2><p>Druid 的监控数据可以在开启 StatFilter 后通过 DruidStatManagerFacade 进行获取，获取到监控数据之后你可以将其暴露给你的监控系统进行使用。Druid 默认的监控系统数据也来源于此。下面给做一个简单的演示，在 Spring Boot 中如何通过 HTTP 接口将 Druid 监控数据以 JSON 的形式暴露出去，实际使用中你可以根据你的需要自由地对监控数据、暴露方式进行扩展。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@RestController</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">DruidStatController</span> &#123;</span><br><span class="line">    <span class="meta">@GetMapping(&quot;/druid/stat&quot;)</span></span><br><span class="line">    <span class="keyword">public</span> Object <span class="title function_">druidStat</span><span class="params">()</span>&#123;</span><br><span class="line">        <span class="comment">// DruidStatManagerFacade#getDataSourceStatDataList 该方法可以获取所有数据源的监控数据，除此之外 DruidStatManagerFacade 还提供了一些其他方法，你可以按需选择使用。</span></span><br><span class="line">        <span class="keyword">return</span> DruidStatManagerFacade.getInstance().getDataSourceStatDataList();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">[</span><br><span class="line">  &#123;</span><br><span class="line">    <span class="string">&quot;Identity&quot;</span>: <span class="number">1583082378</span>,</span><br><span class="line">    <span class="string">&quot;Name&quot;</span>: <span class="string">&quot;DataSource-1583082378&quot;</span>,</span><br><span class="line">    <span class="string">&quot;DbType&quot;</span>: <span class="string">&quot;h2&quot;</span>,</span><br><span class="line">    <span class="string">&quot;DriverClassName&quot;</span>: <span class="string">&quot;org.h2.Driver&quot;</span>,</span><br><span class="line">    <span class="string">&quot;URL&quot;</span>: <span class="string">&quot;jdbc:h2:file:./demo-db&quot;</span>,</span><br><span class="line">    <span class="string">&quot;UserName&quot;</span>: <span class="string">&quot;sa&quot;</span>,</span><br><span class="line">    <span class="string">&quot;FilterClassNames&quot;</span>: [</span><br><span class="line">      <span class="string">&quot;com.alibaba.druid.filter.stat.StatFilter&quot;</span></span><br><span class="line">    ],</span><br><span class="line">    <span class="string">&quot;WaitThreadCount&quot;</span>: <span class="number">0</span>,</span><br><span class="line">    <span class="string">&quot;NotEmptyWaitCount&quot;</span>: <span class="number">0</span>,</span><br><span class="line">    <span class="string">&quot;NotEmptyWaitMillis&quot;</span>: <span class="number">0</span>,</span><br><span class="line">    <span class="string">&quot;PoolingCount&quot;</span>: <span class="number">2</span>,</span><br><span class="line">    <span class="string">&quot;PoolingPeak&quot;</span>: <span class="number">2</span>,</span><br><span class="line">    <span class="string">&quot;PoolingPeakTime&quot;</span>: <span class="number">1533782955104</span>,</span><br><span class="line">    <span class="string">&quot;ActiveCount&quot;</span>: <span class="number">0</span>,</span><br><span class="line">    <span class="string">&quot;ActivePeak&quot;</span>: <span class="number">1</span>,</span><br><span class="line">    <span class="string">&quot;ActivePeakTime&quot;</span>: <span class="number">1533782955178</span>,</span><br><span class="line">    <span class="string">&quot;InitialSize&quot;</span>: <span class="number">2</span>,</span><br><span class="line">    <span class="string">&quot;MinIdle&quot;</span>: <span class="number">2</span>,</span><br><span class="line">    <span class="string">&quot;MaxActive&quot;</span>: <span class="number">30</span>,</span><br><span class="line">    <span class="string">&quot;QueryTimeout&quot;</span>: <span class="number">0</span>,</span><br><span class="line">    <span class="string">&quot;TransactionQueryTimeout&quot;</span>: <span class="number">0</span>,</span><br><span class="line">    <span class="string">&quot;LoginTimeout&quot;</span>: <span class="number">0</span>,</span><br><span class="line">    <span class="string">&quot;ValidConnectionCheckerClassName&quot;</span>: <span class="literal">null</span>,</span><br><span class="line">    <span class="string">&quot;ExceptionSorterClassName&quot;</span>: <span class="literal">null</span>,</span><br><span class="line">    <span class="string">&quot;TestOnBorrow&quot;</span>: <span class="literal">true</span>,</span><br><span class="line">    <span class="string">&quot;TestOnReturn&quot;</span>: <span class="literal">true</span>,</span><br><span class="line">    <span class="string">&quot;TestWhileIdle&quot;</span>: <span class="literal">true</span>,</span><br><span class="line">    <span class="string">&quot;DefaultAutoCommit&quot;</span>: <span class="literal">true</span>,</span><br><span class="line">    <span class="string">&quot;DefaultReadOnly&quot;</span>: <span class="literal">null</span>,</span><br><span class="line">    <span class="string">&quot;DefaultTransactionIsolation&quot;</span>: <span class="literal">null</span>,</span><br><span class="line">    <span class="string">&quot;LogicConnectCount&quot;</span>: <span class="number">103</span>,</span><br><span class="line">    <span class="string">&quot;LogicCloseCount&quot;</span>: <span class="number">103</span>,</span><br><span class="line">    <span class="string">&quot;LogicConnectErrorCount&quot;</span>: <span class="number">0</span>,</span><br><span class="line">    <span class="string">&quot;PhysicalConnectCount&quot;</span>: <span class="number">2</span>,</span><br><span class="line">    <span class="string">&quot;PhysicalCloseCount&quot;</span>: <span class="number">0</span>,</span><br><span class="line">    <span class="string">&quot;PhysicalConnectErrorCount&quot;</span>: <span class="number">0</span>,</span><br><span class="line">    <span class="string">&quot;ExecuteCount&quot;</span>: <span class="number">102</span>,</span><br><span class="line">    <span class="string">&quot;ErrorCount&quot;</span>: <span class="number">0</span>,</span><br><span class="line">    <span class="string">&quot;CommitCount&quot;</span>: <span class="number">100</span>,</span><br><span class="line">    <span class="string">&quot;RollbackCount&quot;</span>: <span class="number">0</span>,</span><br><span class="line">    <span class="string">&quot;PSCacheAccessCount&quot;</span>: <span class="number">100</span>,</span><br><span class="line">    <span class="string">&quot;PSCacheHitCount&quot;</span>: <span class="number">99</span>,</span><br><span class="line">    <span class="string">&quot;PSCacheMissCount&quot;</span>: <span class="number">1</span>,</span><br><span class="line">    <span class="string">&quot;StartTransactionCount&quot;</span>: <span class="number">100</span>,</span><br><span class="line">    <span class="string">&quot;TransactionHistogram&quot;</span>: [</span><br><span class="line">      <span class="number">55</span>,</span><br><span class="line">      <span class="number">44</span>,</span><br><span class="line">      <span class="number">1</span>,</span><br><span class="line">      <span class="number">0</span>,</span><br><span class="line">      <span class="number">0</span>,</span><br><span class="line">      <span class="number">0</span>,</span><br><span class="line">      <span class="number">0</span></span><br><span class="line">    ],</span><br><span class="line">    <span class="string">&quot;ConnectionHoldTimeHistogram&quot;</span>: [</span><br><span class="line">      <span class="number">53</span>,</span><br><span class="line">      <span class="number">47</span>,</span><br><span class="line">      <span class="number">3</span>,</span><br><span class="line">      <span class="number">0</span>,</span><br><span class="line">      <span class="number">0</span>,</span><br><span class="line">      <span class="number">0</span>,</span><br><span class="line">      <span class="number">0</span>,</span><br><span class="line">      <span class="number">0</span></span><br><span class="line">    ],</span><br><span class="line">    <span class="string">&quot;RemoveAbandoned&quot;</span>: <span class="literal">false</span>,</span><br><span class="line">    <span class="string">&quot;ClobOpenCount&quot;</span>: <span class="number">0</span>,</span><br><span class="line">    <span class="string">&quot;BlobOpenCount&quot;</span>: <span class="number">0</span>,</span><br><span class="line">    <span class="string">&quot;KeepAliveCheckCount&quot;</span>: <span class="number">0</span>,</span><br><span class="line">    <span class="string">&quot;KeepAlive&quot;</span>: <span class="literal">false</span>,</span><br><span class="line">    <span class="string">&quot;FailFast&quot;</span>: <span class="literal">false</span>,</span><br><span class="line">    <span class="string">&quot;MaxWait&quot;</span>: <span class="number">1234</span>,</span><br><span class="line">    <span class="string">&quot;MaxWaitThreadCount&quot;</span>: -<span class="number">1</span>,</span><br><span class="line">    <span class="string">&quot;PoolPreparedStatements&quot;</span>: <span class="literal">true</span>,</span><br><span class="line">    <span class="string">&quot;MaxPoolPreparedStatementPerConnectionSize&quot;</span>: <span class="number">5</span>,</span><br><span class="line">    <span class="string">&quot;MinEvictableIdleTimeMillis&quot;</span>: <span class="number">30001</span>,</span><br><span class="line">    <span class="string">&quot;MaxEvictableIdleTimeMillis&quot;</span>: <span class="number">25200000</span>,</span><br><span class="line">    <span class="string">&quot;LogDifferentThread&quot;</span>: <span class="literal">true</span>,</span><br><span class="line">    <span class="string">&quot;RecycleErrorCount&quot;</span>: <span class="number">0</span>,</span><br><span class="line">    <span class="string">&quot;PreparedStatementOpenCount&quot;</span>: <span class="number">1</span>,</span><br><span class="line">    <span class="string">&quot;PreparedStatementClosedCount&quot;</span>: <span class="number">0</span>,</span><br><span class="line">    <span class="string">&quot;UseUnfairLock&quot;</span>: <span class="literal">true</span>,</span><br><span class="line">    <span class="string">&quot;InitGlobalVariants&quot;</span>: <span class="literal">false</span>,</span><br><span class="line">    <span class="string">&quot;InitVariants&quot;</span>: <span class="literal">false</span></span><br><span class="line">  &#125;</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+
+<h2 id="IDE-提示支持"><a href="#IDE-提示支持" class="headerlink" title="IDE 提示支持"></a>IDE 提示支持</h2><p><a target="_blank" rel="noopener" href="https://raw.githubusercontent.com/lihengming/java-codes/master/shared-resources/github-images/druid-spring-boot-starter-ide-hint.jpg"><img src="https://file.pandacode.cn/blog/202211031429633.jpg" alt="img"></a></p>
+<h2 id="演示"><a href="#演示" class="headerlink" title="演示"></a>演示</h2><p>克隆项目，运行<code>test</code>包内的<code>DemoApplication</code>。</p>
+<h2 id="文章参考"><a href="#文章参考" class="headerlink" title="文章参考"></a>文章参考</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://github.com/alibaba/druid/tree/master/druid-spring-boot-starter">druid 官方readme.md</a></li>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/yzh_1346983557/article/details/117673280">springboot下使用druid-spring-boot-starter</a></li>
+</ul>
+
+      
+    </div>
+    <div class="article-footer">
+      <blockquote class="mt-2x">
+  <ul class="post-copyright list-unstyled">
+    
+    <li class="post-copyright-link hidden-xs">
+      <strong>本文链接：</strong>
+      <a href="https://guoshunfa.com/2022/07/%E6%90%AD%E5%BB%BA%E5%8D%95%E4%BD%93SpringBoot%E9%A1%B9%E7%9B%AE-%E9%9B%86%E6%88%90Druid%E6%95%B0%E6%8D%AE%E5%BA%93%E8%BF%9E%E6%8E%A5%E6%B1%A0%E5%92%8C%E7%9B%91%E6%8E%A7/" title="搭建单体SpringBoot项目 集成Druid数据库连接池和监控" target="_blank" rel="external">https://guoshunfa.com/2022/07/搭建单体SpringBoot项目-集成Druid数据库连接池和监控/</a>
+    </li>
+    
+    <li class="post-copyright-license">
+      <strong>版权声明： </strong> 本博客所有文章除特别声明外，均采用 <a href="http://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank" rel="external">CC BY 4.0 CN协议</a> 许可协议。转载请注明出处！
+    </li>
+  </ul>
+</blockquote>
+
+
+<div class="panel panel-default panel-badger">
+  <div class="panel-body">
+    <figure class="media">
+      <div class="media-left">
+        <a href="https://github.com/guoshunfa" target="_blank" class="img-burn thumb-sm visible-lg">
+          <img src="/images/avatar.jpg" class="img-rounded w-full" alt="">
+        </a>
+      </div>
+      <div class="media-body">
+        <h3 class="media-heading"><a href="https://github.com/guoshunfa" target="_blank"><span class="text-dark">郭顺发</span><small class="ml-1x">创业中......</small></a></h3>
+        <div>承接：小程序开发、APP开发、网站开发、爬虫开发</div>
+      </div>
+    </figure>
+  </div>
+</div>
+
+
+    </div>
+  </article>
+  
+    
+  <section id="comments">
+  	
+           
+    
+  </section>
+
+
+  
+</div>
+
+  <nav class="bar bar-footer clearfix" data-stick-bottom>
+  <div class="bar-inner">
+  
+  <ul class="pager pull-left">
+    
+    <li class="prev">
+      <a href="/2022/07/%E6%90%AD%E5%BB%BA%E5%8D%95%E4%BD%93SpringBoot%E9%A1%B9%E7%9B%AE-%E9%9B%86%E6%88%90Activiti7-%E8%BF%9B%E9%98%B6/" title="搭建单体SpringBoot项目 集成Activiti7 进阶"><i class="icon icon-angle-left" aria-hidden="true"></i><span>&nbsp;&nbsp;上一篇</span></a>
+    </li>
+    
+    
+    <li class="next">
+      <a href="/2022/07/%E6%90%AD%E5%BB%BA%E5%8D%95%E4%BD%93SpringBoot%E9%A1%B9%E7%9B%AE-%E9%9B%86%E6%88%90MongoDB%E6%95%B0%E6%8D%AE%E5%BA%93/" title="搭建单体SpringBoot项目 集成MongoDB数据库"><span>下一篇&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
+    </li>
+    
+    
+  </ul>
+  
+  
+  
+  <div class="bar-right">
+    
+    <div class="share-component" data-sites="weibo,qq,wechat,facebook,twitter" data-mobile-sites="weibo,qq,qzone"></div>
+    
+  </div>
+  </div>
+</nav>
+  
+
+
+</main>
+
+  <footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
+	
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/guoshunfa" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="https://gitee.com/guoshunfa" target="_blank" title="Gitee" data-toggle=tooltip data-placement=top><i class="icon icon-gitee"></i></a></li>
+        
+        <li><a href="https://juejin.cn/user/166781500267015" target="_blank" title="Juejin" data-toggle=tooltip data-placement=top><i class="icon icon-juejin"></i></a></li>
+        
+        <li><a href="https://cloud.tencent.com/developer/user/7784141" target="_blank" title="Code" data-toggle=tooltip data-placement=top><i class="icon icon-code"></i></a></li>
+        
+        <li><a href="/atom.xml" target="_blank" title="Rss" data-toggle=tooltip data-placement=top><i class="icon icon-rss"></i></a></li>
+        
+    </ul>
+
+    <div class="copyright">
+    	
+        &copy; 2024 guoshunfa
+        
+        <!-- <div class="publishby">
+        	Theme by <a href="https://github.com/cofess" target="_blank"> cofess </a>base on <a href="https://github.com/cofess/hexo-theme-pure" target="_blank">pure</a>.
+        </div> -->
+    </div>
+</footer>
+  <script src="//cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
+<script>
+window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
+</script>
+
+<script src="/js/plugin.min.js"></script>
+
+
+<script src="/js/application.js"></script>
+
+
+    <script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(未命名)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+
+<script src="/js/insight.js"></script>
+
+
+
+    <script>
+(function ($) {
+    $('.search-form').on('submit', function (e) {
+        var keyword = $('.search-form-input[name="wd"]').val();
+        window.location = 'https://www.baidu.com/s?wd=site:guoshunfa.com ' + keyword;
+        return false;
+    });
+})(jQuery);
+</script>
+
+
+
+
+   
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+   
+    
+  <!-- <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css"> -->
+  <script src="//cdn.jsdelivr.net/npm/gitalk@1.7.2/dist/gitalk.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/blueimp-md5@2.10.0/js/md5.min.js"></script>
+  <script type="text/javascript">
+  var gitalk = new Gitalk({
+    clientID: '328529f408a5d1041fe1',
+    clientSecret: '43872fab04fe0accb98439ac77ff71ff81f7b9dd',
+    repo: 'guoshunfa-comment',
+    owner: 'guoshunfa',
+    admin: ['guoshunfa'],
+    id: md5(location.pathname),
+    distractionFreeMode: true,
+    language: 'zh-CN',
+    enableHotKey: 'true'
+  })
+  gitalk.render('comments')
+  </script>
+      
+
+
+
+  <script src="//cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.3.5/dist/jquery.fancybox.min.js"></script>
+  <script>
+  //利用 FancyBox 实现点击图片放大
+  $(document).ready(function() {
+    $('article img').not('[hidden]').not('.panel-body img').each(function() {
+      var $image = $(this);
+      var imageCaption = $image.attr('alt');
+      var $imageWrapLink = $image.parent('a');
+      if ($imageWrapLink.length < 1) {
+        var src = this.getAttribute('src');
+        var idx = src.lastIndexOf('?');
+        if (idx != -1) {
+          src = src.substring(0, idx);
+        }
+        $imageWrapLink = $image.wrap('<a href="' + src + '"></a>').parent('a');
+      }
+      $imageWrapLink.attr('data-fancybox', 'images');
+      if (imageCaption) {
+        $imageWrapLink.attr('data-caption', imageCaption);
+      }
+    });
+    $().fancybox({
+      selector: '[data-fancybox="images"]',
+      hash: false,
+      loop: false,
+    });
+  });
+  </script>
+
+
+
+
+
+</body>
+</html>

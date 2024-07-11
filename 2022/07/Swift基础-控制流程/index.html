@@ -1,0 +1,946 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+  <meta charset="utf-8">
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-transform" />
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="format-detection" content="telephone=no,email=no,adress=no">
+  <!-- Color theme for statusbar -->
+  <meta name="theme-color" content="#000000" />
+  <!-- 强制页面在当前窗口以独立页面显示,防止别人在框架里调用页面 -->
+  <meta http-equiv="window-target" content="_top" />
+  
+  
+  <title>Swift基础 控制流程 | guoshunfa</title>
+  <meta name="description" content="翻译自：https:&#x2F;&#x2F;docs.swift.org&#x2F;swift-book&#x2F;LanguageGuide&#x2F;ControlFlow.html Swift提供了各种控制流语句。这些包括while循环多次执行任务；if、guard和switch语句，以根据特定条件执行不同的代码分支；以及break和continue将执行流程转移到代码中的另一个点等语句。 Swift还提供了一个for-in循环，可以轻松地">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Swift基础 控制流程">
+<meta property="og:url" content="https://guoshunfa.com/2022/07/Swift%E5%9F%BA%E7%A1%80-%E6%8E%A7%E5%88%B6%E6%B5%81%E7%A8%8B/index.html">
+<meta property="og:site_name" content="guoshunfa">
+<meta property="og:description" content="翻译自：https:&#x2F;&#x2F;docs.swift.org&#x2F;swift-book&#x2F;LanguageGuide&#x2F;ControlFlow.html Swift提供了各种控制流语句。这些包括while循环多次执行任务；if、guard和switch语句，以根据特定条件执行不同的代码分支；以及break和continue将执行流程转移到代码中的另一个点等语句。 Swift还提供了一个for-in循环，可以轻松地">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://guoshunfa.com/2022/07/Swift%E5%9F%BA%E7%A1%80-%E6%8E%A7%E5%88%B6%E6%B5%81%E7%A8%8B/202204051010377.png">
+<meta property="og:image" content="https://file.pandacode.cn/blog/202204051023130.png">
+<meta property="og:image" content="https://file.pandacode.cn/blog/202204051024139.png">
+<meta property="og:image" content="https://docs.swift.org/swift-book/_images/coordinateGraphComplex_2x.png">
+<meta property="og:image" content="https://file.pandacode.cn/blog/202204051033766.png">
+<meta property="article:published_time" content="2022-07-01T04:01:01.000Z">
+<meta property="article:modified_time" content="2024-01-28T11:41:39.289Z">
+<meta property="article:author" content="guoshunfa">
+<meta property="article:tag" content="Swift">
+<meta property="article:tag" content="基础">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://guoshunfa.com/2022/07/Swift%E5%9F%BA%E7%A1%80-%E6%8E%A7%E5%88%B6%E6%B5%81%E7%A8%8B/202204051010377.png">
+  <!-- Canonical links -->
+  <link rel="canonical" href="https://guoshunfa.com/2022/07/Swift%E5%9F%BA%E7%A1%80-%E6%8E%A7%E5%88%B6%E6%B5%81%E7%A8%8B/index.html">
+  
+    <link rel="alternate" href="/atom.xml" title="guoshunfa" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="favicon.jpg" type="image/x-icon">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  
+  
+    <link href="//cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.3.5/dist/jquery.fancybox.min.css" rel="stylesheet">
+  
+  
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1.7.2/dist/gitalk.min.css">
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body class="main-center" itemscope itemtype="http://schema.org/WebPage">
+  <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+  <div class="slimContent">
+    <div class="navbar-header">
+      
+      
+      <div class="profile-block text-center">
+        <a id="avatar" href="https://github.com/guoshunfa" target="_blank">
+          <img class="img-circle img-rotate" src="/images/avatar.jpg" width="200" height="200">
+        </a>
+        <h2 id="name" class="hidden-xs hidden-sm">郭顺发</h2>
+        <h3 id="title" class="hidden-xs hidden-sm hidden-md">创业中......</h3>
+        <small id="location" class="text-muted hidden-xs hidden-sm"><i class="icon icon-map-marker"></i> 深圳, China</small>
+      </div>
+      
+      <div class="search" id="search-form-wrap">
+
+    <form class="search-form sidebar-form">
+        <div class="input-group">
+            <input type="text" class="search-form-input form-control" placeholder="搜索" />
+            <span class="input-group-btn">
+                <button type="submit" class="search-form-submit btn btn-flat" onclick="return false;"><i class="icon icon-search"></i></button>
+            </span>
+        </div>
+    </form>
+    <div class="ins-search">
+  <div class="ins-search-mask"></div>
+  <div class="ins-search-container">
+    <div class="ins-input-wrapper">
+      <input type="text" class="ins-search-input" placeholder="想要查找什么..." x-webkit-speech />
+      <button type="button" class="close ins-close ins-selectable" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="ins-section-wrapper">
+      <div class="ins-section-container"></div>
+    </div>
+  </div>
+</div>
+
+
+</div>
+      <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <nav id="main-navbar" class="collapse navbar-collapse" itemscope itemtype="http://schema.org/SiteNavigationElement" role="navigation">
+      <ul class="nav navbar-nav main-nav menu-highlight">
+        
+        
+        <li class="menu-item menu-item-首页">
+          <a href="/.">
+            
+            <i class="icon icon-home-fill"></i>
+            
+            <span class="menu-title">首页</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-归档">
+          <a href="/archives">
+            
+            <i class="icon icon-archives-fill"></i>
+            
+            <span class="menu-title">归档</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-分类">
+          <a href="/categories">
+            
+            <i class="icon icon-folder"></i>
+            
+            <span class="menu-title">分类</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-标签">
+          <a href="/tags">
+            
+            <i class="icon icon-tags"></i>
+            
+            <span class="menu-title">标签</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-github仓库">
+          <a href="/repository">
+            
+            <i class="icon icon-project"></i>
+            
+            <span class="menu-title">github仓库</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-工具箱">
+          <a href="/tools">
+            
+            <i class="icon icon-book-fill"></i>
+            
+            <span class="menu-title">工具箱</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-友链">
+          <a href="/links">
+            
+            <i class="icon icon-friendship"></i>
+            
+            <span class="menu-title">友链</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-关于">
+          <a href="/about">
+            
+            <i class="icon icon-cup-fill"></i>
+            
+            <span class="menu-title">关于</span>
+          </a>
+        </li>
+        
+      </ul>
+      
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/guoshunfa" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="https://gitee.com/guoshunfa" target="_blank" title="Gitee" data-toggle=tooltip data-placement=top><i class="icon icon-gitee"></i></a></li>
+        
+        <li><a href="https://juejin.cn/user/166781500267015" target="_blank" title="Juejin" data-toggle=tooltip data-placement=top><i class="icon icon-juejin"></i></a></li>
+        
+        <li><a href="https://cloud.tencent.com/developer/user/7784141" target="_blank" title="Code" data-toggle=tooltip data-placement=top><i class="icon icon-code"></i></a></li>
+        
+        <li><a href="/atom.xml" target="_blank" title="Rss" data-toggle=tooltip data-placement=top><i class="icon icon-rss"></i></a></li>
+        
+    </ul>
+
+    </nav>
+  </div>
+</header>
+
+  
+    <aside class="sidebar" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    
+      <div class="widget">
+    <h3 class="widget-title">公告</h3>
+    <div class="widget-body">
+        <div id="board">
+            <div class="content">
+                <p>欢迎来到www.guoshunfa.com。</p><hr/><a target="_blank" rel="noopener" href="https://www.oracle.com/cn/java/">前往Java官网<a/><br/><a target="_blank" rel="noopener" href="https://spring.io/">前往Spring官网<a/>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget-body">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/HTML-CSS-JavaScript/">HTML/CSS/JavaScript</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Java/">Java</a><span class="category-list-count">17</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Python/">Python</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/SpringBoot/">SpringBoot</a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Swift/">Swift</a><span class="category-list-count">29</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%88%9B%E4%B8%9A/">创业</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%A4%8D%E7%9B%98/">复盘</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%A8%B1%E4%B9%90/">娱乐</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%8A%80%E6%9C%AF/">技术</a><span class="category-list-count">27</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%8A%80%E6%9C%AF/%E6%90%AD%E5%BB%BA%E5%8D%95%E4%BD%93SpringBoot%E9%A1%B9%E7%9B%AE/">搭建单体SpringBoot项目</a><span class="category-list-count">21</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%90%AD%E5%BB%BA%E5%8D%95%E4%BD%93SpringBoot%E9%A1%B9%E7%9B%AE/">搭建单体SpringBoot项目</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/">数据库</a><span class="category-list-count">17</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%9C%8D%E5%8A%A1/">服务</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%9C%8D%E5%8A%A1-%E7%BB%84%E4%BB%B6/">服务&组件</a><span class="category-list-count">27</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%AE%A1%E7%90%86/">服务器管理</a><span class="category-list-count">21</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E7%AE%97%E6%B3%95/">算法</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E8%BD%AF%E4%BB%B6%E4%BD%BF%E7%94%A8/">软件使用</a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E8%BD%AF%E4%BB%B6%E6%8A%80%E6%9C%AF%E6%A1%86%E6%9E%B6/">软件技术框架</a><span class="category-list-count">44</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E9%98%85%E8%AF%BB/">阅读</a><span class="category-list-count">2</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget-body">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/AJAX/" rel="tag">AJAX</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Activiti7/" rel="tag">Activiti7</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Arthas/" rel="tag">Arthas</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CSS/" rel="tag">CSS</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Curl/" rel="tag">Curl</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Debug/" rel="tag">Debug</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Docker/" rel="tag">Docker</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Druid/" rel="tag">Druid</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Electron/" rel="tag">Electron</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Expect/" rel="tag">Expect</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/FastJson/" rel="tag">FastJson</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/FreeMarker/" rel="tag">FreeMarker</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Git/" rel="tag">Git</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Gitlab/" rel="tag">Gitlab</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/GitlabRunner/" rel="tag">GitlabRunner</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/HTML-CSS-JavaScript/" rel="tag">HTML&#x2F;CSS&#x2F;JavaScript</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hook/" rel="tag">Hook</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Http/" rel="tag">Http</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hutool/" rel="tag">Hutool</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/IDEA/" rel="tag">IDEA</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JS/" rel="tag">JS</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JVM/" rel="tag">JVM</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Jar/" rel="tag">Jar</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java/" rel="tag">Java</a><span class="tag-list-count">27</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Jdk/" rel="tag">Jdk</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Jenkins/" rel="tag">Jenkins</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Jmeter/" rel="tag">Jmeter</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Json/" rel="tag">Json</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Jsoup/" rel="tag">Jsoup</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Kafka/" rel="tag">Kafka</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Leetcode/" rel="tag">Leetcode</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux/" rel="tag">Linux</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Logback/" rel="tag">Logback</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Mac/" rel="tag">Mac</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Maven/" rel="tag">Maven</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MongoDB/" rel="tag">MongoDB</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MyBatis/" rel="tag">MyBatis</a><span class="tag-list-count">7</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Mybatis/" rel="tag">Mybatis</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MybatisPlus/" rel="tag">MybatisPlus</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Mysql/" rel="tag">Mysql</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Nano/" rel="tag">Nano</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Nexus/" rel="tag">Nexus</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Nginx/" rel="tag">Nginx</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Opengrok/" rel="tag">Opengrok</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Oracle/" rel="tag">Oracle</a><span class="tag-list-count">22</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Profile/" rel="tag">Profile</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/PubSubJS/" rel="tag">PubSubJS</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Python/" rel="tag">Python</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Quartz/" rel="tag">Quartz</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/RESTful/" rel="tag">RESTful</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/React/" rel="tag">React</a><span class="tag-list-count">7</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Redis/" rel="tag">Redis</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SQL/" rel="tag">SQL</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SVN/" rel="tag">SVN</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Scheduled/" rel="tag">Scheduled</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Scrapy/" rel="tag">Scrapy</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Shell/" rel="tag">Shell</a><span class="tag-list-count">9</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Spel%E8%A1%A8%E8%BE%BE%E5%BC%8F/" rel="tag">Spel表达式</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Spring/" rel="tag">Spring</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SpringBoot/" rel="tag">SpringBoot</a><span class="tag-list-count">34</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SpringEvent/" rel="tag">SpringEvent</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SpringMVC/" rel="tag">SpringMVC</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SpringSecurity/" rel="tag">SpringSecurity</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Stream/" rel="tag">Stream</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Swagger/" rel="tag">Swagger</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Swift/" rel="tag">Swift</a><span class="tag-list-count">29</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/TestNG/" rel="tag">TestNG</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Tomcat/" rel="tag">Tomcat</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/UI%E7%BB%84%E4%BB%B6%E5%BA%93/" rel="tag">UI组件库</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Validator/" rel="tag">Validator</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Vue/" rel="tag">Vue</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Vuepress/" rel="tag">Vuepress</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Wordpress/" rel="tag">Wordpress</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/XML/" rel="tag">XML</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/assert/" rel="tag">assert</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/docker/" rel="tag">docker</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/gitlab/" rel="tag">gitlab</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/homebrew/" rel="tag">homebrew</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/iframe/" rel="tag">iframe</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java/" rel="tag">java</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/lambda/" rel="tag">lambda</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/less/" rel="tag">less</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/" rel="tag">linux</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mac/" rel="tag">mac</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mybatis-plus/" rel="tag">mybatis-plus</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mysql/" rel="tag">mysql</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/oracle/" rel="tag">oracle</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/pom-xml/" rel="tag">pom.xml</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/quartz/" rel="tag">quartz</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/settings-xml/" rel="tag">settings.xml</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/spring-boot/" rel="tag">spring-boot</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ssh/" rel="tag">ssh</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sshpass/" rel="tag">sshpass</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/yum/" rel="tag">yum</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%B9%90%E8%A7%82%E9%94%81/" rel="tag">乐观锁</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BB%8B%E7%BB%8D/" rel="tag">介绍</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%86%85%E7%BD%91/" rel="tag">内网</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%86%85%E7%BD%91%E7%A9%BF%E9%80%8F/" rel="tag">内网穿透</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%8A%A0%E5%AF%86/" rel="tag">加密</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%8F%8D%E7%BC%96%E8%AF%91%E5%B7%A5%E5%85%B7/" rel="tag">反编译工具</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%9B%BE%E5%BA%8A/" rel="tag">图床</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%9F%BA%E7%A1%80/" rel="tag">基础</a><span class="tag-list-count">29</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%AD%98%E5%82%A8%E5%87%BD%E6%95%B0/" rel="tag">存储函数</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%AD%98%E5%82%A8%E8%BF%87%E7%A8%8B/" rel="tag">存储过程</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%AE%9A%E6%97%B6%E5%99%A8/" rel="tag">定时器</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%AE%9D%E5%A1%94/" rel="tag">宝塔</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%B9%B6%E5%8F%91/" rel="tag">并发</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%BC%82%E5%B8%B8/" rel="tag">异常</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%BF%83%E7%90%86/" rel="tag">心理</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%80%BB%E7%BB%93/" rel="tag">总结</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%8C%81%E4%B9%85%E5%B1%82%E6%A1%86%E6%9E%B6/" rel="tag">持久层框架</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%8E%A5%E5%8F%A3/" rel="tag">接口</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%8F%92%E4%BB%B6/" rel="tag">插件</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/" rel="tag">数据库</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%96%AD%E8%A8%80/" rel="tag">断言</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%A0%91%E8%8E%93%E6%B4%BE/" rel="tag">树莓派</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%A0%91%E8%8E%93%E6%B4%BE4B/" rel="tag">树莓派4B</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%A6%82%E5%BF%B5/" rel="tag">概念</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%A8%A1%E7%89%88%E5%BC%95%E6%93%8E/" rel="tag">模版引擎</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%B3%9B%E5%9E%8B/" rel="tag">泛型</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%B5%8B%E8%AF%95/" rel="tag">测试</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%88%AC%E8%99%AB/" rel="tag">爬虫</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%94%A8%E6%88%B7%E6%9D%83%E9%99%90%E9%AA%8C%E8%AF%81/" rel="tag">用户权限验证</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%9F%A5%E8%AF%86/" rel="tag">知识</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%AE%97%E6%B3%95/" rel="tag">算法</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%B1%BB/" rel="tag">类</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BB%84%E4%BB%B6%E5%BA%93/" rel="tag">组件库</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%84%9A%E6%9C%AC/" rel="tag">脚本</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%87%AA%E5%8A%A8%E5%8C%96%E6%B5%8B%E8%AF%95/" rel="tag">自动化测试</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%8B%A5%E4%BE%9D/" rel="tag">若依</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/" rel="tag">解决方案</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" rel="tag">设计模式</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/" rel="tag">读书笔记</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%B7%A8%E5%9F%9F/" rel="tag">跨域</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%83%A8%E7%BD%B2/" rel="tag">部署</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9B%86%E6%88%90/" rel="tag">集成</a><span class="tag-list-count">14</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1/" rel="tag">面向对象</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9F%A9%E5%89%A7/" rel="tag">韩剧</a><span class="tag-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget-body tagcloud">
+      <a href="/tags/AJAX/" style="font-size: 13px;">AJAX</a> <a href="/tags/Activiti7/" style="font-size: 13.17px;">Activiti7</a> <a href="/tags/Arthas/" style="font-size: 13px;">Arthas</a> <a href="/tags/CSS/" style="font-size: 13px;">CSS</a> <a href="/tags/Curl/" style="font-size: 13px;">Curl</a> <a href="/tags/Debug/" style="font-size: 13px;">Debug</a> <a href="/tags/Docker/" style="font-size: 13.42px;">Docker</a> <a href="/tags/Druid/" style="font-size: 13px;">Druid</a> <a href="/tags/Electron/" style="font-size: 13.08px;">Electron</a> <a href="/tags/Expect/" style="font-size: 13px;">Expect</a> <a href="/tags/FastJson/" style="font-size: 13px;">FastJson</a> <a href="/tags/FreeMarker/" style="font-size: 13px;">FreeMarker</a> <a href="/tags/Git/" style="font-size: 13.08px;">Git</a> <a href="/tags/Gitlab/" style="font-size: 13.25px;">Gitlab</a> <a href="/tags/GitlabRunner/" style="font-size: 13.08px;">GitlabRunner</a> <a href="/tags/HTML-CSS-JavaScript/" style="font-size: 13.17px;">HTML/CSS/JavaScript</a> <a href="/tags/Hook/" style="font-size: 13px;">Hook</a> <a href="/tags/Http/" style="font-size: 13px;">Http</a> <a href="/tags/Hutool/" style="font-size: 13px;">Hutool</a> <a href="/tags/IDEA/" style="font-size: 13.25px;">IDEA</a> <a href="/tags/JS/" style="font-size: 13.08px;">JS</a> <a href="/tags/JVM/" style="font-size: 13px;">JVM</a> <a href="/tags/Jar/" style="font-size: 13.08px;">Jar</a> <a href="/tags/Java/" style="font-size: 13.83px;">Java</a> <a href="/tags/Jdk/" style="font-size: 13px;">Jdk</a> <a href="/tags/Jenkins/" style="font-size: 13px;">Jenkins</a> <a href="/tags/Jmeter/" style="font-size: 13px;">Jmeter</a> <a href="/tags/Json/" style="font-size: 13px;">Json</a> <a href="/tags/Jsoup/" style="font-size: 13px;">Jsoup</a> <a href="/tags/Kafka/" style="font-size: 13.25px;">Kafka</a> <a href="/tags/Leetcode/" style="font-size: 13.33px;">Leetcode</a> <a href="/tags/Linux/" style="font-size: 13px;">Linux</a> <a href="/tags/Logback/" style="font-size: 13px;">Logback</a> <a href="/tags/Mac/" style="font-size: 13px;">Mac</a> <a href="/tags/Maven/" style="font-size: 13.42px;">Maven</a> <a href="/tags/MongoDB/" style="font-size: 13.42px;">MongoDB</a> <a href="/tags/MyBatis/" style="font-size: 13.5px;">MyBatis</a> <a href="/tags/Mybatis/" style="font-size: 13.17px;">Mybatis</a> <a href="/tags/MybatisPlus/" style="font-size: 13.08px;">MybatisPlus</a> <a href="/tags/Mysql/" style="font-size: 13.25px;">Mysql</a> <a href="/tags/Nano/" style="font-size: 13px;">Nano</a> <a href="/tags/Nexus/" style="font-size: 13.08px;">Nexus</a> <a href="/tags/Nginx/" style="font-size: 13.08px;">Nginx</a> <a href="/tags/Opengrok/" style="font-size: 13px;">Opengrok</a> <a href="/tags/Oracle/" style="font-size: 13.75px;">Oracle</a> <a href="/tags/Profile/" style="font-size: 13px;">Profile</a> <a href="/tags/PubSubJS/" style="font-size: 13px;">PubSubJS</a> <a href="/tags/Python/" style="font-size: 13.17px;">Python</a> <a href="/tags/Quartz/" style="font-size: 13.08px;">Quartz</a> <a href="/tags/RESTful/" style="font-size: 13px;">RESTful</a> <a href="/tags/React/" style="font-size: 13.5px;">React</a> <a href="/tags/Redis/" style="font-size: 13.17px;">Redis</a> <a href="/tags/SQL/" style="font-size: 13.25px;">SQL</a> <a href="/tags/SVN/" style="font-size: 13px;">SVN</a> <a href="/tags/Scheduled/" style="font-size: 13px;">Scheduled</a> <a href="/tags/Scrapy/" style="font-size: 13px;">Scrapy</a> <a href="/tags/Shell/" style="font-size: 13.58px;">Shell</a> <a href="/tags/Spel%E8%A1%A8%E8%BE%BE%E5%BC%8F/" style="font-size: 13px;">Spel表达式</a> <a href="/tags/Spring/" style="font-size: 13.33px;">Spring</a> <a href="/tags/SpringBoot/" style="font-size: 14px;">SpringBoot</a> <a href="/tags/SpringEvent/" style="font-size: 13px;">SpringEvent</a> <a href="/tags/SpringMVC/" style="font-size: 13px;">SpringMVC</a> <a href="/tags/SpringSecurity/" style="font-size: 13.17px;">SpringSecurity</a> <a href="/tags/Stream/" style="font-size: 13px;">Stream</a> <a href="/tags/Swagger/" style="font-size: 13.08px;">Swagger</a> <a href="/tags/Swift/" style="font-size: 13.92px;">Swift</a> <a href="/tags/TestNG/" style="font-size: 13px;">TestNG</a> <a href="/tags/Tomcat/" style="font-size: 13px;">Tomcat</a> <a href="/tags/UI%E7%BB%84%E4%BB%B6%E5%BA%93/" style="font-size: 13px;">UI组件库</a> <a href="/tags/Validator/" style="font-size: 13px;">Validator</a> <a href="/tags/Vue/" style="font-size: 13px;">Vue</a> <a href="/tags/Vuepress/" style="font-size: 13.25px;">Vuepress</a> <a href="/tags/Wordpress/" style="font-size: 13px;">Wordpress</a> <a href="/tags/XML/" style="font-size: 13px;">XML</a> <a href="/tags/assert/" style="font-size: 13px;">assert</a> <a href="/tags/docker/" style="font-size: 13px;">docker</a> <a href="/tags/gitlab/" style="font-size: 13px;">gitlab</a> <a href="/tags/homebrew/" style="font-size: 13px;">homebrew</a> <a href="/tags/iframe/" style="font-size: 13px;">iframe</a> <a href="/tags/java/" style="font-size: 13px;">java</a> <a href="/tags/lambda/" style="font-size: 13px;">lambda</a> <a href="/tags/less/" style="font-size: 13px;">less</a> <a href="/tags/linux/" style="font-size: 13.25px;">linux</a> <a href="/tags/mac/" style="font-size: 13.25px;">mac</a> <a href="/tags/mybatis-plus/" style="font-size: 13px;">mybatis-plus</a> <a href="/tags/mysql/" style="font-size: 13px;">mysql</a> <a href="/tags/oracle/" style="font-size: 13px;">oracle</a> <a href="/tags/pom-xml/" style="font-size: 13px;">pom.xml</a> <a href="/tags/quartz/" style="font-size: 13px;">quartz</a> <a href="/tags/settings-xml/" style="font-size: 13px;">settings.xml</a> <a href="/tags/spring-boot/" style="font-size: 13px;">spring-boot</a> <a href="/tags/ssh/" style="font-size: 13px;">ssh</a> <a href="/tags/sshpass/" style="font-size: 13px;">sshpass</a> <a href="/tags/yum/" style="font-size: 13px;">yum</a> <a href="/tags/%E4%B9%90%E8%A7%82%E9%94%81/" style="font-size: 13px;">乐观锁</a> <a href="/tags/%E4%BB%8B%E7%BB%8D/" style="font-size: 13px;">介绍</a> <a href="/tags/%E5%86%85%E7%BD%91/" style="font-size: 13px;">内网</a> <a href="/tags/%E5%86%85%E7%BD%91%E7%A9%BF%E9%80%8F/" style="font-size: 13px;">内网穿透</a> <a href="/tags/%E5%8A%A0%E5%AF%86/" style="font-size: 13.08px;">加密</a> <a href="/tags/%E5%8F%8D%E7%BC%96%E8%AF%91%E5%B7%A5%E5%85%B7/" style="font-size: 13px;">反编译工具</a> <a href="/tags/%E5%9B%BE%E5%BA%8A/" style="font-size: 13px;">图床</a> <a href="/tags/%E5%9F%BA%E7%A1%80/" style="font-size: 13.92px;">基础</a> <a href="/tags/%E5%AD%98%E5%82%A8%E5%87%BD%E6%95%B0/" style="font-size: 13px;">存储函数</a> <a href="/tags/%E5%AD%98%E5%82%A8%E8%BF%87%E7%A8%8B/" style="font-size: 13.08px;">存储过程</a> <a href="/tags/%E5%AE%9A%E6%97%B6%E5%99%A8/" style="font-size: 13px;">定时器</a> <a href="/tags/%E5%AE%9D%E5%A1%94/" style="font-size: 13.08px;">宝塔</a> <a href="/tags/%E5%B9%B6%E5%8F%91/" style="font-size: 13px;">并发</a> <a href="/tags/%E5%BC%82%E5%B8%B8/" style="font-size: 13px;">异常</a> <a href="/tags/%E5%BF%83%E7%90%86/" style="font-size: 13.08px;">心理</a> <a href="/tags/%E6%80%BB%E7%BB%93/" style="font-size: 13px;">总结</a> <a href="/tags/%E6%8C%81%E4%B9%85%E5%B1%82%E6%A1%86%E6%9E%B6/" style="font-size: 13.17px;">持久层框架</a> <a href="/tags/%E6%8E%A5%E5%8F%A3/" style="font-size: 13px;">接口</a> <a href="/tags/%E6%8F%92%E4%BB%B6/" style="font-size: 13px;">插件</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/" style="font-size: 13.33px;">数据库</a> <a href="/tags/%E6%96%AD%E8%A8%80/" style="font-size: 13px;">断言</a> <a href="/tags/%E6%A0%91%E8%8E%93%E6%B4%BE/" style="font-size: 13.08px;">树莓派</a> <a href="/tags/%E6%A0%91%E8%8E%93%E6%B4%BE4B/" style="font-size: 13px;">树莓派4B</a> <a href="/tags/%E6%A6%82%E5%BF%B5/" style="font-size: 13px;">概念</a> <a href="/tags/%E6%A8%A1%E7%89%88%E5%BC%95%E6%93%8E/" style="font-size: 13px;">模版引擎</a> <a href="/tags/%E6%B3%9B%E5%9E%8B/" style="font-size: 13.08px;">泛型</a> <a href="/tags/%E6%B5%8B%E8%AF%95/" style="font-size: 13.33px;">测试</a> <a href="/tags/%E7%88%AC%E8%99%AB/" style="font-size: 13.08px;">爬虫</a> <a href="/tags/%E7%94%A8%E6%88%B7%E6%9D%83%E9%99%90%E9%AA%8C%E8%AF%81/" style="font-size: 13px;">用户权限验证</a> <a href="/tags/%E7%9F%A5%E8%AF%86/" style="font-size: 13px;">知识</a> <a href="/tags/%E7%AE%97%E6%B3%95/" style="font-size: 13.08px;">算法</a> <a href="/tags/%E7%B1%BB/" style="font-size: 13px;">类</a> <a href="/tags/%E7%BB%84%E4%BB%B6%E5%BA%93/" style="font-size: 13px;">组件库</a> <a href="/tags/%E8%84%9A%E6%9C%AC/" style="font-size: 13.25px;">脚本</a> <a href="/tags/%E8%87%AA%E5%8A%A8%E5%8C%96%E6%B5%8B%E8%AF%95/" style="font-size: 13px;">自动化测试</a> <a href="/tags/%E8%8B%A5%E4%BE%9D/" style="font-size: 13px;">若依</a> <a href="/tags/%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/" style="font-size: 13.08px;">解决方案</a> <a href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" style="font-size: 13px;">设计模式</a> <a href="/tags/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/" style="font-size: 13.08px;">读书笔记</a> <a href="/tags/%E8%B7%A8%E5%9F%9F/" style="font-size: 13px;">跨域</a> <a href="/tags/%E9%83%A8%E7%BD%B2/" style="font-size: 13px;">部署</a> <a href="/tags/%E9%9B%86%E6%88%90/" style="font-size: 13.67px;">集成</a> <a href="/tags/%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1/" style="font-size: 13px;">面向对象</a> <a href="/tags/%E9%9F%A9%E5%89%A7/" style="font-size: 13px;">韩剧</a>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget-body">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/07/">七月 2024</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/07/">七月 2023</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/06/">六月 2023</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/01/">一月 2023</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/11/">十一月 2022</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/10/">十月 2022</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/07/">七月 2022</a><span class="archive-list-count">181</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/06/">六月 2022</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/07/">七月 2020</a><span class="archive-list-count">17</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget-body">
+      <ul class="recent-post-list list-unstyled ">
+        
+          <li>
+            
+            <div class="item-thumb">
+              <a href="/2024/07/%E4%B8%8D%E5%8D%B7%E5%AD%A6%E5%8E%86%E5%92%8C%E8%83%8C%E6%99%AF%E7%9A%84%E8%B5%9B%E9%81%93%EF%BC%8C%E4%B9%9F%E8%83%BD%E6%9C%88%E5%85%A5%E8%BF%87%E4%B8%87%EF%BC%9F/" class="thumb">
+    
+    
+        <span class="thumb-image thumb-none"></span>
+    
+</a>
+
+            </div>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/%E5%88%9B%E4%B8%9A/">创业</a>
+              </p>
+              <p class="item-title">
+                <a href="/2024/07/%E4%B8%8D%E5%8D%B7%E5%AD%A6%E5%8E%86%E5%92%8C%E8%83%8C%E6%99%AF%E7%9A%84%E8%B5%9B%E9%81%93%EF%BC%8C%E4%B9%9F%E8%83%BD%E6%9C%88%E5%85%A5%E8%BF%87%E4%B8%87%EF%BC%9F/" class="title">不卷学历和背景的赛道，也能月入过万？</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2024-07-11T05:45:20.000Z" itemprop="datePublished">2024-07-11</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-thumb">
+              <a href="/2024/07/%E5%9B%9E%E9%A1%BE%E5%B7%A5%E4%BD%9C%E8%BF%99%E5%87%A0%E5%B9%B4/" class="thumb">
+    
+    
+        <span class="thumb-image thumb-none"></span>
+    
+</a>
+
+            </div>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/%E5%A4%8D%E7%9B%98/">复盘</a>
+              </p>
+              <p class="item-title">
+                <a href="/2024/07/%E5%9B%9E%E9%A1%BE%E5%B7%A5%E4%BD%9C%E8%BF%99%E5%87%A0%E5%B9%B4/" class="title">回顾工作这几年</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2024-07-09T06:19:23.000Z" itemprop="datePublished">2024-07-09</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-thumb">
+              <a href="/2023/07/SpringBoot3%E9%9B%86%E6%88%90Quartz%E6%9E%81%E7%AE%80%E7%89%88/" class="thumb">
+    
+    
+        <span style="background-image:url(/2023/07/SpringBoot3集成Quartz极简版/logo-quartz-scheduler.png)" alt="SpringBoot3集成Quartz极简版" class="thumb-image"></span>
+    
+</a>
+
+            </div>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/SpringBoot/">SpringBoot</a>
+              </p>
+              <p class="item-title">
+                <a href="/2023/07/SpringBoot3%E9%9B%86%E6%88%90Quartz%E6%9E%81%E7%AE%80%E7%89%88/" class="title">SpringBoot3集成Quartz极简版</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2023-07-18T01:14:01.000Z" itemprop="datePublished">2023-07-18</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-thumb">
+              <a href="/2023/07/SpringBoot3%E9%9B%86%E6%88%90Quartz%E8%AF%A6%E7%BB%86%E7%89%88/" class="thumb">
+    
+    
+        <span style="background-image:url(/2023/07/SpringBoot3集成Quartz极简版/logo-quartz-scheduler.png)" alt="SpringBoot3集成Quartz详细版" class="thumb-image"></span>
+    
+</a>
+
+            </div>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/SpringBoot/">SpringBoot</a>
+              </p>
+              <p class="item-title">
+                <a href="/2023/07/SpringBoot3%E9%9B%86%E6%88%90Quartz%E8%AF%A6%E7%BB%86%E7%89%88/" class="title">SpringBoot3集成Quartz详细版</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2023-07-18T01:14:01.000Z" itemprop="datePublished">2023-07-18</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-thumb">
+              <a href="/2023/07/SpringBoot3%E9%9B%86%E6%88%90Swagger/" class="thumb">
+    
+    
+        <span style="background-image:url(/2023/07/SpringBoot3集成Swagger/swagger_logo.svg)" alt="SpringBoot3集成Swagger" class="thumb-image"></span>
+    
+</a>
+
+            </div>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/SpringBoot/">SpringBoot</a>
+              </p>
+              <p class="item-title">
+                <a href="/2023/07/SpringBoot3%E9%9B%86%E6%88%90Swagger/" class="title">SpringBoot3集成Swagger</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2023-07-11T06:52:01.000Z" itemprop="datePublished">2023-07-11</time>
+              </p>
+            </div>
+          </li>
+          
+      </ul>
+    </div>
+  </div>
+  
+
+    
+  </div>
+</aside>
+
+  
+  
+<main class="main" role="main">
+  <div class="content">
+  <article id="post-软件开发/技术/编程语言/swift/Swift基础-控制流程" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
+    
+    <div class="article-header">
+      
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Swift基础 控制流程
+    </h1>
+  
+
+      
+      <div class="article-meta">
+        <span class="article-date">
+    <i class="icon icon-calendar-check"></i>
+	<a href="/2022/07/Swift%E5%9F%BA%E7%A1%80-%E6%8E%A7%E5%88%B6%E6%B5%81%E7%A8%8B/" class="article-date">
+	  <time datetime="2022-07-01T04:01:01.000Z" itemprop="datePublished">2022-07-01</time>
+	</a>
+</span>
+        
+  <span class="article-category">
+    <i class="icon icon-folder"></i>
+    <a class="article-category-link" href="/categories/Swift/">Swift</a>
+  </span>
+
+        
+  <span class="article-tag">
+    <i class="icon icon-tags"></i>
+	<a class="article-tag-link-link" href="/tags/Swift/" rel="tag">Swift</a>, <a class="article-tag-link-link" href="/tags/%E5%9F%BA%E7%A1%80/" rel="tag">基础</a>
+  </span>
+
+
+        
+	<span class="article-read hidden-xs">
+	    <i class="icon icon-eye-fill" aria-hidden="true"></i>
+	    <span id="busuanzi_container_page_pv">
+			<span id="busuanzi_value_page_pv">0</span>
+		</span>
+	</span>
+
+
+        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2022/07/Swift%E5%9F%BA%E7%A1%80-%E6%8E%A7%E5%88%B6%E6%B5%81%E7%A8%8B/#comments" class="article-comment-link">评论</a></span>
+        
+	
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">字数统计: 9.4k(字)</span>
+	
+	
+		<span class="post-readcount hidden-xs" itemprop="timeRequired">阅读时长: 37(分)</span>
+	
+
+      </div>
+    </div>
+    <div class="article-entry marked-body" itemprop="articleBody">
+      
+        <p>翻译自：<a target="_blank" rel="noopener" href="https://docs.swift.org/swift-book/LanguageGuide/ControlFlow.html">https://docs.swift.org/swift-book/LanguageGuide/ControlFlow.html</a></p>
+<p>Swift提供了各种控制流语句。这些包括<code>while</code>循环多次执行任务；<code>if</code>、<code>guard</code>和<code>switch</code>语句，以根据特定条件执行不同的代码分支；以及<code>break</code>和<code>continue</code>将执行流程转移到代码中的另一个点等语句。</p>
+<p>Swift还提供了一个<code>for</code>-<code>in</code>循环，可以轻松地在数组、字典、范围、字符串和其他序列上迭代。</p>
+<p>Swift的<code>switch</code>语句在许多类似C语言中比它的对应语句强大得多。案例可以匹配许多不同的模式，包括间隔匹配、元组和特定类型的转换。<code>switch</code>情况下的匹配值可以绑定到临时常量或变量，以便在案例正文中使用，复杂的匹配条件可以用每个案例的<code>where</code>子句表示。</p>
+<h2 id="For-In循环"><a href="#For-In循环" class="headerlink" title="For-In循环"></a>For-In循环</h2><p>您可以使用<code>for</code>-<code>in</code>循环迭代序列，例如数组中的项、数字范围或字符串中的字符。</p>
+<p>此示例使用<code>for</code>-<code>in</code>循环来迭代数组中的项目：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> names <span class="operator">=</span> [<span class="string">&quot;Anna&quot;</span>, <span class="string">&quot;Alex&quot;</span>, <span class="string">&quot;Brian&quot;</span>, <span class="string">&quot;Jack&quot;</span>]</span><br><span class="line"><span class="keyword">for</span> name <span class="keyword">in</span> names &#123;</span><br><span class="line">   <span class="built_in">print</span>(<span class="string">&quot;Hello, <span class="subst">\(name)</span>!&quot;</span>)</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// Hello, Anna!</span></span><br><span class="line"><span class="comment">// Hello, Alex!</span></span><br><span class="line"><span class="comment">// Hello, Brian!</span></span><br><span class="line"><span class="comment">// Hello, Jack!</span></span><br></pre></td></tr></table></figure>
+
+<p>您还可以迭代字典以访问其键值对。字典迭代时，字典中的每个项目都会作为<code>(key,value)</code>元组返回，您可以将<code>(key,value)</code>元组的成员分解为显式命名的常量，以便在<code>for</code>-<code>in</code>循环的正文中使用。在下面的代码示例中，字典的键被分解为名为<code>animalName</code>的常量，字典的值被分解为名为<code>legCount</code>的常量。</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> numberOfLegs <span class="operator">=</span> [<span class="string">&quot;spider&quot;</span>: <span class="number">8</span>, <span class="string">&quot;ant&quot;</span>: <span class="number">6</span>, <span class="string">&quot;cat&quot;</span>: <span class="number">4</span>]</span><br><span class="line"><span class="keyword">for</span> (animalName, legCount) <span class="keyword">in</span> numberOfLegs &#123;</span><br><span class="line">   <span class="built_in">print</span>(<span class="string">&quot;<span class="subst">\(animalName)</span>s have <span class="subst">\(legCount)</span> legs&quot;</span>)</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// cats have 4 legs</span></span><br><span class="line"><span class="comment">// ants have 6 legs</span></span><br><span class="line"><span class="comment">// spiders have 8 legs</span></span><br></pre></td></tr></table></figure>
+
+
+
+<p><code>Dictionary</code>的内容本质上是无序的，迭代它们并不能保证检索它们的顺序。特别是，您在<code>Dictionary</code>中插入项目的顺序并不能定义它们迭代的顺序。有关数组和字典的更多信息，请参阅<a target="_blank" rel="noopener" href="https://docs.swift.org/swift-book/LanguageGuide/CollectionTypes.html">集合类型</a>。</p>
+<p>您还可以使用数字范围的<code>for</code>-<code>in</code>循环。此示例打印五次表中的前几个条目：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> index <span class="keyword">in</span> <span class="number">1</span><span class="operator">...</span><span class="number">5</span> &#123;</span><br><span class="line">   <span class="built_in">print</span>(<span class="string">&quot;<span class="subst">\(index)</span> times 5 is <span class="subst">\(index <span class="operator">*</span> <span class="number">5</span>)</span>&quot;</span>)</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 1 times 5 is 5</span></span><br><span class="line"><span class="comment">// 2 times 5 is 10</span></span><br><span class="line"><span class="comment">// 3 times 5 is 15</span></span><br><span class="line"><span class="comment">// 4 times 5 is 20</span></span><br><span class="line"><span class="comment">// 5 times 5 is 25</span></span><br></pre></td></tr></table></figure>
+
+<p>正在迭代的序列是从<code>1</code>到5的数字范围，包括使用闭区间运算符（<code>...</code>）所示。<code>index</code>的值设置为范围（1）中的第一个数字，并执行循环中的语句。在这种情况下，循环只包含一个语句，该语句从五次表中打印<code>index</code>当前值的条目。执行语句后，<code>index</code>值将更新为包含范围（2）中的第二个值，并再次调用<code>print(_:separator:terminator:)</code>函数。这个过程一直持续到范围结束。</p>
+<p>在上面的示例中，<code>index</code>是一个常量，其值在循环每次迭代开始时自动设置。因此，<code>index</code>在使用之前不必声明。它仅通过包含在循环声明中来隐式声明，而无需<code>let</code>声明关键字。</p>
+<p>如果您不需要序列中的每个值，您可以使用下划线代替变量名称来忽略这些值。</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> base <span class="operator">=</span> <span class="number">3</span></span><br><span class="line"><span class="keyword">let</span> power <span class="operator">=</span> <span class="number">10</span></span><br><span class="line"><span class="keyword">var</span> answer <span class="operator">=</span> <span class="number">1</span></span><br><span class="line"><span class="keyword">for</span> <span class="keyword">_</span> <span class="keyword">in</span> <span class="number">1</span><span class="operator">...</span>power &#123;</span><br><span class="line">   answer <span class="operator">*=</span> base</span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;<span class="subst">\(base)</span> to the power of <span class="subst">\(power)</span> is <span class="subst">\(answer)</span>&quot;</span>)</span><br><span class="line"><span class="comment">// Prints &quot;3 to the power of 10 is 59049&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>上面的示例计算了一个数字对另一个数字幂的值（在这种情况下，<code>3</code>到<code>10</code>的幂）。它使用以<code>1</code>开头和以10结尾的闭合范围将<code>1</code>（即<code>3</code>到<code>0</code>的幂）乘以3、十倍。对于此计算，每次通过循环的单个计数器值是不必要的——代码只需正确执行循环次数。代替循环变量的下划线字符（<code>_</code>）会导致单个值被忽略，并且在循环的每次迭代中不提供对当前值的访问。</p>
+<p>在某些情况下，您可能不想使用闭合范围，包括两个端点。考虑在表盘上每分钟绘制刻度。你想画<code>60</code>勾号，从<code>0</code>分钟开始。使用半开范围运算符（<code>..&lt;</code>）包括下界，但不包括上界。有关范围的更多信息，请参阅<a target="_blank" rel="noopener" href="https://docs.swift.org/swift-book/LanguageGuide/BasicOperators.html#ID73">范围操作员</a>。</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> minutes <span class="operator">=</span> <span class="number">60</span></span><br><span class="line"><span class="keyword">for</span> tickMark <span class="keyword">in</span> <span class="number">0</span><span class="operator">..&lt;</span>minutes &#123;</span><br><span class="line">   <span class="comment">// render the tick mark each minute (60 times)</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>一些用户可能希望在他们的UI中少打勾。他们可以选择每“5”分钟打一个分数。使用’ <code>stride(from:to:by:)</code> ‘函数来跳过不需要的标记。</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> minuteInterval <span class="operator">=</span> <span class="number">5</span></span><br><span class="line"><span class="keyword">for</span> tickMark <span class="keyword">in</span> <span class="built_in">stride</span>(from: <span class="number">0</span>, to: minutes, by: minuteInterval) &#123;</span><br><span class="line">   <span class="comment">// render the tick mark every 5 minutes (0, 5, 10, 15 ... 45, 50, 55)</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>闭合范围也可用，使用 <code>stride(from:through:by:)</code>代替：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> hours <span class="operator">=</span> <span class="number">12</span></span><br><span class="line"><span class="keyword">let</span> hourInterval <span class="operator">=</span> <span class="number">3</span></span><br><span class="line"><span class="keyword">for</span> tickMark <span class="keyword">in</span> <span class="built_in">stride</span>(from: <span class="number">3</span>, through: hours, by: hourInterval) &#123;</span><br><span class="line">   <span class="comment">// render the tick mark every 3 hours (3, 6, 9, 12)</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>上面的示例使用<code>for</code>-<code>in</code>循环来迭代范围、数组、字典和字符串。但是，您可以使用此语法迭代<em>任何</em>集合，包括您自己的类和集合类型，只要这些类型符合<a target="_blank" rel="noopener" href="https://developer.apple.com/documentation/swift/sequence"><code>Sequence</code></a>协议。</p>
+<h2 id="While循环"><a href="#While循环" class="headerlink" title="While循环"></a>While循环</h2><p><code>while</code>循环执行一组语句，直到条件变成<code>false</code>。当第一次迭代开始前不知道迭代次数时，最好使用这些类型的循环。Swift提供了两种类型的<code>while</code>循环：</p>
+<ul>
+<li><code>while</code>在每次通过循环开始时评估其状态。</li>
+<li><code>repeat</code>-<code>while</code>在每次通过循环结束时评估其状态。</li>
+</ul>
+<h3 id="While"><a href="#While" class="headerlink" title="While"></a>While</h3><p><code>while</code>循环从评估单个条件开始。如果条件为<code>true</code>，则重复一组语句，直到条件变为<code>false</code>。</p>
+<p>以下是<code>while</code>循环的一般形式：</p>
+<ol>
+<li>while <code>condition</code> {</li>
+<li>​    <code>statements</code></li>
+<li>}</li>
+</ol>
+<p>这个例子玩一个简单的<em>蛇和梯子</em>游戏（也称为<em>滑槽和梯子</em>）：</p>
+<p><img src="/2022/07/Swift%E5%9F%BA%E7%A1%80-%E6%8E%A7%E5%88%B6%E6%B5%81%E7%A8%8B/202204051010377.png" alt="../_images/snakesAndLadders_2x.png"></p>
+<p>游戏规则如下：</p>
+<ul>
+<li>董事会有25个正方形，目标是降落在25个正方形或25个以上。</li>
+<li>玩家的起始方块是“正方形零”，就在棋盘的左下角。</li>
+<li>每次转弯，您滚动一个六面骰子，并沿着上面虚线箭头指示的水平路径按该数量的正方形移动。</li>
+<li>如果你的转弯在梯子底部结束，你就向上移动。</li>
+<li>如果你的转弯在蛇的头上结束，你就沿着那条蛇向下移动。</li>
+</ul>
+<p>游戏板由<code>Int</code>值数组表示。它的大小基于一个名为<code>finalSquare</code>常量，该常量用于初始化数组，并在示例后面检查获胜条件。因为玩家从棋盘开始，在“平方零”上，棋盘初始化为26个零<code>Int</code>值，而不是25个。</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> finalSquare <span class="operator">=</span> <span class="number">25</span></span><br><span class="line"><span class="keyword">var</span> board <span class="operator">=</span> [<span class="type">Int</span>](repeating: <span class="number">0</span>, count: finalSquare <span class="operator">+</span> <span class="number">1</span>)</span><br></pre></td></tr></table></figure>
+
+<p>然后将一些正方形设置为蛇和梯子具有更具体的值。带梯子底座的正数可以将您向上移动，而带蛇头的正方形则有一个负数将您移回板上。</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">board[<span class="number">03</span>] <span class="operator">=</span> <span class="operator">+</span><span class="number">08</span>; board[<span class="number">06</span>] <span class="operator">=</span> <span class="operator">+</span><span class="number">11</span>; board[<span class="number">09</span>] <span class="operator">=</span> <span class="operator">+</span><span class="number">09</span>; board[<span class="number">10</span>] <span class="operator">=</span> <span class="operator">+</span><span class="number">02</span></span><br><span class="line">board[<span class="number">14</span>] <span class="operator">=</span> <span class="operator">-</span><span class="number">10</span>; board[<span class="number">19</span>] <span class="operator">=</span> <span class="operator">-</span><span class="number">11</span>; board[<span class="number">22</span>] <span class="operator">=</span> <span class="operator">-</span><span class="number">02</span>; board[<span class="number">24</span>] <span class="operator">=</span> <span class="operator">-</span><span class="number">08</span></span><br></pre></td></tr></table></figure>
+
+<p>正方形3包含一个梯子的底部，该梯子将您移动到正方形11。为了表示这一点，<code>board[03]</code>等于<code>+08</code>，这相当于整数值<code>8</code>（<code>3</code>和<code>11</code>之间的差）。为了对齐值和语句，一元加运算符（<code>+i</code>）显式地与一元减运算符（<code>-i</code>）一起使用，小于<code>10</code>的数字用零填充。（两者都不是严格必要的文体技术，但它们会导致代码更整洁。）</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> square <span class="operator">=</span> <span class="number">0</span></span><br><span class="line"><span class="keyword">var</span> diceRoll <span class="operator">=</span> <span class="number">0</span></span><br><span class="line"><span class="keyword">while</span> square <span class="operator">&lt;</span> finalSquare &#123;</span><br><span class="line">   <span class="comment">// roll the dice</span></span><br><span class="line">   diceRoll <span class="operator">+=</span> <span class="number">1</span></span><br><span class="line">   <span class="keyword">if</span> diceRoll <span class="operator">==</span> <span class="number">7</span> &#123; diceRoll <span class="operator">=</span> <span class="number">1</span> &#125;</span><br><span class="line">   <span class="comment">// move by the rolled amount</span></span><br><span class="line">   square <span class="operator">+=</span> diceRoll</span><br><span class="line">   <span class="keyword">if</span> square <span class="operator">&lt;</span> board.count &#123;</span><br><span class="line">       <span class="comment">// if we&#x27;re still on the board, move up or down for a snake or a ladder</span></span><br><span class="line">       square <span class="operator">+=</span> board[square]</span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;Game over!&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+<p>上面的例子使用一种非常简单的方法来掷骰子。它不是生成随机数，而是以<code>diceRoll</code>值<code>0</code>开头。每次通过<code>while</code>循环，<code>diceRoll</code>都会增加一个，然后检查它是否变得太大。每当这个返回值等于7时，骰子卷就变得太大，并重置为1。结果是一系列<code>diceRoll</code>值，总是1、2、3、4、5、6、1、<code>2</code>等等。</p>
+<p>掷骰子后，玩家通过<code>diceRoll</code>正方形向前移动。骰子卷可能已经将玩家移到了25方块之外，在这种情况下，游戏就结束了。为了应对这种情况，代码检查该<code>square</code>小于<code>board</code>数组的<code>count</code>属性。如果<code>square</code>有效，则将存储在<code>board[square]</code>中的值添加到当前<code>square</code>值中，以向上或向下移动任何梯子或蛇。</p>
+<blockquote>
+<p>注意</p>
+<p>如果不执行此检查，<code>board[square]</code>可能会尝试访问<code>board</code>数组范围之外的值，这将触发运行时错误。</p>
+</blockquote>
+<p>然后，电流<code>while</code>循环执行结束，并检查循环的条件，看看是否应该再次执行循环。如果玩家在正方形25上移动或超过25，循环的条件将计算为<code>false</code>，游戏结束。</p>
+<p>在这种情况下，<code>while</code>循环是合适的，因为<code>while</code>循环开始时游戏的长度不明确。相反，循环被执行，直到满足特定条件。</p>
+<h3 id="Repeat-While"><a href="#Repeat-While" class="headerlink" title="Repeat-While"></a>Repeat-While</h3><p><code>while</code>循环的另一个变体，称为<code>repeat``while</code>循环，在考虑循环的条件<em>之前</em>，先执行一次循环块的传递。然后，它继续重复循环，直到条件为<code>false</code>。</p>
+<blockquote>
+<p>注意</p>
+<p>Swift 中的<code>repeat</code>循环类似于其他语言中的<code>while</code>循环。</p>
+</blockquote>
+<p>以下是<code>repeat</code>循环的一般形式：</p>
+<ol>
+<li>repeat {</li>
+<li>​    <code>statements</code></li>
+<li>} while <code>condition</code></li>
+</ol>
+<p>这是<em>蛇和梯子</em>的例子，写成<code>repeat</code>循环，而不是<code>while</code>循环。<code>finalSquare</code>、<code>board</code>、<code>square</code>和<code>diceRoll</code>的值初始化方式与<code>while</code>循环完全相同。</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> finalSquare <span class="operator">=</span> <span class="number">25</span></span><br><span class="line"><span class="keyword">var</span> board <span class="operator">=</span> [<span class="type">Int</span>](repeating: <span class="number">0</span>, count: finalSquare <span class="operator">+</span> <span class="number">1</span>)</span><br><span class="line">board[<span class="number">03</span>] <span class="operator">=</span> <span class="operator">+</span><span class="number">08</span>; board[<span class="number">06</span>] <span class="operator">=</span> <span class="operator">+</span><span class="number">11</span>; board[<span class="number">09</span>] <span class="operator">=</span> <span class="operator">+</span><span class="number">09</span>; board[<span class="number">10</span>] <span class="operator">=</span> <span class="operator">+</span><span class="number">02</span></span><br><span class="line">board[<span class="number">14</span>] <span class="operator">=</span> <span class="operator">-</span><span class="number">10</span>; board[<span class="number">19</span>] <span class="operator">=</span> <span class="operator">-</span><span class="number">11</span>; board[<span class="number">22</span>] <span class="operator">=</span> <span class="operator">-</span><span class="number">02</span>; board[<span class="number">24</span>] <span class="operator">=</span> <span class="operator">-</span><span class="number">08</span></span><br><span class="line"><span class="keyword">var</span> square <span class="operator">=</span> <span class="number">0</span></span><br><span class="line"><span class="keyword">var</span> diceRoll <span class="operator">=</span> <span class="number">0</span></span><br></pre></td></tr></table></figure>
+
+<p>在这个版本的游戏中，循环中<em>的第一个</em>动作是检查梯子或蛇。棋盘上没有梯子将玩家直接带到25号方块，因此不可能通过向上移动梯子来赢得比赛。因此，检查蛇或梯子作为循环中的第一个动作是安全的。</p>
+<p>在游戏开始时，玩家处于“平方零”。<code>board[0]</code>总是等于<code>0</code>，没有效果。</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">repeat</span> &#123;</span><br><span class="line">   <span class="comment">// move up or down for a snake or ladder</span></span><br><span class="line">   square <span class="operator">+=</span> board[square]</span><br><span class="line">   <span class="comment">// roll the dice</span></span><br><span class="line">   diceRoll <span class="operator">+=</span> <span class="number">1</span></span><br><span class="line">   <span class="keyword">if</span> diceRoll <span class="operator">==</span> <span class="number">7</span> &#123; diceRoll <span class="operator">=</span> <span class="number">1</span> &#125;</span><br><span class="line">   <span class="comment">// move by the rolled amount</span></span><br><span class="line">   square <span class="operator">+=</span> diceRoll</span><br><span class="line">&#125; <span class="keyword">while</span> square <span class="operator">&lt;</span> finalSquare</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;Game over!&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+<p>在代码检查蛇和梯子后，掷骰子，玩家被<code>diceRoll</code>正方形向前移动。然后，当前的循环执行结束。</p>
+<p>循环的条件（<code>whilesquare&lt;finalSquare</code>）与以前相同，但这次要到第一次循环运行<em>结束时</em>才会进行评估。<code>repeat</code>循环的结构比上一个示例中的<code>while</code>循环更适合这个游戏。在上面的<code>while</code>循环中，<code>square+=board[square]</code>总是在循环<em>后立即</em>执行，<code>while</code>条件确认<code>square</code>仍在板上。此行为消除了前面描述的游戏<code>while</code>循环版本中对数组边界检查的需求。</p>
+<h2 id="条件声明"><a href="#条件声明" class="headerlink" title="条件声明"></a>条件声明</h2><p>根据特定条件执行不同的代码通常非常有用。您可能希望在发生错误时运行额外的代码，或者在值变得太高或太低时显示消息。为此，您可以将部分代码<em>附加条件</em>。</p>
+<p>Swift提供了两种向代码添加条件分支的方法：<code>if</code>语句和<code>switch</code>语句。通常，您使用<code>if</code>语句来评估只有少数可能结果的简单条件。<code>switch</code>语句更适合具有多种可能排列的更复杂条件，在模式匹配可以帮助选择适当的代码分支执行的情况下非常有用。</p>
+<h3 id="if"><a href="#if" class="headerlink" title="if"></a>if</h3><p>在最简单的形式中，<code>if</code>语句有一个单一的<code>if</code>条件。只有当条件为<code>true</code>时，它才会执行一组语句。</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> temperatureInFahrenheit <span class="operator">=</span> <span class="number">30</span></span><br><span class="line"><span class="keyword">if</span> temperatureInFahrenheit <span class="operator">&lt;=</span> <span class="number">32</span> &#123;</span><br><span class="line">   <span class="built_in">print</span>(<span class="string">&quot;It&#x27;s very cold. Consider wearing a scarf.&quot;</span>)</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// Prints &quot;It&#x27;s very cold. Consider wearing a scarf.&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>上面的例子检查温度是小于还是等于32华氏度（水的冰点）。如果是，则打印一条消息。否则，不会打印消息，代码执行在<code>if</code>语句的关闭大括号后继续。</p>
+<p><code>if</code>语句可以为<code>if</code>条件为<code>false</code>的情况提供一组替代语句，称为<em>e else子句</em>。这些语句由<code>else</code>关键字表示。</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">temperatureInFahrenheit <span class="operator">=</span> <span class="number">40</span></span><br><span class="line"><span class="keyword">if</span> temperatureInFahrenheit <span class="operator">&lt;=</span> <span class="number">32</span> &#123;</span><br><span class="line">   <span class="built_in">print</span>(<span class="string">&quot;It&#x27;s very cold. Consider wearing a scarf.&quot;</span>)</span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">   <span class="built_in">print</span>(<span class="string">&quot;It&#x27;s not that cold. Wear a t-shirt.&quot;</span>)</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// Prints &quot;It&#x27;s not that cold. Wear a t-shirt.&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>这两个分支中的一个总是被执行的。由于温度已升至华氏<code>40</code>度，因此不再足够冷，无法建议戴围巾，因此会触发<code>else</code>分支。</p>
+<p>您可以将多个<code>if</code>语句链接在一起，以考虑其他子句。</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">temperatureInFahrenheit <span class="operator">=</span> <span class="number">90</span></span><br><span class="line"><span class="keyword">if</span> temperatureInFahrenheit <span class="operator">&lt;=</span> <span class="number">32</span> &#123;</span><br><span class="line">   <span class="built_in">print</span>(<span class="string">&quot;It&#x27;s very cold. Consider wearing a scarf.&quot;</span>)</span><br><span class="line">&#125; <span class="keyword">else</span> <span class="keyword">if</span> temperatureInFahrenheit <span class="operator">&gt;=</span> <span class="number">86</span> &#123;</span><br><span class="line">   <span class="built_in">print</span>(<span class="string">&quot;It&#x27;s really warm. Don&#x27;t forget to wear sunscreen.&quot;</span>)</span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">  <span class="built_in">print</span>(<span class="string">&quot;It&#x27;s not that cold. Wear a t-shirt.&quot;</span>)</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// Prints &quot;It&#x27;s really warm. Don&#x27;t forget to wear sunscreen.&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>在这里，添加了一个额外的<code>if</code>语句，以应对特别温暖的温度。最后的<code>else</code>句仍然存在，它打印了对任何既不太温暖也不太冷的温度的响应。</p>
+<p>然而，最终的al <code>else</code>子句是可选的，如果一组条件不需要完整，则可以排除。</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">temperatureInFahrenheit <span class="operator">=</span> <span class="number">72</span></span><br><span class="line"><span class="keyword">if</span> temperatureInFahrenheit <span class="operator">&lt;=</span> <span class="number">32</span> &#123;</span><br><span class="line">   <span class="built_in">print</span>(<span class="string">&quot;It&#x27;s very cold. Consider wearing a scarf.&quot;</span>)</span><br><span class="line">&#125; <span class="keyword">else</span> <span class="keyword">if</span> temperatureInFahrenheit <span class="operator">&gt;=</span> <span class="number">86</span> &#123;</span><br><span class="line">   <span class="built_in">print</span>(<span class="string">&quot;It&#x27;s really warm. Don&#x27;t forget to wear sunscreen.&quot;</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>由于温度既不太冷也不太暖，无法触发<code>if</code>或<code>if</code>条件，因此没有打印任何消息。</p>
+<h3 id="switch"><a href="#switch" class="headerlink" title="switch"></a>switch</h3><p><code>switch</code>语句考虑一个值，并将其与几种可能的匹配模式进行比较。然后，它根据第一个成功匹配的模式执行适当的代码块。<code>switch</code>语句提供了<code>if</code>语句的替代方案，用于响应多个潜在状态。</p>
+<p>以最简单的形式，<code>switch</code>语句将一个值与同一类型的一个或多个值进行比较。</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">switch</span> <span class="keyword">some</span> value to consider &#123;</span><br><span class="line"><span class="keyword">case</span> value <span class="number">1</span>:</span><br><span class="line">   respond to value <span class="number">1</span></span><br><span class="line"><span class="keyword">case</span> value <span class="number">2</span>,</span><br><span class="line">    value <span class="number">3</span>:</span><br><span class="line">   respond to value <span class="number">2</span> or <span class="number">3</span></span><br><span class="line"><span class="keyword">default</span>:</span><br><span class="line">   otherwise, <span class="keyword">do</span> something <span class="keyword">else</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>每个<code>switch</code>语句由多个可能的<em>大小写组成</em>，每个<code>case</code>关键字开头。除了与特定值进行比较外，Swift还为每种情况提供了几种方法来指定更复杂的匹配模式。本章后面将介绍这些选项。</p>
+<p><code>if</code>语句的正文一样，每个<code>case</code>都是代码执行的单独分支。<code>switch</code>语句决定应该选择哪个分支。此过程被称为对正在考虑的值进行<em>切换</em>。</p>
+<p>每个<code>switch</code>语句必须<em>详尽无遗</em>。也就是说，所考虑的类型的每个可能值都必须与其中一个<code>switch</code>情况匹配。如果为每个可能的值提供一个案例不合适，您可以定义一个默认大小写，以涵盖任何未显式处理的值。此默认情况由<code>default</code>关键字表示，并且必须始终显示在最后。</p>
+<p>此示例使用<code>switch</code>语句来考虑单个小写字符，称为<code>someCharacter</code>：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> someCharacter: <span class="type">Character</span> <span class="operator">=</span> <span class="string">&quot;z&quot;</span></span><br><span class="line"><span class="keyword">switch</span> someCharacter &#123;</span><br><span class="line"><span class="keyword">case</span> <span class="string">&quot;a&quot;</span>:</span><br><span class="line">   <span class="built_in">print</span>(<span class="string">&quot;The first letter of the alphabet&quot;</span>)</span><br><span class="line"><span class="keyword">case</span> <span class="string">&quot;z&quot;</span>:</span><br><span class="line">   <span class="built_in">print</span>(<span class="string">&quot;The last letter of the alphabet&quot;</span>)</span><br><span class="line"><span class="keyword">default</span>:</span><br><span class="line">   <span class="built_in">print</span>(<span class="string">&quot;Some other character&quot;</span>)</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// Prints &quot;The last letter of the alphabet&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p><code>switch</code>语句的第一个大小写与英语字母表<code>a</code>的第一个字母匹配，其第二个大小写与最后一个字母<code>z</code>匹配。由于<code>switch</code>必须为每个可能的字符（而不仅仅是每个字母字符）有一个大小写，因此此<code>switch</code>语句使用<code>default</code>大小写来匹配<code>a</code>和<code>z</code>以外的所有字符。该条款确保了<code>switch</code>语句详尽无遗。</p>
+<h3 id="没有隐含Fallthrough"><a href="#没有隐含Fallthrough" class="headerlink" title="没有隐含Fallthrough"></a>没有隐含Fallthrough</h3><p>与C和Objective-C中的<code>switch</code>语句不同，Swift中的<code>switch</code>语句不会默认地从每个案例的底部掉到下一个案例中。相反，整个<code>switch</code>语句在第一个匹配的<code>switch</code>案例完成后立即完成执行，而无需显式<code>break</code>语句。这使得<code>switch</code>语句比C中的交换机语句更安全、更易于使用，并避免错误地执行多个<code>switch</code>案例。</p>
+<blockquote>
+<p>注意</p>
+<p>虽然 Swift 中不需要<code>break</code>，但您可以使用<code>break</code>语句来匹配和忽略特定案例，或者在案例完成执行之前打破匹配的案例。有关详细信息，请参阅<a target="_blank" rel="noopener" href="https://docs.swift.org/swift-book/LanguageGuide/ControlFlow.html#ID139">切换语句中的断裂</a>。</p>
+</blockquote>
+<p>每个案例的正文<em>必须</em>包含至少一个可执行的语句。编写以下代码无效，因为第一个案例为空：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> anotherCharacter: <span class="type">Character</span> <span class="operator">=</span> <span class="string">&quot;a&quot;</span></span><br><span class="line"><span class="keyword">switch</span> anotherCharacter &#123;</span><br><span class="line"><span class="keyword">case</span> <span class="string">&quot;a&quot;</span>: <span class="comment">// Invalid, the case has an empty body</span></span><br><span class="line"><span class="keyword">case</span> <span class="string">&quot;A&quot;</span>:</span><br><span class="line">   <span class="built_in">print</span>(<span class="string">&quot;The letter A&quot;</span>)</span><br><span class="line"><span class="keyword">default</span>:</span><br><span class="line">   <span class="built_in">print</span>(<span class="string">&quot;Not the letter A&quot;</span>)</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// This will report a compile-time error.</span></span><br></pre></td></tr></table></figure>
+
+<p>与C中的<code>switch</code>语句不同，此<code>switch</code>语句与<code>&quot;a&quot;</code>和<code>&quot;A&quot;</code>都不匹配。相反，它报告了一个编译时错误，<code>case&quot;a&quot;:</code>不包含任何可执行语句。这种方法避免了从一个案例到另一个案例的意外故障，并使其意图更安全的代码更加清晰。</p>
+<p>要使用同时匹配<code>&quot;a&quot;</code>和<code>&quot;A&quot;</code>的单个大小写进行<code>switch</code>请将这两个值组合成一个复合大小写，用逗号分隔值。</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> anotherCharacter: <span class="type">Character</span> <span class="operator">=</span> <span class="string">&quot;a&quot;</span></span><br><span class="line"><span class="keyword">switch</span> anotherCharacter &#123;</span><br><span class="line"><span class="keyword">case</span> <span class="string">&quot;a&quot;</span>, <span class="string">&quot;A&quot;</span>:</span><br><span class="line">   <span class="built_in">print</span>(<span class="string">&quot;The letter A&quot;</span>)</span><br><span class="line"><span class="keyword">default</span>:</span><br><span class="line">   <span class="built_in">print</span>(<span class="string">&quot;Not the letter A&quot;</span>)</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// Prints &quot;The letter A&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>为了可读性，复合情况也可以写在多行上。有关复合病例的更多信息，请参阅<a target="_blank" rel="noopener" href="https://docs.swift.org/swift-book/LanguageGuide/ControlFlow.html#ID548">复合案例</a>。</p>
+<blockquote>
+<p>注意</p>
+<p>要在特定<code>switch</code>大小写的末尾显式掉线，请使用<code>fallthrough</code>关键字，如<a target="_blank" rel="noopener" href="https://docs.swift.org/swift-book/LanguageGuide/ControlFlow.html#ID140">Fallthrough</a>中所述。</p>
+</blockquote>
+<h3 id="间隔匹配"><a href="#间隔匹配" class="headerlink" title="间隔匹配"></a>间隔匹配</h3><p><code>switch</code>情况下的值可以检查它们是否在间隔内包含。此示例使用数字间隔为任何大小的数字提供自然语言计数：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> approximateCount <span class="operator">=</span> <span class="number">62</span></span><br><span class="line"><span class="keyword">let</span> countedThings <span class="operator">=</span> <span class="string">&quot;moons orbiting Saturn&quot;</span></span><br><span class="line"><span class="keyword">let</span> naturalCount: <span class="type">String</span></span><br><span class="line"><span class="keyword">switch</span> approximateCount &#123;</span><br><span class="line"><span class="keyword">case</span> <span class="number">0</span>:</span><br><span class="line">   naturalCount <span class="operator">=</span> <span class="string">&quot;no&quot;</span></span><br><span class="line"><span class="keyword">case</span> <span class="number">1</span><span class="operator">..&lt;</span><span class="number">5</span>:</span><br><span class="line">   naturalCount <span class="operator">=</span> <span class="string">&quot;a few&quot;</span></span><br><span class="line"><span class="keyword">case</span> <span class="number">5</span><span class="operator">..&lt;</span><span class="number">12</span>:</span><br><span class="line">   naturalCount <span class="operator">=</span> <span class="string">&quot;several&quot;</span></span><br><span class="line"><span class="keyword">case</span> <span class="number">12</span><span class="operator">..&lt;</span><span class="number">100</span>:</span><br><span class="line">   naturalCount <span class="operator">=</span> <span class="string">&quot;dozens of&quot;</span></span><br><span class="line"><span class="keyword">case</span> <span class="number">100</span><span class="operator">..&lt;</span><span class="number">1000</span>:</span><br><span class="line">   naturalCount <span class="operator">=</span> <span class="string">&quot;hundreds of&quot;</span></span><br><span class="line"><span class="keyword">default</span>:</span><br><span class="line">   naturalCount <span class="operator">=</span> <span class="string">&quot;many&quot;</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;There are <span class="subst">\(naturalCount)</span> <span class="subst">\(countedThings)</span>.&quot;</span>)</span><br><span class="line"><span class="comment">// Prints &quot;There are dozens of moons orbiting Saturn.&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>在上面的示例中，<code>approximateCount</code>在<code>switch</code>语句中计算。每个<code>case</code>都将该值与数字或区间进行比较。由于<code>approximateCount</code>的值在12到100之间，<code>naturalCount</code>被分配到<code>&quot;dozens</code>并从<code>switch</code>语句中转移执行。</p>
+<h3 id="元组"><a href="#元组" class="headerlink" title="元组"></a>元组</h3><p>您可以使用元组在同一<code>switch</code>语句中测试多个值。元组的每个元素都可以根据不同的值或值间隔进行测试。或者，使用下划线字符（<code>_</code>），也称为通配符模式，以匹配任何可能的值。</p>
+<p>下面的示例取了一个（x，y）点，表示为类型的简单元组<code>(Int,Int)</code>并在示例后面的图表上对其进行分类。</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> somePoint <span class="operator">=</span> (<span class="number">1</span>, <span class="number">1</span>)</span><br><span class="line"><span class="keyword">switch</span> somePoint &#123;</span><br><span class="line"><span class="keyword">case</span> (<span class="number">0</span>, <span class="number">0</span>):</span><br><span class="line">   <span class="built_in">print</span>(<span class="string">&quot;<span class="subst">\(somePoint)</span> is at the origin&quot;</span>)</span><br><span class="line"><span class="keyword">case</span> (<span class="keyword">_</span>, <span class="number">0</span>):</span><br><span class="line">   <span class="built_in">print</span>(<span class="string">&quot;<span class="subst">\(somePoint)</span> is on the x-axis&quot;</span>)</span><br><span class="line"><span class="keyword">case</span> (<span class="number">0</span>, <span class="keyword">_</span>):</span><br><span class="line">   <span class="built_in">print</span>(<span class="string">&quot;<span class="subst">\(somePoint)</span> is on the y-axis&quot;</span>)</span><br><span class="line"><span class="keyword">case</span> (<span class="operator">-</span><span class="number">2</span><span class="operator">...</span><span class="number">2</span>, <span class="operator">-</span><span class="number">2</span><span class="operator">...</span><span class="number">2</span>):</span><br><span class="line">   <span class="built_in">print</span>(<span class="string">&quot;<span class="subst">\(somePoint)</span> is inside the box&quot;</span>)</span><br><span class="line"><span class="keyword">default</span>:</span><br><span class="line">   <span class="built_in">print</span>(<span class="string">&quot;<span class="subst">\(somePoint)</span> is outside of the box&quot;</span>)</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// Prints &quot;(1, 1) is inside the box&quot;</span></span><br></pre></td></tr></table></figure>
+
+<img src="https://file.pandacode.cn/blog/202204051023130.png" alt="../_images/coordinateGraphSimple_2x.png" style="zoom:50%;">
+
+<p><code>switch</code>语句确定该点是在原点（0，0）、红色x轴上、绿色y轴上、以原点为中心的蓝色4乘4框内，还是在框外。</p>
+<p>与C不同，Swift允许多个<code>switch</code>考虑相同的值。事实上，点（0，0）可以匹配本示例中的所有<em>四个</em>情况。但是，如果可以进行多次匹配，则始终使用第一个匹配案例。点（0，0）将首先匹配<code>case(0,0)</code>因此所有其他匹配情况将被忽略。</p>
+<h3 id="价值绑定"><a href="#价值绑定" class="headerlink" title="价值绑定"></a>价值绑定</h3><p><code>switch</code>大小写可以命名其匹配的值或值，以用于临时常量或变量，以便在正文中使用。这种行为被称为<em>值绑定</em>，因为值绑定到案例正文中的临时常量或变量。</p>
+<p>下面的示例取了一个（x，y）点，表示为类型<code>(Int,Int)</code>的元组，并将其分类如下图：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> anotherPoint <span class="operator">=</span> (<span class="number">2</span>, <span class="number">0</span>)</span><br><span class="line"><span class="keyword">switch</span> anotherPoint &#123;</span><br><span class="line"><span class="keyword">case</span> (<span class="keyword">let</span> x, <span class="number">0</span>):</span><br><span class="line">   <span class="built_in">print</span>(<span class="string">&quot;on the x-axis with an x value of <span class="subst">\(x)</span>&quot;</span>)</span><br><span class="line"><span class="keyword">case</span> (<span class="number">0</span>, <span class="keyword">let</span> y):</span><br><span class="line">   <span class="built_in">print</span>(<span class="string">&quot;on the y-axis with a y value of <span class="subst">\(y)</span>&quot;</span>)</span><br><span class="line"><span class="keyword">case</span> <span class="keyword">let</span> (x, y):</span><br><span class="line">   <span class="built_in">print</span>(<span class="string">&quot;somewhere else at (<span class="subst">\(x)</span>, <span class="subst">\(y)</span>)&quot;</span>)</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// Prints &quot;on the x-axis with an x value of 2&quot;</span></span><br></pre></td></tr></table></figure>
+
+<img src="https://file.pandacode.cn/blog/202204051024139.png" alt="../_images/coordinateGraphMedium_2x.png" style="zoom:50%;">
+
+<p><code>switch</code>语句决定了该点是在红色x轴上，还是在绿色y轴上，还是在其他地方（在两个轴上）。</p>
+<p>这三种’ switch ‘情况声明了占位符常量’ x ‘和’ y ‘，它们临时接受’ anotherPoint ‘中的一个或两个元组值。第一种情况，’ case (let x, 0) ‘，匹配任何点的’ y ‘值为’ 0 ‘，并将该点的’ x ‘值赋给临时常数’ x ‘。类似地，第二种情况，’ case (0, let y) ‘，匹配任何点的’ x ‘值为’ 0 ‘，并将该点的’ y ‘值赋给临时常数’ y ‘。</p>
+<p>声明临时常量后，它们可以在案例的代码块中使用。在这里，它们用于打印点的分类。</p>
+<p>此<code>switch</code>语句没有<code>default</code>案例。最后一个案例，<code>caselet(x,y)</code>声明一个由两个占位符常量组成，可以匹配任何值。由于<code>anotherPoint</code>始终是两个值的元组，因此此情况与所有可能的剩余值匹配，并且不需要<code>default</code>大小写即可使<code>switch</code>语句详尽无遗。</p>
+<h3 id="where"><a href="#where" class="headerlink" title="where"></a>where</h3><p><code>switch</code>盒可以使用<code>where</code>子句来检查其他条件。</p>
+<p>以下示例对以下图表上的（x，y）点进行了分类：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> yetAnotherPoint <span class="operator">=</span> (<span class="number">1</span>, <span class="operator">-</span><span class="number">1</span>)</span><br><span class="line"><span class="keyword">switch</span> yetAnotherPoint &#123;</span><br><span class="line"><span class="keyword">case</span> <span class="keyword">let</span> (x, y) <span class="keyword">where</span> x <span class="operator">==</span> y:</span><br><span class="line">   <span class="built_in">print</span>(<span class="string">&quot;(<span class="subst">\(x)</span>, <span class="subst">\(y)</span>) is on the line x == y&quot;</span>)</span><br><span class="line"><span class="keyword">case</span> <span class="keyword">let</span> (x, y) <span class="keyword">where</span> x <span class="operator">==</span> <span class="operator">-</span>y:</span><br><span class="line">   <span class="built_in">print</span>(<span class="string">&quot;(<span class="subst">\(x)</span>, <span class="subst">\(y)</span>) is on the line x == -y&quot;</span>)</span><br><span class="line"><span class="keyword">case</span> <span class="keyword">let</span> (x, y):</span><br><span class="line">   <span class="built_in">print</span>(<span class="string">&quot;(<span class="subst">\(x)</span>, <span class="subst">\(y)</span>) is just some arbitrary point&quot;</span>)</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// Prints &quot;(1, -1) is on the line x == -y&quot;</span></span><br></pre></td></tr></table></figure>
+
+<img src="https://docs.swift.org/swift-book/_images/coordinateGraphComplex_2x.png" alt="../_images/coordinateGraphComplex_2x.png" style="zoom:50%;">
+
+<p>‘ switch ‘语句确定这个点是在绿色对角线上的’ x &#x3D;&#x3D; y ‘，还是在紫色对角线上的’ x &#x3D;&#x3D; -y ‘，或者两者都不在。</p>
+<p>三个<code>switch</code>情况声明占位符常量<code>x</code>和<code>y</code>，这些常量暂时接受 <code>yetAnotherPoint</code>的两个元组值。这些常量被用作<code>where</code>子句的一部分，以创建动态过滤器。<code>where</code>子句的条件计算为<code>true</code>时，<code>switch</code>大小写才匹配<code>point</code>的当前值。</p>
+<p>与上一个示例一样，最终大小写匹配所有可能的剩余值，因此不需要<code>default</code>大小写来使<code>switch</code>语句详尽无遗。</p>
+<h3 id="复合病例"><a href="#复合病例" class="headerlink" title="复合病例"></a>复合病例</h3><p>共享同一主体的多个开关案例可以通过在<code>case</code>后写多个模式组合，每个模式之间都有一个逗号。如果任何模式匹配，则认为情况匹配。如果列表很长，图案可以写在多行上。例如：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> someCharacter: <span class="type">Character</span> <span class="operator">=</span> <span class="string">&quot;e&quot;</span></span><br><span class="line"><span class="keyword">switch</span> someCharacter &#123;</span><br><span class="line"><span class="keyword">case</span> <span class="string">&quot;a&quot;</span>, <span class="string">&quot;e&quot;</span>, <span class="string">&quot;i&quot;</span>, <span class="string">&quot;o&quot;</span>, <span class="string">&quot;u&quot;</span>:</span><br><span class="line">   <span class="built_in">print</span>(<span class="string">&quot;<span class="subst">\(someCharacter)</span> is a vowel&quot;</span>)</span><br><span class="line"><span class="keyword">case</span> <span class="string">&quot;b&quot;</span>, <span class="string">&quot;c&quot;</span>, <span class="string">&quot;d&quot;</span>, <span class="string">&quot;f&quot;</span>, <span class="string">&quot;g&quot;</span>, <span class="string">&quot;h&quot;</span>, <span class="string">&quot;j&quot;</span>, <span class="string">&quot;k&quot;</span>, <span class="string">&quot;l&quot;</span>, <span class="string">&quot;m&quot;</span>,</span><br><span class="line">    <span class="string">&quot;n&quot;</span>, <span class="string">&quot;p&quot;</span>, <span class="string">&quot;q&quot;</span>, <span class="string">&quot;r&quot;</span>, <span class="string">&quot;s&quot;</span>, <span class="string">&quot;t&quot;</span>, <span class="string">&quot;v&quot;</span>, <span class="string">&quot;w&quot;</span>, <span class="string">&quot;x&quot;</span>, <span class="string">&quot;y&quot;</span>, <span class="string">&quot;z&quot;</span>:</span><br><span class="line">   <span class="built_in">print</span>(<span class="string">&quot;<span class="subst">\(someCharacter)</span> is a consonant&quot;</span>)</span><br><span class="line"><span class="keyword">default</span>:</span><br><span class="line">   <span class="built_in">print</span>(<span class="string">&quot;<span class="subst">\(someCharacter)</span> isn&#x27;t a vowel or a consonant&quot;</span>)</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// Prints &quot;e is a vowel&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p><code>switch</code>语句的第一个大小写与英语中的所有五个小写元音相匹配。同样，它的第二个大小写匹配所有小写英语辅音。最后，<code>default</code>大小写与任何其他字符匹配。</p>
+<p>复合情况也可以包括值绑定。复合情况的所有模式都必须包含相同的值绑定集，并且每个绑定必须从复合情况下的所有模式中获得相同类型的值。这确保了无论复合情况的哪个部分匹配，大小写正文中的代码都可以始终访问绑定的值，并且该值始终具有相同的类型。</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> stillAnotherPoint <span class="operator">=</span> (<span class="number">9</span>, <span class="number">0</span>)</span><br><span class="line"><span class="keyword">switch</span> stillAnotherPoint &#123;</span><br><span class="line"><span class="keyword">case</span> (<span class="keyword">let</span> distance, <span class="number">0</span>), (<span class="number">0</span>, <span class="keyword">let</span> distance):</span><br><span class="line">   <span class="built_in">print</span>(<span class="string">&quot;On an axis, <span class="subst">\(distance)</span> from the origin&quot;</span>)</span><br><span class="line"><span class="keyword">default</span>:</span><br><span class="line">   <span class="built_in">print</span>(<span class="string">&quot;Not on an axis&quot;</span>)</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// Prints &quot;On an axis, 9 from the origin&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>上述<code>case</code>有两种模式：<code>(letdistance,0)</code>匹配x轴上的点，<code>(0,letdistance)</code>匹配y轴上的点。这两种模式都包括<code>distance</code>的绑定，<code>distance</code>是两种模式中的整数——这意味着<code>case</code>正文中的代码始终可以访问<code>distance</code>值。</p>
+<h2 id="控制转移声明"><a href="#控制转移声明" class="headerlink" title="控制转移声明"></a>控制转移声明</h2><p><em>控制转移语句</em>通过将控制权从一段代码传输到另一段代码来更改代码的执行顺序。Swift有五个控制转移语句：</p>
+<ul>
+<li><code>continue</code></li>
+<li><code>break</code></li>
+<li><code>fallthrough</code></li>
+<li><code>return</code></li>
+<li><code>throw</code></li>
+</ul>
+<p><code>continue</code>、<code>break</code>和<code>fallthrough</code>的陈述如下所述。<code>return</code>语句在<a target="_blank" rel="noopener" href="https://docs.swift.org/swift-book/LanguageGuide/Functions.html">函数</a>中描述，<code>throw</code>语句在<a target="_blank" rel="noopener" href="https://docs.swift.org/swift-book/LanguageGuide/ErrorHandling.html#ID510">使用抛出函数传播错误</a>中描述。</p>
+<h3 id="continue"><a href="#continue" class="headerlink" title="continue"></a>continue</h3><p><code>continue</code>语句告诉循环停止它正在做的事情，并在下一个迭代开始时通过循环重新开始。它说“我完成了当前的循环迭代”，而没有完全离开循环。</p>
+<p>以下示例从小写字符串中删除所有元音和空格，以创建神秘的益智短语：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> puzzleInput <span class="operator">=</span> <span class="string">&quot;great minds think alike&quot;</span></span><br><span class="line"><span class="keyword">var</span> puzzleOutput <span class="operator">=</span> <span class="string">&quot;&quot;</span></span><br><span class="line"><span class="keyword">let</span> charactersToRemove: [<span class="type">Character</span>] <span class="operator">=</span> [<span class="string">&quot;a&quot;</span>, <span class="string">&quot;e&quot;</span>, <span class="string">&quot;i&quot;</span>, <span class="string">&quot;o&quot;</span>, <span class="string">&quot;u&quot;</span>, <span class="string">&quot; &quot;</span>]</span><br><span class="line"><span class="keyword">for</span> character <span class="keyword">in</span> puzzleInput &#123;</span><br><span class="line">   <span class="keyword">if</span> charactersToRemove.contains(character) &#123;</span><br><span class="line">       <span class="keyword">continue</span></span><br><span class="line">   &#125;</span><br><span class="line">   puzzleOutput.append(character)</span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">print</span>(puzzleOutput)</span><br><span class="line"><span class="comment">// Prints &quot;grtmndsthnklk&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>上面的代码每当它匹配元音或空格时都会调用<code>continue</code>关键字，导致循环的当前迭代立即结束，并直接跳转到下一个迭代的开始。</p>
+<h3 id="break"><a href="#break" class="headerlink" title="break"></a>break</h3><p><code>break</code>语句立即结束整个控制流语句的执行。当您想提前终止<code>switch</code>或循环语句的执行时，可以在<code>switch</code>或循环语句中使用。</p>
+<h4 id="打破循环语句"><a href="#打破循环语句" class="headerlink" title="打破循环语句"></a>打破循环语句</h4><p>当在循环语句中使用时，<code>break</code>会立即结束循环的执行，并在循环的关闭大括号（<code>&#125;</code>）后将控制权传输到代码。没有执行循环当前迭代的进一步代码，也没有开始循环的进一步迭代。</p>
+<h4 id="切换语句中的中断"><a href="#切换语句中的中断" class="headerlink" title="切换语句中的中断"></a>切换语句中的中断</h4><p>当在<code>switch</code>语句中使用时，<code>break</code>会导致<code>switch</code>语句立即结束执行，并在<code>switch</code>语句的关闭大括号（<code>&#125;</code>）后将控制权转移到代码中。</p>
+<p>此行为可用于匹配和忽略<code>switch</code>语句中的一个或多个案例。由于 Swift 的<code>switch</code>语句非常详尽，不允许空案例，因此有时需要故意匹配和忽略案例，以便明确您的意图。您通过将<code>break</code>声明写成您要忽略的整个案例正文来做到这一点。当该案例与<code>switch</code>语句匹配时，案例中的<code>break</code>语句将立即结束<code>switch</code>语句的执行。</p>
+<blockquote>
+<p>注意</p>
+<p>仅包含注释的<code>switch</code>案例被报告为编译时错误。评论不是陈述，也不会导致<code>switch</code>案例被忽略。务必使用<code>break</code>语句来忽略<code>switch</code>案例。</p>
+</blockquote>
+<p>以下示例切换<code>Character</code>值，并确定它是否代表四种语言之一的数字符号。为了简洁起，单个<code>switch</code>案例中包含多个值。</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> numberSymbol: <span class="type">Character</span> <span class="operator">=</span> <span class="string">&quot;三&quot;</span>  <span class="comment">// Chinese symbol for the number 3</span></span><br><span class="line"><span class="keyword">var</span> possibleIntegerValue: <span class="type">Int</span>?</span><br><span class="line"><span class="keyword">switch</span> numberSymbol &#123;</span><br><span class="line"><span class="keyword">case</span> <span class="string">&quot;1&quot;</span>, <span class="string">&quot;١&quot;</span>, <span class="string">&quot;一&quot;</span>, <span class="string">&quot;๑&quot;</span>:</span><br><span class="line">   possibleIntegerValue <span class="operator">=</span> <span class="number">1</span></span><br><span class="line"><span class="keyword">case</span> <span class="string">&quot;2&quot;</span>, <span class="string">&quot;٢&quot;</span>, <span class="string">&quot;二&quot;</span>, <span class="string">&quot;๒&quot;</span>:</span><br><span class="line">   possibleIntegerValue <span class="operator">=</span> <span class="number">2</span></span><br><span class="line"><span class="keyword">case</span> <span class="string">&quot;3&quot;</span>, <span class="string">&quot;٣&quot;</span>, <span class="string">&quot;三&quot;</span>, <span class="string">&quot;๓&quot;</span>:</span><br><span class="line">   possibleIntegerValue <span class="operator">=</span> <span class="number">3</span></span><br><span class="line"><span class="keyword">case</span> <span class="string">&quot;4&quot;</span>, <span class="string">&quot;٤&quot;</span>, <span class="string">&quot;四&quot;</span>, <span class="string">&quot;๔&quot;</span>:</span><br><span class="line">   possibleIntegerValue <span class="operator">=</span> <span class="number">4</span></span><br><span class="line"><span class="keyword">default</span>:</span><br><span class="line">   <span class="keyword">break</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">if</span> <span class="keyword">let</span> integerValue <span class="operator">=</span> possibleIntegerValue &#123;</span><br><span class="line">   <span class="built_in">print</span>(<span class="string">&quot;The integer value of <span class="subst">\(numberSymbol)</span> is <span class="subst">\(integerValue)</span>.&quot;</span>)</span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">   <span class="built_in">print</span>(<span class="string">&quot;An integer value couldn&#x27;t be found for <span class="subst">\(numberSymbol)</span>.&quot;</span>)</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// Prints &quot;The integer value of 三 is 3.&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>此示例检查<code>numberSymbol</code>，以确定数字<code>1</code>到4的符号是拉丁文、阿拉伯文、中文还是泰语符号。如果找到匹配项，<code>switch</code>语句的一个案例会设置一个可选的<code>Int?</code>变量称为<code>possibleIntegerValue</code>到适当的整数值。</p>
+<p>在<code>switch</code>语句完成执行后，该示例使用可选绑定来确定是否找到了值。由于是可选类型，<code>possibleIntegerValue</code>变量的隐式初始值为<code>nil</code>，因此只有当<code>possibleIntegerValue</code>被<code>switch</code>语句的前四种情况之一设置为实际值时，可选绑定才会成功。</p>
+<p>因为在上面的例子中列出所有可能的’ Character ‘值是不实际的，所以’ default ‘ case处理任何不匹配的字符。这种’ default ‘情况不需要执行任何操作，所以它是用一个’ break ‘语句作为它的主体编写的。只要匹配到’ default ‘的大小写，’ break ‘语句就会结束’ switch ‘语句的执行，代码的执行从’ if let ‘语句开始。</p>
+<h3 id="fallthrough"><a href="#fallthrough" class="headerlink" title="fallthrough"></a>fallthrough</h3><p>在 Swift 中，<code>switch</code>语句不会从每个案例的底部掉到下一个案例中。也就是说，整个<code>switch</code>语句在第一个匹配案例完成后立即完成执行。相比之下，C要求您在每个<code>switch</code>盒的末尾插入一个显式<code>break</code>语句，以防止掉线。避免默认的故障意味着Swift<code>switch</code>语句比C中的对应语句更简洁、更可预测，因此它们避免错误地执行多个<code>switch</code>案例。</p>
+<p>如果您需要C型跌倒性行为，您可以使用<code>fallthrough</code>关键字逐案选择加入此行为。下面的示例使用<code>fallthrough</code>创建数字的文本描述。</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> integerToDescribe <span class="operator">=</span> <span class="number">5</span></span><br><span class="line"><span class="keyword">var</span> description <span class="operator">=</span> <span class="string">&quot;The number <span class="subst">\(integerToDescribe)</span> is&quot;</span></span><br><span class="line"><span class="keyword">switch</span> integerToDescribe &#123;</span><br><span class="line"><span class="keyword">case</span> <span class="number">2</span>, <span class="number">3</span>, <span class="number">5</span>, <span class="number">7</span>, <span class="number">11</span>, <span class="number">13</span>, <span class="number">17</span>, <span class="number">19</span>:</span><br><span class="line">   description <span class="operator">+=</span> <span class="string">&quot; a prime number, and also&quot;</span></span><br><span class="line">   <span class="keyword">fallthrough</span></span><br><span class="line"><span class="keyword">default</span>:</span><br><span class="line">   description <span class="operator">+=</span> <span class="string">&quot; an integer.&quot;</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">print</span>(description)</span><br><span class="line"><span class="comment">// Prints &quot;The number 5 is a prime number, and also an integer.&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>此示例声明一个名为<code>description</code>的新<code>String</code>变量，并为其分配初始值。然后，函数使用<code>switch</code>语句考虑<code>integerToDescribe</code>的值。如果<code>integerToDescribe</code>的值是列表中的素数之一，则函数会将文本附加到<code>description</code>的末尾，以注意该数字是素数。然后，它使用<code>fallthrough</code>关键字来“落入”<code>default</code>情况。<code>default</code>情况下，在描述的末尾添加了一些额外的文本，<code>switch</code>语句已完成。</p>
+<p>除非<code>integerToDescribe</code>的值在已知素数列表中，否则它根本不与第一个<code>switch</code>情况匹配。由于没有其他特定情况，<code>integerToDescribe</code>与<code>default</code>情况匹配。</p>
+<p><code>switch</code>语句执行完成后，使用<code>print(_:separator:terminator:)</code>函数打印数字描述。在本例中，数字<code>5</code>被正确标识为素数。</p>
+<blockquote>
+<p>注意</p>
+<p><code>fallthrough</code>关键字不会检查它导致执行陷入的<code>switch</code>案例的大小写条件。<code>fallthrough</code>关键字只是导致代码执行直接移动到下一个案例（或<code>default</code>大小写）块中的语句，就像C的标准<code>switch</code>语句行为一样。</p>
+</blockquote>
+<h3 id="带标签的语句"><a href="#带标签的语句" class="headerlink" title="带标签的语句"></a>带标签的语句</h3><p>在Swift中，您可以在其他循环和条件语句中嵌套循环和条件语句，以创建复杂的控制流结构。然而，循环语句和条件语句都可以使用<code>break</code>语句过早地结束其执行。因此，有时明确您希望<code>break</code>语句终止哪个循环或条件语句是有用的。同样，如果您有多个嵌套循环，明确<code>continue</code>语句应该影响哪个循环可能会有用。</p>
+<p>为了实现这些目标，您可以使用<em>声明标签</em>标记循环语句或条件语句。使用条件语句，您可以使用带有<code>break</code>语句的语句标签来结束标记语句的执行。使用循环语句，您可以使用带有<code>break</code>或<code>continue</code>语句的语句标签来结束或继续执行标记语句。</p>
+<p>标记语句通过在与语句的介绍关键字相同的行上放置标签来指示，后跟冒号。以下是<code>while</code>循环语法的一个示例，尽管所有循环和<code>switch</code>语句的原则都是一样的：</p>
+<ol>
+<li><code>label name</code>: while <code>condition</code> {</li>
+<li>​    <code>statements</code></li>
+<li>}</li>
+</ol>
+<p>以下示例使用您在本章前面看到的<em>Snakes</em> and <em>Ladders</em>游戏改编版本的带有标签<code>while</code>循环的<code>break</code><em>和</em><code>continue</code>语句。这一次，游戏有一个额外的规则：</p>
+<ul>
+<li>要获胜，你必须<em>正好</em>降落在25号广场。</li>
+</ul>
+<p>如果一个特定的骰子卷会带你超过25方块，你必须再次滚动，直到你滚动落在25方块所需的确切数字。</p>
+<p>游戏板和以前一样。</p>
+<p><img src="https://file.pandacode.cn/blog/202204051033766.png" alt="../_images/snakesAndLadders_2x.png"></p>
+<p><code>finalSquare</code>、<code>board</code>、<code>square</code>和<code>diceRoll</code>的值与之前相同初始化：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> finalSquare <span class="operator">=</span> <span class="number">25</span></span><br><span class="line"><span class="keyword">var</span> board <span class="operator">=</span> [<span class="type">Int</span>](repeating: <span class="number">0</span>, count: finalSquare <span class="operator">+</span> <span class="number">1</span>)</span><br><span class="line">board[<span class="number">03</span>] <span class="operator">=</span> <span class="operator">+</span><span class="number">08</span>; board[<span class="number">06</span>] <span class="operator">=</span> <span class="operator">+</span><span class="number">11</span>; board[<span class="number">09</span>] <span class="operator">=</span> <span class="operator">+</span><span class="number">09</span>; board[<span class="number">10</span>] <span class="operator">=</span> <span class="operator">+</span><span class="number">02</span></span><br><span class="line">board[<span class="number">14</span>] <span class="operator">=</span> <span class="operator">-</span><span class="number">10</span>; board[<span class="number">19</span>] <span class="operator">=</span> <span class="operator">-</span><span class="number">11</span>; board[<span class="number">22</span>] <span class="operator">=</span> <span class="operator">-</span><span class="number">02</span>; board[<span class="number">24</span>] <span class="operator">=</span> <span class="operator">-</span><span class="number">08</span></span><br><span class="line"><span class="keyword">var</span> square <span class="operator">=</span> <span class="number">0</span></span><br><span class="line"><span class="keyword">var</span> diceRoll <span class="operator">=</span> <span class="number">0</span></span><br></pre></td></tr></table></figure>
+
+<p>这个版本的游戏使用<code>while</code>循环和<code>switch</code>语句来实现游戏的逻辑。<code>while</code>循环有一个名为<code>gameLoop</code>的语句标签，表示它是蛇和梯子游戏的主要游戏循环。</p>
+<p>The <code>while</code> loop’s condition is <code>while square != finalSquare</code>, to reflect that you must land exactly on square 25.</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">gameLoop: <span class="keyword">while</span> square <span class="operator">!=</span> finalSquare &#123;</span><br><span class="line">   diceRoll <span class="operator">+=</span> <span class="number">1</span></span><br><span class="line">   <span class="keyword">if</span> diceRoll <span class="operator">==</span> <span class="number">7</span> &#123; diceRoll <span class="operator">=</span> <span class="number">1</span> &#125;</span><br><span class="line">   <span class="keyword">switch</span> square <span class="operator">+</span> diceRoll &#123;</span><br><span class="line">   <span class="keyword">case</span> finalSquare:</span><br><span class="line">       <span class="comment">// diceRoll will move us to the final square, so the game is over</span></span><br><span class="line">       <span class="keyword">break</span> gameLoop</span><br><span class="line">   <span class="keyword">case</span> <span class="keyword">let</span> newSquare <span class="keyword">where</span> newSquare <span class="operator">&gt;</span> finalSquare:</span><br><span class="line">       <span class="comment">// diceRoll will move us beyond the final square, so roll again</span></span><br><span class="line">       <span class="keyword">continue</span> gameLoop</span><br><span class="line">   <span class="keyword">default</span>:</span><br><span class="line">       <span class="comment">// this is a valid move, so find out its effect</span></span><br><span class="line">       square <span class="operator">+=</span> diceRoll</span><br><span class="line">       square <span class="operator">+=</span> board[square]</span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;Game over!&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+<p>骰子在每个循环的开头滚动。Loop不立即移动播放器，而是使用<code>switch</code>语句来考虑移动的结果，并确定是否允许移动：</p>
+<ul>
+<li>如果掷骰子将玩家带到最后一个方格，那么游戏就结束了。“break gamelloop”语句将控制转移到“while”循环之外的第一行代码，从而结束游戏。</li>
+<li>如果掷骰子将玩家移出最后的方格，那么这一移动就是无效的，玩家需要再次掷骰子。“continue gameLoop”语句结束当前的“while”循环迭代，并开始下一个循环迭代。</li>
+<li>在所有其他情况下，掷骰子是一个有效的举动。玩家通过<code>diceRoll</code>方块向前移动，游戏逻辑检查是否有任何蛇和梯子。然后循环结束，控件返回到<code>while</code>条件，以决定是否需要再次回合。</li>
+</ul>
+<blockquote>
+<p>注意</p>
+<p>如果上面的<code>break</code>语句没有使用<code>gameLoop</code>标签，它将从<code>switch</code>语句中脱颖而出，而不是<code>while</code>语句。使用<code>gameLoop</code>标签可以明确应该终止哪个控制语句。</p>
+</blockquote>
+<p>当调用“continue gameLoop”来跳转到循环的下一个迭代时，并不一定要使用“gameLoop”标签。游戏中只有一个循环，因此“continue”语句将影响哪个循环并不含糊。然而，在“continue”语句中使用“gameLoop”标签并没有什么坏处。这样做与标签的使用与“中断”声明是一致的，并有助于让游戏的逻辑更清晰地阅读和理解。</p>
+<h2 id="提前退出"><a href="#提前退出" class="headerlink" title="提前退出"></a>提前退出</h2><p><code>guard</code>语句，如<code>if</code>语句，根据表达式的布尔值执行语句。您使用<code>guard</code>语句要求条件必须为真，才能执行<code>guard</code>语句之后的代码。与<code>if</code>语句不同，<code>guard</code>语句总是有一个<code>else</code>子句——如果条件不正确，则执行<code>else</code>子句中的代码。</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">func</span> <span class="title function_">greet</span>(<span class="params">person</span>: [<span class="params">String</span>: <span class="type">String</span>]) &#123;</span><br><span class="line">   <span class="keyword">guard</span> <span class="keyword">let</span> name <span class="operator">=</span> person[<span class="string">&quot;name&quot;</span>] <span class="keyword">else</span> &#123;</span><br><span class="line">       <span class="keyword">return</span></span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line">   <span class="built_in">print</span>(<span class="string">&quot;Hello <span class="subst">\(name)</span>!&quot;</span>)</span><br><span class="line"></span><br><span class="line">   <span class="keyword">guard</span> <span class="keyword">let</span> location <span class="operator">=</span> person[<span class="string">&quot;location&quot;</span>] <span class="keyword">else</span> &#123;</span><br><span class="line">       <span class="built_in">print</span>(<span class="string">&quot;I hope the weather is nice near you.&quot;</span>)</span><br><span class="line">       <span class="keyword">return</span></span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line">   <span class="built_in">print</span>(<span class="string">&quot;I hope the weather is nice in <span class="subst">\(location)</span>.&quot;</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">greet(person: [<span class="string">&quot;name&quot;</span>: <span class="string">&quot;John&quot;</span>])</span><br><span class="line"><span class="comment">// Prints &quot;Hello John!&quot;</span></span><br><span class="line"><span class="comment">// Prints &quot;I hope the weather is nice near you.&quot;</span></span><br><span class="line">greet(person: [<span class="string">&quot;name&quot;</span>: <span class="string">&quot;Jane&quot;</span>, <span class="string">&quot;location&quot;</span>: <span class="string">&quot;Cupertino&quot;</span>])</span><br><span class="line"><span class="comment">// Prints &quot;Hello Jane!&quot;</span></span><br><span class="line"><span class="comment">// Prints &quot;I hope the weather is nice in Cupertino.&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>如果满足<code>guard</code>语句的条件，则在<code>guard</code>语句的闭幕大括号后继续执行代码。使用可选绑定作为条件的一部分分配值的任何变量或常量都可用于<code>guard</code>语句中显示的代码块的其余部分。</p>
+<p>如果不符合此条件，则执行<code>else</code>分支内的代码。该分支必须传输控件才能退出出现<code>guard</code>语句的代码块。它可以通过<code>return</code>、<code>break</code>、<code>continue</code>或<code>throw</code>等控件传输语句来执行此操作，也可以调用不返回的函数或方法，例如<code>fatalError(_:file:line:)</code></p>
+<p>与对<code>if</code>语句进行相同的检查相比，对需求使用<code>guard</code>语句可以提高代码的可读性。它允许您编写通常执行的代码，而无需将其包装在<code>else</code>块中，并允许您将处理违反要求的代码保留在需求旁边。</p>
+<h2 id="检查API可用性"><a href="#检查API可用性" class="headerlink" title="检查API可用性"></a>检查API可用性</h2><p>Swift内置了对检查API可用性的支持，这确保您不会意外使用给定部署目标上不可用的API。</p>
+<p>编译器使用SDK中的可用性信息来验证代码中使用的所有API是否在项目指定的部署目标上可用。如果您尝试使用不可用的API，Swift会在编译时报告错误。</p>
+<p>您在<code>if</code>或<code>guard</code>语句中使用<em>可用性条件</em>执行代码块，具体取决于您要使用的API在运行时是否可用。编译器在验证该代码块中的API是否可用时，使用可用性条件中的信息。</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> <span class="keyword">#available</span>(<span class="keyword">iOS</span> <span class="number">10</span>, <span class="keyword">macOS</span> <span class="number">10.12</span>, <span class="operator">*</span>) &#123;</span><br><span class="line">   <span class="comment">// Use iOS 10 APIs on iOS, and use macOS 10.12 APIs on macOS</span></span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">   <span class="comment">// Fall back to earlier iOS and macOS APIs</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>上述可用性条件指定，在iOS中，<code>if</code>语句的正文仅在iOS 10及更高版本中执行；在macOS中，仅在macOS 10.12及更高版本中执行。最后一个参数<code>*</code>是必需的，并指定在任何其他平台上，<code>if</code>的正文对目标指定的最小部署目标执行。</p>
+<p>在其一般形式中，可用性条件接受平台名称和版本列表。您可以使用平台名称，如’ iOS ‘， ‘ macOS ‘， ‘ watchOS ‘和’ tvOS ‘ -完整的列表，请参阅<a target="_blank" rel="noopener" href="https://docs.swift.org/swift-book/ReferenceManual/Attributes.html#ID348">声明属性</a>。除了指定主要版本号(如iOS 8或macOS 10.10)外，还可以指定次要版本号(如iOS 11.2.6和macOS 10.13.3)。</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> <span class="keyword">#available</span>(platform name version, <span class="operator">...</span>, <span class="operator">*</span>) &#123;</span><br><span class="line">   statements to execute <span class="keyword">if</span> the <span class="type">APIs</span> are available</span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">   fallback statements to execute <span class="keyword">if</span> the <span class="type">APIs</span> are unavailable</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+      
+    </div>
+    <div class="article-footer">
+      <blockquote class="mt-2x">
+  <ul class="post-copyright list-unstyled">
+    
+    <li class="post-copyright-link hidden-xs">
+      <strong>本文链接：</strong>
+      <a href="https://guoshunfa.com/2022/07/Swift%E5%9F%BA%E7%A1%80-%E6%8E%A7%E5%88%B6%E6%B5%81%E7%A8%8B/" title="Swift基础 控制流程" target="_blank" rel="external">https://guoshunfa.com/2022/07/Swift基础-控制流程/</a>
+    </li>
+    
+    <li class="post-copyright-license">
+      <strong>版权声明： </strong> 本博客所有文章除特别声明外，均采用 <a href="http://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank" rel="external">CC BY 4.0 CN协议</a> 许可协议。转载请注明出处！
+    </li>
+  </ul>
+</blockquote>
+
+
+<div class="panel panel-default panel-badger">
+  <div class="panel-body">
+    <figure class="media">
+      <div class="media-left">
+        <a href="https://github.com/guoshunfa" target="_blank" class="img-burn thumb-sm visible-lg">
+          <img src="/images/avatar.jpg" class="img-rounded w-full" alt="">
+        </a>
+      </div>
+      <div class="media-body">
+        <h3 class="media-heading"><a href="https://github.com/guoshunfa" target="_blank"><span class="text-dark">郭顺发</span><small class="ml-1x">创业中......</small></a></h3>
+        <div>承接：小程序开发、APP开发、网站开发、爬虫开发</div>
+      </div>
+    </figure>
+  </div>
+</div>
+
+
+    </div>
+  </article>
+  
+    
+  <section id="comments">
+  	
+           
+    
+  </section>
+
+
+  
+</div>
+
+  <nav class="bar bar-footer clearfix" data-stick-bottom>
+  <div class="bar-inner">
+  
+  <ul class="pager pull-left">
+    
+    <li class="prev">
+      <a href="/2022/07/Swift%E5%9F%BA%E7%A1%80-%E5%B9%B6%E5%8F%91%E6%80%A7/" title="Swift基础 并发性"><i class="icon icon-angle-left" aria-hidden="true"></i><span>&nbsp;&nbsp;上一篇</span></a>
+    </li>
+    
+    
+    <li class="next">
+      <a href="/2022/07/Swift%E5%9F%BA%E7%A1%80-%E6%96%B9%E6%B3%95/" title="Swift基础 方法"><span>下一篇&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
+    </li>
+    
+    
+  </ul>
+  
+  
+  
+  <div class="bar-right">
+    
+    <div class="share-component" data-sites="weibo,qq,wechat,facebook,twitter" data-mobile-sites="weibo,qq,qzone"></div>
+    
+  </div>
+  </div>
+</nav>
+  
+
+
+</main>
+
+  <footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
+	
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/guoshunfa" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="https://gitee.com/guoshunfa" target="_blank" title="Gitee" data-toggle=tooltip data-placement=top><i class="icon icon-gitee"></i></a></li>
+        
+        <li><a href="https://juejin.cn/user/166781500267015" target="_blank" title="Juejin" data-toggle=tooltip data-placement=top><i class="icon icon-juejin"></i></a></li>
+        
+        <li><a href="https://cloud.tencent.com/developer/user/7784141" target="_blank" title="Code" data-toggle=tooltip data-placement=top><i class="icon icon-code"></i></a></li>
+        
+        <li><a href="/atom.xml" target="_blank" title="Rss" data-toggle=tooltip data-placement=top><i class="icon icon-rss"></i></a></li>
+        
+    </ul>
+
+    <div class="copyright">
+    	
+        &copy; 2024 guoshunfa
+        
+        <!-- <div class="publishby">
+        	Theme by <a href="https://github.com/cofess" target="_blank"> cofess </a>base on <a href="https://github.com/cofess/hexo-theme-pure" target="_blank">pure</a>.
+        </div> -->
+    </div>
+</footer>
+  <script src="//cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
+<script>
+window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
+</script>
+
+<script src="/js/plugin.min.js"></script>
+
+
+<script src="/js/application.js"></script>
+
+
+    <script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(未命名)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+
+<script src="/js/insight.js"></script>
+
+
+
+    <script>
+(function ($) {
+    $('.search-form').on('submit', function (e) {
+        var keyword = $('.search-form-input[name="wd"]').val();
+        window.location = 'https://www.baidu.com/s?wd=site:guoshunfa.com ' + keyword;
+        return false;
+    });
+})(jQuery);
+</script>
+
+
+
+
+   
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+   
+    
+  <!-- <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css"> -->
+  <script src="//cdn.jsdelivr.net/npm/gitalk@1.7.2/dist/gitalk.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/blueimp-md5@2.10.0/js/md5.min.js"></script>
+  <script type="text/javascript">
+  var gitalk = new Gitalk({
+    clientID: '328529f408a5d1041fe1',
+    clientSecret: '43872fab04fe0accb98439ac77ff71ff81f7b9dd',
+    repo: 'guoshunfa-comment',
+    owner: 'guoshunfa',
+    admin: ['guoshunfa'],
+    id: md5(location.pathname),
+    distractionFreeMode: true,
+    language: 'zh-CN',
+    enableHotKey: 'true'
+  })
+  gitalk.render('comments')
+  </script>
+      
+
+
+
+  <script src="//cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.3.5/dist/jquery.fancybox.min.js"></script>
+  <script>
+  //利用 FancyBox 实现点击图片放大
+  $(document).ready(function() {
+    $('article img').not('[hidden]').not('.panel-body img').each(function() {
+      var $image = $(this);
+      var imageCaption = $image.attr('alt');
+      var $imageWrapLink = $image.parent('a');
+      if ($imageWrapLink.length < 1) {
+        var src = this.getAttribute('src');
+        var idx = src.lastIndexOf('?');
+        if (idx != -1) {
+          src = src.substring(0, idx);
+        }
+        $imageWrapLink = $image.wrap('<a href="' + src + '"></a>').parent('a');
+      }
+      $imageWrapLink.attr('data-fancybox', 'images');
+      if (imageCaption) {
+        $imageWrapLink.attr('data-caption', imageCaption);
+      }
+    });
+    $().fancybox({
+      selector: '[data-fancybox="images"]',
+      hash: false,
+      loop: false,
+    });
+  });
+  </script>
+
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,898 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+  <meta charset="utf-8">
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-transform" />
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="format-detection" content="telephone=no,email=no,adress=no">
+  <!-- Color theme for statusbar -->
+  <meta name="theme-color" content="#000000" />
+  <!-- 强制页面在当前窗口以独立页面显示,防止别人在框架里调用页面 -->
+  <meta http-equiv="window-target" content="_top" />
+  
+  
+  <title>Swift基础 访问控制 | guoshunfa</title>
+  <meta name="description" content="翻译自：https:&#x2F;&#x2F;docs.swift.org&#x2F;swift-book&#x2F;LanguageGuide&#x2F;AccessControl.html 访问控制限制从其他源文件和模块中的代码访问部分代码。此功能使您能够隐藏代码的实现详细信息，并指定可以访问和使用该代码的首选界面。 您可以为单个类型（类、结构和枚举）以及属于这些类型的属性、方法、初始化器和下标分配特定的访问级别。协议可以限制在特定上下文中，全">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Swift基础 访问控制">
+<meta property="og:url" content="https://guoshunfa.com/2022/07/Swift%E5%9F%BA%E7%A1%80-%E8%AE%BF%E9%97%AE%E6%8E%A7%E5%88%B6/index.html">
+<meta property="og:site_name" content="guoshunfa">
+<meta property="og:description" content="翻译自：https:&#x2F;&#x2F;docs.swift.org&#x2F;swift-book&#x2F;LanguageGuide&#x2F;AccessControl.html 访问控制限制从其他源文件和模块中的代码访问部分代码。此功能使您能够隐藏代码的实现详细信息，并指定可以访问和使用该代码的首选界面。 您可以为单个类型（类、结构和枚举）以及属于这些类型的属性、方法、初始化器和下标分配特定的访问级别。协议可以限制在特定上下文中，全">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2022-07-01T04:01:01.000Z">
+<meta property="article:modified_time" content="2024-01-28T11:41:39.294Z">
+<meta property="article:author" content="guoshunfa">
+<meta property="article:tag" content="Swift">
+<meta property="article:tag" content="基础">
+<meta name="twitter:card" content="summary">
+  <!-- Canonical links -->
+  <link rel="canonical" href="https://guoshunfa.com/2022/07/Swift%E5%9F%BA%E7%A1%80-%E8%AE%BF%E9%97%AE%E6%8E%A7%E5%88%B6/index.html">
+  
+    <link rel="alternate" href="/atom.xml" title="guoshunfa" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="favicon.jpg" type="image/x-icon">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  
+  
+    <link href="//cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.3.5/dist/jquery.fancybox.min.css" rel="stylesheet">
+  
+  
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1.7.2/dist/gitalk.min.css">
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body class="main-center" itemscope itemtype="http://schema.org/WebPage">
+  <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+  <div class="slimContent">
+    <div class="navbar-header">
+      
+      
+      <div class="profile-block text-center">
+        <a id="avatar" href="https://github.com/guoshunfa" target="_blank">
+          <img class="img-circle img-rotate" src="/images/avatar.jpg" width="200" height="200">
+        </a>
+        <h2 id="name" class="hidden-xs hidden-sm">郭顺发</h2>
+        <h3 id="title" class="hidden-xs hidden-sm hidden-md">创业中......</h3>
+        <small id="location" class="text-muted hidden-xs hidden-sm"><i class="icon icon-map-marker"></i> 深圳, China</small>
+      </div>
+      
+      <div class="search" id="search-form-wrap">
+
+    <form class="search-form sidebar-form">
+        <div class="input-group">
+            <input type="text" class="search-form-input form-control" placeholder="搜索" />
+            <span class="input-group-btn">
+                <button type="submit" class="search-form-submit btn btn-flat" onclick="return false;"><i class="icon icon-search"></i></button>
+            </span>
+        </div>
+    </form>
+    <div class="ins-search">
+  <div class="ins-search-mask"></div>
+  <div class="ins-search-container">
+    <div class="ins-input-wrapper">
+      <input type="text" class="ins-search-input" placeholder="想要查找什么..." x-webkit-speech />
+      <button type="button" class="close ins-close ins-selectable" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="ins-section-wrapper">
+      <div class="ins-section-container"></div>
+    </div>
+  </div>
+</div>
+
+
+</div>
+      <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <nav id="main-navbar" class="collapse navbar-collapse" itemscope itemtype="http://schema.org/SiteNavigationElement" role="navigation">
+      <ul class="nav navbar-nav main-nav menu-highlight">
+        
+        
+        <li class="menu-item menu-item-首页">
+          <a href="/.">
+            
+            <i class="icon icon-home-fill"></i>
+            
+            <span class="menu-title">首页</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-归档">
+          <a href="/archives">
+            
+            <i class="icon icon-archives-fill"></i>
+            
+            <span class="menu-title">归档</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-分类">
+          <a href="/categories">
+            
+            <i class="icon icon-folder"></i>
+            
+            <span class="menu-title">分类</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-标签">
+          <a href="/tags">
+            
+            <i class="icon icon-tags"></i>
+            
+            <span class="menu-title">标签</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-github仓库">
+          <a href="/repository">
+            
+            <i class="icon icon-project"></i>
+            
+            <span class="menu-title">github仓库</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-工具箱">
+          <a href="/tools">
+            
+            <i class="icon icon-book-fill"></i>
+            
+            <span class="menu-title">工具箱</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-友链">
+          <a href="/links">
+            
+            <i class="icon icon-friendship"></i>
+            
+            <span class="menu-title">友链</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-关于">
+          <a href="/about">
+            
+            <i class="icon icon-cup-fill"></i>
+            
+            <span class="menu-title">关于</span>
+          </a>
+        </li>
+        
+      </ul>
+      
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/guoshunfa" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="https://gitee.com/guoshunfa" target="_blank" title="Gitee" data-toggle=tooltip data-placement=top><i class="icon icon-gitee"></i></a></li>
+        
+        <li><a href="https://juejin.cn/user/166781500267015" target="_blank" title="Juejin" data-toggle=tooltip data-placement=top><i class="icon icon-juejin"></i></a></li>
+        
+        <li><a href="https://cloud.tencent.com/developer/user/7784141" target="_blank" title="Code" data-toggle=tooltip data-placement=top><i class="icon icon-code"></i></a></li>
+        
+        <li><a href="/atom.xml" target="_blank" title="Rss" data-toggle=tooltip data-placement=top><i class="icon icon-rss"></i></a></li>
+        
+    </ul>
+
+    </nav>
+  </div>
+</header>
+
+  
+    <aside class="sidebar" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    
+      <div class="widget">
+    <h3 class="widget-title">公告</h3>
+    <div class="widget-body">
+        <div id="board">
+            <div class="content">
+                <p>欢迎来到www.guoshunfa.com。</p><hr/><a target="_blank" rel="noopener" href="https://www.oracle.com/cn/java/">前往Java官网<a/><br/><a target="_blank" rel="noopener" href="https://spring.io/">前往Spring官网<a/>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget-body">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/HTML-CSS-JavaScript/">HTML/CSS/JavaScript</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Java/">Java</a><span class="category-list-count">17</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Python/">Python</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/SpringBoot/">SpringBoot</a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Swift/">Swift</a><span class="category-list-count">29</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%88%9B%E4%B8%9A/">创业</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%A4%8D%E7%9B%98/">复盘</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%A8%B1%E4%B9%90/">娱乐</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%8A%80%E6%9C%AF/">技术</a><span class="category-list-count">27</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%8A%80%E6%9C%AF/%E6%90%AD%E5%BB%BA%E5%8D%95%E4%BD%93SpringBoot%E9%A1%B9%E7%9B%AE/">搭建单体SpringBoot项目</a><span class="category-list-count">21</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%90%AD%E5%BB%BA%E5%8D%95%E4%BD%93SpringBoot%E9%A1%B9%E7%9B%AE/">搭建单体SpringBoot项目</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/">数据库</a><span class="category-list-count">17</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%9C%8D%E5%8A%A1/">服务</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%9C%8D%E5%8A%A1-%E7%BB%84%E4%BB%B6/">服务&组件</a><span class="category-list-count">27</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%AE%A1%E7%90%86/">服务器管理</a><span class="category-list-count">21</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E7%AE%97%E6%B3%95/">算法</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E8%BD%AF%E4%BB%B6%E4%BD%BF%E7%94%A8/">软件使用</a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E8%BD%AF%E4%BB%B6%E6%8A%80%E6%9C%AF%E6%A1%86%E6%9E%B6/">软件技术框架</a><span class="category-list-count">44</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E9%98%85%E8%AF%BB/">阅读</a><span class="category-list-count">2</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget-body">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/AJAX/" rel="tag">AJAX</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Activiti7/" rel="tag">Activiti7</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Arthas/" rel="tag">Arthas</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CSS/" rel="tag">CSS</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Curl/" rel="tag">Curl</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Debug/" rel="tag">Debug</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Docker/" rel="tag">Docker</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Druid/" rel="tag">Druid</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Electron/" rel="tag">Electron</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Expect/" rel="tag">Expect</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/FastJson/" rel="tag">FastJson</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/FreeMarker/" rel="tag">FreeMarker</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Git/" rel="tag">Git</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Gitlab/" rel="tag">Gitlab</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/GitlabRunner/" rel="tag">GitlabRunner</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/HTML-CSS-JavaScript/" rel="tag">HTML&#x2F;CSS&#x2F;JavaScript</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hook/" rel="tag">Hook</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Http/" rel="tag">Http</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hutool/" rel="tag">Hutool</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/IDEA/" rel="tag">IDEA</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JS/" rel="tag">JS</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JVM/" rel="tag">JVM</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Jar/" rel="tag">Jar</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java/" rel="tag">Java</a><span class="tag-list-count">27</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Jdk/" rel="tag">Jdk</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Jenkins/" rel="tag">Jenkins</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Jmeter/" rel="tag">Jmeter</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Json/" rel="tag">Json</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Jsoup/" rel="tag">Jsoup</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Kafka/" rel="tag">Kafka</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Leetcode/" rel="tag">Leetcode</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux/" rel="tag">Linux</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Logback/" rel="tag">Logback</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Mac/" rel="tag">Mac</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Maven/" rel="tag">Maven</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MongoDB/" rel="tag">MongoDB</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MyBatis/" rel="tag">MyBatis</a><span class="tag-list-count">7</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Mybatis/" rel="tag">Mybatis</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MybatisPlus/" rel="tag">MybatisPlus</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Mysql/" rel="tag">Mysql</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Nano/" rel="tag">Nano</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Nexus/" rel="tag">Nexus</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Nginx/" rel="tag">Nginx</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Opengrok/" rel="tag">Opengrok</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Oracle/" rel="tag">Oracle</a><span class="tag-list-count">22</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Profile/" rel="tag">Profile</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/PubSubJS/" rel="tag">PubSubJS</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Python/" rel="tag">Python</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Quartz/" rel="tag">Quartz</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/RESTful/" rel="tag">RESTful</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/React/" rel="tag">React</a><span class="tag-list-count">7</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Redis/" rel="tag">Redis</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SQL/" rel="tag">SQL</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SVN/" rel="tag">SVN</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Scheduled/" rel="tag">Scheduled</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Scrapy/" rel="tag">Scrapy</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Shell/" rel="tag">Shell</a><span class="tag-list-count">9</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Spel%E8%A1%A8%E8%BE%BE%E5%BC%8F/" rel="tag">Spel表达式</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Spring/" rel="tag">Spring</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SpringBoot/" rel="tag">SpringBoot</a><span class="tag-list-count">34</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SpringEvent/" rel="tag">SpringEvent</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SpringMVC/" rel="tag">SpringMVC</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SpringSecurity/" rel="tag">SpringSecurity</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Stream/" rel="tag">Stream</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Swagger/" rel="tag">Swagger</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Swift/" rel="tag">Swift</a><span class="tag-list-count">29</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/TestNG/" rel="tag">TestNG</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Tomcat/" rel="tag">Tomcat</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/UI%E7%BB%84%E4%BB%B6%E5%BA%93/" rel="tag">UI组件库</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Validator/" rel="tag">Validator</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Vue/" rel="tag">Vue</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Vuepress/" rel="tag">Vuepress</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Wordpress/" rel="tag">Wordpress</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/XML/" rel="tag">XML</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/assert/" rel="tag">assert</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/docker/" rel="tag">docker</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/gitlab/" rel="tag">gitlab</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/homebrew/" rel="tag">homebrew</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/iframe/" rel="tag">iframe</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java/" rel="tag">java</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/lambda/" rel="tag">lambda</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/less/" rel="tag">less</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/" rel="tag">linux</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mac/" rel="tag">mac</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mybatis-plus/" rel="tag">mybatis-plus</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mysql/" rel="tag">mysql</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/oracle/" rel="tag">oracle</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/pom-xml/" rel="tag">pom.xml</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/quartz/" rel="tag">quartz</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/settings-xml/" rel="tag">settings.xml</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/spring-boot/" rel="tag">spring-boot</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ssh/" rel="tag">ssh</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sshpass/" rel="tag">sshpass</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/yum/" rel="tag">yum</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%B9%90%E8%A7%82%E9%94%81/" rel="tag">乐观锁</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BB%8B%E7%BB%8D/" rel="tag">介绍</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%86%85%E7%BD%91/" rel="tag">内网</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%86%85%E7%BD%91%E7%A9%BF%E9%80%8F/" rel="tag">内网穿透</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%8A%A0%E5%AF%86/" rel="tag">加密</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%8F%8D%E7%BC%96%E8%AF%91%E5%B7%A5%E5%85%B7/" rel="tag">反编译工具</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%9B%BE%E5%BA%8A/" rel="tag">图床</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%9F%BA%E7%A1%80/" rel="tag">基础</a><span class="tag-list-count">29</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%AD%98%E5%82%A8%E5%87%BD%E6%95%B0/" rel="tag">存储函数</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%AD%98%E5%82%A8%E8%BF%87%E7%A8%8B/" rel="tag">存储过程</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%AE%9A%E6%97%B6%E5%99%A8/" rel="tag">定时器</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%AE%9D%E5%A1%94/" rel="tag">宝塔</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%B9%B6%E5%8F%91/" rel="tag">并发</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%BC%82%E5%B8%B8/" rel="tag">异常</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%BF%83%E7%90%86/" rel="tag">心理</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%80%BB%E7%BB%93/" rel="tag">总结</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%8C%81%E4%B9%85%E5%B1%82%E6%A1%86%E6%9E%B6/" rel="tag">持久层框架</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%8E%A5%E5%8F%A3/" rel="tag">接口</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%8F%92%E4%BB%B6/" rel="tag">插件</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/" rel="tag">数据库</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%96%AD%E8%A8%80/" rel="tag">断言</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%A0%91%E8%8E%93%E6%B4%BE/" rel="tag">树莓派</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%A0%91%E8%8E%93%E6%B4%BE4B/" rel="tag">树莓派4B</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%A6%82%E5%BF%B5/" rel="tag">概念</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%A8%A1%E7%89%88%E5%BC%95%E6%93%8E/" rel="tag">模版引擎</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%B3%9B%E5%9E%8B/" rel="tag">泛型</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%B5%8B%E8%AF%95/" rel="tag">测试</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%88%AC%E8%99%AB/" rel="tag">爬虫</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%94%A8%E6%88%B7%E6%9D%83%E9%99%90%E9%AA%8C%E8%AF%81/" rel="tag">用户权限验证</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%9F%A5%E8%AF%86/" rel="tag">知识</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%AE%97%E6%B3%95/" rel="tag">算法</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%B1%BB/" rel="tag">类</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BB%84%E4%BB%B6%E5%BA%93/" rel="tag">组件库</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%84%9A%E6%9C%AC/" rel="tag">脚本</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%87%AA%E5%8A%A8%E5%8C%96%E6%B5%8B%E8%AF%95/" rel="tag">自动化测试</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%8B%A5%E4%BE%9D/" rel="tag">若依</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/" rel="tag">解决方案</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" rel="tag">设计模式</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/" rel="tag">读书笔记</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%B7%A8%E5%9F%9F/" rel="tag">跨域</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%83%A8%E7%BD%B2/" rel="tag">部署</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9B%86%E6%88%90/" rel="tag">集成</a><span class="tag-list-count">14</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1/" rel="tag">面向对象</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9F%A9%E5%89%A7/" rel="tag">韩剧</a><span class="tag-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget-body tagcloud">
+      <a href="/tags/AJAX/" style="font-size: 13px;">AJAX</a> <a href="/tags/Activiti7/" style="font-size: 13.17px;">Activiti7</a> <a href="/tags/Arthas/" style="font-size: 13px;">Arthas</a> <a href="/tags/CSS/" style="font-size: 13px;">CSS</a> <a href="/tags/Curl/" style="font-size: 13px;">Curl</a> <a href="/tags/Debug/" style="font-size: 13px;">Debug</a> <a href="/tags/Docker/" style="font-size: 13.42px;">Docker</a> <a href="/tags/Druid/" style="font-size: 13px;">Druid</a> <a href="/tags/Electron/" style="font-size: 13.08px;">Electron</a> <a href="/tags/Expect/" style="font-size: 13px;">Expect</a> <a href="/tags/FastJson/" style="font-size: 13px;">FastJson</a> <a href="/tags/FreeMarker/" style="font-size: 13px;">FreeMarker</a> <a href="/tags/Git/" style="font-size: 13.08px;">Git</a> <a href="/tags/Gitlab/" style="font-size: 13.25px;">Gitlab</a> <a href="/tags/GitlabRunner/" style="font-size: 13.08px;">GitlabRunner</a> <a href="/tags/HTML-CSS-JavaScript/" style="font-size: 13.17px;">HTML/CSS/JavaScript</a> <a href="/tags/Hook/" style="font-size: 13px;">Hook</a> <a href="/tags/Http/" style="font-size: 13px;">Http</a> <a href="/tags/Hutool/" style="font-size: 13px;">Hutool</a> <a href="/tags/IDEA/" style="font-size: 13.25px;">IDEA</a> <a href="/tags/JS/" style="font-size: 13.08px;">JS</a> <a href="/tags/JVM/" style="font-size: 13px;">JVM</a> <a href="/tags/Jar/" style="font-size: 13.08px;">Jar</a> <a href="/tags/Java/" style="font-size: 13.83px;">Java</a> <a href="/tags/Jdk/" style="font-size: 13px;">Jdk</a> <a href="/tags/Jenkins/" style="font-size: 13px;">Jenkins</a> <a href="/tags/Jmeter/" style="font-size: 13px;">Jmeter</a> <a href="/tags/Json/" style="font-size: 13px;">Json</a> <a href="/tags/Jsoup/" style="font-size: 13px;">Jsoup</a> <a href="/tags/Kafka/" style="font-size: 13.25px;">Kafka</a> <a href="/tags/Leetcode/" style="font-size: 13.33px;">Leetcode</a> <a href="/tags/Linux/" style="font-size: 13px;">Linux</a> <a href="/tags/Logback/" style="font-size: 13px;">Logback</a> <a href="/tags/Mac/" style="font-size: 13px;">Mac</a> <a href="/tags/Maven/" style="font-size: 13.42px;">Maven</a> <a href="/tags/MongoDB/" style="font-size: 13.42px;">MongoDB</a> <a href="/tags/MyBatis/" style="font-size: 13.5px;">MyBatis</a> <a href="/tags/Mybatis/" style="font-size: 13.17px;">Mybatis</a> <a href="/tags/MybatisPlus/" style="font-size: 13.08px;">MybatisPlus</a> <a href="/tags/Mysql/" style="font-size: 13.25px;">Mysql</a> <a href="/tags/Nano/" style="font-size: 13px;">Nano</a> <a href="/tags/Nexus/" style="font-size: 13.08px;">Nexus</a> <a href="/tags/Nginx/" style="font-size: 13.08px;">Nginx</a> <a href="/tags/Opengrok/" style="font-size: 13px;">Opengrok</a> <a href="/tags/Oracle/" style="font-size: 13.75px;">Oracle</a> <a href="/tags/Profile/" style="font-size: 13px;">Profile</a> <a href="/tags/PubSubJS/" style="font-size: 13px;">PubSubJS</a> <a href="/tags/Python/" style="font-size: 13.17px;">Python</a> <a href="/tags/Quartz/" style="font-size: 13.08px;">Quartz</a> <a href="/tags/RESTful/" style="font-size: 13px;">RESTful</a> <a href="/tags/React/" style="font-size: 13.5px;">React</a> <a href="/tags/Redis/" style="font-size: 13.17px;">Redis</a> <a href="/tags/SQL/" style="font-size: 13.25px;">SQL</a> <a href="/tags/SVN/" style="font-size: 13px;">SVN</a> <a href="/tags/Scheduled/" style="font-size: 13px;">Scheduled</a> <a href="/tags/Scrapy/" style="font-size: 13px;">Scrapy</a> <a href="/tags/Shell/" style="font-size: 13.58px;">Shell</a> <a href="/tags/Spel%E8%A1%A8%E8%BE%BE%E5%BC%8F/" style="font-size: 13px;">Spel表达式</a> <a href="/tags/Spring/" style="font-size: 13.33px;">Spring</a> <a href="/tags/SpringBoot/" style="font-size: 14px;">SpringBoot</a> <a href="/tags/SpringEvent/" style="font-size: 13px;">SpringEvent</a> <a href="/tags/SpringMVC/" style="font-size: 13px;">SpringMVC</a> <a href="/tags/SpringSecurity/" style="font-size: 13.17px;">SpringSecurity</a> <a href="/tags/Stream/" style="font-size: 13px;">Stream</a> <a href="/tags/Swagger/" style="font-size: 13.08px;">Swagger</a> <a href="/tags/Swift/" style="font-size: 13.92px;">Swift</a> <a href="/tags/TestNG/" style="font-size: 13px;">TestNG</a> <a href="/tags/Tomcat/" style="font-size: 13px;">Tomcat</a> <a href="/tags/UI%E7%BB%84%E4%BB%B6%E5%BA%93/" style="font-size: 13px;">UI组件库</a> <a href="/tags/Validator/" style="font-size: 13px;">Validator</a> <a href="/tags/Vue/" style="font-size: 13px;">Vue</a> <a href="/tags/Vuepress/" style="font-size: 13.25px;">Vuepress</a> <a href="/tags/Wordpress/" style="font-size: 13px;">Wordpress</a> <a href="/tags/XML/" style="font-size: 13px;">XML</a> <a href="/tags/assert/" style="font-size: 13px;">assert</a> <a href="/tags/docker/" style="font-size: 13px;">docker</a> <a href="/tags/gitlab/" style="font-size: 13px;">gitlab</a> <a href="/tags/homebrew/" style="font-size: 13px;">homebrew</a> <a href="/tags/iframe/" style="font-size: 13px;">iframe</a> <a href="/tags/java/" style="font-size: 13px;">java</a> <a href="/tags/lambda/" style="font-size: 13px;">lambda</a> <a href="/tags/less/" style="font-size: 13px;">less</a> <a href="/tags/linux/" style="font-size: 13.25px;">linux</a> <a href="/tags/mac/" style="font-size: 13.25px;">mac</a> <a href="/tags/mybatis-plus/" style="font-size: 13px;">mybatis-plus</a> <a href="/tags/mysql/" style="font-size: 13px;">mysql</a> <a href="/tags/oracle/" style="font-size: 13px;">oracle</a> <a href="/tags/pom-xml/" style="font-size: 13px;">pom.xml</a> <a href="/tags/quartz/" style="font-size: 13px;">quartz</a> <a href="/tags/settings-xml/" style="font-size: 13px;">settings.xml</a> <a href="/tags/spring-boot/" style="font-size: 13px;">spring-boot</a> <a href="/tags/ssh/" style="font-size: 13px;">ssh</a> <a href="/tags/sshpass/" style="font-size: 13px;">sshpass</a> <a href="/tags/yum/" style="font-size: 13px;">yum</a> <a href="/tags/%E4%B9%90%E8%A7%82%E9%94%81/" style="font-size: 13px;">乐观锁</a> <a href="/tags/%E4%BB%8B%E7%BB%8D/" style="font-size: 13px;">介绍</a> <a href="/tags/%E5%86%85%E7%BD%91/" style="font-size: 13px;">内网</a> <a href="/tags/%E5%86%85%E7%BD%91%E7%A9%BF%E9%80%8F/" style="font-size: 13px;">内网穿透</a> <a href="/tags/%E5%8A%A0%E5%AF%86/" style="font-size: 13.08px;">加密</a> <a href="/tags/%E5%8F%8D%E7%BC%96%E8%AF%91%E5%B7%A5%E5%85%B7/" style="font-size: 13px;">反编译工具</a> <a href="/tags/%E5%9B%BE%E5%BA%8A/" style="font-size: 13px;">图床</a> <a href="/tags/%E5%9F%BA%E7%A1%80/" style="font-size: 13.92px;">基础</a> <a href="/tags/%E5%AD%98%E5%82%A8%E5%87%BD%E6%95%B0/" style="font-size: 13px;">存储函数</a> <a href="/tags/%E5%AD%98%E5%82%A8%E8%BF%87%E7%A8%8B/" style="font-size: 13.08px;">存储过程</a> <a href="/tags/%E5%AE%9A%E6%97%B6%E5%99%A8/" style="font-size: 13px;">定时器</a> <a href="/tags/%E5%AE%9D%E5%A1%94/" style="font-size: 13.08px;">宝塔</a> <a href="/tags/%E5%B9%B6%E5%8F%91/" style="font-size: 13px;">并发</a> <a href="/tags/%E5%BC%82%E5%B8%B8/" style="font-size: 13px;">异常</a> <a href="/tags/%E5%BF%83%E7%90%86/" style="font-size: 13.08px;">心理</a> <a href="/tags/%E6%80%BB%E7%BB%93/" style="font-size: 13px;">总结</a> <a href="/tags/%E6%8C%81%E4%B9%85%E5%B1%82%E6%A1%86%E6%9E%B6/" style="font-size: 13.17px;">持久层框架</a> <a href="/tags/%E6%8E%A5%E5%8F%A3/" style="font-size: 13px;">接口</a> <a href="/tags/%E6%8F%92%E4%BB%B6/" style="font-size: 13px;">插件</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/" style="font-size: 13.33px;">数据库</a> <a href="/tags/%E6%96%AD%E8%A8%80/" style="font-size: 13px;">断言</a> <a href="/tags/%E6%A0%91%E8%8E%93%E6%B4%BE/" style="font-size: 13.08px;">树莓派</a> <a href="/tags/%E6%A0%91%E8%8E%93%E6%B4%BE4B/" style="font-size: 13px;">树莓派4B</a> <a href="/tags/%E6%A6%82%E5%BF%B5/" style="font-size: 13px;">概念</a> <a href="/tags/%E6%A8%A1%E7%89%88%E5%BC%95%E6%93%8E/" style="font-size: 13px;">模版引擎</a> <a href="/tags/%E6%B3%9B%E5%9E%8B/" style="font-size: 13.08px;">泛型</a> <a href="/tags/%E6%B5%8B%E8%AF%95/" style="font-size: 13.33px;">测试</a> <a href="/tags/%E7%88%AC%E8%99%AB/" style="font-size: 13.08px;">爬虫</a> <a href="/tags/%E7%94%A8%E6%88%B7%E6%9D%83%E9%99%90%E9%AA%8C%E8%AF%81/" style="font-size: 13px;">用户权限验证</a> <a href="/tags/%E7%9F%A5%E8%AF%86/" style="font-size: 13px;">知识</a> <a href="/tags/%E7%AE%97%E6%B3%95/" style="font-size: 13.08px;">算法</a> <a href="/tags/%E7%B1%BB/" style="font-size: 13px;">类</a> <a href="/tags/%E7%BB%84%E4%BB%B6%E5%BA%93/" style="font-size: 13px;">组件库</a> <a href="/tags/%E8%84%9A%E6%9C%AC/" style="font-size: 13.25px;">脚本</a> <a href="/tags/%E8%87%AA%E5%8A%A8%E5%8C%96%E6%B5%8B%E8%AF%95/" style="font-size: 13px;">自动化测试</a> <a href="/tags/%E8%8B%A5%E4%BE%9D/" style="font-size: 13px;">若依</a> <a href="/tags/%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/" style="font-size: 13.08px;">解决方案</a> <a href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" style="font-size: 13px;">设计模式</a> <a href="/tags/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/" style="font-size: 13.08px;">读书笔记</a> <a href="/tags/%E8%B7%A8%E5%9F%9F/" style="font-size: 13px;">跨域</a> <a href="/tags/%E9%83%A8%E7%BD%B2/" style="font-size: 13px;">部署</a> <a href="/tags/%E9%9B%86%E6%88%90/" style="font-size: 13.67px;">集成</a> <a href="/tags/%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1/" style="font-size: 13px;">面向对象</a> <a href="/tags/%E9%9F%A9%E5%89%A7/" style="font-size: 13px;">韩剧</a>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget-body">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/07/">七月 2024</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/07/">七月 2023</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/06/">六月 2023</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/01/">一月 2023</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/11/">十一月 2022</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/10/">十月 2022</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/07/">七月 2022</a><span class="archive-list-count">181</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/06/">六月 2022</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/07/">七月 2020</a><span class="archive-list-count">17</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget-body">
+      <ul class="recent-post-list list-unstyled ">
+        
+          <li>
+            
+            <div class="item-thumb">
+              <a href="/2024/07/%E4%B8%8D%E5%8D%B7%E5%AD%A6%E5%8E%86%E5%92%8C%E8%83%8C%E6%99%AF%E7%9A%84%E8%B5%9B%E9%81%93%EF%BC%8C%E4%B9%9F%E8%83%BD%E6%9C%88%E5%85%A5%E8%BF%87%E4%B8%87%EF%BC%9F/" class="thumb">
+    
+    
+        <span class="thumb-image thumb-none"></span>
+    
+</a>
+
+            </div>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/%E5%88%9B%E4%B8%9A/">创业</a>
+              </p>
+              <p class="item-title">
+                <a href="/2024/07/%E4%B8%8D%E5%8D%B7%E5%AD%A6%E5%8E%86%E5%92%8C%E8%83%8C%E6%99%AF%E7%9A%84%E8%B5%9B%E9%81%93%EF%BC%8C%E4%B9%9F%E8%83%BD%E6%9C%88%E5%85%A5%E8%BF%87%E4%B8%87%EF%BC%9F/" class="title">不卷学历和背景的赛道，也能月入过万？</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2024-07-11T05:45:20.000Z" itemprop="datePublished">2024-07-11</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-thumb">
+              <a href="/2024/07/%E5%9B%9E%E9%A1%BE%E5%B7%A5%E4%BD%9C%E8%BF%99%E5%87%A0%E5%B9%B4/" class="thumb">
+    
+    
+        <span class="thumb-image thumb-none"></span>
+    
+</a>
+
+            </div>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/%E5%A4%8D%E7%9B%98/">复盘</a>
+              </p>
+              <p class="item-title">
+                <a href="/2024/07/%E5%9B%9E%E9%A1%BE%E5%B7%A5%E4%BD%9C%E8%BF%99%E5%87%A0%E5%B9%B4/" class="title">回顾工作这几年</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2024-07-09T06:19:23.000Z" itemprop="datePublished">2024-07-09</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-thumb">
+              <a href="/2023/07/SpringBoot3%E9%9B%86%E6%88%90Quartz%E6%9E%81%E7%AE%80%E7%89%88/" class="thumb">
+    
+    
+        <span style="background-image:url(/2023/07/SpringBoot3集成Quartz极简版/logo-quartz-scheduler.png)" alt="SpringBoot3集成Quartz极简版" class="thumb-image"></span>
+    
+</a>
+
+            </div>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/SpringBoot/">SpringBoot</a>
+              </p>
+              <p class="item-title">
+                <a href="/2023/07/SpringBoot3%E9%9B%86%E6%88%90Quartz%E6%9E%81%E7%AE%80%E7%89%88/" class="title">SpringBoot3集成Quartz极简版</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2023-07-18T01:14:01.000Z" itemprop="datePublished">2023-07-18</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-thumb">
+              <a href="/2023/07/SpringBoot3%E9%9B%86%E6%88%90Quartz%E8%AF%A6%E7%BB%86%E7%89%88/" class="thumb">
+    
+    
+        <span style="background-image:url(/2023/07/SpringBoot3集成Quartz极简版/logo-quartz-scheduler.png)" alt="SpringBoot3集成Quartz详细版" class="thumb-image"></span>
+    
+</a>
+
+            </div>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/SpringBoot/">SpringBoot</a>
+              </p>
+              <p class="item-title">
+                <a href="/2023/07/SpringBoot3%E9%9B%86%E6%88%90Quartz%E8%AF%A6%E7%BB%86%E7%89%88/" class="title">SpringBoot3集成Quartz详细版</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2023-07-18T01:14:01.000Z" itemprop="datePublished">2023-07-18</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-thumb">
+              <a href="/2023/07/SpringBoot3%E9%9B%86%E6%88%90Swagger/" class="thumb">
+    
+    
+        <span style="background-image:url(/2023/07/SpringBoot3集成Swagger/swagger_logo.svg)" alt="SpringBoot3集成Swagger" class="thumb-image"></span>
+    
+</a>
+
+            </div>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/SpringBoot/">SpringBoot</a>
+              </p>
+              <p class="item-title">
+                <a href="/2023/07/SpringBoot3%E9%9B%86%E6%88%90Swagger/" class="title">SpringBoot3集成Swagger</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2023-07-11T06:52:01.000Z" itemprop="datePublished">2023-07-11</time>
+              </p>
+            </div>
+          </li>
+          
+      </ul>
+    </div>
+  </div>
+  
+
+    
+  </div>
+</aside>
+
+  
+  
+<main class="main" role="main">
+  <div class="content">
+  <article id="post-软件开发/技术/编程语言/swift/Swift基础-访问控制" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
+    
+    <div class="article-header">
+      
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Swift基础 访问控制
+    </h1>
+  
+
+      
+      <div class="article-meta">
+        <span class="article-date">
+    <i class="icon icon-calendar-check"></i>
+	<a href="/2022/07/Swift%E5%9F%BA%E7%A1%80-%E8%AE%BF%E9%97%AE%E6%8E%A7%E5%88%B6/" class="article-date">
+	  <time datetime="2022-07-01T04:01:01.000Z" itemprop="datePublished">2022-07-01</time>
+	</a>
+</span>
+        
+  <span class="article-category">
+    <i class="icon icon-folder"></i>
+    <a class="article-category-link" href="/categories/Swift/">Swift</a>
+  </span>
+
+        
+  <span class="article-tag">
+    <i class="icon icon-tags"></i>
+	<a class="article-tag-link-link" href="/tags/Swift/" rel="tag">Swift</a>, <a class="article-tag-link-link" href="/tags/%E5%9F%BA%E7%A1%80/" rel="tag">基础</a>
+  </span>
+
+
+        
+	<span class="article-read hidden-xs">
+	    <i class="icon icon-eye-fill" aria-hidden="true"></i>
+	    <span id="busuanzi_container_page_pv">
+			<span id="busuanzi_value_page_pv">0</span>
+		</span>
+	</span>
+
+
+        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2022/07/Swift%E5%9F%BA%E7%A1%80-%E8%AE%BF%E9%97%AE%E6%8E%A7%E5%88%B6/#comments" class="article-comment-link">评论</a></span>
+        
+	
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">字数统计: 6.1k(字)</span>
+	
+	
+		<span class="post-readcount hidden-xs" itemprop="timeRequired">阅读时长: 21(分)</span>
+	
+
+      </div>
+    </div>
+    <div class="article-entry marked-body" itemprop="articleBody">
+      
+        <p>翻译自：<a target="_blank" rel="noopener" href="https://docs.swift.org/swift-book/LanguageGuide/AccessControl.html">https://docs.swift.org/swift-book/LanguageGuide/AccessControl.html</a></p>
+<p><em>访问控制</em>限制从其他源文件和模块中的代码访问部分代码。此功能使您能够隐藏代码的实现详细信息，并指定可以访问和使用该代码的首选界面。</p>
+<p>您可以为单个类型（类、结构和枚举）以及属于这些类型的属性、方法、初始化器和下标分配特定的访问级别。协议可以限制在特定上下文中，全局常量、变量和函数也是如此。</p>
+<p>除了提供不同级别的访问控制外，Swift还通过为典型场景提供默认访问级别来减少指定显式访问控制级别的需求。事实上，如果您正在编写单个目标应用程序，您可能根本不需要指定显式访问控制级别。</p>
+<p>注意</p>
+<p>代码中可以对其应用访问控制的各个方面（属性、类型、函数等）在以下章节中称为“实体”，以方便简洁。</p>
+<h2 id="模块和源文件"><a href="#模块和源文件" class="headerlink" title="模块和源文件"></a>模块和源文件</h2><p>Swift的访问控制模型基于模块和源文件的概念。</p>
+<p><em>模块</em>是代码分发的单个单元，即一个框架或应用程序，作为单个单元构建和发布，并且可以通过另一个具有Swift<code>import</code>关键字的模块导入。</p>
+<p>Xcode 中的每个构建目标（如 app 套装或框架）在 Swift 中被视为一个单独的模块。如果您将应用程序代码的各个方面作为一个独立的框架组合在一起——也许是为了在多个应用程序中封装和重用该代码——那么您在该框架中定义的所有内容都将在应用程序中导入和使用时，或者在另一个框架中使用时，都将成为单独模块的一部分。</p>
+<p><em>源文件</em>是模块中的单个Swift源代码文件（实际上，是应用程序或框架中的单个文件）。虽然在单独的源文件中定义单个类型很常见，但单个源文件可以包含多种类型、函数等的定义。</p>
+<h2 id="访问级别"><a href="#访问级别" class="headerlink" title="访问级别"></a>访问级别</h2><p>Swift为您的代码中的实体提供了五个不同的<em>访问级别</em>。这些访问级别相对于定义实体的源文件，也相对于源文件所属的模块。</p>
+<ul>
+<li><em>开放访问**和公共访问</em>使实体能够在其定义模块的任何源文件中使用，也可以在导入定义模块的另一个模块的源文件中使用。在指定框架的公共接口时，您通常使用开放或公共访问。开放接入和公共访问之间的区别如下。</li>
+<li><em>内部访问</em>使实体能够在其定义模块的任何源文件中使用，但不能在该模块以外的任何源文件中使用。在定义应用程序或框架的内部结构时，您通常使用内部访问。</li>
+<li><em>文件专用访问</em>将实体的使用限制在自己的定义源文件上。当这些详细信息在整个文件中使用时，使用文件专用访问来隐藏特定功能的实现细节。</li>
+<li><em>私人访问</em>将实体的使用限制为封闭声明，以及同一文件中该声明的扩展名。当特定功能的实现细节仅在单个声明中使用时，使用私有访问来隐藏这些功能的实现细节。</li>
+</ul>
+<p>开放访问是最高（限制最少）的访问级别，私人访问是最低（限制最强）的访问级别。</p>
+<p>开放访问仅适用于类和类成员，它与公共访问不同，允许模块外的代码子类和重写，如下文在<a target="_blank" rel="noopener" href="https://docs.swift.org/swift-book/LanguageGuide/AccessControl.html#ID16">子类</a>中讨论。将类标记为开放明确表示您考虑了使用该类作为超类的其他模块代码的影响，并且您相应地设计了类的代码。</p>
+<h3 id="访问级别的指导原则"><a href="#访问级别的指导原则" class="headerlink" title="访问级别的指导原则"></a>访问级别的指导原则</h3><p>Swift中的访问级别遵循一个总体指导原则：<em>任何实体都不能用另一个访问级别较低（限制性更强）的实体来定义。</em></p>
+<p>例如：</p>
+<ul>
+<li>公共变量不能定义为具有内部、文件私有或私有类型，因为该类型可能并非在使用公共变量的任何地方都可用。</li>
+<li>函数的访问级别不能高于其参数类型和返回类型，因为该函数可以在其组成类型对周围代码不可用的情况下使用。</li>
+</ul>
+<p>下文详细介绍了该指导原则对语言不同方面的具体影响。</p>
+<h3 id="默认访问级别"><a href="#默认访问级别" class="headerlink" title="默认访问级别"></a>默认访问级别</h3><p>如果您自己没有指定显式访问级别，代码中的所有实体（如本章后面所述，有几个特定例外）都有内部的默认访问级别。因此，在许多情况下，您不需要在代码中指定显式访问级别。</p>
+<h3 id="单目标应用程序的访问级别"><a href="#单目标应用程序的访问级别" class="headerlink" title="单目标应用程序的访问级别"></a>单目标应用程序的访问级别</h3><p>当您编写一个简单的单目标应用程序时，应用程序中的代码通常在应用程序中独立，不需要在应用程序模块之外提供。内部的默认访问级别已经符合此要求。因此，您不需要指定自定义访问级别。但是，您可能希望将代码的某些部分标记为私有或私有文件，以便从应用程序模块中的其他代码中隐藏其实现详细信息。</p>
+<h3 id="框架的访问级别"><a href="#框架的访问级别" class="headerlink" title="框架的访问级别"></a>框架的访问级别</h3><p>当您开发框架时，请将该框架的面向公众的界面标记为开放或公共，以便其他模块（例如导入框架的应用程序）可以查看和访问。这个面向公众的界面是框架的应用程序编程接口（或API）。</p>
+<p>注意</p>
+<p>框架的任何内部实现详细信息仍然可以使用内部的默认访问级别，或者如果您想从框架内部代码的其他部分隐藏它们，可以标记为私有或文件私有。只有当您希望实体成为框架API的一部分时，您才需要将其标记为开放或公共实体。</p>
+<h3 id="单元测试目标的访问级别"><a href="#单元测试目标的访问级别" class="headerlink" title="单元测试目标的访问级别"></a>单元测试目标的访问级别</h3><p>当您编写具有单元测试目标的应用程序时，应用程序中的代码需要提供给该模块才能进行测试。默认情况下，其他模块只能访问标记为开放或公共的实体。但是，如果您使用<code>@testable</code>属性标记产品模块的导入声明，并在启用测试的情况下编译该产品模块，则单元测试目标可以访问任何内部实体。</p>
+<h2 id="访问控制语法"><a href="#访问控制语法" class="headerlink" title="访问控制语法"></a>访问控制语法</h2><p>通过在实体声明的开头放置一个<code>open</code>、<code>public</code>、<code>internal</code>、<code>fileprivate</code>或<code>private</code>修饰符来定义实体的访问级别。</p>
+<ol>
+<li>public class SomePublicClass {}</li>
+<li>internal class SomeInternalClass {}</li>
+<li>fileprivate class SomeFilePrivateClass {}</li>
+<li>private class SomePrivateClass {}</li>
+<li></li>
+<li>public var somePublicVariable &#x3D; 0</li>
+<li>internal let someInternalConstant &#x3D; 0</li>
+<li>fileprivate func someFilePrivateFunction() {}</li>
+<li>private func somePrivateFunction() {}</li>
+</ol>
+<p>除非另有说明，否则默认访问级别是内部<a target="_blank" rel="noopener" href="https://docs.swift.org/swift-book/LanguageGuide/AccessControl.html#ID7">的</a>，如<a target="_blank" rel="noopener" href="https://docs.swift.org/swift-book/LanguageGuide/AccessControl.html#ID7">默认访问级别</a>所述。这意味着<code>SomeInternalClass</code>和<code>someInternalConstant</code>可以在没有显式访问级修饰符的情况下编写，并且仍然具有内部访问级别：</p>
+<ol>
+<li>class SomeInternalClass {}              &#x2F;&#x2F; implicitly internal</li>
+<li>let someInternalConstant &#x3D; 0            &#x2F;&#x2F; implicitly internal</li>
+</ol>
+<h2 id="自定义类型"><a href="#自定义类型" class="headerlink" title="自定义类型"></a>自定义类型</h2><p>如果您想为自定义类型指定显式访问级别，请在定义类型时指定。然后，这种新型可以在访问级别允许的任何地方使用。例如，如果您定义文件私有类，该类只能用作属性的类型，或在定义文件私有类的源文件中用作函数参数或返回类型。</p>
+<p>类型的访问控制级别也会影响该类型<em>成员</em>的默认访问级别（其属性、方法、初始化器和下标）。如果您将类型的访问级别定义为私有或文件私有，则其成员的默认访问级别也将是私有或文件私有。如果您将类型的访问级别定义为内部或公共（或使用内部的默认访问级别，而不显式指定访问级别），则该类型成员的默认访问级别将是内部的。</p>
+<p>重要</p>
+<p>公共类型默认为有内部成员，而不是公共成员。如果您希望类型成员公开，则必须明确将其标记为公开成员。此要求确保类型面向公众的API是您选择发布的内容，并避免错误地将类型的内部工作显示为公共API。</p>
+<ol>
+<li>public class SomePublicClass {                  &#x2F;&#x2F; explicitly public class</li>
+<li>​    public var somePublicProperty &#x3D; 0            &#x2F;&#x2F; explicitly public class member</li>
+<li>​    var someInternalProperty &#x3D; 0                 &#x2F;&#x2F; implicitly internal class member</li>
+<li>​    fileprivate func someFilePrivateMethod() {}  &#x2F;&#x2F; explicitly file-private class member</li>
+<li>​    private func somePrivateMethod() {}          &#x2F;&#x2F; explicitly private class member</li>
+<li>}</li>
+<li></li>
+<li>class SomeInternalClass {                       &#x2F;&#x2F; implicitly internal class</li>
+<li>​    var someInternalProperty &#x3D; 0                 &#x2F;&#x2F; implicitly internal class member</li>
+<li>​    fileprivate func someFilePrivateMethod() {}  &#x2F;&#x2F; explicitly file-private class member</li>
+<li>​    private func somePrivateMethod() {}          &#x2F;&#x2F; explicitly private class member</li>
+<li>}</li>
+<li></li>
+<li>fileprivate class SomeFilePrivateClass {        &#x2F;&#x2F; explicitly file-private class</li>
+<li>​    func someFilePrivateMethod() {}              &#x2F;&#x2F; implicitly file-private class member</li>
+<li>​    private func somePrivateMethod() {}          &#x2F;&#x2F; explicitly private class member</li>
+<li>}</li>
+<li></li>
+<li>private class SomePrivateClass {                &#x2F;&#x2F; explicitly private class</li>
+<li>​    func somePrivateMethod() {}                  &#x2F;&#x2F; implicitly private class member</li>
+<li>}</li>
+</ol>
+<h3 id="元组类型"><a href="#元组类型" class="headerlink" title="元组类型"></a>元组类型</h3><p>元组类型的访问级别是该元组中使用的所有类型的访问级别中最严格的。例如，如果您从两种不同类型的元组组成元组，一种具有内部访问，另一种具有私有访问，则该复合元组类型的访问级别将是私有的。</p>
+<p>注意</p>
+<p>元组类型没有像类、结构、枚举和函数那样具有独立的定义。元组类型的访问级别是从构成元组类型的类型自动确定的，并且无法显式指定。</p>
+<h3 id="功能类型"><a href="#功能类型" class="headerlink" title="功能类型"></a>功能类型</h3><p>函数类型的访问级别计算为函数参数类型和返回类型的最严格的访问级别。如果函数的计算访问级别与上下文默认值不匹配，则必须显式指定访问级别作为函数定义的一部分。</p>
+<p>下面的示例定义了一个名为<code>someFunction()</code>的全局函数，但没有为函数本身提供特定的访问级修饰符。您可能希望此功能具有“内部”的默认访问级别，但事实并非如此。事实上，<code>someFunction()</code>不会按以下内容编译：</p>
+<ol>
+<li>func someFunction() -&gt; (SomeInternalClass, SomePrivateClass) {</li>
+<li>​    &#x2F;&#x2F; function implementation goes here</li>
+<li>}</li>
+</ol>
+<p>该函数的返回类型是由上面<a target="_blank" rel="noopener" href="https://docs.swift.org/swift-book/LanguageGuide/AccessControl.html#ID11">自定义类型</a>中定义的两个自定义类组成的元组类型。其中一类被定义为内部，另一类被定义为私有。因此，复合元组类型的整体访问级别是私有的（元组组成部分类型的最小访问级别）。</p>
+<p>由于函数的返回类型是私有的，因此您必须用<code>private</code>修饰符标记函数的整体访问级别，以便函数声明有效：</p>
+<ol>
+<li>private func someFunction() -&gt; (SomeInternalClass, SomePrivateClass) {</li>
+<li>​    &#x2F;&#x2F; function implementation goes here</li>
+<li>}</li>
+</ol>
+<p>使用<code>public</code>或<code>internal</code>修饰符标记<code>someFunction()</code>的定义或使用内部的默认设置无效，因为函数的公共或内部用户可能无法适当访问函数返回类型中使用的私有类。</p>
+<h3 id="枚举类型"><a href="#枚举类型" class="headerlink" title="枚举类型"></a>枚举类型</h3><p>枚举的单个案例会自动获得与它们所属枚举相同的访问级别。您无法为单个枚举案例指定不同的访问级别。</p>
+<p>在下面的示例中，<code>CompassPoint</code>枚举具有明确的公共访问级别。因此，<code>north</code>、<code>south</code>、<code>east</code>和<code>west</code>列举案例也有公众的准入级别：</p>
+<ol>
+<li>public enum CompassPoint {</li>
+<li>​    case north</li>
+<li>​    case south</li>
+<li>​    case east</li>
+<li>​    case west</li>
+<li>}</li>
+</ol>
+<h4 id="原始值和相关值"><a href="#原始值和相关值" class="headerlink" title="原始值和相关值"></a>原始值和相关值</h4><p>用于枚举定义中任何原始值或相关值的类型必须具有至少与枚举访问级别相同的访问级别。例如，您不能使用私有类型作为具有内部访问级别的枚举的原始值类型。</p>
+<h3 id="嵌套类型"><a href="#嵌套类型" class="headerlink" title="嵌套类型"></a>嵌套类型</h3><p>嵌套类型的访问级别与其包含类型相同，除非包含类型是公共的。在公共类型中定义的嵌套类型具有内部的自动访问级别。如果您希望公共类型中的嵌套类型公开可用，则必须显式声明嵌套类型为公共类型。</p>
+<h2 id="子分类"><a href="#子分类" class="headerlink" title="子分类"></a>子分类</h2><p>您可以对可以在当前访问上下文中访问的任何类进行子类，该类与子类在同一模块中定义。您还可以对其他模块中定义的任何开放类进行子类。一个子类不能比其超类具有更高的访问级别——例如，您不能编写内部超类的公共子类。</p>
+<p>此外，对于在同一模块中定义的类，您可以覆盖在特定访问上下文中可见的任何类成员（方法、属性、初始化器或下标）。对于在另一个模块中定义的类，您可以覆盖任何打开的类成员。</p>
+<p>重写可以使继承的类成员比其超类版本更容易访问。在下面的示例中，类<code>A</code>是一个公共类，其文件私有方法称为<code>someMethod()</code>。<code>B</code>类是<code>A</code>的子类，访问级别为“内部”。尽管如此，<code>B</code>类提供了<code>someMethod()</code>的重写，访问级别为“内部”，高于<code>someMethod()</code>的原始实现：</p>
+<ol>
+<li>public class A {</li>
+<li>​    fileprivate func someMethod() {}</li>
+<li>}</li>
+<li></li>
+<li>internal class B: A {</li>
+<li>​    override internal func someMethod() {}</li>
+<li>}</li>
+</ol>
+<p>子类成员甚至可以调用访问权限低于子类成员的超类成员，只要对超类成员的调用是在允许的访问级别上下文中（即在与文件私有成员调用的超类相同的源文件中，或在与内部成员调用的超类相同的模块中）：</p>
+<ol>
+<li>public class A {</li>
+<li>​    fileprivate func someMethod() {}</li>
+<li>}</li>
+<li></li>
+<li>internal class B: A {</li>
+<li>​    override internal func someMethod() {</li>
+<li>​        super.someMethod()</li>
+<li>​    }</li>
+<li>}</li>
+</ol>
+<p>由于超类<code>A</code>和子类<code>B</code>在同一源文件中定义，因此<code>someMethod()</code>的<code>B</code>实现调用<code>super.someMethod()</code>是有效的。</p>
+<h2 id="常量、变量、属性和下标"><a href="#常量、变量、属性和下标" class="headerlink" title="常量、变量、属性和下标"></a>常量、变量、属性和下标</h2><p>常量、变量或属性不能比其类型更公开。例如，使用私有类型写入公共财产是无效的。同样，下标不能比其索引类型或返回类型更公开。</p>
+<p>如果常量、变量、属性或下标使用私有类型，则常量、变量、属性或下标也必须标记为<code>private</code>：</p>
+<ol>
+<li>private var privateInstance &#x3D; SomePrivateClass()</li>
+</ol>
+<h3 id="获取者和设置者"><a href="#获取者和设置者" class="headerlink" title="获取者和设置者"></a>获取者和设置者</h3><p>常量、变量、属性和下标的获取者和设置器会自动接收与他们所属的常量、变量、属性或下标相同的访问级别。</p>
+<p>您可以给设置器比其对应的获取器<em>更低</em>的访问级别，以限制该变量、属性或下标的读写范围。您可以通过在<code>var</code>或<code>subscript</code>介绍器之前编写<code>fileprivate(set)``private(set)</code>或<code>internal(set)</code>分配较低的访问级别。</p>
+<p>注意</p>
+<p>此规则适用于存储属性以及计算属性。即使您没有为存储的属性编写显式获取器和设置器，Swift仍然会合成隐式获取器和设置器，以提供对存储属性备份存储的访问。使用<code>fileprivate(set)``private(set)</code>和<code>internal(set)</code>以与计算属性中的显式setter完全相同的方式更改此合成设置器的访问级别。</p>
+<p>以下示例定义了一个名为<code>TrackedString</code>结构，该结构跟踪字符串属性被修改的次数：</p>
+<ol>
+<li>struct TrackedString {</li>
+<li>​    private(set) var numberOfEdits &#x3D; 0</li>
+<li>​    var value: String &#x3D; “” {</li>
+<li>​        didSet {</li>
+<li>​            numberOfEdits +&#x3D; 1</li>
+<li>​        }</li>
+<li>​    }</li>
+<li>}</li>
+</ol>
+<p><code>TrackedString</code>结构定义了一个名为<code>value</code>的存储字符串属性，初始值为<code>&quot;&quot;</code>”（空字符串）。该结构还定义了一个名为<code>numberOfEdits</code>的存储整数属性，用于跟踪该<code>value</code>被修改的次数。此修改跟踪通过<code>value</code>属性上的<code>didSet</code>属性观察器实现，该观察器每次将<code>value</code>属性设置为新值时都会增加<code>numberOfEdits</code>。</p>
+<p><code>TrackedString</code>结构和<code>value</code>属性不提供显式访问级修饰符，因此它们都接收内部的默认访问级别。然而，<code>numberOfEdits</code>属性的访问级别用<code>private(set)</code>修饰符标记，以指示属性的获取器仍然具有内部的默认访问级别，但该属性只能从作为<code>TrackedString</code>结构一部分的代码中设置。这使<code>TrackedString</code>能够在内部修改<code>numberOfEdits</code>属性，但当该属性在结构定义之外使用时，将其显示为只读属性。</p>
+<p>如果您创建<code>TrackedString</code>实例并修改其字符串值几次，您可以看到<code>numberOfEdits</code>属性值更新，以匹配修改次数：</p>
+<ol>
+<li>var stringToEdit &#x3D; TrackedString()</li>
+<li>stringToEdit.value &#x3D; “This string will be tracked.”</li>
+<li>stringToEdit.value +&#x3D; “ This edit will increment numberOfEdits.”</li>
+<li>stringToEdit.value +&#x3D; “ So will this one.”</li>
+<li>print(“The number of edits is (stringToEdit.numberOfEdits)”)</li>
+<li>&#x2F;&#x2F; Prints “The number of edits is 3”</li>
+</ol>
+<p>Although you can query the current value of the <code>numberOfEdits</code> property from within another source file, you can’t <em>modify</em> the property from another source file. This restriction protects the implementation details of the <code>TrackedString</code> edit-tracking functionality, while still providing convenient access to an aspect of that functionality.</p>
+<p>请注意，如果需要，您可以为获取器和设置器分配显式访问级别。下面的示例显示了<code>TrackedString</code>结构的一个版本，其中该结构以公共的显式访问级别定义。因此，结构的成员（包括numberOfEdits属性）默认具有内部访问级别。您可以通过组合<code>public</code>和<code>private(set)</code>访问级修饰符，使结构的<code>numberOfEdits</code>属性获取器公开，其属性设置器为私有：</p>
+<ol>
+<li>public struct TrackedString {</li>
+<li>​    public private(set) var numberOfEdits &#x3D; 0</li>
+<li>​    public var value: String &#x3D; “” {</li>
+<li>​        didSet {</li>
+<li>​            numberOfEdits +&#x3D; 1</li>
+<li>​        }</li>
+<li>​    }</li>
+<li>​    public init() {}</li>
+<li>}</li>
+</ol>
+<h2 id="初始化器"><a href="#初始化器" class="headerlink" title="初始化器"></a>初始化器</h2><p>自定义初始化器可以分配小于或等于其初始化类型的访问级别。唯一的例外是必需的初始化器（如<a target="_blank" rel="noopener" href="https://docs.swift.org/swift-book/LanguageGuide/Initialization.html#ID231">必需初始化器</a>中定义）。所需的初始化器必须具有与它所属类相同的访问级别。</p>
+<p>与函数和方法参数一样，初始化器参数的类型不能比初始化器自己的访问级别更私密。</p>
+<h3 id="默认初始化器"><a href="#默认初始化器" class="headerlink" title="默认初始化器"></a>默认初始化器</h3><p>如<a target="_blank" rel="noopener" href="https://docs.swift.org/swift-book/LanguageGuide/Initialization.html#ID213">默认初始化器</a>所述，Swift会自动提供<em>默认初始化器</em>，没有任何结构或基类的参数，这些结构或基类为其所有属性提供默认值，并且本身也不提供至少一个初始化器。</p>
+<p>默认初始化器具有与初始化的类型相同的访问级别，除非该类型被定义为<code>public</code>。对于定义为<code>public</code>的类型，默认初始化器被视为内部初始化器。如果您希望公共类型在另一个模块中使用无参数初始化器进行初始化，则必须自己显式提供公共无参数初始化器，作为类型定义的一部分。</p>
+<h3 id="结构类型的默认成员初始化器"><a href="#结构类型的默认成员初始化器" class="headerlink" title="结构类型的默认成员初始化器"></a>结构类型的默认成员初始化器</h3><p>如果结构的任何存储属性是私有的，则结构类型的默认成员初始化器被视为私有。同样，如果结构的任何存储属性是文件私有的，则初始化器是文件私有的。否则，初始化器具有内部访问级别。</p>
+<p>与上面的默认初始化器一样，如果您希望公共结构类型在另一个模块中使用成员初始化器时可以初始化，则必须自己提供公共成员初始化器，作为类型定义的一部分。</p>
+<h3 id="协议"><a href="#协议" class="headerlink" title="协议"></a>协议</h3><p>如果您想为协议类型分配显式访问级别，请在定义协议时这样做。这使您能够创建只能在特定访问上下文中采用的协议。</p>
+<p>协议定义中每个需求的访问级别会自动设置为与协议相同的访问级别。您无法将协议要求设置为与其支持的协议不同的访问级别。这确保了协议的所有要求在任何采用该协议的类型上都可见。</p>
+<p>注意</p>
+<p>如果您定义了公共协议，则协议的要求在实现时需要这些要求的公共访问级别。这种行为与其他类型不同，在这些类型中，公共类型定义意味着类型成员的内部访问级别。</p>
+<h3 id="协议继承"><a href="#协议继承" class="headerlink" title="协议继承"></a>协议继承</h3><p>如果您定义了从现有协议继承的新协议，则新协议最多可以具有与它继承的协议相同的访问级别。例如，您无法编写从内部协议继承的公共协议。</p>
+<h3 id="协议一致性"><a href="#协议一致性" class="headerlink" title="协议一致性"></a>协议一致性</h3><p>类型可以符合比类型本身更低访问级别的协议。例如，您可以定义一种公共类型，该类型可以在其他模块中使用，但其与内部协议的一致性只能在内部协议的定义模块中使用。</p>
+<p>类型符合特定协议的上下文是类型访问级别和协议访问级别的最低值。例如，如果一种类型是公开的，但它遵守的协议是内部的，则该类型与该协议的一致性也是内部的。</p>
+<p>当您编写或扩展类型以符合协议时，您必须确保该类型对每个协议要求的实现至少与该类型对该协议的一致性具有相同的访问级别。例如，如果公共类型符合内部协议，则该类型对每个协议要求的实现必须至少是内部的。</p>
+<p>注意</p>
+<p>在Swift中，就像在Objective-C中一样，协议一致性是全局的——类型不可能在同一程序中以两种不同的方式遵守协议。</p>
+<h2 id="扩展"><a href="#扩展" class="headerlink" title="扩展"></a>扩展</h2><p>您可以在类、结构或枚举可用的任何访问上下文中扩展类、结构或枚举。在扩展中添加的任何类型成员的默认访问级别与正在扩展的原始类型中声明的类型成员具有相同的默认访问级别。如果您扩展公共或内部类型，您添加的任何新类型成员都有默认的内部访问级别。如果您扩展文件私有类型，则您添加的任何新类型成员都有文件私有的默认访问级别。如果您扩展私有类型，则您添加的任何新类型成员都有默认的私有访问级别。</p>
+<p>或者，您可以使用显式访问级别修饰符（例如<code>private</code>）标记扩展，为扩展中定义的所有成员设置新的默认访问级别。这个新的默认值仍然可以在单个类型成员的扩展中重写。</p>
+<p>如果您使用扩展来添加协议一致性，则无法为扩展提供显式访问级修饰符。相反，协议自己的访问级别用于为扩展中的每个协议需求实现提供默认访问级别。</p>
+<h3 id="扩展中的私人成员"><a href="#扩展中的私人成员" class="headerlink" title="扩展中的私人成员"></a>扩展中的私人成员</h3><p>与它们扩展的类、结构或枚举位于同一文件中的扩展名的行为就像扩展中的代码是作为原始类型声明的一部分编写的。因此，您可以：</p>
+<ul>
+<li>在原始声明中声明一个私人成员，并从同一文件中的扩展名访问该成员。</li>
+<li>在一个扩展中声明一个私有成员，并从同一文件中的另一个扩展名访问该成员。</li>
+<li>在扩展名中声明一个私有成员，并从同一文件中的原始声明访问该成员。</li>
+</ul>
+<p>此行为意味着无论您的类型是否有私有实体，您都可以以同样的方式使用扩展来组织代码。例如，给定以下简单的协议：</p>
+<ol>
+<li>protocol SomeProtocol {</li>
+<li>​    func doSomething()</li>
+<li>}</li>
+</ol>
+<p>您可以使用扩展来添加协议一致性，如下所示：</p>
+<ol>
+<li>struct SomeStruct {</li>
+<li>​    private var privateVariable &#x3D; 12</li>
+<li>}</li>
+<li></li>
+<li>extension SomeStruct: SomeProtocol {</li>
+<li>​    func doSomething() {</li>
+<li>​        print(privateVariable)</li>
+<li>​    }</li>
+<li>}</li>
+</ol>
+<h2 id="通用"><a href="#通用" class="headerlink" title="通用"></a>通用</h2><p>泛型类型或泛型函数的访问级别是泛型类型或函数本身的访问级别及其类型参数上任何类型约束的访问级别的最低值。</p>
+<h2 id="类型别名"><a href="#类型别名" class="headerlink" title="类型别名"></a>类型别名</h2><p>为了访问控制的目的，您定义的任何类型别名都被视为不同的类型。类型别名的访问级别可以小于或等于其别名类型的访问级别。例如，私有类型别名可以别名私有、文件私有、内部、公共或开放类型，但公共类型别名不能别名内部、文件私有或私有类型。</p>
+<p>注意</p>
+<p>此规则也适用于用于满足协议一致性的关联类型的类型别名。</p>
+
+      
+    </div>
+    <div class="article-footer">
+      <blockquote class="mt-2x">
+  <ul class="post-copyright list-unstyled">
+    
+    <li class="post-copyright-link hidden-xs">
+      <strong>本文链接：</strong>
+      <a href="https://guoshunfa.com/2022/07/Swift%E5%9F%BA%E7%A1%80-%E8%AE%BF%E9%97%AE%E6%8E%A7%E5%88%B6/" title="Swift基础 访问控制" target="_blank" rel="external">https://guoshunfa.com/2022/07/Swift基础-访问控制/</a>
+    </li>
+    
+    <li class="post-copyright-license">
+      <strong>版权声明： </strong> 本博客所有文章除特别声明外，均采用 <a href="http://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank" rel="external">CC BY 4.0 CN协议</a> 许可协议。转载请注明出处！
+    </li>
+  </ul>
+</blockquote>
+
+
+<div class="panel panel-default panel-badger">
+  <div class="panel-body">
+    <figure class="media">
+      <div class="media-left">
+        <a href="https://github.com/guoshunfa" target="_blank" class="img-burn thumb-sm visible-lg">
+          <img src="/images/avatar.jpg" class="img-rounded w-full" alt="">
+        </a>
+      </div>
+      <div class="media-body">
+        <h3 class="media-heading"><a href="https://github.com/guoshunfa" target="_blank"><span class="text-dark">郭顺发</span><small class="ml-1x">创业中......</small></a></h3>
+        <div>承接：小程序开发、APP开发、网站开发、爬虫开发</div>
+      </div>
+    </figure>
+  </div>
+</div>
+
+
+    </div>
+  </article>
+  
+    
+  <section id="comments">
+  	
+           
+    
+  </section>
+
+
+  
+</div>
+
+  <nav class="bar bar-footer clearfix" data-stick-bottom>
+  <div class="bar-inner">
+  
+  <ul class="pager pull-left">
+    
+    <li class="prev">
+      <a href="/2022/07/Swift%E5%9F%BA%E7%A1%80-%E8%87%AA%E5%8A%A8%E5%8F%82%E8%80%83%E8%AE%A1%E6%95%B0/" title="Swift基础 自动参考计数"><i class="icon icon-angle-left" aria-hidden="true"></i><span>&nbsp;&nbsp;上一篇</span></a>
+    </li>
+    
+    
+    <li class="next">
+      <a href="/2022/07/Swift%E5%9F%BA%E7%A1%80-%E9%80%9A%E7%94%A8/" title="Swift基础 通用"><span>下一篇&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
+    </li>
+    
+    
+  </ul>
+  
+  
+  
+  <div class="bar-right">
+    
+    <div class="share-component" data-sites="weibo,qq,wechat,facebook,twitter" data-mobile-sites="weibo,qq,qzone"></div>
+    
+  </div>
+  </div>
+</nav>
+  
+
+
+</main>
+
+  <footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
+	
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/guoshunfa" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="https://gitee.com/guoshunfa" target="_blank" title="Gitee" data-toggle=tooltip data-placement=top><i class="icon icon-gitee"></i></a></li>
+        
+        <li><a href="https://juejin.cn/user/166781500267015" target="_blank" title="Juejin" data-toggle=tooltip data-placement=top><i class="icon icon-juejin"></i></a></li>
+        
+        <li><a href="https://cloud.tencent.com/developer/user/7784141" target="_blank" title="Code" data-toggle=tooltip data-placement=top><i class="icon icon-code"></i></a></li>
+        
+        <li><a href="/atom.xml" target="_blank" title="Rss" data-toggle=tooltip data-placement=top><i class="icon icon-rss"></i></a></li>
+        
+    </ul>
+
+    <div class="copyright">
+    	
+        &copy; 2024 guoshunfa
+        
+        <!-- <div class="publishby">
+        	Theme by <a href="https://github.com/cofess" target="_blank"> cofess </a>base on <a href="https://github.com/cofess/hexo-theme-pure" target="_blank">pure</a>.
+        </div> -->
+    </div>
+</footer>
+  <script src="//cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
+<script>
+window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
+</script>
+
+<script src="/js/plugin.min.js"></script>
+
+
+<script src="/js/application.js"></script>
+
+
+    <script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(未命名)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+
+<script src="/js/insight.js"></script>
+
+
+
+    <script>
+(function ($) {
+    $('.search-form').on('submit', function (e) {
+        var keyword = $('.search-form-input[name="wd"]').val();
+        window.location = 'https://www.baidu.com/s?wd=site:guoshunfa.com ' + keyword;
+        return false;
+    });
+})(jQuery);
+</script>
+
+
+
+
+   
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+   
+    
+  <!-- <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css"> -->
+  <script src="//cdn.jsdelivr.net/npm/gitalk@1.7.2/dist/gitalk.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/blueimp-md5@2.10.0/js/md5.min.js"></script>
+  <script type="text/javascript">
+  var gitalk = new Gitalk({
+    clientID: '328529f408a5d1041fe1',
+    clientSecret: '43872fab04fe0accb98439ac77ff71ff81f7b9dd',
+    repo: 'guoshunfa-comment',
+    owner: 'guoshunfa',
+    admin: ['guoshunfa'],
+    id: md5(location.pathname),
+    distractionFreeMode: true,
+    language: 'zh-CN',
+    enableHotKey: 'true'
+  })
+  gitalk.render('comments')
+  </script>
+      
+
+
+
+  <script src="//cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.3.5/dist/jquery.fancybox.min.js"></script>
+  <script>
+  //利用 FancyBox 实现点击图片放大
+  $(document).ready(function() {
+    $('article img').not('[hidden]').not('.panel-body img').each(function() {
+      var $image = $(this);
+      var imageCaption = $image.attr('alt');
+      var $imageWrapLink = $image.parent('a');
+      if ($imageWrapLink.length < 1) {
+        var src = this.getAttribute('src');
+        var idx = src.lastIndexOf('?');
+        if (idx != -1) {
+          src = src.substring(0, idx);
+        }
+        $imageWrapLink = $image.wrap('<a href="' + src + '"></a>').parent('a');
+      }
+      $imageWrapLink.attr('data-fancybox', 'images');
+      if (imageCaption) {
+        $imageWrapLink.attr('data-caption', imageCaption);
+      }
+    });
+    $().fancybox({
+      selector: '[data-fancybox="images"]',
+      hash: false,
+      loop: false,
+    });
+  });
+  </script>
+
+
+
+
+
+</body>
+</html>

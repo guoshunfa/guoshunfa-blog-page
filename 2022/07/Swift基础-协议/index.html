@@ -1,0 +1,1405 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+  <meta charset="utf-8">
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-transform" />
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="format-detection" content="telephone=no,email=no,adress=no">
+  <!-- Color theme for statusbar -->
+  <meta name="theme-color" content="#000000" />
+  <!-- 强制页面在当前窗口以独立页面显示,防止别人在框架里调用页面 -->
+  <meta http-equiv="window-target" content="_top" />
+  
+  
+  <title>Swift基础 协议 | guoshunfa</title>
+  <meta name="description" content="翻译自：https:&#x2F;&#x2F;docs.swift.org&#x2F;swift-book&#x2F;LanguageGuide&#x2F;Protocols.html 协议定义了适合特定任务或功能的方法、属性和其他要求的蓝图。然后，该协议可以由类、结构或枚举采用，以提供这些要求的实际实现。任何满足协议要求的类型都被称为符合该协议。 除了指定符合类型必须实现的要求外，您还可以扩展协议来实现其中一些需求或实现符合类型可以利用的其他功能">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Swift基础 协议">
+<meta property="og:url" content="https://guoshunfa.com/2022/07/Swift%E5%9F%BA%E7%A1%80-%E5%8D%8F%E8%AE%AE/index.html">
+<meta property="og:site_name" content="guoshunfa">
+<meta property="og:description" content="翻译自：https:&#x2F;&#x2F;docs.swift.org&#x2F;swift-book&#x2F;LanguageGuide&#x2F;Protocols.html 协议定义了适合特定任务或功能的方法、属性和其他要求的蓝图。然后，该协议可以由类、结构或枚举采用，以提供这些要求的实际实现。任何满足协议要求的类型都被称为符合该协议。 除了指定符合类型必须实现的要求外，您还可以扩展协议来实现其中一些需求或实现符合类型可以利用的其他功能">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2022-07-01T04:01:01.000Z">
+<meta property="article:modified_time" content="2024-01-28T11:41:39.289Z">
+<meta property="article:author" content="guoshunfa">
+<meta property="article:tag" content="Swift">
+<meta property="article:tag" content="基础">
+<meta name="twitter:card" content="summary">
+  <!-- Canonical links -->
+  <link rel="canonical" href="https://guoshunfa.com/2022/07/Swift%E5%9F%BA%E7%A1%80-%E5%8D%8F%E8%AE%AE/index.html">
+  
+    <link rel="alternate" href="/atom.xml" title="guoshunfa" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="favicon.jpg" type="image/x-icon">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  
+  
+    <link href="//cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.3.5/dist/jquery.fancybox.min.css" rel="stylesheet">
+  
+  
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1.7.2/dist/gitalk.min.css">
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body class="main-center" itemscope itemtype="http://schema.org/WebPage">
+  <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+  <div class="slimContent">
+    <div class="navbar-header">
+      
+      
+      <div class="profile-block text-center">
+        <a id="avatar" href="https://github.com/guoshunfa" target="_blank">
+          <img class="img-circle img-rotate" src="/images/avatar.jpg" width="200" height="200">
+        </a>
+        <h2 id="name" class="hidden-xs hidden-sm">郭顺发</h2>
+        <h3 id="title" class="hidden-xs hidden-sm hidden-md">创业中......</h3>
+        <small id="location" class="text-muted hidden-xs hidden-sm"><i class="icon icon-map-marker"></i> 深圳, China</small>
+      </div>
+      
+      <div class="search" id="search-form-wrap">
+
+    <form class="search-form sidebar-form">
+        <div class="input-group">
+            <input type="text" class="search-form-input form-control" placeholder="搜索" />
+            <span class="input-group-btn">
+                <button type="submit" class="search-form-submit btn btn-flat" onclick="return false;"><i class="icon icon-search"></i></button>
+            </span>
+        </div>
+    </form>
+    <div class="ins-search">
+  <div class="ins-search-mask"></div>
+  <div class="ins-search-container">
+    <div class="ins-input-wrapper">
+      <input type="text" class="ins-search-input" placeholder="想要查找什么..." x-webkit-speech />
+      <button type="button" class="close ins-close ins-selectable" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="ins-section-wrapper">
+      <div class="ins-section-container"></div>
+    </div>
+  </div>
+</div>
+
+
+</div>
+      <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <nav id="main-navbar" class="collapse navbar-collapse" itemscope itemtype="http://schema.org/SiteNavigationElement" role="navigation">
+      <ul class="nav navbar-nav main-nav menu-highlight">
+        
+        
+        <li class="menu-item menu-item-首页">
+          <a href="/.">
+            
+            <i class="icon icon-home-fill"></i>
+            
+            <span class="menu-title">首页</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-归档">
+          <a href="/archives">
+            
+            <i class="icon icon-archives-fill"></i>
+            
+            <span class="menu-title">归档</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-分类">
+          <a href="/categories">
+            
+            <i class="icon icon-folder"></i>
+            
+            <span class="menu-title">分类</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-标签">
+          <a href="/tags">
+            
+            <i class="icon icon-tags"></i>
+            
+            <span class="menu-title">标签</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-github仓库">
+          <a href="/repository">
+            
+            <i class="icon icon-project"></i>
+            
+            <span class="menu-title">github仓库</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-工具箱">
+          <a href="/tools">
+            
+            <i class="icon icon-book-fill"></i>
+            
+            <span class="menu-title">工具箱</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-友链">
+          <a href="/links">
+            
+            <i class="icon icon-friendship"></i>
+            
+            <span class="menu-title">友链</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-关于">
+          <a href="/about">
+            
+            <i class="icon icon-cup-fill"></i>
+            
+            <span class="menu-title">关于</span>
+          </a>
+        </li>
+        
+      </ul>
+      
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/guoshunfa" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="https://gitee.com/guoshunfa" target="_blank" title="Gitee" data-toggle=tooltip data-placement=top><i class="icon icon-gitee"></i></a></li>
+        
+        <li><a href="https://juejin.cn/user/166781500267015" target="_blank" title="Juejin" data-toggle=tooltip data-placement=top><i class="icon icon-juejin"></i></a></li>
+        
+        <li><a href="https://cloud.tencent.com/developer/user/7784141" target="_blank" title="Code" data-toggle=tooltip data-placement=top><i class="icon icon-code"></i></a></li>
+        
+        <li><a href="/atom.xml" target="_blank" title="Rss" data-toggle=tooltip data-placement=top><i class="icon icon-rss"></i></a></li>
+        
+    </ul>
+
+    </nav>
+  </div>
+</header>
+
+  
+    <aside class="sidebar" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    
+      <div class="widget">
+    <h3 class="widget-title">公告</h3>
+    <div class="widget-body">
+        <div id="board">
+            <div class="content">
+                <p>欢迎来到www.guoshunfa.com。</p><hr/><a target="_blank" rel="noopener" href="https://www.oracle.com/cn/java/">前往Java官网<a/><br/><a target="_blank" rel="noopener" href="https://spring.io/">前往Spring官网<a/>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget-body">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/HTML-CSS-JavaScript/">HTML/CSS/JavaScript</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Java/">Java</a><span class="category-list-count">17</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Python/">Python</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/SpringBoot/">SpringBoot</a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Swift/">Swift</a><span class="category-list-count">29</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%88%9B%E4%B8%9A/">创业</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%A4%8D%E7%9B%98/">复盘</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%A8%B1%E4%B9%90/">娱乐</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%8A%80%E6%9C%AF/">技术</a><span class="category-list-count">27</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%8A%80%E6%9C%AF/%E6%90%AD%E5%BB%BA%E5%8D%95%E4%BD%93SpringBoot%E9%A1%B9%E7%9B%AE/">搭建单体SpringBoot项目</a><span class="category-list-count">21</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%90%AD%E5%BB%BA%E5%8D%95%E4%BD%93SpringBoot%E9%A1%B9%E7%9B%AE/">搭建单体SpringBoot项目</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/">数据库</a><span class="category-list-count">17</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%9C%8D%E5%8A%A1/">服务</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%9C%8D%E5%8A%A1-%E7%BB%84%E4%BB%B6/">服务&组件</a><span class="category-list-count">27</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%AE%A1%E7%90%86/">服务器管理</a><span class="category-list-count">21</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E7%AE%97%E6%B3%95/">算法</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E8%BD%AF%E4%BB%B6%E4%BD%BF%E7%94%A8/">软件使用</a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E8%BD%AF%E4%BB%B6%E6%8A%80%E6%9C%AF%E6%A1%86%E6%9E%B6/">软件技术框架</a><span class="category-list-count">44</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E9%98%85%E8%AF%BB/">阅读</a><span class="category-list-count">2</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget-body">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/AJAX/" rel="tag">AJAX</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Activiti7/" rel="tag">Activiti7</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Arthas/" rel="tag">Arthas</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CSS/" rel="tag">CSS</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Curl/" rel="tag">Curl</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Debug/" rel="tag">Debug</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Docker/" rel="tag">Docker</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Druid/" rel="tag">Druid</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Electron/" rel="tag">Electron</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Expect/" rel="tag">Expect</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/FastJson/" rel="tag">FastJson</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/FreeMarker/" rel="tag">FreeMarker</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Git/" rel="tag">Git</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Gitlab/" rel="tag">Gitlab</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/GitlabRunner/" rel="tag">GitlabRunner</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/HTML-CSS-JavaScript/" rel="tag">HTML&#x2F;CSS&#x2F;JavaScript</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hook/" rel="tag">Hook</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Http/" rel="tag">Http</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hutool/" rel="tag">Hutool</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/IDEA/" rel="tag">IDEA</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JS/" rel="tag">JS</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JVM/" rel="tag">JVM</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Jar/" rel="tag">Jar</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java/" rel="tag">Java</a><span class="tag-list-count">27</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Jdk/" rel="tag">Jdk</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Jenkins/" rel="tag">Jenkins</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Jmeter/" rel="tag">Jmeter</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Json/" rel="tag">Json</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Jsoup/" rel="tag">Jsoup</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Kafka/" rel="tag">Kafka</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Leetcode/" rel="tag">Leetcode</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux/" rel="tag">Linux</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Logback/" rel="tag">Logback</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Mac/" rel="tag">Mac</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Maven/" rel="tag">Maven</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MongoDB/" rel="tag">MongoDB</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MyBatis/" rel="tag">MyBatis</a><span class="tag-list-count">7</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Mybatis/" rel="tag">Mybatis</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MybatisPlus/" rel="tag">MybatisPlus</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Mysql/" rel="tag">Mysql</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Nano/" rel="tag">Nano</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Nexus/" rel="tag">Nexus</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Nginx/" rel="tag">Nginx</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Opengrok/" rel="tag">Opengrok</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Oracle/" rel="tag">Oracle</a><span class="tag-list-count">22</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Profile/" rel="tag">Profile</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/PubSubJS/" rel="tag">PubSubJS</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Python/" rel="tag">Python</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Quartz/" rel="tag">Quartz</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/RESTful/" rel="tag">RESTful</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/React/" rel="tag">React</a><span class="tag-list-count">7</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Redis/" rel="tag">Redis</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SQL/" rel="tag">SQL</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SVN/" rel="tag">SVN</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Scheduled/" rel="tag">Scheduled</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Scrapy/" rel="tag">Scrapy</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Shell/" rel="tag">Shell</a><span class="tag-list-count">9</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Spel%E8%A1%A8%E8%BE%BE%E5%BC%8F/" rel="tag">Spel表达式</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Spring/" rel="tag">Spring</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SpringBoot/" rel="tag">SpringBoot</a><span class="tag-list-count">34</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SpringEvent/" rel="tag">SpringEvent</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SpringMVC/" rel="tag">SpringMVC</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SpringSecurity/" rel="tag">SpringSecurity</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Stream/" rel="tag">Stream</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Swagger/" rel="tag">Swagger</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Swift/" rel="tag">Swift</a><span class="tag-list-count">29</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/TestNG/" rel="tag">TestNG</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Tomcat/" rel="tag">Tomcat</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/UI%E7%BB%84%E4%BB%B6%E5%BA%93/" rel="tag">UI组件库</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Validator/" rel="tag">Validator</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Vue/" rel="tag">Vue</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Vuepress/" rel="tag">Vuepress</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Wordpress/" rel="tag">Wordpress</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/XML/" rel="tag">XML</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/assert/" rel="tag">assert</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/docker/" rel="tag">docker</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/gitlab/" rel="tag">gitlab</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/homebrew/" rel="tag">homebrew</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/iframe/" rel="tag">iframe</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java/" rel="tag">java</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/lambda/" rel="tag">lambda</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/less/" rel="tag">less</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/" rel="tag">linux</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mac/" rel="tag">mac</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mybatis-plus/" rel="tag">mybatis-plus</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mysql/" rel="tag">mysql</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/oracle/" rel="tag">oracle</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/pom-xml/" rel="tag">pom.xml</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/quartz/" rel="tag">quartz</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/settings-xml/" rel="tag">settings.xml</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/spring-boot/" rel="tag">spring-boot</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ssh/" rel="tag">ssh</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sshpass/" rel="tag">sshpass</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/yum/" rel="tag">yum</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%B9%90%E8%A7%82%E9%94%81/" rel="tag">乐观锁</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BB%8B%E7%BB%8D/" rel="tag">介绍</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%86%85%E7%BD%91/" rel="tag">内网</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%86%85%E7%BD%91%E7%A9%BF%E9%80%8F/" rel="tag">内网穿透</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%8A%A0%E5%AF%86/" rel="tag">加密</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%8F%8D%E7%BC%96%E8%AF%91%E5%B7%A5%E5%85%B7/" rel="tag">反编译工具</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%9B%BE%E5%BA%8A/" rel="tag">图床</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%9F%BA%E7%A1%80/" rel="tag">基础</a><span class="tag-list-count">29</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%AD%98%E5%82%A8%E5%87%BD%E6%95%B0/" rel="tag">存储函数</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%AD%98%E5%82%A8%E8%BF%87%E7%A8%8B/" rel="tag">存储过程</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%AE%9A%E6%97%B6%E5%99%A8/" rel="tag">定时器</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%AE%9D%E5%A1%94/" rel="tag">宝塔</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%B9%B6%E5%8F%91/" rel="tag">并发</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%BC%82%E5%B8%B8/" rel="tag">异常</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%BF%83%E7%90%86/" rel="tag">心理</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%80%BB%E7%BB%93/" rel="tag">总结</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%8C%81%E4%B9%85%E5%B1%82%E6%A1%86%E6%9E%B6/" rel="tag">持久层框架</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%8E%A5%E5%8F%A3/" rel="tag">接口</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%8F%92%E4%BB%B6/" rel="tag">插件</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/" rel="tag">数据库</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%96%AD%E8%A8%80/" rel="tag">断言</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%A0%91%E8%8E%93%E6%B4%BE/" rel="tag">树莓派</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%A0%91%E8%8E%93%E6%B4%BE4B/" rel="tag">树莓派4B</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%A6%82%E5%BF%B5/" rel="tag">概念</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%A8%A1%E7%89%88%E5%BC%95%E6%93%8E/" rel="tag">模版引擎</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%B3%9B%E5%9E%8B/" rel="tag">泛型</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%B5%8B%E8%AF%95/" rel="tag">测试</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%88%AC%E8%99%AB/" rel="tag">爬虫</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%94%A8%E6%88%B7%E6%9D%83%E9%99%90%E9%AA%8C%E8%AF%81/" rel="tag">用户权限验证</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%9F%A5%E8%AF%86/" rel="tag">知识</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%AE%97%E6%B3%95/" rel="tag">算法</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%B1%BB/" rel="tag">类</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BB%84%E4%BB%B6%E5%BA%93/" rel="tag">组件库</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%84%9A%E6%9C%AC/" rel="tag">脚本</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%87%AA%E5%8A%A8%E5%8C%96%E6%B5%8B%E8%AF%95/" rel="tag">自动化测试</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%8B%A5%E4%BE%9D/" rel="tag">若依</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/" rel="tag">解决方案</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" rel="tag">设计模式</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/" rel="tag">读书笔记</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%B7%A8%E5%9F%9F/" rel="tag">跨域</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%83%A8%E7%BD%B2/" rel="tag">部署</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9B%86%E6%88%90/" rel="tag">集成</a><span class="tag-list-count">14</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1/" rel="tag">面向对象</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9F%A9%E5%89%A7/" rel="tag">韩剧</a><span class="tag-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget-body tagcloud">
+      <a href="/tags/AJAX/" style="font-size: 13px;">AJAX</a> <a href="/tags/Activiti7/" style="font-size: 13.17px;">Activiti7</a> <a href="/tags/Arthas/" style="font-size: 13px;">Arthas</a> <a href="/tags/CSS/" style="font-size: 13px;">CSS</a> <a href="/tags/Curl/" style="font-size: 13px;">Curl</a> <a href="/tags/Debug/" style="font-size: 13px;">Debug</a> <a href="/tags/Docker/" style="font-size: 13.42px;">Docker</a> <a href="/tags/Druid/" style="font-size: 13px;">Druid</a> <a href="/tags/Electron/" style="font-size: 13.08px;">Electron</a> <a href="/tags/Expect/" style="font-size: 13px;">Expect</a> <a href="/tags/FastJson/" style="font-size: 13px;">FastJson</a> <a href="/tags/FreeMarker/" style="font-size: 13px;">FreeMarker</a> <a href="/tags/Git/" style="font-size: 13.08px;">Git</a> <a href="/tags/Gitlab/" style="font-size: 13.25px;">Gitlab</a> <a href="/tags/GitlabRunner/" style="font-size: 13.08px;">GitlabRunner</a> <a href="/tags/HTML-CSS-JavaScript/" style="font-size: 13.17px;">HTML/CSS/JavaScript</a> <a href="/tags/Hook/" style="font-size: 13px;">Hook</a> <a href="/tags/Http/" style="font-size: 13px;">Http</a> <a href="/tags/Hutool/" style="font-size: 13px;">Hutool</a> <a href="/tags/IDEA/" style="font-size: 13.25px;">IDEA</a> <a href="/tags/JS/" style="font-size: 13.08px;">JS</a> <a href="/tags/JVM/" style="font-size: 13px;">JVM</a> <a href="/tags/Jar/" style="font-size: 13.08px;">Jar</a> <a href="/tags/Java/" style="font-size: 13.83px;">Java</a> <a href="/tags/Jdk/" style="font-size: 13px;">Jdk</a> <a href="/tags/Jenkins/" style="font-size: 13px;">Jenkins</a> <a href="/tags/Jmeter/" style="font-size: 13px;">Jmeter</a> <a href="/tags/Json/" style="font-size: 13px;">Json</a> <a href="/tags/Jsoup/" style="font-size: 13px;">Jsoup</a> <a href="/tags/Kafka/" style="font-size: 13.25px;">Kafka</a> <a href="/tags/Leetcode/" style="font-size: 13.33px;">Leetcode</a> <a href="/tags/Linux/" style="font-size: 13px;">Linux</a> <a href="/tags/Logback/" style="font-size: 13px;">Logback</a> <a href="/tags/Mac/" style="font-size: 13px;">Mac</a> <a href="/tags/Maven/" style="font-size: 13.42px;">Maven</a> <a href="/tags/MongoDB/" style="font-size: 13.42px;">MongoDB</a> <a href="/tags/MyBatis/" style="font-size: 13.5px;">MyBatis</a> <a href="/tags/Mybatis/" style="font-size: 13.17px;">Mybatis</a> <a href="/tags/MybatisPlus/" style="font-size: 13.08px;">MybatisPlus</a> <a href="/tags/Mysql/" style="font-size: 13.25px;">Mysql</a> <a href="/tags/Nano/" style="font-size: 13px;">Nano</a> <a href="/tags/Nexus/" style="font-size: 13.08px;">Nexus</a> <a href="/tags/Nginx/" style="font-size: 13.08px;">Nginx</a> <a href="/tags/Opengrok/" style="font-size: 13px;">Opengrok</a> <a href="/tags/Oracle/" style="font-size: 13.75px;">Oracle</a> <a href="/tags/Profile/" style="font-size: 13px;">Profile</a> <a href="/tags/PubSubJS/" style="font-size: 13px;">PubSubJS</a> <a href="/tags/Python/" style="font-size: 13.17px;">Python</a> <a href="/tags/Quartz/" style="font-size: 13.08px;">Quartz</a> <a href="/tags/RESTful/" style="font-size: 13px;">RESTful</a> <a href="/tags/React/" style="font-size: 13.5px;">React</a> <a href="/tags/Redis/" style="font-size: 13.17px;">Redis</a> <a href="/tags/SQL/" style="font-size: 13.25px;">SQL</a> <a href="/tags/SVN/" style="font-size: 13px;">SVN</a> <a href="/tags/Scheduled/" style="font-size: 13px;">Scheduled</a> <a href="/tags/Scrapy/" style="font-size: 13px;">Scrapy</a> <a href="/tags/Shell/" style="font-size: 13.58px;">Shell</a> <a href="/tags/Spel%E8%A1%A8%E8%BE%BE%E5%BC%8F/" style="font-size: 13px;">Spel表达式</a> <a href="/tags/Spring/" style="font-size: 13.33px;">Spring</a> <a href="/tags/SpringBoot/" style="font-size: 14px;">SpringBoot</a> <a href="/tags/SpringEvent/" style="font-size: 13px;">SpringEvent</a> <a href="/tags/SpringMVC/" style="font-size: 13px;">SpringMVC</a> <a href="/tags/SpringSecurity/" style="font-size: 13.17px;">SpringSecurity</a> <a href="/tags/Stream/" style="font-size: 13px;">Stream</a> <a href="/tags/Swagger/" style="font-size: 13.08px;">Swagger</a> <a href="/tags/Swift/" style="font-size: 13.92px;">Swift</a> <a href="/tags/TestNG/" style="font-size: 13px;">TestNG</a> <a href="/tags/Tomcat/" style="font-size: 13px;">Tomcat</a> <a href="/tags/UI%E7%BB%84%E4%BB%B6%E5%BA%93/" style="font-size: 13px;">UI组件库</a> <a href="/tags/Validator/" style="font-size: 13px;">Validator</a> <a href="/tags/Vue/" style="font-size: 13px;">Vue</a> <a href="/tags/Vuepress/" style="font-size: 13.25px;">Vuepress</a> <a href="/tags/Wordpress/" style="font-size: 13px;">Wordpress</a> <a href="/tags/XML/" style="font-size: 13px;">XML</a> <a href="/tags/assert/" style="font-size: 13px;">assert</a> <a href="/tags/docker/" style="font-size: 13px;">docker</a> <a href="/tags/gitlab/" style="font-size: 13px;">gitlab</a> <a href="/tags/homebrew/" style="font-size: 13px;">homebrew</a> <a href="/tags/iframe/" style="font-size: 13px;">iframe</a> <a href="/tags/java/" style="font-size: 13px;">java</a> <a href="/tags/lambda/" style="font-size: 13px;">lambda</a> <a href="/tags/less/" style="font-size: 13px;">less</a> <a href="/tags/linux/" style="font-size: 13.25px;">linux</a> <a href="/tags/mac/" style="font-size: 13.25px;">mac</a> <a href="/tags/mybatis-plus/" style="font-size: 13px;">mybatis-plus</a> <a href="/tags/mysql/" style="font-size: 13px;">mysql</a> <a href="/tags/oracle/" style="font-size: 13px;">oracle</a> <a href="/tags/pom-xml/" style="font-size: 13px;">pom.xml</a> <a href="/tags/quartz/" style="font-size: 13px;">quartz</a> <a href="/tags/settings-xml/" style="font-size: 13px;">settings.xml</a> <a href="/tags/spring-boot/" style="font-size: 13px;">spring-boot</a> <a href="/tags/ssh/" style="font-size: 13px;">ssh</a> <a href="/tags/sshpass/" style="font-size: 13px;">sshpass</a> <a href="/tags/yum/" style="font-size: 13px;">yum</a> <a href="/tags/%E4%B9%90%E8%A7%82%E9%94%81/" style="font-size: 13px;">乐观锁</a> <a href="/tags/%E4%BB%8B%E7%BB%8D/" style="font-size: 13px;">介绍</a> <a href="/tags/%E5%86%85%E7%BD%91/" style="font-size: 13px;">内网</a> <a href="/tags/%E5%86%85%E7%BD%91%E7%A9%BF%E9%80%8F/" style="font-size: 13px;">内网穿透</a> <a href="/tags/%E5%8A%A0%E5%AF%86/" style="font-size: 13.08px;">加密</a> <a href="/tags/%E5%8F%8D%E7%BC%96%E8%AF%91%E5%B7%A5%E5%85%B7/" style="font-size: 13px;">反编译工具</a> <a href="/tags/%E5%9B%BE%E5%BA%8A/" style="font-size: 13px;">图床</a> <a href="/tags/%E5%9F%BA%E7%A1%80/" style="font-size: 13.92px;">基础</a> <a href="/tags/%E5%AD%98%E5%82%A8%E5%87%BD%E6%95%B0/" style="font-size: 13px;">存储函数</a> <a href="/tags/%E5%AD%98%E5%82%A8%E8%BF%87%E7%A8%8B/" style="font-size: 13.08px;">存储过程</a> <a href="/tags/%E5%AE%9A%E6%97%B6%E5%99%A8/" style="font-size: 13px;">定时器</a> <a href="/tags/%E5%AE%9D%E5%A1%94/" style="font-size: 13.08px;">宝塔</a> <a href="/tags/%E5%B9%B6%E5%8F%91/" style="font-size: 13px;">并发</a> <a href="/tags/%E5%BC%82%E5%B8%B8/" style="font-size: 13px;">异常</a> <a href="/tags/%E5%BF%83%E7%90%86/" style="font-size: 13.08px;">心理</a> <a href="/tags/%E6%80%BB%E7%BB%93/" style="font-size: 13px;">总结</a> <a href="/tags/%E6%8C%81%E4%B9%85%E5%B1%82%E6%A1%86%E6%9E%B6/" style="font-size: 13.17px;">持久层框架</a> <a href="/tags/%E6%8E%A5%E5%8F%A3/" style="font-size: 13px;">接口</a> <a href="/tags/%E6%8F%92%E4%BB%B6/" style="font-size: 13px;">插件</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/" style="font-size: 13.33px;">数据库</a> <a href="/tags/%E6%96%AD%E8%A8%80/" style="font-size: 13px;">断言</a> <a href="/tags/%E6%A0%91%E8%8E%93%E6%B4%BE/" style="font-size: 13.08px;">树莓派</a> <a href="/tags/%E6%A0%91%E8%8E%93%E6%B4%BE4B/" style="font-size: 13px;">树莓派4B</a> <a href="/tags/%E6%A6%82%E5%BF%B5/" style="font-size: 13px;">概念</a> <a href="/tags/%E6%A8%A1%E7%89%88%E5%BC%95%E6%93%8E/" style="font-size: 13px;">模版引擎</a> <a href="/tags/%E6%B3%9B%E5%9E%8B/" style="font-size: 13.08px;">泛型</a> <a href="/tags/%E6%B5%8B%E8%AF%95/" style="font-size: 13.33px;">测试</a> <a href="/tags/%E7%88%AC%E8%99%AB/" style="font-size: 13.08px;">爬虫</a> <a href="/tags/%E7%94%A8%E6%88%B7%E6%9D%83%E9%99%90%E9%AA%8C%E8%AF%81/" style="font-size: 13px;">用户权限验证</a> <a href="/tags/%E7%9F%A5%E8%AF%86/" style="font-size: 13px;">知识</a> <a href="/tags/%E7%AE%97%E6%B3%95/" style="font-size: 13.08px;">算法</a> <a href="/tags/%E7%B1%BB/" style="font-size: 13px;">类</a> <a href="/tags/%E7%BB%84%E4%BB%B6%E5%BA%93/" style="font-size: 13px;">组件库</a> <a href="/tags/%E8%84%9A%E6%9C%AC/" style="font-size: 13.25px;">脚本</a> <a href="/tags/%E8%87%AA%E5%8A%A8%E5%8C%96%E6%B5%8B%E8%AF%95/" style="font-size: 13px;">自动化测试</a> <a href="/tags/%E8%8B%A5%E4%BE%9D/" style="font-size: 13px;">若依</a> <a href="/tags/%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/" style="font-size: 13.08px;">解决方案</a> <a href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" style="font-size: 13px;">设计模式</a> <a href="/tags/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/" style="font-size: 13.08px;">读书笔记</a> <a href="/tags/%E8%B7%A8%E5%9F%9F/" style="font-size: 13px;">跨域</a> <a href="/tags/%E9%83%A8%E7%BD%B2/" style="font-size: 13px;">部署</a> <a href="/tags/%E9%9B%86%E6%88%90/" style="font-size: 13.67px;">集成</a> <a href="/tags/%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1/" style="font-size: 13px;">面向对象</a> <a href="/tags/%E9%9F%A9%E5%89%A7/" style="font-size: 13px;">韩剧</a>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget-body">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/07/">七月 2024</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/07/">七月 2023</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/06/">六月 2023</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/01/">一月 2023</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/11/">十一月 2022</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/10/">十月 2022</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/07/">七月 2022</a><span class="archive-list-count">181</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/06/">六月 2022</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/07/">七月 2020</a><span class="archive-list-count">17</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget-body">
+      <ul class="recent-post-list list-unstyled ">
+        
+          <li>
+            
+            <div class="item-thumb">
+              <a href="/2024/07/%E4%B8%8D%E5%8D%B7%E5%AD%A6%E5%8E%86%E5%92%8C%E8%83%8C%E6%99%AF%E7%9A%84%E8%B5%9B%E9%81%93%EF%BC%8C%E4%B9%9F%E8%83%BD%E6%9C%88%E5%85%A5%E8%BF%87%E4%B8%87%EF%BC%9F/" class="thumb">
+    
+    
+        <span class="thumb-image thumb-none"></span>
+    
+</a>
+
+            </div>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/%E5%88%9B%E4%B8%9A/">创业</a>
+              </p>
+              <p class="item-title">
+                <a href="/2024/07/%E4%B8%8D%E5%8D%B7%E5%AD%A6%E5%8E%86%E5%92%8C%E8%83%8C%E6%99%AF%E7%9A%84%E8%B5%9B%E9%81%93%EF%BC%8C%E4%B9%9F%E8%83%BD%E6%9C%88%E5%85%A5%E8%BF%87%E4%B8%87%EF%BC%9F/" class="title">不卷学历和背景的赛道，也能月入过万？</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2024-07-11T05:45:20.000Z" itemprop="datePublished">2024-07-11</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-thumb">
+              <a href="/2024/07/%E5%9B%9E%E9%A1%BE%E5%B7%A5%E4%BD%9C%E8%BF%99%E5%87%A0%E5%B9%B4/" class="thumb">
+    
+    
+        <span class="thumb-image thumb-none"></span>
+    
+</a>
+
+            </div>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/%E5%A4%8D%E7%9B%98/">复盘</a>
+              </p>
+              <p class="item-title">
+                <a href="/2024/07/%E5%9B%9E%E9%A1%BE%E5%B7%A5%E4%BD%9C%E8%BF%99%E5%87%A0%E5%B9%B4/" class="title">回顾工作这几年</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2024-07-09T06:19:23.000Z" itemprop="datePublished">2024-07-09</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-thumb">
+              <a href="/2023/07/SpringBoot3%E9%9B%86%E6%88%90Quartz%E6%9E%81%E7%AE%80%E7%89%88/" class="thumb">
+    
+    
+        <span style="background-image:url(/2023/07/SpringBoot3集成Quartz极简版/logo-quartz-scheduler.png)" alt="SpringBoot3集成Quartz极简版" class="thumb-image"></span>
+    
+</a>
+
+            </div>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/SpringBoot/">SpringBoot</a>
+              </p>
+              <p class="item-title">
+                <a href="/2023/07/SpringBoot3%E9%9B%86%E6%88%90Quartz%E6%9E%81%E7%AE%80%E7%89%88/" class="title">SpringBoot3集成Quartz极简版</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2023-07-18T01:14:01.000Z" itemprop="datePublished">2023-07-18</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-thumb">
+              <a href="/2023/07/SpringBoot3%E9%9B%86%E6%88%90Quartz%E8%AF%A6%E7%BB%86%E7%89%88/" class="thumb">
+    
+    
+        <span style="background-image:url(/2023/07/SpringBoot3集成Quartz极简版/logo-quartz-scheduler.png)" alt="SpringBoot3集成Quartz详细版" class="thumb-image"></span>
+    
+</a>
+
+            </div>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/SpringBoot/">SpringBoot</a>
+              </p>
+              <p class="item-title">
+                <a href="/2023/07/SpringBoot3%E9%9B%86%E6%88%90Quartz%E8%AF%A6%E7%BB%86%E7%89%88/" class="title">SpringBoot3集成Quartz详细版</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2023-07-18T01:14:01.000Z" itemprop="datePublished">2023-07-18</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-thumb">
+              <a href="/2023/07/SpringBoot3%E9%9B%86%E6%88%90Swagger/" class="thumb">
+    
+    
+        <span style="background-image:url(/2023/07/SpringBoot3集成Swagger/swagger_logo.svg)" alt="SpringBoot3集成Swagger" class="thumb-image"></span>
+    
+</a>
+
+            </div>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/SpringBoot/">SpringBoot</a>
+              </p>
+              <p class="item-title">
+                <a href="/2023/07/SpringBoot3%E9%9B%86%E6%88%90Swagger/" class="title">SpringBoot3集成Swagger</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2023-07-11T06:52:01.000Z" itemprop="datePublished">2023-07-11</time>
+              </p>
+            </div>
+          </li>
+          
+      </ul>
+    </div>
+  </div>
+  
+
+    
+  </div>
+</aside>
+
+  
+  
+<main class="main" role="main">
+  <div class="content">
+  <article id="post-软件开发/技术/编程语言/swift/Swift基础-协议" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
+    
+    <div class="article-header">
+      
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Swift基础 协议
+    </h1>
+  
+
+      
+      <div class="article-meta">
+        <span class="article-date">
+    <i class="icon icon-calendar-check"></i>
+	<a href="/2022/07/Swift%E5%9F%BA%E7%A1%80-%E5%8D%8F%E8%AE%AE/" class="article-date">
+	  <time datetime="2022-07-01T04:01:01.000Z" itemprop="datePublished">2022-07-01</time>
+	</a>
+</span>
+        
+  <span class="article-category">
+    <i class="icon icon-folder"></i>
+    <a class="article-category-link" href="/categories/Swift/">Swift</a>
+  </span>
+
+        
+  <span class="article-tag">
+    <i class="icon icon-tags"></i>
+	<a class="article-tag-link-link" href="/tags/Swift/" rel="tag">Swift</a>, <a class="article-tag-link-link" href="/tags/%E5%9F%BA%E7%A1%80/" rel="tag">基础</a>
+  </span>
+
+
+        
+	<span class="article-read hidden-xs">
+	    <i class="icon icon-eye-fill" aria-hidden="true"></i>
+	    <span id="busuanzi_container_page_pv">
+			<span id="busuanzi_value_page_pv">0</span>
+		</span>
+	</span>
+
+
+        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2022/07/Swift%E5%9F%BA%E7%A1%80-%E5%8D%8F%E8%AE%AE/#comments" class="article-comment-link">评论</a></span>
+        
+	
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">字数统计: 9.7k(字)</span>
+	
+	
+		<span class="post-readcount hidden-xs" itemprop="timeRequired">阅读时长: 39(分)</span>
+	
+
+      </div>
+    </div>
+    <div class="article-entry marked-body" itemprop="articleBody">
+      
+        <p>翻译自：<a target="_blank" rel="noopener" href="https://docs.swift.org/swift-book/LanguageGuide/Protocols.html">https://docs.swift.org/swift-book/LanguageGuide/Protocols.html</a></p>
+<p><em>协议</em>定义了适合特定任务或功能的方法、属性和其他要求的蓝图。然后，该协议可以由类、结构或枚举<em>采用</em>，以提供这些要求的实际实现。任何满足协议要求的类型都被称为<em>符合</em>该协议。</p>
+<p>除了指定符合类型必须实现的要求外，您还可以扩展协议来实现其中一些需求或实现符合类型可以利用的其他功能。</p>
+<h2 id="协议语法"><a href="#协议语法" class="headerlink" title="协议语法"></a>协议语法</h2><p>您以与类、结构和枚举非常相似的方式定义协议：</p>
+<ol>
+<li>protocol SomeProtocol {</li>
+<li>​    &#x2F;&#x2F; protocol definition goes here</li>
+<li>}</li>
+</ol>
+<p>自定义类型声明，他们采用特定协议，将协议的名称放在类型名称之后，用冒号分隔，作为其定义的一部分。可以列出多个协议，并用逗号分隔：</p>
+<ol>
+<li>struct SomeStructure: FirstProtocol, AnotherProtocol {</li>
+<li>​    &#x2F;&#x2F; structure definition goes here</li>
+<li>}</li>
+</ol>
+<p>如果一个类有一个超类，请在它采用的任何协议之前列出超类名称，后跟逗号：</p>
+<ol>
+<li>class SomeClass: SomeSuperclass, FirstProtocol, AnotherProtocol {</li>
+<li>​    &#x2F;&#x2F; class definition goes here</li>
+<li>}</li>
+</ol>
+<h2 id="财产要求"><a href="#财产要求" class="headerlink" title="财产要求"></a>财产要求</h2><p>协议可以要求任何符合要求的类型为实例属性或类型属性提供特定名称和类型。该协议没有指定该属性是存储属性还是计算属性，它只指定所需的属性名称和类型。该协议还指定每个属性必须是可获取的还是可获取<em>和</em>可设置的。</p>
+<p>如果协议要求属性可获取和可设置，则该属性要求无法由常量存储属性或只读计算属性满足。如果协议仅要求属性是可获取的，则任何类型的属性都可以满足该要求，如果这对您自己的代码有用，则该属性也可以设置。</p>
+<p>Property requirements are always declared as variable properties, prefixed with the <code>var</code>keyword. Gettable and settable properties are indicated by writing <code>&#123; get set &#125;</code> after their type declaration, and gettable properties are indicated by writing <code>&#123; get &#125;</code>.</p>
+<ol>
+<li>protocol SomeProtocol {</li>
+<li>​    var mustBeSettable: Int { get set }</li>
+<li>​    var doesNotNeedToBeSettable: Int { get }</li>
+<li>}</li>
+</ol>
+<p>在协议中定义类型属性要求时，请务必用静态关键字作为类型属性要求前缀。即使类型属性要求在类实现时可以以<code>class</code>或静态关键字为前缀，但此规则也适用：</p>
+<ol>
+<li>protocol AnotherProtocol {</li>
+<li>​    static var someTypeProperty: Int { get set }</li>
+<li>}</li>
+</ol>
+<p>以下是具有单个实例属性要求的协议示例：</p>
+<ol>
+<li>protocol FullyNamed {</li>
+<li>​    var fullName: String { get }</li>
+<li>}</li>
+</ol>
+<p><code>FullyNamed</code>协议要求符合要求的类型来提供完全限定的名称。该协议没有指定任何关于符合类型性质的任何其他信息——它只指定该类型必须能够为自己提供全名。该协议规定，任何<code>FullyNamed</code>类型都必须有一个名为<code>fullName</code>的gettable实例属性，该属性类型为<code>String</code>。</p>
+<p>以下是采用并符合<code>FullyNamed</code>协议的简单结构示例：</p>
+<ol>
+<li>struct Person: FullyNamed {</li>
+<li>​    var fullName: String</li>
+<li>}</li>
+<li>let john &#x3D; Person(fullName: “John Appleseed”)</li>
+<li>&#x2F;&#x2F; john.fullName is “John Appleseed”</li>
+</ol>
+<p>此示例定义了一个名为<code>Person</code>结构，该结构表示一个特定的命名人。它表示，它采用<code>FullyNamed</code>协议作为其定义第一行的一部分。</p>
+<p>Each instance of <code>Person</code> has a single stored property called <code>fullName</code>, which is of type <code>String</code>. This matches the single requirement of the <code>FullyNamed</code> protocol, and means that <code>Person</code> has correctly conformed to the protocol. (Swift reports an error at compile time if a protocol requirement isn’t fulfilled.)</p>
+<p>这里有一个更复杂的类，它也采用并符合<code>FullyNamed</code>协议：</p>
+<ol>
+<li>class Starship: FullyNamed {</li>
+<li>​    var prefix: String?</li>
+<li>​    var name: String</li>
+<li>​    init(name: String, prefix: String? &#x3D; nil) {</li>
+<li>​        self.name &#x3D; name</li>
+<li>​        self.prefix &#x3D; prefix</li>
+<li>​    }</li>
+<li>​    var fullName: String {</li>
+<li>​        return (prefix !&#x3D; nil ? prefix! + “ “ : “”) + name</li>
+<li>​    }</li>
+<li>}</li>
+<li>var ncc1701 &#x3D; Starship(name: “Enterprise”, prefix: “USS”)</li>
+<li>&#x2F;&#x2F; ncc1701.fullName is “USS Enterprise”</li>
+</ol>
+<p>该类实现<code>fullName</code>属性要求，作为星际飞船的计算只读属性。每个<code>Starship</code>类实例都存储一个必填<code>name</code>和一个可选<code>prefix</code>。如果存在，<code>fullName</code>属性使用<code>prefix</code>值，并将其前置于<code>name</code>开头，为星舰创建全名。</p>
+<h2 id="方法要求"><a href="#方法要求" class="headerlink" title="方法要求"></a>方法要求</h2><p>协议可以要求通过符合类型实现特定的实例方法和类型方法。这些方法作为协议定义的一部分，以与普通实例和类型方法完全相同的方式编写，但没有花括号或方法主体。允许变量参数，但须遵守与正常方法相同的规则。然而，无法为协议定义中的方法参数指定默认值。</p>
+<p>与类型属性要求一样，当在协议中定义<code>static</code>关键字时，您总是在类型方法要求前加上静态关键字。即使类型方法要求在类实现时以<code>class</code>或静态关键字为前缀，也是如此：</p>
+<ol>
+<li>protocol SomeProtocol {</li>
+<li>​    static func someTypeMethod()</li>
+<li>}</li>
+</ol>
+<p>以下示例定义了具有单个实例方法要求的协议：</p>
+<ol>
+<li>protocol RandomNumberGenerator {</li>
+<li>​    func random() -&gt; Double</li>
+<li>}</li>
+</ol>
+<p>该协议<code>RandomNumberGenerator</code>要求任何符合要求的类型都有一个名为<code>random</code>实例方法，该方法在调用时返回一个<code>Double</code>值。虽然它没有指定为协议的一部分，但假设这个值将从<code>0.0</code>到（但不包括）<code>1.0</code>。</p>
+<p><code>RandomNumberGenerator</code>协议不会对如何生成每个随机数做出任何假设——它只是要求生成器提供一种标准方法来生成新的随机数。</p>
+<p>以下是采用并符合<code>RandomNumberGenerator</code>协议的类的实现。该类实现了伪随机数生成器算法，称为<em>线性同余生成器</em>：</p>
+<ol>
+<li>class LinearCongruentialGenerator: RandomNumberGenerator {</li>
+<li>​    var lastRandom &#x3D; 42.0</li>
+<li>​    let m &#x3D; 139968.0</li>
+<li>​    let a &#x3D; 3877.0</li>
+<li>​    let c &#x3D; 29573.0</li>
+<li>​    func random() -&gt; Double {</li>
+<li>​        lastRandom &#x3D; ((lastRandom * a + c)</li>
+<li>​            .truncatingRemainder(dividingBy:m))</li>
+<li>​        return lastRandom &#x2F; m</li>
+<li>​    }</li>
+<li>}</li>
+<li>let generator &#x3D; LinearCongruentialGenerator()</li>
+<li>print(“Here’s a random number: (generator.random())”)</li>
+<li>&#x2F;&#x2F; Prints “Here’s a random number: 0.3746499199817101”</li>
+<li>print(“And another one: (generator.random())”)</li>
+<li>&#x2F;&#x2F; Prints “And another one: 0.729023776863283”</li>
+</ol>
+<h2 id="突变方法要求"><a href="#突变方法要求" class="headerlink" title="突变方法要求"></a>突变方法要求</h2><p>有时，方法需要修改（或<em>突变</em>）它所属的实例。例如，值类型（即结构和枚举）上的方法，您将<code>mutating</code>关键字放在方法的<code>func</code>关键字之前，以指示允许该方法修改其所属的实例和该实例的任何属性。这个过程在<a target="_blank" rel="noopener" href="https://docs.swift.org/swift-book/LanguageGuide/Methods.html#ID239">从实例内方法修改值类型中</a>进行了描述。</p>
+<p>如果您定义了旨在突变采用该协议的任何类型的实例的协议实例方法要求，请将该方法标记为协议定义的一部分。这使结构和枚举能够采用协议并满足该方法要求。</p>
+<p>注意</p>
+<p>如果您将协议实例方法要求标记为<code>mutating</code>，则在为类编写该方法的实现时无需编写<code>mutating</code>关键字。<code>mutating</code>关键字仅供结构和枚举使用。</p>
+<p>下面的示例定义了一个名为<code>Togglable</code>的协议，该协议定义了一个名为<code>toggle</code>单个实例方法要求。顾名思义，<code>toggle()</code>方法旨在切换或反转任何符合类型的状态，通常通过修改该类型的属性。</p>
+<p><code>toggle()</code>方法被标记为<code>mutating</code>关键字，作为<code>Togglable</code>协议定义的一部分，以指示该方法在调用时预计将突变符合实例的状态：</p>
+<ol>
+<li>protocol Togglable {</li>
+<li>​    mutating func toggle()</li>
+<li>}</li>
+</ol>
+<p>如果您为结构或枚举实现<code>Togglable</code>协议，该结构或枚举可以通过提供也标记为<code>mutating</code>的<code>toggle()</code>方法的实现来符合协议。</p>
+<p>The example below defines an enumeration called <code>OnOffSwitch</code>. This enumeration toggles between two states, indicated by the enumeration cases <code>on</code> and <code>off</code>. The enumeration’s <code>toggle</code> implementation is marked as <code>mutating</code>, to match the <code>Togglable</code> protocol’s requirements:</p>
+<ol>
+<li>enum OnOffSwitch: Togglable {</li>
+<li>​    case off, on</li>
+<li>​    mutating func toggle() {</li>
+<li>​        switch self {</li>
+<li>​        case .off:</li>
+<li>​            self &#x3D; .on</li>
+<li>​        case .on:</li>
+<li>​            self &#x3D; .off</li>
+<li>​        }</li>
+<li>​    }</li>
+<li>}</li>
+<li>var lightSwitch &#x3D; OnOffSwitch.off</li>
+<li>lightSwitch.toggle()</li>
+<li>&#x2F;&#x2F; lightSwitch is now equal to .on</li>
+</ol>
+<h2 id="初始化器要求"><a href="#初始化器要求" class="headerlink" title="初始化器要求"></a>初始化器要求</h2><p>协议可以要求通过符合类型实现特定的初始化器。您以与普通初始化器完全相同的方式编写这些初始化器作为协议定义的一部分，但没有花括号或初始化器主体：</p>
+<ol>
+<li>protocol SomeProtocol {</li>
+<li>​    init(someParameter: Int)</li>
+<li>}</li>
+</ol>
+<h3 id="协议初始化器要求的类实现"><a href="#协议初始化器要求的类实现" class="headerlink" title="协议初始化器要求的类实现"></a>协议初始化器要求的类实现</h3><p>您可以在符合要求的类上实现协议初始化器要求，作为指定的初始化器或方便初始化器。在这两种情况下，您都必须用<code>required</code>修饰符标记初始化器实现：</p>
+<ol>
+<li>class SomeClass: SomeProtocol {</li>
+<li>​    required init(someParameter: Int) {</li>
+<li>​        &#x2F;&#x2F; initializer implementation goes here</li>
+<li>​    }</li>
+<li>}</li>
+</ol>
+<p>使用<code>required</code>修饰符可确保您在符合类的所有子类上提供初始化器要求的显式或继承实现，以便它们也符合协议。</p>
+<p>有关所需初始化器的更多信息，请参阅<a target="_blank" rel="noopener" href="https://docs.swift.org/swift-book/LanguageGuide/Initialization.html#ID231">所需初始化器</a>。</p>
+<p>注意</p>
+<p>您不需要在标有<code>final</code>修饰符的类上使用<code>required</code>修饰符标记协议初始化器实现，因为最终类无法子类。有关<code>final</code>修饰符的更多信息，请参阅<a target="_blank" rel="noopener" href="https://docs.swift.org/swift-book/LanguageGuide/Inheritance.html#ID202">防止覆盖</a>。</p>
+<p>如果子类从超类覆盖指定的初始化器，并且还从协议中实现了匹配的初始化器要求，请用<code>required</code>修饰符和<code>override</code>修饰符标记初始化器实现：</p>
+<ol>
+<li>protocol SomeProtocol {</li>
+<li>​    init()</li>
+<li>}</li>
+<li></li>
+<li>class SomeSuperClass {</li>
+<li>​    init() {</li>
+<li>​        &#x2F;&#x2F; initializer implementation goes here</li>
+<li>​    }</li>
+<li>}</li>
+<li></li>
+<li>class SomeSubClass: SomeSuperClass, SomeProtocol {</li>
+<li>​    &#x2F;&#x2F; “required” from SomeProtocol conformance; “override” from SomeSuperClass</li>
+<li>​    required override init() {</li>
+<li>​        &#x2F;&#x2F; initializer implementation goes here</li>
+<li>​    }</li>
+<li>}</li>
+</ol>
+<h3 id="失败的初始化器要求"><a href="#失败的初始化器要求" class="headerlink" title="失败的初始化器要求"></a>失败的初始化器要求</h3><p>协议可以定义符合类型的故障初始化器要求，如<a target="_blank" rel="noopener" href="https://docs.swift.org/swift-book/LanguageGuide/Initialization.html#ID224">故障初始化器</a>中定义。</p>
+<p>符合要求的类型上的可故障或不可失败的初始化器可以满足故障初始化器要求。非故障初始化器或隐式未包装的故障初始化器可以满足非故障初始化器要求。</p>
+<h2 id="协议作为类型"><a href="#协议作为类型" class="headerlink" title="协议作为类型"></a>协议作为类型</h2><p>协议本身实际上并没有实现任何功能。尽管如此，您可以在代码中将协议用作成熟的类型。将协议用作类型有时被称为<em>存在类型</em>，它来自短语“存在一种类型<em>T</em>，使得<em>T</em>符合协议”。</p>
+<p>您可以在许多允许其他类型的地方使用协议，包括：</p>
+<ul>
+<li>作为函数、方法或初始化器中的参数类型或返回类型</li>
+<li>作为常量、变量或属性的类型</li>
+<li>作为数组、字典或其他容器中项目的类型</li>
+</ul>
+<p>注意</p>
+<p>由于协议是类型，因此以大写字母（如<code>FullyNamed</code>和<code>RandomNumberGenerator</code>）开头，以匹配Swift中其他类型的名称（如<code>Int</code>、<code>String</code>和<code>Double</code>）。</p>
+<p>以下是用作类型的协议示例：</p>
+<ol>
+<li>class Dice {</li>
+<li>​    let sides: Int</li>
+<li>​    let generator: RandomNumberGenerator</li>
+<li>​    init(sides: Int, generator: RandomNumberGenerator) {</li>
+<li>​        self.sides &#x3D; sides</li>
+<li>​        self.generator &#x3D; generator</li>
+<li>​    }</li>
+<li>​    func roll() -&gt; Int {</li>
+<li>​        return Int(generator.random() * Double(sides)) + 1</li>
+<li>​    }</li>
+<li>}</li>
+</ol>
+<p>此示例定义了一个名为<code>Dice</code>的新类，它表示用于棋盘游戏的<em>n</em>面骰子。<code>Dice</code>实例有一个称为<code>sides</code>的整数属性，表示它们有多少边，以及一个称为生<code>generator</code>属性，它提供了一个随机数生成器，从中创建骰子滚动值。</p>
+<p><code>generator</code>属性为<code>RandomNumberGenerator</code>类型。因此，您可以将其设置为采用<code>RandomNumberGenerator</code>协议<em>的任何</em>类型的实例。您分配给此属性的实例不需要其他内容，除非实例必须采用<code>RandomNumberGenerator</code>协议。由于其类型是<code>RandomNumberGenerator</code>，<code>Dice</code>类中的代码只能以适用于所有符合此协议的生成器的方式与<code>generator</code>交互。这意味着它不能使用由生成器底层类型定义的任何方法或属性。但是，您可以从协议类型降级类型到底层类型，就像您可以从超类向下转换到子类一样，正如在<a target="_blank" rel="noopener" href="https://docs.swift.org/swift-book/LanguageGuide/TypeCasting.html#ID341">向下转换</a>中讨论的那样。</p>
+<p><code>Dice</code>还有一个初始化器，用于设置其初始状态。此初始化器有一个名为<code>generator</code>的参数，该参数也属于<code>RandomNumberGenerator</code>类型。在初始化新的<code>Dice</code>实例时，您可以将任何符合类型的值传递给此参数。</p>
+<p><code>Dice</code>提供一种实例方法，<code>roll</code>，它返回1和骰子上边数之间的整数值。此方法调用生成器的<code>random()</code>方法，以创建一个<code>0.0</code>到<code>1.0</code>之间的新随机数，并使用此随机数在正确的范围内创建骰子滚动值。由于已知<code>generator</code>采用<code>RandomNumberGenerator</code>，因此它保证有一个<code>random()</code>方法可以调用。</p>
+<p>以下是如何使用<code>Dice</code>创建以a<code>LinearCongruentialGenerator</code>实例作为其随机数生成器的六面骰子：</p>
+<ol>
+<li>var d6 &#x3D; Dice(sides: 6, generator: LinearCongruentialGenerator())</li>
+<li>for _ in 1…5 {</li>
+<li>​    print(“Random dice roll is (d6.roll())”)</li>
+<li>}</li>
+<li>&#x2F;&#x2F; Random dice roll is 3</li>
+<li>&#x2F;&#x2F; Random dice roll is 5</li>
+<li>&#x2F;&#x2F; Random dice roll is 4</li>
+<li>&#x2F;&#x2F; Random dice roll is 5</li>
+<li>&#x2F;&#x2F; Random dice roll is 4</li>
+</ol>
+<h2 id="授权"><a href="#授权" class="headerlink" title="授权"></a>授权</h2><p><em>委托</em>是一种设计模式，使类或结构能够将其部分责任移交给（或<em>委托</em>）到另一种类型的实例。这种设计模式是通过定义封装委托责任的协议来实现的，这样保证符合的类型（称为委托）可以提供已委托的功能。委托可用于响应特定操作，或从外部来源检索数据，而无需知道该源的基础类型。</p>
+<p>以下示例定义了两种用于基于骰子的棋盘游戏的协议：</p>
+<ol>
+<li>protocol DiceGame {</li>
+<li>​    var dice: Dice { get }</li>
+<li>​    func play()</li>
+<li>}</li>
+<li>protocol DiceGameDelegate: AnyObject {</li>
+<li>​    func gameDidStart(_ game: DiceGame)</li>
+<li>​    func game(_ game: DiceGame, didStartNewTurnWithDiceRoll diceRoll: Int)</li>
+<li>​    func gameDidEnd(_ game: DiceGame)</li>
+<li>}</li>
+</ol>
+<p><code>DiceGame</code>协议是一种协议，任何涉及骰子的游戏都可以采用。</p>
+<p>可以使用<code>DiceGameDelegate</code>协议来跟踪<code>DiceGame</code>的进度。为了防止强引用周期，委托被声明为弱引用。有关弱引用的信息，请参阅<a target="_blank" rel="noopener" href="https://docs.swift.org/swift-book/LanguageGuide/AutomaticReferenceCounting.html#ID51">类实例之间的强引用周期</a>。将协议标记为仅类可以让<code>SnakesAndLadders</code>类在本章后面声明其委托必须使用弱引用。正如在仅<a target="_blank" rel="noopener" href="https://docs.swift.org/swift-book/LanguageGuide/Protocols.html#ID281">类协议</a>中讨论的那样，仅类协议通过从<code>AnyObject</code>继承来标记。</p>
+<p>这是最初在<a target="_blank" rel="noopener" href="https://docs.swift.org/swift-book/LanguageGuide/ControlFlow.html">Control Flow</a>中引入<em>的蛇和梯子</em>游戏的一个版本。此版本适用于使用<code>Dice</code>实例进行骰子卷；采用<code>DiceGame</code>协议；并通知<code>DiceGameDelegate</code>其进度：</p>
+<ol>
+<li>class SnakesAndLadders: DiceGame {</li>
+<li>​    let finalSquare &#x3D; 25</li>
+<li>​    let dice &#x3D; Dice(sides: 6, generator: LinearCongruentialGenerator())</li>
+<li>​    var square &#x3D; 0</li>
+<li>​    var board: [Int]</li>
+<li>​    init() {</li>
+<li>​        board &#x3D; Array(repeating: 0, count: finalSquare + 1)</li>
+<li>​        board[03] &#x3D; +08; board[06] &#x3D; +11; board[09] &#x3D; +09; board[10] &#x3D; +02</li>
+<li>​        board[14] &#x3D; -10; board[19] &#x3D; -11; board[22] &#x3D; -02; board[24] &#x3D; -08</li>
+<li>​    }</li>
+<li>​    weak var delegate: DiceGameDelegate?</li>
+<li>​    func play() {</li>
+<li>​        square &#x3D; 0</li>
+<li>​        delegate?.gameDidStart(self)</li>
+<li>​        gameLoop: while square !&#x3D; finalSquare {</li>
+<li>​            let diceRoll &#x3D; dice.roll()</li>
+<li>​            delegate?.game(self, didStartNewTurnWithDiceRoll: diceRoll)</li>
+<li>​            switch square + diceRoll {</li>
+<li>​            case finalSquare:</li>
+<li>​                break gameLoop</li>
+<li>​            case let newSquare where newSquare &gt; finalSquare:</li>
+<li>​                continue gameLoop</li>
+<li>​            default:</li>
+<li>​                square +&#x3D; diceRoll</li>
+<li>​                square +&#x3D; board[square]</li>
+<li>​            }</li>
+<li>​        }</li>
+<li>​        delegate?.gameDidEnd(self)</li>
+<li>​    }</li>
+<li>}</li>
+</ol>
+<p>有关<em>蛇和梯子</em>游戏玩法的描述，请参阅<a target="_blank" rel="noopener" href="https://docs.swift.org/swift-book/LanguageGuide/ControlFlow.html#ID137">Break</a>。</p>
+<p>这个版本的游戏被包装成一个名为<code>SnakesAndLadders</code>类，该类采用了<code>DiceGame</code>协议。它提供了一个gettable<code>dice</code>属性和一个<code>play()</code>方法，以符合协议。（<code>dice</code>属性被声明为常量属性，因为它在初始化后不需要更改，并且协议仅要求它必须是可获取的。）</p>
+<p><em>Snakes and Ladders</em>游戏板设置在类的<code>init()</code>初始化器中进行。所有游戏逻辑都转移到协议<code>play</code>方法中，该方法使用协议的必需<code>dice</code>属性来提供其骰子滚动值。</p>
+<p>请注意，<code>delegate</code>属性被定义为<em>可选</em>的<code>DiceGameDelegate</code>，因为玩游戏不需要委托。由于它是可选类型，<code>delegate</code>属性会自动设置为<code>nil</code>的初始值。此后，游戏实例化器可以选择将属性设置为合适的委托。由于<code>DiceGameDelegate</code>协议仅限类，因此您可以声明委托为<code>weak</code>，以防止引用周期。</p>
+<p><code>DiceGameDelegate</code>提供了三种跟踪游戏进度的方法。这三种方法已纳入上述<code>play()</code>方法中的游戏逻辑，并在新游戏开始、新回合开始或游戏结束时调用。</p>
+<p>由于<code>delegate</code>属性是<em>可选</em>的<code>DiceGameDelegate</code>，因此<code>play()</code>方法每次在委托上调用方法时都使用可选链。如果<code>delegate</code>属性为零，则这些委托调用优雅地失败，没有错误。如果<code>delegate</code>属性非零，则调用委托方法，并将<code>SnakesAndLadders</code>实例作为参数传递。</p>
+<p>下一个示例显示了一个名为<code>DiceGameTracker</code>的类，该类采用了<code>DiceGameDelegate</code>协议：</p>
+<ol>
+<li>class DiceGameTracker: DiceGameDelegate {</li>
+<li>​    var numberOfTurns &#x3D; 0</li>
+<li>​    func gameDidStart(_ game: DiceGame) {</li>
+<li>​        numberOfTurns &#x3D; 0</li>
+<li>​        if game is SnakesAndLadders {</li>
+<li>​            print(“Started a new game of Snakes and Ladders”)</li>
+<li>​        }</li>
+<li>​        print(“The game is using a (game.dice.sides)-sided dice”)</li>
+<li>​    }</li>
+<li>​    func game(_ game: DiceGame, didStartNewTurnWithDiceRoll diceRoll: Int) {</li>
+<li>​        numberOfTurns +&#x3D; 1</li>
+<li>​        print(“Rolled a (diceRoll)”)</li>
+<li>​    }</li>
+<li>​    func gameDidEnd(_ game: DiceGame) {</li>
+<li>​        print(“The game lasted for (numberOfTurns) turns”)</li>
+<li>​    }</li>
+<li>}</li>
+</ol>
+<p><code>DiceGameTracker</code>实现<code>DiceGameDelegate</code>所需的所有三种方法。它使用这些方法来跟踪游戏的转弯次数。当游戏开始时，它会将anumberOfTurns属性重置为零，每次新回合开始时都会增加，并在游戏结束后打印出回合总数。</p>
+<p>上面显示的<code>gameDidStart(_:)</code>的实现使用<code>game</code>参数打印一些关于即将玩的游戏的介绍性信息。<code>game</code>参数具有<code>DiceGame</code>类型，而不是<code>SnakesAndLadders</code>，因此<code>gameDidStart(_:)</code>只能访问和使用作为<code>DiceGame</code>协议一部分实现的方法和属性。然而，该方法仍然能够使用类型转换来查询底层实例的类型。在本例中，它检查<code>game</code>是否实际上是幕后<code>SnakesAndLadders</code>的实例，如果是，则打印适当的消息。</p>
+<p><code>gameDidStart(_:)</code>方法还访问传递<code>game</code>参数的<code>dice</code>属性。由于<code>game</code>已知符合<code>DiceGame</code>协议，因此它保证具有<code>dice</code>属性，因此无论玩哪种游戏，<code>gameDidStart(_:)</code>方法都可以访问和打印骰子的<code>sides</code>属性。</p>
+<p>以下是<code>DiceGameTracker</code>在操作中的样子：</p>
+<ol>
+<li>let tracker &#x3D; DiceGameTracker()</li>
+<li>let game &#x3D; SnakesAndLadders()</li>
+<li>game.delegate &#x3D; tracker</li>
+<li>game.play()</li>
+<li>&#x2F;&#x2F; Started a new game of Snakes and Ladders</li>
+<li>&#x2F;&#x2F; The game is using a 6-sided dice</li>
+<li>&#x2F;&#x2F; Rolled a 3</li>
+<li>&#x2F;&#x2F; Rolled a 5</li>
+<li>&#x2F;&#x2F; Rolled a 4</li>
+<li>&#x2F;&#x2F; Rolled a 5</li>
+<li>&#x2F;&#x2F; The game lasted for 4 turns</li>
+</ol>
+<h2 id="通过扩展添加协议一致性"><a href="#通过扩展添加协议一致性" class="headerlink" title="通过扩展添加协议一致性"></a>通过扩展添加协议一致性</h2><p>即使您无法访问现有类型的源代码，您也可以扩展现有类型以采用和遵守新协议。扩展可以向现有类型添加新的属性、方法和下标，因此能够添加协议可能要求的任何要求。有关扩展的更多信息，请参阅<a target="_blank" rel="noopener" href="https://docs.swift.org/swift-book/LanguageGuide/Extensions.html">扩展</a>。</p>
+<p>注意</p>
+<p>当该一致性在扩展中添加到实例的类型时，类型的现有实例会自动采用并符合协议。</p>
+<p>例如，这种名为<code>TextRepresentable</code>的协议可以通过任何可以表示为文本的类型实现。这可能是对自身的描述，也可能是其当前状态的文本版本：</p>
+<ol>
+<li>protocol TextRepresentable {</li>
+<li>​    var textualDescription: String { get }</li>
+<li>}</li>
+</ol>
+<p>上面的<code>Dice</code>可以扩展到采用并符合<code>TextRepresentable</code>：</p>
+<ol>
+<li>extension Dice: TextRepresentable {</li>
+<li>​    var textualDescription: String {</li>
+<li>​        return “A (sides)-sided dice”</li>
+<li>​    }</li>
+<li>}</li>
+</ol>
+<p>此扩展采用新协议的方式与<code>Dice</code>在其原始实现中提供的方式完全相同。协议名称在类型名称之后提供，由冒号分隔，并在扩展的花括号内提供协议所有要求的实现。</p>
+<p>任何<code>Dice</code>实例现在都可以被视为<code>TextRepresentable</code>：</p>
+<ol>
+<li>let d12 &#x3D; Dice(sides: 12, generator: LinearCongruentialGenerator())</li>
+<li>print(d12.textualDescription)</li>
+<li>&#x2F;&#x2F; Prints “A 12-sided dice”</li>
+</ol>
+<p>同样，<code>SnakesAndLadders</code>游戏类可以扩展为采用并符合<code>TextRepresentable</code>协议：</p>
+<ol>
+<li>extension SnakesAndLadders: TextRepresentable {</li>
+<li>​    var textualDescription: String {</li>
+<li>​        return “A game of Snakes and Ladders with (finalSquare) squares”</li>
+<li>​    }</li>
+<li>}</li>
+<li>print(game.textualDescription)</li>
+<li>&#x2F;&#x2F; Prints “A game of Snakes and Ladders with 25 squares”</li>
+</ol>
+<h3 id="有条件地遵守协议"><a href="#有条件地遵守协议" class="headerlink" title="有条件地遵守协议"></a>有条件地遵守协议</h3><p>只有在特定条件下，例如当类型的通用参数符合协议时，通用类型才能满足协议的要求。您可以通过在扩展类型时列出约束，使泛型类型有条件地符合协议。通过编写通用<code>where</code>子句，在您采用的协议名称后写入这些约束。有关通用<code>where</code>子句的更多信息，请参阅<a target="_blank" rel="noopener" href="https://docs.swift.org/swift-book/LanguageGuide/Generics.html#ID192">通用where子句</a>。</p>
+<p>以下扩展使<code>Array</code>实例在存储符合TextRepresentable的类型元素时符合<code>TextRepresentable</code>协议。</p>
+<ol>
+<li>extension Array: TextRepresentable where Element: TextRepresentable {</li>
+<li>​    var textualDescription: String {</li>
+<li>​        let itemsAsText &#x3D; self.map { $0.textualDescription }</li>
+<li>​        return “[“ + itemsAsText.joined(separator: “, “) + “]”</li>
+<li>​    }</li>
+<li>}</li>
+<li>let myDice &#x3D; [d6, d12]</li>
+<li>print(myDice.textualDescription)</li>
+<li>&#x2F;&#x2F; Prints “[A 6-sided dice, A 12-sided dice]”</li>
+</ol>
+<h3 id="宣布协议通过扩展"><a href="#宣布协议通过扩展" class="headerlink" title="宣布协议通过扩展"></a>宣布协议通过扩展</h3><p>如果一种类型已经符合协议的所有要求，但尚未声明它采用该协议，您可以使其采用带有空扩展名的协议：</p>
+<ol>
+<li>struct Hamster {</li>
+<li>​    var name: String</li>
+<li>​    var textualDescription: String {</li>
+<li>​        return “A hamster named (name)”</li>
+<li>​    }</li>
+<li>}</li>
+<li>extension Hamster: TextRepresentable {}</li>
+</ol>
+<p>现在，只要<code>TextRepresentable</code>是必填类型，都可以使用<code>Hamster</code>实例：</p>
+<ol>
+<li>let simonTheHamster &#x3D; Hamster(name: “Simon”)</li>
+<li>let somethingTextRepresentable: TextRepresentable &#x3D; simonTheHamster</li>
+<li>print(somethingTextRepresentable.textualDescription)</li>
+<li>&#x2F;&#x2F; Prints “A hamster named Simon”</li>
+</ol>
+<p>注意</p>
+<p>类型不会仅仅通过满足其要求而自动采用协议。他们必须始终明确宣布通过该议定书。</p>
+<h2 id="使用综合实现采用协议"><a href="#使用综合实现采用协议" class="headerlink" title="使用综合实现采用协议"></a>使用综合实现采用协议</h2><p>在许多简单的情况下，Swift可以自动为<code>Equatable</code>、<code>Hashable</code>和<code>Comparable</code>提供协议一致性。使用此综合实现意味着您不必编写重复的样板代码来自己实现协议要求。</p>
+<p>Swift为以下类型的自定义类型提供了<code>Equatable</code>的综合实现：</p>
+<ul>
+<li>仅存储符合<code>Equatable</code>协议的属性的结构</li>
+<li>仅具有符合<code>Equatable</code>协议的关联类型的枚举</li>
+<li>没有关联类型的枚举</li>
+</ul>
+<p>To receive a synthesized implementation of <code>==</code>, declare conformance to <code>Equatable</code> in the file that contains the original declaration, without implementing an <code>==</code> operator yourself. The <code>Equatable</code> protocol provides a default implementation of <code>!=</code>.</p>
+<p>下面的示例定义了三维位置向量<code>(x,y,z)</code>的<code>Vector3D</code>结构，类似于<code>Vector2D</code>结构。由于<code>x</code>、<code>y</code>和<code>z</code>属性都是<code>Equatable</code>的，<code>Vector3D</code>接收等价运算符的合成实现。</p>
+<ol>
+<li>struct Vector3D: Equatable {</li>
+<li>​    var x &#x3D; 0.0, y &#x3D; 0.0, z &#x3D; 0.0</li>
+<li>}</li>
+<li></li>
+<li>let twoThreeFour &#x3D; Vector3D(x: 2.0, y: 3.0, z: 4.0)</li>
+<li>let anotherTwoThreeFour &#x3D; Vector3D(x: 2.0, y: 3.0, z: 4.0)</li>
+<li>if twoThreeFour &#x3D;&#x3D; anotherTwoThreeFour {</li>
+<li>​    print(“These two vectors are also equivalent.”)</li>
+<li>}</li>
+<li>&#x2F;&#x2F; Prints “These two vectors are also equivalent.”</li>
+</ol>
+<p>Swift为以下类型的自定义类型提供了<code>Hashable</code>的综合实现：</p>
+<ul>
+<li>Structures that have only stored properties that conform to the <code>Hashable</code> protocol</li>
+<li>仅具有符合<code>Hashable</code>协议的关联类型的枚举</li>
+<li>没有关联类型的枚举</li>
+</ul>
+<p>要接收<code>hash(into:)</code>的合成实现，请在包含原始声明的文件中声明与<code>Hashable</code>的一致性，而无需自己实现<code>hash(into:)</code>方法。</p>
+<p>Swift为没有原始值的枚举提供了<code>Comparable</code>的综合实现。如果枚举具有关联类型，它们都必须符合<code>Comparable</code>协议。要接收<code>&lt;</code>的合成实现，请在包含原始枚举声明的文件中声明一致性为<code>Comparable</code>，而无需自己实现<code>&lt;</code>运算符。<code>Comparable</code>协议的默认实现<code>&lt;=</code>,<code>&gt;</code>和<code>&gt;=</code>提供了剩余的比较运算符。</p>
+<p>以下示例定义了针对初学者、中级和专家案例的<code>SkillLevel</code>列举。专家还根据他们拥有的恒星数量进行排名。</p>
+<ol>
+<li>enum SkillLevel: Comparable {</li>
+<li>​    case beginner</li>
+<li>​    case intermediate</li>
+<li>​    case expert(stars: Int)</li>
+<li>}</li>
+<li>var levels &#x3D; [SkillLevel.intermediate, SkillLevel.beginner,</li>
+<li>​              SkillLevel.expert(stars: 5), SkillLevel.expert(stars: 3)]</li>
+<li>for level in levels.sorted() {</li>
+<li>​    print(level)</li>
+<li>}</li>
+<li>&#x2F;&#x2F; Prints “beginner”</li>
+<li>&#x2F;&#x2F; Prints “intermediate”</li>
+<li>&#x2F;&#x2F; Prints “expert(stars: 3)”</li>
+<li>&#x2F;&#x2F; Prints “expert(stars: 5)”</li>
+</ol>
+<h2 id="协议类型的集合"><a href="#协议类型的集合" class="headerlink" title="协议类型的集合"></a>协议类型的集合</h2><p>协议可以用作存储在集合中的类型，如数组或字典，如<a target="_blank" rel="noopener" href="https://docs.swift.org/swift-book/LanguageGuide/Protocols.html#ID275">协议</a>中所述。此示例创建一个<code>TextRepresentable</code>事物数组：</p>
+<ol>
+<li>let things: [TextRepresentable] &#x3D; [game, d12, simonTheHamster]</li>
+</ol>
+<p>现在可以迭代数组中的项目，并打印每个项目的文本描述：</p>
+<ol>
+<li>for thing in things {</li>
+<li>​    print(thing.textualDescription)</li>
+<li>}</li>
+<li>&#x2F;&#x2F; A game of Snakes and Ladders with 25 squares</li>
+<li>&#x2F;&#x2F; A 12-sided dice</li>
+<li>&#x2F;&#x2F; A hamster named Simon</li>
+</ol>
+<p>请注意，常量为<code>TextRepresentable</code>类型。它不是<code>Dice</code>、orDiceGame或<code>Hamster</code>类型，即使幕后的实际实例是这些类型之一。尽管如此，由于其类型为<code>TextRepresentable</code>，并且已知任何<code>TextRepresentable</code>都具有<code>textualDescription</code>属性，因此每次通过循环访问<code>thing.textualDescription</code>都是安全的。</p>
+<h2 id="协议继承"><a href="#协议继承" class="headerlink" title="协议继承"></a>协议继承</h2><p>协议可以<em>继承</em>一个或多个其他协议，并可以在继承的要求之外添加进一步的要求。协议继承的语法类似于类继承的语法，但可以选择列出多个继承的协议，用逗号分隔：</p>
+<ol>
+<li>protocol InheritingProtocol: SomeProtocol, AnotherProtocol {</li>
+<li>​    &#x2F;&#x2F; protocol definition goes here</li>
+<li>}</li>
+</ol>
+<p>以下是从上面继承<code>TextRepresentable</code>协议的协议示例：</p>
+<ol>
+<li>protocol PrettyTextRepresentable: TextRepresentable {</li>
+<li>​    var prettyTextualDescription: String { get }</li>
+<li>}</li>
+</ol>
+<p>This example defines a new protocol, <code>PrettyTextRepresentable</code>, which inherits from <code>TextRepresentable</code>. Anything that adopts <code>PrettyTextRepresentable</code> must satisfy all of the requirements enforced by <code>TextRepresentable</code>, <em>plus</em> the additional requirements enforced by <code>PrettyTextRepresentable</code>. In this example, <code>PrettyTextRepresentable</code> adds a single requirement to provide a gettable property called <code>prettyTextualDescription</code> that returns a <code>String</code>.</p>
+<p><code>SnakesAndLadders</code>类可以扩展到采用并符合<code>PrettyTextRepresentable</code>：</p>
+<ol>
+<li>extension SnakesAndLadders: PrettyTextRepresentable {</li>
+<li>​    var prettyTextualDescription: String {</li>
+<li>​        var output &#x3D; textualDescription + “:\n”</li>
+<li>​        for index in 1…finalSquare {</li>
+<li>​            switch board[index] {</li>
+<li>​            case let ladder where ladder &gt; 0:</li>
+<li>​                output +&#x3D; “▲ “</li>
+<li>​            case let snake where snake &lt; 0:</li>
+<li>​                output +&#x3D; “▼ “</li>
+<li>​            default:</li>
+<li>​                output +&#x3D; “○ “</li>
+<li>​            }</li>
+<li>​        }</li>
+<li>​        return output</li>
+<li>​    }</li>
+<li>}</li>
+</ol>
+<p>此扩展声明它采用<code>PrettyTextRepresentable</code>协议，并为<code>SnakesAndLadders</code>类型提供了 <code>prettyTextualDescription</code>属性的实现。任何<code>PrettyTextRepresentable</code>都必须是<code>TextRepresentable</code>，因此<code>prettyTextualDescription</code>的实现从<code>TextRepresentable</code>协议访问<code>textualDescription</code>属性开始，以启动输出字符串。它附加冒号和换行符，并将其用作其漂亮文本表示的开始。然后，它通过板正方形阵列迭代，并附加一个几何形状来表示每个正方形的内容：</p>
+<ul>
+<li>如果正方形的值大于<code>0</code>，它是梯子的底部，并用▲表示。</li>
+<li>如果正方形的值小于<code>0</code>，那就是蛇的头，并用▼表示。</li>
+<li>否则，正方形的值为<code>0</code>，它是一个“自由”正方形，由<code>○</code>表示。</li>
+</ul>
+<p><code>prettyTextualDescription</code>属性现在可用于打印任何<code>SnakesAndLadders</code>实例的漂亮文本描述：</p>
+<ol>
+<li>print(game.prettyTextualDescription)</li>
+<li>&#x2F;&#x2F; A game of Snakes and Ladders with 25 squares:</li>
+<li>&#x2F;&#x2F; ○ ○ ▲ ○ ○ ▲ ○ ○ ▲ ▲ ○ ○ ○ ▼ ○ ○ ○ ○ ▼ ○ ○ ▼ ○ ▼ ○</li>
+</ol>
+<h2 id="仅类协议"><a href="#仅类协议" class="headerlink" title="仅类协议"></a>仅类协议</h2><p>您可以通过将<code>AnyObject</code>协议添加到协议的继承列表中来将协议采用限制为类类型（而不是结构或枚举）。</p>
+<ol>
+<li>protocol SomeClassOnlyProtocol: AnyObject, SomeInheritedProtocol {</li>
+<li>​    &#x2F;&#x2F; class-only protocol definition goes here</li>
+<li>}</li>
+</ol>
+<p>在上面的示例中，<code>SomeClassOnlyProtocol</code>只能由类类型采用。编写试图采用<code>SomeClassOnlyProtocol</code>的结构或枚举定义是一个编译时错误。</p>
+<p>注意</p>
+<p>当该协议要求定义的行为假设或要求符合的类型具有参考语义而不是值语义时，请使用仅类协议。有关引用和值语义的更多信息，请参阅<a target="_blank" rel="noopener" href="https://docs.swift.org/swift-book/LanguageGuide/ClassesAndStructures.html#ID88">结构和枚举是值类型</a>，<a target="_blank" rel="noopener" href="https://docs.swift.org/swift-book/LanguageGuide/ClassesAndStructures.html#ID89">类是参考类型</a>。</p>
+<h2 id="礼宾组成"><a href="#礼宾组成" class="headerlink" title="礼宾组成"></a>礼宾组成</h2><p>要求一种类型同时遵守多个协议可能是有用的。您可以将多个协议组合成一个带有<em>协议组合</em>的单个需求。协议组合的行为就好像您定义了一个临时本地协议，该协议具有组合中所有协议的组合要求。协议组合没有定义任何新的协议类型。</p>
+<p>Protocol compositions have the form <code>SomeProtocol &amp; AnotherProtocol</code>. You can list as many protocols as you need, separating them with ampersands (<code>&amp;</code>). In addition to its list of protocols, a protocol composition can also contain one class type, which you can use to specify a required superclass.</p>
+<p>以下是一个将两个名为<code>Named</code>和<code>Aged</code>的协议组合成函数参数上的单个协议组合要求的示例：</p>
+<ol>
+<li>protocol Named {</li>
+<li>​    var name: String { get }</li>
+<li>}</li>
+<li>protocol Aged {</li>
+<li>​    var age: Int { get }</li>
+<li>}</li>
+<li>struct Person: Named, Aged {</li>
+<li>​    var name: String</li>
+<li>​    var age: Int</li>
+<li>}</li>
+<li>func wishHappyBirthday(to celebrator: Named &amp; Aged) {</li>
+<li>​    print(“Happy birthday, (celebrator.name), you’re (celebrator.age)!”)</li>
+<li>}</li>
+<li>let birthdayPerson &#x3D; Person(name: “Malcolm”, age: 21)</li>
+<li>wishHappyBirthday(to: birthdayPerson)</li>
+<li>&#x2F;&#x2F; Prints “Happy birthday, Malcolm, you’re 21!”</li>
+</ol>
+<p>在本例中，<code>Named</code>协议对名为<code>name</code>的可获取<code>String</code>属性有一个单一要求。<code>Aged</code>协议对可取的<code>Int</code>属性调用具有单一要求。这两种协议都由一个名为<code>Person</code>的结构采用。</p>
+<p>The example also defines a <code>wishHappyBirthday(to:)</code> function. The type of the <code>celebrator</code>parameter is <code>Named &amp; Aged</code>, which means “any type that conforms to both the <code>Named</code> and <code>Aged</code> protocols.” It doesn’t matter which specific type is passed to the function, as long as it conforms to both of the required protocols.</p>
+<p>然后，该示例创建一个名为<code>birthdayPerson</code>的新Person实例，并将此新实例传递给<code>wishHappyBirthday(to:)</code>函数。由于<code>Person</code>符合这两种协议，因此此通话是有效的，<code>wishHappyBirthday(to:)</code>功能可以打印其生日问候语。</p>
+<p>以下是将上一个示例中的<code>Named</code>协议与aLocation类相结合的示例：</p>
+<ol>
+<li>class Location {</li>
+<li>​    var latitude: Double</li>
+<li>​    var longitude: Double</li>
+<li>​    init(latitude: Double, longitude: Double) {</li>
+<li>​        self.latitude &#x3D; latitude</li>
+<li>​        self.longitude &#x3D; longitude</li>
+<li>​    }</li>
+<li>}</li>
+<li>class City: Location, Named {</li>
+<li>​    var name: String</li>
+<li>​    init(name: String, latitude: Double, longitude: Double) {</li>
+<li>​        self.name &#x3D; name</li>
+<li>​        super.init(latitude: latitude, longitude: longitude)</li>
+<li>​    }</li>
+<li>}</li>
+<li>func beginConcert(in location: Location &amp; Named) {</li>
+<li>​    print(“Hello, (location.name)!”)</li>
+<li>}</li>
+<li></li>
+<li>let seattle &#x3D; City(name: “Seattle”, latitude: 47.6, longitude: -122.3)</li>
+<li>beginConcert(in: seattle)</li>
+<li>&#x2F;&#x2F; Prints “Hello, Seattle!”</li>
+</ol>
+<p>The <code>beginConcert(in:)</code> function takes a parameter of type <code>Location &amp; Named</code>, which means “any type that’s a subclass of <code>Location</code> and that conforms to the <code>Named</code> protocol.” In this case, <code>City</code> satisfies both requirements.</p>
+<p>Passing <code>birthdayPerson</code> to the <code>beginConcert(in:)</code> function is invalid because <code>Person</code> isn’t a subclass of <code>Location</code>. Likewise, if you made a subclass of <code>Location</code> that didn’t conform to the <code>Named</code> protocol, calling <code>beginConcert(in:)</code> with an instance of that type is also invalid.</p>
+<h2 id="检查协议一致性"><a href="#检查协议一致性" class="headerlink" title="检查协议一致性"></a>检查协议一致性</h2><p>您可以使用<a target="_blank" rel="noopener" href="https://docs.swift.org/swift-book/LanguageGuide/TypeCasting.html">类型转换</a>中描述的<code>is</code>和<code>as</code>运算符来检查协议一致性，并转换为特定协议。检查和转换到协议遵循与检查和转换到类型完全相同的语法：</p>
+<ul>
+<li>如果实例符合协议，则<code>is</code>运算符返回<code>true</code>，如果不符合协议，则返回<code>false</code>。</li>
+<li><code>as?</code>向下转换运算符的版本返回协议类型的可选值，如果实例不符合该协议，则该值为<code>nil</code>。</li>
+<li><code>as!</code>下调运算符的版本将下调强制到协议类型，如果下调失败，则触发运行时错误。</li>
+</ul>
+<p>此示例定义了一个名为<code>HasArea</code>协议，具有称为<code>area</code>的可获取<code>Double</code>属性的单个属性要求：</p>
+<ol>
+<li>protocol HasArea {</li>
+<li>​    var area: Double { get }</li>
+<li>}</li>
+</ol>
+<p>以下是两个类别，<code>Circle</code>和<code>Country</code>，它们都符合<code>HasArea</code>协议：</p>
+<ol>
+<li>class Circle: HasArea {</li>
+<li>​    let pi &#x3D; 3.1415927</li>
+<li>​    var radius: Double</li>
+<li>​    var area: Double { return pi * radius * radius }</li>
+<li>​    init(radius: Double) { self.radius &#x3D; radius }</li>
+<li>}</li>
+<li>class Country: HasArea {</li>
+<li>​    var area: Double</li>
+<li>​    init(area: Double) { self.area &#x3D; area }</li>
+<li>}</li>
+</ol>
+<p><code>Circle</code>类基于存储<code>radius</code>属性将<code>area</code>属性要求作为计算属性实现。<code>Country</code>类直接作为存储属性实现<code>area</code>要求。这两个类都正确地符合<code>HasArea</code>协议。</p>
+<p>这里有一个名为<code>Animal</code>的类，它不符合<code>HasArea</code>协议：</p>
+<ol>
+<li>class Animal {</li>
+<li>​    var legs: Int</li>
+<li>​    init(legs: Int) { self.legs &#x3D; legs }</li>
+<li>}</li>
+</ol>
+<p><code>Circle</code>、<code>Country</code>和<code>Animal</code>类没有共享的基类。尽管如此，它们都是类，因此所有三种类型的实例都可以用于初始化存储类型<code>AnyObject</code>值的数组：</p>
+<ol>
+<li>let objects: [AnyObject] &#x3D; [</li>
+<li>​    Circle(radius: 2.0),</li>
+<li>​    Country(area: 243_610),</li>
+<li>​    Animal(legs: 4)</li>
+<li>]</li>
+</ol>
+<p><code>objects</code>数组初始化为数组文字，其中包含半径为2个单位的<code>Circle</code>实例；以英国表面积（平方公里）初始化<code>Country</code>实例；以及四个腿的<code>Animal</code>实例。</p>
+<p>现在可以迭代<code>objects</code>数组，并且可以检查数组中的每个对象，看看它是否符合<code>HasArea</code>协议：</p>
+<ol>
+<li>for object in objects {</li>
+<li>​    if let objectWithArea &#x3D; object as? HasArea {</li>
+<li>​        print(“Area is (objectWithArea.area)”)</li>
+<li>​    } else {</li>
+<li>​        print(“Something that doesn’t have an area”)</li>
+<li>​    }</li>
+<li>}</li>
+<li>&#x2F;&#x2F; Area is 12.5663708</li>
+<li>&#x2F;&#x2F; Area is 243610.0</li>
+<li>&#x2F;&#x2F; Something that doesn’t have an area</li>
+</ol>
+<p>Whenever an object in the array conforms to the <code>HasArea</code> protocol, the optional value returned by the <code>as?</code> operator is unwrapped with optional binding into a constant called <code>objectWithArea</code>. The <code>objectWithArea</code> constant is known to be of type <code>HasArea</code>, and so its <code>area</code> property can be accessed and printed in a type-safe way.</p>
+<p>请注意，基础对象不会因铸造过程而改变。他们仍然是<code>Circle</code>、<code>Country</code>和<code>Animal</code>。然而，当它们存储在<code>objectWithArea</code>常量中时，它们只知道是<code>HasArea</code>类型，因此只能访问它们<code>area</code>属性。</p>
+<h2 id="《任择议定书》要求"><a href="#《任择议定书》要求" class="headerlink" title="《任择议定书》要求"></a>《任择议定书》要求</h2><p>您可以定义协议的<em>可选要求</em>。这些要求不必由符合协议的类型实现。作为协议定义的一部分，可选要求前缀为<code>optional</code>饰符。可选要求可用，以便您可以编写与Objective-C互操作的代码。协议和可选要求都必须用<code>@objc</code>属性标记。请注意，<code>@objc</code>协议只能由从Objective-C类或其他<code>@objc</code>类继承的类采用。它们不能被结构或枚举所采用。</p>
+<p>当您在可选需求中使用方法或属性时，其类型会自动成为可选类型。例如，类型<code>(Int)-&gt;String</code>的方法变为<code>((Int)-&gt;String)?</code>请注意，整个函数类型包装在可选中，而不是方法的返回值中。</p>
+<p>可选协议要求可以通过可选链调用，以解释该要求不是由符合协议的类型实现的可能性。调用可选方法时，您可以通过在方法名称后写一个问号来检查其实现，例如<code>someOptionalMethod?(someArgument)</code>有关可选链的信息，请参阅<a target="_blank" rel="noopener" href="https://docs.swift.org/swift-book/LanguageGuide/OptionalChaining.html">可选链</a>。</p>
+<p>以下示例定义了一个名为<code>Counter</code>的整数计数类，该类使用外部数据源来提供其增量。此数据源由<code>CounterDataSource</code>协议定义，该协议有两个可选要求：</p>
+<ol>
+<li>@objc protocol CounterDataSource {</li>
+<li>​    @objc optional func increment(forCount count: Int) -&gt; Int</li>
+<li>​    @objc optional var fixedIncrement: Int { get }</li>
+<li>}</li>
+</ol>
+<p><code>CounterDataSource</code>协议定义了一个名为<code>increment(forCount:)</code>的可选方法要求和一个名为<code>fixedIncrement</code>可选属性要求。这些要求定义了数据源为<code>Counter</code>实例提供适当增量的两种不同方式。</p>
+<p>注意</p>
+<p>严格来说，您可以编写符合<code>CounterDataSource</code>的自定义类，而无需实现<em>任一</em>协议要求。毕竟，它们都是可选的。虽然技术上允许，但这不会成为一个非常好的数据源。</p>
+<p>下面定义的<code>Counter</code>类具有typeCounterDataSource<code>CounterDataSource?</code>的可选<code>dataSource</code>属性：</p>
+<ol>
+<li>class Counter {</li>
+<li>​    var count &#x3D; 0</li>
+<li>​    var dataSource: CounterDataSource?</li>
+<li>​    func increment() {</li>
+<li>​        if let amount &#x3D; dataSource?.increment?(forCount: count) {</li>
+<li>​            count +&#x3D; amount</li>
+<li>​        } else if let amount &#x3D; dataSource?.fixedIncrement {</li>
+<li>​            count +&#x3D; amount</li>
+<li>​        }</li>
+<li>​    }</li>
+<li>}</li>
+</ol>
+<p><code>Counter</code>类将其当前值存储在称为<code>count</code>的变量属性中。<code>Counter</code>类还定义了一个名为<code>increment</code>的方法，每次调用方法时都会增加<code>count</code>属性。</p>
+<p><code>increment()</code>方法首先尝试通过在其数据源上查找<code>increment(forCount:)</code>方法的实现来检索增量。<code>increment()</code>方法使用可选链来尝试调用<code>increment(forCount:)</code>并将currentcount值作为方法的单个参数传递。</p>
+<p>请注意，<em>两个</em>级别的可选链在这里起作用。首先，<code>dataSource</code>可能为<code>nil</code>，因此<code>dataSource</code>名称后有一个问号，表示只有当<code>dataSource</code>不是<code>nil</code>才应调用<code>increment(forCount:)</code>）。其次，即使<code>dataSource</code><em>确实</em>存在，也不能保证它实现<code>increment(forCount:)</code>因为它是一个可选要求。在这里，<code>increment(forCount:)</code>可能无法实现的可能性也通过可选链处理。只有当<code>increment(forCount:)</code>存在时，才会调用<code>increment(forCount:)</code>），也就是说，如果它不是<code>nil</code>。这就是为什么<code>increment(forCount:)</code>在名称后面也用问号书写。</p>
+<p>Because the call to <code>increment(forCount:)</code> can fail for either of these two reasons, the call returns an <em>optional</em> <code>Int</code> value. This is true even though <code>increment(forCount:)</code> is defined as returning a non-optional <code>Int</code> value in the definition of <code>CounterDataSource</code>. Even though there are two optional chaining operations, one after another, the result is still wrapped in a single optional. For more information about using multiple optional chaining operations, see <a target="_blank" rel="noopener" href="https://docs.swift.org/swift-book/LanguageGuide/OptionalChaining.html#ID252">Linking Multiple Levels of Chaining</a>.</p>
+<p>调用<code>increment(forCount:)</code>后，它返回的可选<code>Int</code>使用可选绑定解包装成一个常量称为<code>amount</code>。如果可选的<code>Int</code>确实包含一个值——也就是说，如果委托和方法都存在，并且方法返回了一个值——则未包装的<code>amount</code>将添加到存储<code>count</code>属性中，并且增量完成。</p>
+<p>如果<em>无法</em>从<code>increment(forCount:)</code>方法中检索值——要么是因为<code>dataSource</code>为零，要么是因为数据源没有实现<code>increment(forCount:)</code>——那么<code>increment()</code>方法会尝试从数据源的<code>fixedIncrement</code>属性中检索值。<code>fixedIncrement</code>属性也是可选要求，因此其值是可选的<code>Int</code>值，即使<code>fixedIncrement</code>被定义为非可选的<code>Int</code>属性，作为<code>CounterDataSource</code>协议定义的一部分。</p>
+<p>这是一个简单的<code>CounterDataSource</code>实现，其中数据源每次查询时都会返回<code>3</code>的常量值。它通过实现可选<code>fixedIncrement</code>属性要求来做到这一点：</p>
+<ol>
+<li>class ThreeSource: NSObject, CounterDataSource {</li>
+<li>​    let fixedIncrement &#x3D; 3</li>
+<li>}</li>
+</ol>
+<p>您可以使用<code>ThreeSource</code>实例作为新<code>Counter</code>实例的数据源：</p>
+<ol>
+<li>var counter &#x3D; Counter()</li>
+<li>counter.dataSource &#x3D; ThreeSource()</li>
+<li>for _ in 1…4 {</li>
+<li>​    counter.increment()</li>
+<li>​    print(counter.count)</li>
+<li>}</li>
+<li>&#x2F;&#x2F; 3</li>
+<li>&#x2F;&#x2F; 6</li>
+<li>&#x2F;&#x2F; 9</li>
+<li>&#x2F;&#x2F; 12</li>
+</ol>
+<p>上面的代码创建一个新的<code>Counter</code>实例；将其数据源设置为newThreeSource实例；并四次调用counter的<code>increment()</code>方法。不出所料，每次调用<code>increment()</code>时，计数器的<code>count</code>属性都会增加三个。</p>
+<p>Here’s a more complex data source called <code>TowardsZeroSource</code>, which makes a <code>Counter</code>instance count up or down towards zero from its current <code>count</code> value:</p>
+<ol>
+<li>class TowardsZeroSource: NSObject, CounterDataSource {</li>
+<li>​    func increment(forCount count: Int) -&gt; Int {</li>
+<li>​        if count &#x3D;&#x3D; 0 {</li>
+<li>​            return 0</li>
+<li>​        } else if count &lt; 0 {</li>
+<li>​            return 1</li>
+<li>​        } else {</li>
+<li>​            return -1</li>
+<li>​        }</li>
+<li>​    }</li>
+<li>}</li>
+</ol>
+<p>The <code>TowardsZeroSource</code> class implements the optional <code>increment(forCount:)</code> method from the <code>CounterDataSource</code> protocol and uses the <code>count</code> argument value to work out which direction to count in. If <code>count</code> is already zero, the method returns <code>0</code> to indicate that no further counting should take place.</p>
+<p>You can use an instance of <code>TowardsZeroSource</code> with the existing <code>Counter</code> instance to count from <code>-4</code> to zero. Once the counter reaches zero, no more counting takes place:</p>
+<ol>
+<li>counter.count &#x3D; -4</li>
+<li>counter.dataSource &#x3D; TowardsZeroSource()</li>
+<li>for _ in 1…5 {</li>
+<li>​    counter.increment()</li>
+<li>​    print(counter.count)</li>
+<li>}</li>
+<li>&#x2F;&#x2F; -3</li>
+<li>&#x2F;&#x2F; -2</li>
+<li>&#x2F;&#x2F; -1</li>
+<li>&#x2F;&#x2F; 0</li>
+<li>&#x2F;&#x2F; 0</li>
+</ol>
+<h2 id="协议扩展"><a href="#协议扩展" class="headerlink" title="协议扩展"></a>协议扩展</h2><p>协议可以扩展到向符合要求的类型提供方法、初始化器、下标和计算属性实现。这允许您定义协议本身的行为，而不是在每种类型的单个一致性或全局函数中。</p>
+<p>例如，<code>RandomNumberGenerator</code>协议可以扩展到提供arandomBool<code>randomBool()</code>方法，该方法使用所需的<code>random()</code>方法的结果返回随机<code>Bool</code>值：</p>
+<ol>
+<li>extension RandomNumberGenerator {</li>
+<li>​    func randomBool() -&gt; Bool {</li>
+<li>​        return random() &gt; 0.5</li>
+<li>​    }</li>
+<li>}</li>
+</ol>
+<p>通过在协议上创建扩展，所有符合的类型都会自动获得此方法实现，而无需任何额外的修改。</p>
+<ol>
+<li>let generator &#x3D; LinearCongruentialGenerator()</li>
+<li>print(“Here’s a random number: (generator.random())”)</li>
+<li>&#x2F;&#x2F; Prints “Here’s a random number: 0.3746499199817101”</li>
+<li>print(“And here’s a random Boolean: (generator.randomBool())”)</li>
+<li>&#x2F;&#x2F; Prints “And here’s a random Boolean: true”</li>
+</ol>
+<p>协议扩展可以向符合要求的类型添加实现，但不能使协议扩展或从其他协议继承。协议继承总是在协议声明本身中指定。</p>
+<h3 id="提供默认实现"><a href="#提供默认实现" class="headerlink" title="提供默认实现"></a>提供默认实现</h3><p>您可以使用协议扩展为该协议的任何方法或计算属性要求提供默认实现。如果符合的类型提供了自己实现所需的方法或属性，则将使用该实现而不是扩展提供的实现。</p>
+<p>注意</p>
+<p>扩展提供的默认实现的协议要求与任择议定书要求不同。虽然符合要求的类型不必提供它们自己的实现，但可以调用默认实现的需求，而无需可选的链式。</p>
+<p>例如，继承<code>TextRepresentable</code>协议的<code>PrettyTextRepresentable</code>协议可以提供其resedprettyTextualDescription属性的默认实现，以简单地返回访问<code>textualDescription</code>属性的结果：</p>
+<ol>
+<li>extension PrettyTextRepresentable  {</li>
+<li>​    var prettyTextualDescription: String {</li>
+<li>​        return textualDescription</li>
+<li>​    }</li>
+<li>}</li>
+</ol>
+<h3 id="为协议扩展添加约束"><a href="#为协议扩展添加约束" class="headerlink" title="为协议扩展添加约束"></a>为协议扩展添加约束</h3><p>当您定义协议扩展时，您可以指定符合要求的类型在扩展的方法和属性可用之前必须满足的约束。您通过编写通用<code>where</code>子句，在您要扩展的协议名称后编写这些约束。有关通用<code>where</code>子句的更多信息，请参阅<a target="_blank" rel="noopener" href="https://docs.swift.org/swift-book/LanguageGuide/Generics.html#ID192">通用where子句</a>。</p>
+<p>例如，您可以定义<code>Collection</code>协议的扩展，该扩展适用于其元素符合<code>Equatable</code>协议的任何集合。通过将集合的元素限制到标准库的一部分<code>Equatable</code>协议，您可以使用<code>==</code>和<code>!=</code>运算符来检查两个元素之间的等式和不等式。</p>
+<ol>
+<li>extension Collection where Element: Equatable {</li>
+<li>​    func allEqual() -&gt; Bool {</li>
+<li>​        for element in self {</li>
+<li>​            if element !&#x3D; self.first {</li>
+<li>​                return false</li>
+<li>​            }</li>
+<li>​        }</li>
+<li>​        return true</li>
+<li>​    }</li>
+<li>}</li>
+</ol>
+<p>只有当集合中的所有元素相等时，<code>allEqual()</code>方法才会返回<code>true</code>。</p>
+<p>考虑两个整数数组，一个所有元素都相同，另一个不相同：</p>
+<ol>
+<li>let equalNumbers &#x3D; [100, 100, 100, 100, 100]</li>
+<li>let differentNumbers &#x3D; [100, 100, 200, 100, 200]</li>
+</ol>
+<p>由于数组符合<code>Collection</code>，整数符合<code>Equatable</code>，<code>equalNumbers</code>和<code>differentNumbers</code>可以使用<code>allEqual()</code>方法：</p>
+<ol>
+<li>print(equalNumbers.allEqual())</li>
+<li>&#x2F;&#x2F; Prints “true”</li>
+<li>print(differentNumbers.allEqual())</li>
+<li>&#x2F;&#x2F; Prints “false”</li>
+</ol>
+<p>注意</p>
+<p>如果符合要求的类型满足为同一方法或属性提供实现的多个约束扩展的要求，Swift将使用与最专业约束相对应的实现。</p>
+
+      
+    </div>
+    <div class="article-footer">
+      <blockquote class="mt-2x">
+  <ul class="post-copyright list-unstyled">
+    
+    <li class="post-copyright-link hidden-xs">
+      <strong>本文链接：</strong>
+      <a href="https://guoshunfa.com/2022/07/Swift%E5%9F%BA%E7%A1%80-%E5%8D%8F%E8%AE%AE/" title="Swift基础 协议" target="_blank" rel="external">https://guoshunfa.com/2022/07/Swift基础-协议/</a>
+    </li>
+    
+    <li class="post-copyright-license">
+      <strong>版权声明： </strong> 本博客所有文章除特别声明外，均采用 <a href="http://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank" rel="external">CC BY 4.0 CN协议</a> 许可协议。转载请注明出处！
+    </li>
+  </ul>
+</blockquote>
+
+
+<div class="panel panel-default panel-badger">
+  <div class="panel-body">
+    <figure class="media">
+      <div class="media-left">
+        <a href="https://github.com/guoshunfa" target="_blank" class="img-burn thumb-sm visible-lg">
+          <img src="/images/avatar.jpg" class="img-rounded w-full" alt="">
+        </a>
+      </div>
+      <div class="media-body">
+        <h3 class="media-heading"><a href="https://github.com/guoshunfa" target="_blank"><span class="text-dark">郭顺发</span><small class="ml-1x">创业中......</small></a></h3>
+        <div>承接：小程序开发、APP开发、网站开发、爬虫开发</div>
+      </div>
+    </figure>
+  </div>
+</div>
+
+
+    </div>
+  </article>
+  
+    
+  <section id="comments">
+  	
+           
+    
+  </section>
+
+
+  
+</div>
+
+  <nav class="bar bar-footer clearfix" data-stick-bottom>
+  <div class="bar-inner">
+  
+  <ul class="pager pull-left">
+    
+    <li class="prev">
+      <a href="/2022/07/Swift%E5%9F%BA%E7%A1%80-%E5%8A%9F%E8%83%BD/" title="Swift基础 功能(Functions)"><i class="icon icon-angle-left" aria-hidden="true"></i><span>&nbsp;&nbsp;上一篇</span></a>
+    </li>
+    
+    
+    <li class="next">
+      <a href="/2022/07/Swift%E5%9F%BA%E7%A1%80-%E5%8E%BB%E5%88%9D%E5%A7%8B%E5%8C%96/" title="Swift基础 去初始化"><span>下一篇&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
+    </li>
+    
+    
+  </ul>
+  
+  
+  
+  <div class="bar-right">
+    
+    <div class="share-component" data-sites="weibo,qq,wechat,facebook,twitter" data-mobile-sites="weibo,qq,qzone"></div>
+    
+  </div>
+  </div>
+</nav>
+  
+
+
+</main>
+
+  <footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
+	
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/guoshunfa" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="https://gitee.com/guoshunfa" target="_blank" title="Gitee" data-toggle=tooltip data-placement=top><i class="icon icon-gitee"></i></a></li>
+        
+        <li><a href="https://juejin.cn/user/166781500267015" target="_blank" title="Juejin" data-toggle=tooltip data-placement=top><i class="icon icon-juejin"></i></a></li>
+        
+        <li><a href="https://cloud.tencent.com/developer/user/7784141" target="_blank" title="Code" data-toggle=tooltip data-placement=top><i class="icon icon-code"></i></a></li>
+        
+        <li><a href="/atom.xml" target="_blank" title="Rss" data-toggle=tooltip data-placement=top><i class="icon icon-rss"></i></a></li>
+        
+    </ul>
+
+    <div class="copyright">
+    	
+        &copy; 2024 guoshunfa
+        
+        <!-- <div class="publishby">
+        	Theme by <a href="https://github.com/cofess" target="_blank"> cofess </a>base on <a href="https://github.com/cofess/hexo-theme-pure" target="_blank">pure</a>.
+        </div> -->
+    </div>
+</footer>
+  <script src="//cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
+<script>
+window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
+</script>
+
+<script src="/js/plugin.min.js"></script>
+
+
+<script src="/js/application.js"></script>
+
+
+    <script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(未命名)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+
+<script src="/js/insight.js"></script>
+
+
+
+    <script>
+(function ($) {
+    $('.search-form').on('submit', function (e) {
+        var keyword = $('.search-form-input[name="wd"]').val();
+        window.location = 'https://www.baidu.com/s?wd=site:guoshunfa.com ' + keyword;
+        return false;
+    });
+})(jQuery);
+</script>
+
+
+
+
+   
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+   
+    
+  <!-- <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css"> -->
+  <script src="//cdn.jsdelivr.net/npm/gitalk@1.7.2/dist/gitalk.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/blueimp-md5@2.10.0/js/md5.min.js"></script>
+  <script type="text/javascript">
+  var gitalk = new Gitalk({
+    clientID: '328529f408a5d1041fe1',
+    clientSecret: '43872fab04fe0accb98439ac77ff71ff81f7b9dd',
+    repo: 'guoshunfa-comment',
+    owner: 'guoshunfa',
+    admin: ['guoshunfa'],
+    id: md5(location.pathname),
+    distractionFreeMode: true,
+    language: 'zh-CN',
+    enableHotKey: 'true'
+  })
+  gitalk.render('comments')
+  </script>
+      
+
+
+
+  <script src="//cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.3.5/dist/jquery.fancybox.min.js"></script>
+  <script>
+  //利用 FancyBox 实现点击图片放大
+  $(document).ready(function() {
+    $('article img').not('[hidden]').not('.panel-body img').each(function() {
+      var $image = $(this);
+      var imageCaption = $image.attr('alt');
+      var $imageWrapLink = $image.parent('a');
+      if ($imageWrapLink.length < 1) {
+        var src = this.getAttribute('src');
+        var idx = src.lastIndexOf('?');
+        if (idx != -1) {
+          src = src.substring(0, idx);
+        }
+        $imageWrapLink = $image.wrap('<a href="' + src + '"></a>').parent('a');
+      }
+      $imageWrapLink.attr('data-fancybox', 'images');
+      if (imageCaption) {
+        $imageWrapLink.attr('data-caption', imageCaption);
+      }
+    });
+    $().fancybox({
+      selector: '[data-fancybox="images"]',
+      hash: false,
+      loop: false,
+    });
+  });
+  </script>
+
+
+
+
+
+</body>
+</html>

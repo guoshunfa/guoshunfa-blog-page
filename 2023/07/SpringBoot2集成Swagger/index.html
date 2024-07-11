@@ -1,0 +1,938 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+  <meta charset="utf-8">
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-transform" />
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="format-detection" content="telephone=no,email=no,adress=no">
+  <!-- Color theme for statusbar -->
+  <meta name="theme-color" content="#000000" />
+  <!-- 强制页面在当前窗口以独立页面显示,防止别人在框架里调用页面 -->
+  <meta http-equiv="window-target" content="_top" />
+  
+  
+  <title>SpringBoot2集成Swagger | guoshunfa</title>
+  <meta name="description" content="文章仓库：Github Project  前提本文章所用版本：  SpringBoot 2.2.6.RELEASE springfox 3.0.0 jdk 8  不同的版本会导致版本冲突，切换版本时建议先去官方查看是否互相兼容。 开始集成 Swagger导入swagger maven 库123456789101112&lt;!-- https:&#x2F;&#x2F;mvnrepository.com&#x2F;artifa">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SpringBoot2集成Swagger">
+<meta property="og:url" content="https://guoshunfa.com/2023/07/SpringBoot2%E9%9B%86%E6%88%90Swagger/index.html">
+<meta property="og:site_name" content="guoshunfa">
+<meta property="og:description" content="文章仓库：Github Project  前提本文章所用版本：  SpringBoot 2.2.6.RELEASE springfox 3.0.0 jdk 8  不同的版本会导致版本冲突，切换版本时建议先去官方查看是否互相兼容。 开始集成 Swagger导入swagger maven 库123456789101112&lt;!-- https:&#x2F;&#x2F;mvnrepository.com&#x2F;artifa">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://guoshunfa.com/2023/07/SpringBoot2%E9%9B%86%E6%88%90Swagger/image-20230711133253689.png">
+<meta property="og:image" content="https://guoshunfa.com/2023/07/SpringBoot2%E9%9B%86%E6%88%90Swagger/1689053804648.png">
+<meta property="article:published_time" content="2023-07-11T04:01:01.000Z">
+<meta property="article:modified_time" content="2024-01-28T11:41:39.303Z">
+<meta property="article:author" content="guoshunfa">
+<meta property="article:tag" content="SpringBoot">
+<meta property="article:tag" content="Java">
+<meta property="article:tag" content="Swagger">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://guoshunfa.com/2023/07/SpringBoot2%E9%9B%86%E6%88%90Swagger/image-20230711133253689.png">
+  <!-- Canonical links -->
+  <link rel="canonical" href="https://guoshunfa.com/2023/07/SpringBoot2%E9%9B%86%E6%88%90Swagger/index.html">
+  
+    <link rel="alternate" href="/atom.xml" title="guoshunfa" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="favicon.jpg" type="image/x-icon">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  
+  
+    <link href="//cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.3.5/dist/jquery.fancybox.min.css" rel="stylesheet">
+  
+  
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1.7.2/dist/gitalk.min.css">
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body class="main-center" itemscope itemtype="http://schema.org/WebPage">
+  <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+  <div class="slimContent">
+    <div class="navbar-header">
+      
+      
+      <div class="profile-block text-center">
+        <a id="avatar" href="https://github.com/guoshunfa" target="_blank">
+          <img class="img-circle img-rotate" src="/images/avatar.jpg" width="200" height="200">
+        </a>
+        <h2 id="name" class="hidden-xs hidden-sm">郭顺发</h2>
+        <h3 id="title" class="hidden-xs hidden-sm hidden-md">创业中......</h3>
+        <small id="location" class="text-muted hidden-xs hidden-sm"><i class="icon icon-map-marker"></i> 深圳, China</small>
+      </div>
+      
+      <div class="search" id="search-form-wrap">
+
+    <form class="search-form sidebar-form">
+        <div class="input-group">
+            <input type="text" class="search-form-input form-control" placeholder="搜索" />
+            <span class="input-group-btn">
+                <button type="submit" class="search-form-submit btn btn-flat" onclick="return false;"><i class="icon icon-search"></i></button>
+            </span>
+        </div>
+    </form>
+    <div class="ins-search">
+  <div class="ins-search-mask"></div>
+  <div class="ins-search-container">
+    <div class="ins-input-wrapper">
+      <input type="text" class="ins-search-input" placeholder="想要查找什么..." x-webkit-speech />
+      <button type="button" class="close ins-close ins-selectable" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="ins-section-wrapper">
+      <div class="ins-section-container"></div>
+    </div>
+  </div>
+</div>
+
+
+</div>
+      <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <nav id="main-navbar" class="collapse navbar-collapse" itemscope itemtype="http://schema.org/SiteNavigationElement" role="navigation">
+      <ul class="nav navbar-nav main-nav menu-highlight">
+        
+        
+        <li class="menu-item menu-item-首页">
+          <a href="/.">
+            
+            <i class="icon icon-home-fill"></i>
+            
+            <span class="menu-title">首页</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-归档">
+          <a href="/archives">
+            
+            <i class="icon icon-archives-fill"></i>
+            
+            <span class="menu-title">归档</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-分类">
+          <a href="/categories">
+            
+            <i class="icon icon-folder"></i>
+            
+            <span class="menu-title">分类</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-标签">
+          <a href="/tags">
+            
+            <i class="icon icon-tags"></i>
+            
+            <span class="menu-title">标签</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-github仓库">
+          <a href="/repository">
+            
+            <i class="icon icon-project"></i>
+            
+            <span class="menu-title">github仓库</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-工具箱">
+          <a href="/tools">
+            
+            <i class="icon icon-book-fill"></i>
+            
+            <span class="menu-title">工具箱</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-友链">
+          <a href="/links">
+            
+            <i class="icon icon-friendship"></i>
+            
+            <span class="menu-title">友链</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-关于">
+          <a href="/about">
+            
+            <i class="icon icon-cup-fill"></i>
+            
+            <span class="menu-title">关于</span>
+          </a>
+        </li>
+        
+      </ul>
+      
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/guoshunfa" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="https://gitee.com/guoshunfa" target="_blank" title="Gitee" data-toggle=tooltip data-placement=top><i class="icon icon-gitee"></i></a></li>
+        
+        <li><a href="https://juejin.cn/user/166781500267015" target="_blank" title="Juejin" data-toggle=tooltip data-placement=top><i class="icon icon-juejin"></i></a></li>
+        
+        <li><a href="https://cloud.tencent.com/developer/user/7784141" target="_blank" title="Code" data-toggle=tooltip data-placement=top><i class="icon icon-code"></i></a></li>
+        
+        <li><a href="/atom.xml" target="_blank" title="Rss" data-toggle=tooltip data-placement=top><i class="icon icon-rss"></i></a></li>
+        
+    </ul>
+
+    </nav>
+  </div>
+</header>
+
+  
+    <aside class="sidebar" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    
+      <div class="widget">
+    <h3 class="widget-title">公告</h3>
+    <div class="widget-body">
+        <div id="board">
+            <div class="content">
+                <p>欢迎来到www.guoshunfa.com。</p><hr/><a target="_blank" rel="noopener" href="https://www.oracle.com/cn/java/">前往Java官网<a/><br/><a target="_blank" rel="noopener" href="https://spring.io/">前往Spring官网<a/>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget-body">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/HTML-CSS-JavaScript/">HTML/CSS/JavaScript</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Java/">Java</a><span class="category-list-count">17</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Python/">Python</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/SpringBoot/">SpringBoot</a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Swift/">Swift</a><span class="category-list-count">29</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%88%9B%E4%B8%9A/">创业</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%A4%8D%E7%9B%98/">复盘</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%A8%B1%E4%B9%90/">娱乐</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%8A%80%E6%9C%AF/">技术</a><span class="category-list-count">27</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%8A%80%E6%9C%AF/%E6%90%AD%E5%BB%BA%E5%8D%95%E4%BD%93SpringBoot%E9%A1%B9%E7%9B%AE/">搭建单体SpringBoot项目</a><span class="category-list-count">21</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%90%AD%E5%BB%BA%E5%8D%95%E4%BD%93SpringBoot%E9%A1%B9%E7%9B%AE/">搭建单体SpringBoot项目</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/">数据库</a><span class="category-list-count">17</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%9C%8D%E5%8A%A1/">服务</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%9C%8D%E5%8A%A1-%E7%BB%84%E4%BB%B6/">服务&组件</a><span class="category-list-count">27</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%AE%A1%E7%90%86/">服务器管理</a><span class="category-list-count">21</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E7%AE%97%E6%B3%95/">算法</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E8%BD%AF%E4%BB%B6%E4%BD%BF%E7%94%A8/">软件使用</a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E8%BD%AF%E4%BB%B6%E6%8A%80%E6%9C%AF%E6%A1%86%E6%9E%B6/">软件技术框架</a><span class="category-list-count">44</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E9%98%85%E8%AF%BB/">阅读</a><span class="category-list-count">2</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget-body">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/AJAX/" rel="tag">AJAX</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Activiti7/" rel="tag">Activiti7</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Arthas/" rel="tag">Arthas</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CSS/" rel="tag">CSS</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Curl/" rel="tag">Curl</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Debug/" rel="tag">Debug</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Docker/" rel="tag">Docker</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Druid/" rel="tag">Druid</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Electron/" rel="tag">Electron</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Expect/" rel="tag">Expect</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/FastJson/" rel="tag">FastJson</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/FreeMarker/" rel="tag">FreeMarker</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Git/" rel="tag">Git</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Gitlab/" rel="tag">Gitlab</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/GitlabRunner/" rel="tag">GitlabRunner</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/HTML-CSS-JavaScript/" rel="tag">HTML&#x2F;CSS&#x2F;JavaScript</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hook/" rel="tag">Hook</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Http/" rel="tag">Http</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hutool/" rel="tag">Hutool</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/IDEA/" rel="tag">IDEA</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JS/" rel="tag">JS</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JVM/" rel="tag">JVM</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Jar/" rel="tag">Jar</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java/" rel="tag">Java</a><span class="tag-list-count">27</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Jdk/" rel="tag">Jdk</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Jenkins/" rel="tag">Jenkins</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Jmeter/" rel="tag">Jmeter</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Json/" rel="tag">Json</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Jsoup/" rel="tag">Jsoup</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Kafka/" rel="tag">Kafka</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Leetcode/" rel="tag">Leetcode</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux/" rel="tag">Linux</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Logback/" rel="tag">Logback</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Mac/" rel="tag">Mac</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Maven/" rel="tag">Maven</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MongoDB/" rel="tag">MongoDB</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MyBatis/" rel="tag">MyBatis</a><span class="tag-list-count">7</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Mybatis/" rel="tag">Mybatis</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MybatisPlus/" rel="tag">MybatisPlus</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Mysql/" rel="tag">Mysql</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Nano/" rel="tag">Nano</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Nexus/" rel="tag">Nexus</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Nginx/" rel="tag">Nginx</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Opengrok/" rel="tag">Opengrok</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Oracle/" rel="tag">Oracle</a><span class="tag-list-count">22</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Profile/" rel="tag">Profile</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/PubSubJS/" rel="tag">PubSubJS</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Python/" rel="tag">Python</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Quartz/" rel="tag">Quartz</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/RESTful/" rel="tag">RESTful</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/React/" rel="tag">React</a><span class="tag-list-count">7</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Redis/" rel="tag">Redis</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SQL/" rel="tag">SQL</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SVN/" rel="tag">SVN</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Scheduled/" rel="tag">Scheduled</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Scrapy/" rel="tag">Scrapy</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Shell/" rel="tag">Shell</a><span class="tag-list-count">9</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Spel%E8%A1%A8%E8%BE%BE%E5%BC%8F/" rel="tag">Spel表达式</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Spring/" rel="tag">Spring</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SpringBoot/" rel="tag">SpringBoot</a><span class="tag-list-count">34</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SpringEvent/" rel="tag">SpringEvent</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SpringMVC/" rel="tag">SpringMVC</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SpringSecurity/" rel="tag">SpringSecurity</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Stream/" rel="tag">Stream</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Swagger/" rel="tag">Swagger</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Swift/" rel="tag">Swift</a><span class="tag-list-count">29</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/TestNG/" rel="tag">TestNG</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Tomcat/" rel="tag">Tomcat</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/UI%E7%BB%84%E4%BB%B6%E5%BA%93/" rel="tag">UI组件库</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Validator/" rel="tag">Validator</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Vue/" rel="tag">Vue</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Vuepress/" rel="tag">Vuepress</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Wordpress/" rel="tag">Wordpress</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/XML/" rel="tag">XML</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/assert/" rel="tag">assert</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/docker/" rel="tag">docker</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/gitlab/" rel="tag">gitlab</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/homebrew/" rel="tag">homebrew</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/iframe/" rel="tag">iframe</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java/" rel="tag">java</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/lambda/" rel="tag">lambda</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/less/" rel="tag">less</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/" rel="tag">linux</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mac/" rel="tag">mac</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mybatis-plus/" rel="tag">mybatis-plus</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mysql/" rel="tag">mysql</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/oracle/" rel="tag">oracle</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/pom-xml/" rel="tag">pom.xml</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/quartz/" rel="tag">quartz</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/settings-xml/" rel="tag">settings.xml</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/spring-boot/" rel="tag">spring-boot</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ssh/" rel="tag">ssh</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sshpass/" rel="tag">sshpass</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/yum/" rel="tag">yum</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%B9%90%E8%A7%82%E9%94%81/" rel="tag">乐观锁</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BB%8B%E7%BB%8D/" rel="tag">介绍</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%86%85%E7%BD%91/" rel="tag">内网</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%86%85%E7%BD%91%E7%A9%BF%E9%80%8F/" rel="tag">内网穿透</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%8A%A0%E5%AF%86/" rel="tag">加密</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%8F%8D%E7%BC%96%E8%AF%91%E5%B7%A5%E5%85%B7/" rel="tag">反编译工具</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%9B%BE%E5%BA%8A/" rel="tag">图床</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%9F%BA%E7%A1%80/" rel="tag">基础</a><span class="tag-list-count">29</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%AD%98%E5%82%A8%E5%87%BD%E6%95%B0/" rel="tag">存储函数</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%AD%98%E5%82%A8%E8%BF%87%E7%A8%8B/" rel="tag">存储过程</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%AE%9A%E6%97%B6%E5%99%A8/" rel="tag">定时器</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%AE%9D%E5%A1%94/" rel="tag">宝塔</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%B9%B6%E5%8F%91/" rel="tag">并发</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%BC%82%E5%B8%B8/" rel="tag">异常</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%BF%83%E7%90%86/" rel="tag">心理</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%80%BB%E7%BB%93/" rel="tag">总结</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%8C%81%E4%B9%85%E5%B1%82%E6%A1%86%E6%9E%B6/" rel="tag">持久层框架</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%8E%A5%E5%8F%A3/" rel="tag">接口</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%8F%92%E4%BB%B6/" rel="tag">插件</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/" rel="tag">数据库</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%96%AD%E8%A8%80/" rel="tag">断言</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%A0%91%E8%8E%93%E6%B4%BE/" rel="tag">树莓派</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%A0%91%E8%8E%93%E6%B4%BE4B/" rel="tag">树莓派4B</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%A6%82%E5%BF%B5/" rel="tag">概念</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%A8%A1%E7%89%88%E5%BC%95%E6%93%8E/" rel="tag">模版引擎</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%B3%9B%E5%9E%8B/" rel="tag">泛型</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%B5%8B%E8%AF%95/" rel="tag">测试</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%88%AC%E8%99%AB/" rel="tag">爬虫</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%94%A8%E6%88%B7%E6%9D%83%E9%99%90%E9%AA%8C%E8%AF%81/" rel="tag">用户权限验证</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%9F%A5%E8%AF%86/" rel="tag">知识</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%AE%97%E6%B3%95/" rel="tag">算法</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%B1%BB/" rel="tag">类</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BB%84%E4%BB%B6%E5%BA%93/" rel="tag">组件库</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%84%9A%E6%9C%AC/" rel="tag">脚本</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%87%AA%E5%8A%A8%E5%8C%96%E6%B5%8B%E8%AF%95/" rel="tag">自动化测试</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%8B%A5%E4%BE%9D/" rel="tag">若依</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/" rel="tag">解决方案</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" rel="tag">设计模式</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/" rel="tag">读书笔记</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%B7%A8%E5%9F%9F/" rel="tag">跨域</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%83%A8%E7%BD%B2/" rel="tag">部署</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9B%86%E6%88%90/" rel="tag">集成</a><span class="tag-list-count">14</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1/" rel="tag">面向对象</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9F%A9%E5%89%A7/" rel="tag">韩剧</a><span class="tag-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget-body tagcloud">
+      <a href="/tags/AJAX/" style="font-size: 13px;">AJAX</a> <a href="/tags/Activiti7/" style="font-size: 13.17px;">Activiti7</a> <a href="/tags/Arthas/" style="font-size: 13px;">Arthas</a> <a href="/tags/CSS/" style="font-size: 13px;">CSS</a> <a href="/tags/Curl/" style="font-size: 13px;">Curl</a> <a href="/tags/Debug/" style="font-size: 13px;">Debug</a> <a href="/tags/Docker/" style="font-size: 13.42px;">Docker</a> <a href="/tags/Druid/" style="font-size: 13px;">Druid</a> <a href="/tags/Electron/" style="font-size: 13.08px;">Electron</a> <a href="/tags/Expect/" style="font-size: 13px;">Expect</a> <a href="/tags/FastJson/" style="font-size: 13px;">FastJson</a> <a href="/tags/FreeMarker/" style="font-size: 13px;">FreeMarker</a> <a href="/tags/Git/" style="font-size: 13.08px;">Git</a> <a href="/tags/Gitlab/" style="font-size: 13.25px;">Gitlab</a> <a href="/tags/GitlabRunner/" style="font-size: 13.08px;">GitlabRunner</a> <a href="/tags/HTML-CSS-JavaScript/" style="font-size: 13.17px;">HTML/CSS/JavaScript</a> <a href="/tags/Hook/" style="font-size: 13px;">Hook</a> <a href="/tags/Http/" style="font-size: 13px;">Http</a> <a href="/tags/Hutool/" style="font-size: 13px;">Hutool</a> <a href="/tags/IDEA/" style="font-size: 13.25px;">IDEA</a> <a href="/tags/JS/" style="font-size: 13.08px;">JS</a> <a href="/tags/JVM/" style="font-size: 13px;">JVM</a> <a href="/tags/Jar/" style="font-size: 13.08px;">Jar</a> <a href="/tags/Java/" style="font-size: 13.83px;">Java</a> <a href="/tags/Jdk/" style="font-size: 13px;">Jdk</a> <a href="/tags/Jenkins/" style="font-size: 13px;">Jenkins</a> <a href="/tags/Jmeter/" style="font-size: 13px;">Jmeter</a> <a href="/tags/Json/" style="font-size: 13px;">Json</a> <a href="/tags/Jsoup/" style="font-size: 13px;">Jsoup</a> <a href="/tags/Kafka/" style="font-size: 13.25px;">Kafka</a> <a href="/tags/Leetcode/" style="font-size: 13.33px;">Leetcode</a> <a href="/tags/Linux/" style="font-size: 13px;">Linux</a> <a href="/tags/Logback/" style="font-size: 13px;">Logback</a> <a href="/tags/Mac/" style="font-size: 13px;">Mac</a> <a href="/tags/Maven/" style="font-size: 13.42px;">Maven</a> <a href="/tags/MongoDB/" style="font-size: 13.42px;">MongoDB</a> <a href="/tags/MyBatis/" style="font-size: 13.5px;">MyBatis</a> <a href="/tags/Mybatis/" style="font-size: 13.17px;">Mybatis</a> <a href="/tags/MybatisPlus/" style="font-size: 13.08px;">MybatisPlus</a> <a href="/tags/Mysql/" style="font-size: 13.25px;">Mysql</a> <a href="/tags/Nano/" style="font-size: 13px;">Nano</a> <a href="/tags/Nexus/" style="font-size: 13.08px;">Nexus</a> <a href="/tags/Nginx/" style="font-size: 13.08px;">Nginx</a> <a href="/tags/Opengrok/" style="font-size: 13px;">Opengrok</a> <a href="/tags/Oracle/" style="font-size: 13.75px;">Oracle</a> <a href="/tags/Profile/" style="font-size: 13px;">Profile</a> <a href="/tags/PubSubJS/" style="font-size: 13px;">PubSubJS</a> <a href="/tags/Python/" style="font-size: 13.17px;">Python</a> <a href="/tags/Quartz/" style="font-size: 13.08px;">Quartz</a> <a href="/tags/RESTful/" style="font-size: 13px;">RESTful</a> <a href="/tags/React/" style="font-size: 13.5px;">React</a> <a href="/tags/Redis/" style="font-size: 13.17px;">Redis</a> <a href="/tags/SQL/" style="font-size: 13.25px;">SQL</a> <a href="/tags/SVN/" style="font-size: 13px;">SVN</a> <a href="/tags/Scheduled/" style="font-size: 13px;">Scheduled</a> <a href="/tags/Scrapy/" style="font-size: 13px;">Scrapy</a> <a href="/tags/Shell/" style="font-size: 13.58px;">Shell</a> <a href="/tags/Spel%E8%A1%A8%E8%BE%BE%E5%BC%8F/" style="font-size: 13px;">Spel表达式</a> <a href="/tags/Spring/" style="font-size: 13.33px;">Spring</a> <a href="/tags/SpringBoot/" style="font-size: 14px;">SpringBoot</a> <a href="/tags/SpringEvent/" style="font-size: 13px;">SpringEvent</a> <a href="/tags/SpringMVC/" style="font-size: 13px;">SpringMVC</a> <a href="/tags/SpringSecurity/" style="font-size: 13.17px;">SpringSecurity</a> <a href="/tags/Stream/" style="font-size: 13px;">Stream</a> <a href="/tags/Swagger/" style="font-size: 13.08px;">Swagger</a> <a href="/tags/Swift/" style="font-size: 13.92px;">Swift</a> <a href="/tags/TestNG/" style="font-size: 13px;">TestNG</a> <a href="/tags/Tomcat/" style="font-size: 13px;">Tomcat</a> <a href="/tags/UI%E7%BB%84%E4%BB%B6%E5%BA%93/" style="font-size: 13px;">UI组件库</a> <a href="/tags/Validator/" style="font-size: 13px;">Validator</a> <a href="/tags/Vue/" style="font-size: 13px;">Vue</a> <a href="/tags/Vuepress/" style="font-size: 13.25px;">Vuepress</a> <a href="/tags/Wordpress/" style="font-size: 13px;">Wordpress</a> <a href="/tags/XML/" style="font-size: 13px;">XML</a> <a href="/tags/assert/" style="font-size: 13px;">assert</a> <a href="/tags/docker/" style="font-size: 13px;">docker</a> <a href="/tags/gitlab/" style="font-size: 13px;">gitlab</a> <a href="/tags/homebrew/" style="font-size: 13px;">homebrew</a> <a href="/tags/iframe/" style="font-size: 13px;">iframe</a> <a href="/tags/java/" style="font-size: 13px;">java</a> <a href="/tags/lambda/" style="font-size: 13px;">lambda</a> <a href="/tags/less/" style="font-size: 13px;">less</a> <a href="/tags/linux/" style="font-size: 13.25px;">linux</a> <a href="/tags/mac/" style="font-size: 13.25px;">mac</a> <a href="/tags/mybatis-plus/" style="font-size: 13px;">mybatis-plus</a> <a href="/tags/mysql/" style="font-size: 13px;">mysql</a> <a href="/tags/oracle/" style="font-size: 13px;">oracle</a> <a href="/tags/pom-xml/" style="font-size: 13px;">pom.xml</a> <a href="/tags/quartz/" style="font-size: 13px;">quartz</a> <a href="/tags/settings-xml/" style="font-size: 13px;">settings.xml</a> <a href="/tags/spring-boot/" style="font-size: 13px;">spring-boot</a> <a href="/tags/ssh/" style="font-size: 13px;">ssh</a> <a href="/tags/sshpass/" style="font-size: 13px;">sshpass</a> <a href="/tags/yum/" style="font-size: 13px;">yum</a> <a href="/tags/%E4%B9%90%E8%A7%82%E9%94%81/" style="font-size: 13px;">乐观锁</a> <a href="/tags/%E4%BB%8B%E7%BB%8D/" style="font-size: 13px;">介绍</a> <a href="/tags/%E5%86%85%E7%BD%91/" style="font-size: 13px;">内网</a> <a href="/tags/%E5%86%85%E7%BD%91%E7%A9%BF%E9%80%8F/" style="font-size: 13px;">内网穿透</a> <a href="/tags/%E5%8A%A0%E5%AF%86/" style="font-size: 13.08px;">加密</a> <a href="/tags/%E5%8F%8D%E7%BC%96%E8%AF%91%E5%B7%A5%E5%85%B7/" style="font-size: 13px;">反编译工具</a> <a href="/tags/%E5%9B%BE%E5%BA%8A/" style="font-size: 13px;">图床</a> <a href="/tags/%E5%9F%BA%E7%A1%80/" style="font-size: 13.92px;">基础</a> <a href="/tags/%E5%AD%98%E5%82%A8%E5%87%BD%E6%95%B0/" style="font-size: 13px;">存储函数</a> <a href="/tags/%E5%AD%98%E5%82%A8%E8%BF%87%E7%A8%8B/" style="font-size: 13.08px;">存储过程</a> <a href="/tags/%E5%AE%9A%E6%97%B6%E5%99%A8/" style="font-size: 13px;">定时器</a> <a href="/tags/%E5%AE%9D%E5%A1%94/" style="font-size: 13.08px;">宝塔</a> <a href="/tags/%E5%B9%B6%E5%8F%91/" style="font-size: 13px;">并发</a> <a href="/tags/%E5%BC%82%E5%B8%B8/" style="font-size: 13px;">异常</a> <a href="/tags/%E5%BF%83%E7%90%86/" style="font-size: 13.08px;">心理</a> <a href="/tags/%E6%80%BB%E7%BB%93/" style="font-size: 13px;">总结</a> <a href="/tags/%E6%8C%81%E4%B9%85%E5%B1%82%E6%A1%86%E6%9E%B6/" style="font-size: 13.17px;">持久层框架</a> <a href="/tags/%E6%8E%A5%E5%8F%A3/" style="font-size: 13px;">接口</a> <a href="/tags/%E6%8F%92%E4%BB%B6/" style="font-size: 13px;">插件</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/" style="font-size: 13.33px;">数据库</a> <a href="/tags/%E6%96%AD%E8%A8%80/" style="font-size: 13px;">断言</a> <a href="/tags/%E6%A0%91%E8%8E%93%E6%B4%BE/" style="font-size: 13.08px;">树莓派</a> <a href="/tags/%E6%A0%91%E8%8E%93%E6%B4%BE4B/" style="font-size: 13px;">树莓派4B</a> <a href="/tags/%E6%A6%82%E5%BF%B5/" style="font-size: 13px;">概念</a> <a href="/tags/%E6%A8%A1%E7%89%88%E5%BC%95%E6%93%8E/" style="font-size: 13px;">模版引擎</a> <a href="/tags/%E6%B3%9B%E5%9E%8B/" style="font-size: 13.08px;">泛型</a> <a href="/tags/%E6%B5%8B%E8%AF%95/" style="font-size: 13.33px;">测试</a> <a href="/tags/%E7%88%AC%E8%99%AB/" style="font-size: 13.08px;">爬虫</a> <a href="/tags/%E7%94%A8%E6%88%B7%E6%9D%83%E9%99%90%E9%AA%8C%E8%AF%81/" style="font-size: 13px;">用户权限验证</a> <a href="/tags/%E7%9F%A5%E8%AF%86/" style="font-size: 13px;">知识</a> <a href="/tags/%E7%AE%97%E6%B3%95/" style="font-size: 13.08px;">算法</a> <a href="/tags/%E7%B1%BB/" style="font-size: 13px;">类</a> <a href="/tags/%E7%BB%84%E4%BB%B6%E5%BA%93/" style="font-size: 13px;">组件库</a> <a href="/tags/%E8%84%9A%E6%9C%AC/" style="font-size: 13.25px;">脚本</a> <a href="/tags/%E8%87%AA%E5%8A%A8%E5%8C%96%E6%B5%8B%E8%AF%95/" style="font-size: 13px;">自动化测试</a> <a href="/tags/%E8%8B%A5%E4%BE%9D/" style="font-size: 13px;">若依</a> <a href="/tags/%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/" style="font-size: 13.08px;">解决方案</a> <a href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" style="font-size: 13px;">设计模式</a> <a href="/tags/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/" style="font-size: 13.08px;">读书笔记</a> <a href="/tags/%E8%B7%A8%E5%9F%9F/" style="font-size: 13px;">跨域</a> <a href="/tags/%E9%83%A8%E7%BD%B2/" style="font-size: 13px;">部署</a> <a href="/tags/%E9%9B%86%E6%88%90/" style="font-size: 13.67px;">集成</a> <a href="/tags/%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1/" style="font-size: 13px;">面向对象</a> <a href="/tags/%E9%9F%A9%E5%89%A7/" style="font-size: 13px;">韩剧</a>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget-body">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/07/">七月 2024</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/07/">七月 2023</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/06/">六月 2023</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/01/">一月 2023</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/11/">十一月 2022</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/10/">十月 2022</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/07/">七月 2022</a><span class="archive-list-count">181</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/06/">六月 2022</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/07/">七月 2020</a><span class="archive-list-count">17</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget-body">
+      <ul class="recent-post-list list-unstyled ">
+        
+          <li>
+            
+            <div class="item-thumb">
+              <a href="/2024/07/%E4%B8%8D%E5%8D%B7%E5%AD%A6%E5%8E%86%E5%92%8C%E8%83%8C%E6%99%AF%E7%9A%84%E8%B5%9B%E9%81%93%EF%BC%8C%E4%B9%9F%E8%83%BD%E6%9C%88%E5%85%A5%E8%BF%87%E4%B8%87%EF%BC%9F/" class="thumb">
+    
+    
+        <span class="thumb-image thumb-none"></span>
+    
+</a>
+
+            </div>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/%E5%88%9B%E4%B8%9A/">创业</a>
+              </p>
+              <p class="item-title">
+                <a href="/2024/07/%E4%B8%8D%E5%8D%B7%E5%AD%A6%E5%8E%86%E5%92%8C%E8%83%8C%E6%99%AF%E7%9A%84%E8%B5%9B%E9%81%93%EF%BC%8C%E4%B9%9F%E8%83%BD%E6%9C%88%E5%85%A5%E8%BF%87%E4%B8%87%EF%BC%9F/" class="title">不卷学历和背景的赛道，也能月入过万？</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2024-07-11T05:45:20.000Z" itemprop="datePublished">2024-07-11</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-thumb">
+              <a href="/2024/07/%E5%9B%9E%E9%A1%BE%E5%B7%A5%E4%BD%9C%E8%BF%99%E5%87%A0%E5%B9%B4/" class="thumb">
+    
+    
+        <span class="thumb-image thumb-none"></span>
+    
+</a>
+
+            </div>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/%E5%A4%8D%E7%9B%98/">复盘</a>
+              </p>
+              <p class="item-title">
+                <a href="/2024/07/%E5%9B%9E%E9%A1%BE%E5%B7%A5%E4%BD%9C%E8%BF%99%E5%87%A0%E5%B9%B4/" class="title">回顾工作这几年</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2024-07-09T06:19:23.000Z" itemprop="datePublished">2024-07-09</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-thumb">
+              <a href="/2023/07/SpringBoot3%E9%9B%86%E6%88%90Quartz%E6%9E%81%E7%AE%80%E7%89%88/" class="thumb">
+    
+    
+        <span style="background-image:url(/2023/07/SpringBoot3集成Quartz极简版/logo-quartz-scheduler.png)" alt="SpringBoot3集成Quartz极简版" class="thumb-image"></span>
+    
+</a>
+
+            </div>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/SpringBoot/">SpringBoot</a>
+              </p>
+              <p class="item-title">
+                <a href="/2023/07/SpringBoot3%E9%9B%86%E6%88%90Quartz%E6%9E%81%E7%AE%80%E7%89%88/" class="title">SpringBoot3集成Quartz极简版</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2023-07-18T01:14:01.000Z" itemprop="datePublished">2023-07-18</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-thumb">
+              <a href="/2023/07/SpringBoot3%E9%9B%86%E6%88%90Quartz%E8%AF%A6%E7%BB%86%E7%89%88/" class="thumb">
+    
+    
+        <span style="background-image:url(/2023/07/SpringBoot3集成Quartz极简版/logo-quartz-scheduler.png)" alt="SpringBoot3集成Quartz详细版" class="thumb-image"></span>
+    
+</a>
+
+            </div>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/SpringBoot/">SpringBoot</a>
+              </p>
+              <p class="item-title">
+                <a href="/2023/07/SpringBoot3%E9%9B%86%E6%88%90Quartz%E8%AF%A6%E7%BB%86%E7%89%88/" class="title">SpringBoot3集成Quartz详细版</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2023-07-18T01:14:01.000Z" itemprop="datePublished">2023-07-18</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-thumb">
+              <a href="/2023/07/SpringBoot3%E9%9B%86%E6%88%90Swagger/" class="thumb">
+    
+    
+        <span style="background-image:url(/2023/07/SpringBoot3集成Swagger/swagger_logo.svg)" alt="SpringBoot3集成Swagger" class="thumb-image"></span>
+    
+</a>
+
+            </div>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/SpringBoot/">SpringBoot</a>
+              </p>
+              <p class="item-title">
+                <a href="/2023/07/SpringBoot3%E9%9B%86%E6%88%90Swagger/" class="title">SpringBoot3集成Swagger</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2023-07-11T06:52:01.000Z" itemprop="datePublished">2023-07-11</time>
+              </p>
+            </div>
+          </li>
+          
+      </ul>
+    </div>
+  </div>
+  
+
+    
+  </div>
+</aside>
+
+  
+  
+<main class="main" role="main">
+  <div class="content">
+  <article id="post-软件开发/技术/软件技术框架/各大框架/Spring全家桶/SpringBoot/SpringBoot2集成Swagger" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
+    
+    <div class="article-header">
+      
+        
+  
+    <h1 class="article-title" itemprop="name">
+      SpringBoot2集成Swagger
+    </h1>
+  
+
+      
+      <div class="article-meta">
+        <span class="article-date">
+    <i class="icon icon-calendar-check"></i>
+	<a href="/2023/07/SpringBoot2%E9%9B%86%E6%88%90Swagger/" class="article-date">
+	  <time datetime="2023-07-11T04:01:01.000Z" itemprop="datePublished">2023-07-11</time>
+	</a>
+</span>
+        
+  <span class="article-category">
+    <i class="icon icon-folder"></i>
+    <a class="article-category-link" href="/categories/SpringBoot/">SpringBoot</a>
+  </span>
+
+        
+  <span class="article-tag">
+    <i class="icon icon-tags"></i>
+	<a class="article-tag-link-link" href="/tags/Java/" rel="tag">Java</a>, <a class="article-tag-link-link" href="/tags/SpringBoot/" rel="tag">SpringBoot</a>, <a class="article-tag-link-link" href="/tags/Swagger/" rel="tag">Swagger</a>
+  </span>
+
+
+        
+	<span class="article-read hidden-xs">
+	    <i class="icon icon-eye-fill" aria-hidden="true"></i>
+	    <span id="busuanzi_container_page_pv">
+			<span id="busuanzi_value_page_pv">0</span>
+		</span>
+	</span>
+
+
+        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2023/07/SpringBoot2%E9%9B%86%E6%88%90Swagger/#comments" class="article-comment-link">评论</a></span>
+        
+	
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">字数统计: 4.7k(字)</span>
+	
+	
+		<span class="post-readcount hidden-xs" itemprop="timeRequired">阅读时长: 21(分)</span>
+	
+
+      </div>
+    </div>
+    <div class="article-entry marked-body" itemprop="articleBody">
+      
+        <blockquote>
+<p>文章仓库：<a target="_blank" rel="noopener" href="https://github.com/guoshunfa/guoshunfa-spring-demo/tree/97f59e0921f21bfd09e864a34e646efa2eeff4d8/01.SpringBoot/SpringBoot%E9%9B%86%E6%88%90%E7%BB%84%E4%BB%B6%E5%BA%93/springboot-2-swagger-demo">Github Project</a></p>
+</blockquote>
+<h1 id="前提"><a href="#前提" class="headerlink" title="前提"></a>前提</h1><p>本文章所用版本：</p>
+<ul>
+<li>SpringBoot 2.2.6.RELEASE</li>
+<li>springfox 3.0.0</li>
+<li>jdk 8</li>
+</ul>
+<p>不同的版本会导致版本冲突，切换版本时建议先去官方查看是否互相兼容。</p>
+<h1 id="开始集成-Swagger"><a href="#开始集成-Swagger" class="headerlink" title="开始集成 Swagger"></a>开始集成 Swagger</h1><h2 id="导入swagger-maven-库"><a href="#导入swagger-maven-库" class="headerlink" title="导入swagger maven 库"></a>导入swagger maven 库</h2><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- https://mvnrepository.com/artifact/io.springfox/springfox-boot-starter --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>io.springfox<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>springfox-boot-starter<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>3.0.0<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"><span class="comment">&lt;!-- https://mvnrepository.com/artifact/io.springfox/springfox-swagger-ui --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>io.springfox<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>springfox-swagger-ui<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>3.0.0<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>SpringBoot引入Swagger的maven库之前，需要先引入springboot-web的maven，否则没有效果。</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-web --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-starter-web<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="添加swagger配置类"><a href="#添加swagger配置类" class="headerlink" title="添加swagger配置类"></a>添加swagger配置类</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> io.swagger.annotations.ApiOperation;</span><br><span class="line"><span class="keyword">import</span> org.springframework.context.annotation.Bean;</span><br><span class="line"><span class="keyword">import</span> org.springframework.context.annotation.Configuration;</span><br><span class="line"><span class="keyword">import</span> springfox.documentation.builders.ApiInfoBuilder;</span><br><span class="line"><span class="keyword">import</span> springfox.documentation.builders.PathSelectors;</span><br><span class="line"><span class="keyword">import</span> springfox.documentation.builders.RequestHandlerSelectors;</span><br><span class="line"><span class="keyword">import</span> springfox.documentation.oas.annotations.EnableOpenApi;</span><br><span class="line"><span class="keyword">import</span> springfox.documentation.service.ApiInfo;</span><br><span class="line"><span class="keyword">import</span> springfox.documentation.spi.DocumentationType;</span><br><span class="line"><span class="keyword">import</span> springfox.documentation.spring.web.plugins.Docket;</span><br><span class="line"><span class="keyword">import</span> springfox.documentation.swagger2.annotations.EnableSwagger2;</span><br><span class="line"></span><br><span class="line"><span class="comment">// @Configuration 标识当前类是配置类，与@Bean搭配使用会直接注册为bean。</span></span><br><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="comment">// @EnableOpenApi 标识开启生成接口文档功能（只有开启了OpenApi,才可以实现生成接口文档的功能）</span></span><br><span class="line"><span class="meta">@EnableOpenApi</span></span><br><span class="line"><span class="meta">@EnableSwagger2</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">SwaggerConfig</span> &#123;</span><br><span class="line">    <span class="meta">@Bean(&quot;swagger-1&quot;)</span></span><br><span class="line">    <span class="keyword">public</span> Docket <span class="title function_">createRestApi</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">Docket</span>(DocumentationType.OAS_30)</span><br><span class="line">                .groupName(<span class="string">&quot;swagger-1&quot;</span>)</span><br><span class="line">                .apiInfo(apiInfo())</span><br><span class="line">                .select()</span><br><span class="line">                .apis( RequestHandlerSelectors.withMethodAnnotation(ApiOperation.class))</span><br><span class="line">                .paths(PathSelectors.any())</span><br><span class="line">                .build();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Bean(&quot;swagger-2&quot;)</span></span><br><span class="line">    <span class="keyword">public</span> Docket <span class="title function_">createRest2Api</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">Docket</span>(DocumentationType.OAS_30)</span><br><span class="line">                .groupName(<span class="string">&quot;swagger-2&quot;</span>)</span><br><span class="line">                .apiInfo(apiInfo())</span><br><span class="line">                .select()</span><br><span class="line">                .apis( RequestHandlerSelectors.withMethodAnnotation(ApiOperation.class))</span><br><span class="line">                .paths(PathSelectors.any())</span><br><span class="line">                .build();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> ApiInfo <span class="title function_">apiInfo</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">ApiInfoBuilder</span>()</span><br><span class="line">                <span class="comment">// 添加标题</span></span><br><span class="line">                .title(<span class="string">&quot;郭顺发 SpringBoot+Swagger接口文档平台&quot;</span> + System.currentTimeMillis())</span><br><span class="line">                <span class="comment">// 添加描述</span></span><br><span class="line">                .description(<span class="string">&quot;https://www.guoshunfa.com&quot;</span>)</span><br><span class="line">                <span class="comment">// 添加版本</span></span><br><span class="line">                .version(<span class="string">&quot;1.0&quot;</span>)</span><br><span class="line">                .build();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="编写API接口"><a href="#编写API接口" class="headerlink" title="编写API接口"></a>编写API接口</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> io.swagger.annotations.Api;</span><br><span class="line"><span class="keyword">import</span> io.swagger.annotations.ApiOperation;</span><br><span class="line"><span class="keyword">import</span> io.swagger.annotations.ApiParam;</span><br><span class="line"><span class="keyword">import</span> org.springframework.web.bind.annotation.GetMapping;</span><br><span class="line"><span class="keyword">import</span> org.springframework.web.bind.annotation.RequestMapping;</span><br><span class="line"><span class="keyword">import</span> org.springframework.web.bind.annotation.RestController;</span><br><span class="line"></span><br><span class="line"><span class="meta">@RestController</span></span><br><span class="line"><span class="meta">@Api(&quot;测试controller&quot;)</span></span><br><span class="line"><span class="meta">@RequestMapping(&quot;/guoshunfa&quot;)</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">TestController</span> &#123;</span><br><span class="line">    </span><br><span class="line">    <span class="meta">@ApiOperation(&quot;测试接口&quot;)</span></span><br><span class="line">    <span class="meta">@GetMapping(&quot;/swagger/test/&quot;)</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">test</span><span class="params">(<span class="meta">@ApiParam(&quot;阿拉啦啦&quot;)</span> String param1)</span> &#123;&#125;</span><br><span class="line">    </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="查看swagger-ui效果"><a href="#查看swagger-ui效果" class="headerlink" title="查看swagger-ui效果"></a>查看swagger-ui效果</h2><p>启动项目，将</p>
+<p>浏览器访问 <a href="http://ip:port/swagger-ui/index.html">http://ip:port/swagger-ui/index.html</a></p>
+<p><img src="/2023/07/SpringBoot2%E9%9B%86%E6%88%90Swagger/image-20230711133253689.png" alt="image-20230711133253689"></p>
+<h3 id="其他页面展示效果-swagger-bootstrap-ui-效果"><a href="#其他页面展示效果-swagger-bootstrap-ui-效果" class="headerlink" title="其他页面展示效果 - swagger-bootstrap-ui 效果"></a>其他页面展示效果 - swagger-bootstrap-ui 效果</h3><p><strong>使用其他ui需要引入maven</strong></p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>com.github.xiaoymin<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>swagger-bootstrap-ui<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>1.9.6<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>效果</strong></p>
+<p>浏览器访问 <a href="http://ip:port/doc.html">http://ip:port/doc.html</a></p>
+<p><img src="/2023/07/SpringBoot2%E9%9B%86%E6%88%90Swagger/1689053804648.png" alt="1689053804648"></p>
+<h1 id="Swagger-API"><a href="#Swagger-API" class="headerlink" title="Swagger API"></a>Swagger API</h1><table>
+<thead>
+<tr>
+<th>注解</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><a target="_blank" rel="noopener" href="https://github.com/swagger-api/swagger-core/wiki/Annotations-1.5.X#api">@Api</a></td>
+<td>将类标记为 Swagger 资源。</td>
+</tr>
+<tr>
+<td><a target="_blank" rel="noopener" href="https://github.com/swagger-api/swagger-core/wiki/Annotations-1.5.X#apiimplicitparam-apiimplicitparams">@ApiImplicitParam</a></td>
+<td>表示 API 操作中的单个参数。</td>
+</tr>
+<tr>
+<td><a target="_blank" rel="noopener" href="https://github.com/swagger-api/swagger-core/wiki/Annotations-1.5.X#apiimplicitparam-apiimplicitparams">@ApiImplicitParams</a></td>
+<td>允许多个 ApiImplicitParam 对象列表的包装器。</td>
+</tr>
+<tr>
+<td><a target="_blank" rel="noopener" href="https://github.com/swagger-api/swagger-core/wiki/Annotations-1.5.X#apimodel">@ApiModel</a></td>
+<td>提供有关 Swagger 模型的其他信息。</td>
+</tr>
+<tr>
+<td><a target="_blank" rel="noopener" href="https://github.com/swagger-api/swagger-core/wiki/Annotations-1.5.X#apimodelproperty">@ApiModelProperty</a></td>
+<td>添加和操作模型属性的数据。</td>
+</tr>
+<tr>
+<td><a target="_blank" rel="noopener" href="https://github.com/swagger-api/swagger-core/wiki/Annotations-1.5.X#apioperation">@ApiOperation</a></td>
+<td>描述针对特定路径的操作或通常是 HTTP 方法。</td>
+</tr>
+<tr>
+<td><a target="_blank" rel="noopener" href="https://github.com/swagger-api/swagger-core/wiki/Annotations-1.5.X#apiparam">@ApiParam</a></td>
+<td>为操作参数添加额外的元数据。</td>
+</tr>
+<tr>
+<td><a target="_blank" rel="noopener" href="https://github.com/swagger-api/swagger-core/wiki/Annotations-1.5.X#apiresponses-apiresponse">@ApiResponse</a></td>
+<td>描述操作的可能响应。</td>
+</tr>
+<tr>
+<td><a target="_blank" rel="noopener" href="https://github.com/swagger-api/swagger-core/wiki/Annotations-1.5.X#apiresponses-apiresponse">@ApiResponses</a></td>
+<td>允许多个 ApiResponse 对象列表的包装器。</td>
+</tr>
+<tr>
+<td><a target="_blank" rel="noopener" href="https://github.com/swagger-api/swagger-core/wiki/Annotations-1.5.X#authorization-authorizationscope">@Authorization</a></td>
+<td>声明要在资源或操作上使用的授权方案。</td>
+</tr>
+<tr>
+<td><a target="_blank" rel="noopener" href="https://github.com/swagger-api/swagger-core/wiki/Annotations-1.5.X#authorization-authorizationscope">@AuthorizationScope</a></td>
+<td>描述 OAuth2 授权范围。</td>
+</tr>
+<tr>
+<td><a target="_blank" rel="noopener" href="https://github.com/swagger-api/swagger-core/wiki/Annotations-1.5.X#responseHeader">@ResponseHeader</a></td>
+<td>表示可以作为响应的一部分提供的标头。</td>
+</tr>
+</tbody></table>
+<p>最新版本还添加了许多注释，用于在 Swagger 定义级别添加扩展和元数据：</p>
+<table>
+<thead>
+<tr>
+<th>注解</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><a target="_blank" rel="noopener" href="https://github.com/swagger-api/swagger-core/wiki/Annotations-1.5.X#swaggerdefinition">@SwaggerDefinition</a></td>
+<td>要添加到生成的 Swagger 定义中的定义级属性</td>
+</tr>
+<tr>
+<td><a target="_blank" rel="noopener" href="https://github.com/swagger-api/swagger-core/wiki/Annotations-1.5.X#info">@Info</a></td>
+<td>Swagger 定义的一般元数据</td>
+</tr>
+<tr>
+<td><a target="_blank" rel="noopener" href="https://github.com/swagger-api/swagger-core/wiki/Annotations-1.5.X#contact">@Contact</a></td>
+<td>用于描述 Swagger 定义的联系人的属性</td>
+</tr>
+<tr>
+<td><a target="_blank" rel="noopener" href="https://github.com/swagger-api/swagger-core/wiki/Annotations-1.5.X#license">@License</a></td>
+<td>用于描述 Swagger 定义的许可证的属性</td>
+</tr>
+<tr>
+<td><a target="_blank" rel="noopener" href="https://github.com/swagger-api/swagger-core/wiki/Annotations-1.5.X#extension">@Extension</a></td>
+<td>添加包含属性的扩展</td>
+</tr>
+<tr>
+<td><a target="_blank" rel="noopener" href="https://github.com/swagger-api/swagger-core/wiki/Annotations-1.5.X#extensionproperty">@ExtensionProperty</a></td>
+<td>将自定义属性添加到扩展</td>
+</tr>
+</tbody></table>
+<h2 id="资源-API-声明"><a href="#资源-API-声明" class="headerlink" title="资源 API 声明"></a>资源 API 声明</h2><h3 id="Api"><a href="#Api" class="headerlink" title="@Api"></a><a target="_blank" rel="noopener" href="http://docs.swagger.io/swagger-core/v1.5.X/apidocs/index.html?io/swagger/annotations/Api.html">@Api</a></h3><p>在 Swagger 2.0 中，资源被标签替换，这会影响<code>@Api</code>注释。它不再用于声明资源，而现在用于为在它下定义的所有操作应用定义。</p>
+<p>JAX-RS 的用法是：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">@Path(&quot;/pet&quot;)</span><br><span class="line">@Api(value = &quot;pet&quot;, authorizations = &#123;</span><br><span class="line">      @Authorization(value=&quot;sampleoauth&quot;, scopes = &#123;&#125;)</span><br><span class="line">    &#125;)</span><br><span class="line">@Produces(&#123;&quot;application/json&quot;, &quot;application/xml&quot;&#125;)</span><br><span class="line">public class PetResource &#123;</span><br><span class="line"> ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>在这个例子中，我们说这个类下的操作的标签是<code>pet</code>（所以它们都会被组合在一起）。Swagger 将获取<code>@Produces</code>注释，但如果您愿意，您可以覆盖此值。</p>
+<p><code>@Api</code>也可用于在资源级别声明授权。这些定义适用于该资源下的所有操作，但如果需要，可以在操作级别覆盖。在上面的示例中，我们添加了一个先前声明的 OAuth2 授权方案，没有任何范围。有关更多详细信息，请检查<a target="_blank" rel="noopener" href="https://github.com/swagger-api/swagger-core/wiki/Annotations-1.5.X#authorization-authorizationscope">@Authorization</a>注释。</p>
+<p>除了使用<code>value()</code>，您可以使用<code>tags()</code>允许您为操作设置多个标签的属性。例如：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">@Api(tags = &#123;&quot;external_info&quot;,&quot;user_info&quot;&#125;)</span><br></pre></td></tr></table></figure>
+
+<p>请注意，在这种情况下，<code>value()</code>即使它存在也会被忽略。</p>
+<p>布尔<code>hidden</code>属性可用于完全隐藏 @Api，即使它已声明。这在使用子资源删除不需要的工件时特别有用。</p>
+<p>在 swagger-core 1.5.X 中，<code>description()</code>不再使用<code>basePath()</code>、 和。<code>position()</code></p>
+<p><strong>有关此注释、用法和边缘情况的更多详细信息，请查看<a target="_blank" rel="noopener" href="http://docs.swagger.io/swagger-core/v1.5.X/apidocs/index.html?io/swagger/annotations/Api.html">javadocs</a>。</strong></p>
+<h2 id="运营声明"><a href="#运营声明" class="headerlink" title="运营声明"></a>运营声明</h2><h3 id="ApiOperation"><a href="#ApiOperation" class="headerlink" title="@ApiOperation"></a><a target="_blank" rel="noopener" href="http://docs.swagger.io/swagger-core/v1.5.X/apidocs/index.html?io/swagger/annotations/ApiOperation.html">@ApiOperation</a></h3><p><code>@ApiOperation</code>用于声明单个操作。操作被认为是路径和 HTTP 方法的唯一组合。</p>
+<p>JAX-RS 的用法是：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">@GET</span><br><span class="line">@Path(&quot;/findByStatus&quot;)</span><br><span class="line">@ApiOperation(value = &quot;Finds Pets by status&quot;,</span><br><span class="line">   notes = &quot;Multiple status values can be provided with comma seperated strings&quot;,</span><br><span class="line">   response = Pet.class,</span><br><span class="line">   responseContainer = &quot;List&quot;)</span><br><span class="line">public Response findPetsByStatus(...) &#123; ... &#125;</span><br></pre></td></tr></table></figure>
+
+<p>注释的<code>value</code>是对 API 的简短描述。由于它显示在 Swagger-UI 的操作列表中，并且位置大小有限，因此应保持简短（最好小于 120 个字符）。这<code>notes</code>允许您提供有关操作的更多详细信息。<code>response</code>是方法的返回类型。请注意，实际的方法声明返回的<code>Response</code>是一个通用 JAX-RS 类，而不是发送给用户的实际响应。如果返回的对象是实际结果，可以直接使用，不用在注解中声明。由于我们想要返回一个宠物列表，我们使用<code>responseContainer</code>. 请记住，Java 具有类型擦除，因此在返回类型中使用泛型可能无法正确解析，并且<code>response</code>应该直接使用。JAX-RS 注释将<code>@GET</code>用作操作的 (HTTP)<code>method</code>字段，它<code>@Path</code>会告诉我们操作的路径（操作分组在同一路径下，每个使用的 HTTP 方法一个）。</p>
+<p>输出将是：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">  &quot;/pet/findByStatus&quot;: &#123;</span><br><span class="line">&quot;get&quot;: &#123;</span><br><span class="line">  &quot;tags&quot;: [</span><br><span class="line">    &quot;pet&quot;</span><br><span class="line">  ],</span><br><span class="line">  &quot;summary&quot;: &quot;Finds Pets by status&quot;,</span><br><span class="line">  &quot;description&quot;: &quot;Multiple status values can be provided with comma seperated strings&quot;,</span><br><span class="line">  &quot;responses&quot;: &#123;</span><br><span class="line">    &quot;200&quot;: &#123;</span><br><span class="line">      &quot;description&quot;: &quot;successful operation&quot;,</span><br><span class="line">      &quot;schema&quot;: &#123;</span><br><span class="line">        &quot;type&quot;: &quot;array&quot;,</span><br><span class="line">        &quot;items&quot;: &#123;</span><br><span class="line">          &quot;$ref&quot;: &quot;#/definitions/Pet&quot;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;,</span><br><span class="line">    .</span><br><span class="line">    .</span><br><span class="line">    .</span><br></pre></td></tr></table></figure>
+
+<p><strong>有关此注释、用法和边缘情况的更多详细信息，请查看<a target="_blank" rel="noopener" href="http://docs.swagger.io/swagger-core/v1.5.X/apidocs/index.html?io/swagger/annotations/ApiOperation.html">javadocs</a>。</strong></p>
+<h3 id="ApiResponses-ApiResponse"><a href="#ApiResponses-ApiResponse" class="headerlink" title="@ApiResponses , @ApiResponse"></a><a target="_blank" rel="noopener" href="http://docs.swagger.io/swagger-core/v1.5.X/apidocs/index.html?io/swagger/annotations/ApiResponses.html">@ApiResponses</a> , <a target="_blank" rel="noopener" href="http://docs.swagger.io/swagger-core/v1.5.X/apidocs/index.html?io/swagger/annotations/ApiResponse.html">@ApiResponse</a></h3><p>使用 HTTP 状态代码返回错误（或其他成功消息）是一种常见的做法。<a target="_blank" rel="noopener" href="https://github.com/swagger-api/swagger-core/wiki/Annotations-1.5.X#apioperation">虽然在@ApiOperation</a>中定义了操作的一般返回类型，但应使用这些注释来描述其余的返回代码。</p>
+<p>描述了一个具体的<code>@ApiResponse</code>可能响应。不能直接在方法或类&#x2F;接口上使用，需要包含在数组值中<code>@ApiResponses</code>（无论是一个响应还是多个响应）。</p>
+<p>如果响应伴随着身体，也可以描述身体模型（每个响应一个模型）。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">@ApiResponses(value = &#123; </span><br><span class="line">    @ApiResponse(code = 400, message = &quot;Invalid ID supplied&quot;, </span><br><span class="line">                 responseHeaders = @ResponseHeader(name = &quot;X-Rack-Cache&quot;, description = &quot;Explains whether or not a cache was used&quot;, response = Boolean.class)),</span><br><span class="line">    @ApiResponse(code = 404, message = &quot;Pet not found&quot;) &#125;)</span><br><span class="line">public Response getPetById(...) &#123;...&#125;</span><br></pre></td></tr></table></figure>
+
+<p>在 swagger-core 1.5.X 中，您还可以添加响应标头的描述，如上例所示。</p>
+<p><strong>有关此注释、用法和边缘情况的更多详细信息，请查看 javadocs（<a target="_blank" rel="noopener" href="http://docs.swagger.io/swagger-core/v1.5.X/apidocs/index.html?io/swagger/annotations/ApiResponses.html">@ApiResponses</a>、<a target="_blank" rel="noopener" href="http://docs.swagger.io/swagger-core/v1.5.X/apidocs/index.html?io/swagger/annotations/ApiResponse.html">@ApiResponse</a>）</strong>。</p>
+<h3 id="Authorization-AuthorizationScope"><a href="#Authorization-AuthorizationScope" class="headerlink" title="@Authorization , @AuthorizationScope"></a><a target="_blank" rel="noopener" href="http://docs.swagger.io/swagger-core/v1.5.X/apidocs/index.html?io/swagger/annotations/Authorization.html">@Authorization</a> , <a target="_blank" rel="noopener" href="http://docs.swagger.io/swagger-core/v1.5.X/apidocs/index.html?io/swagger/annotations/AuthorizationScope.html">@AuthorizationScope</a></h3><p>这些注释仅用作<a target="_blank" rel="noopener" href="https://github.com/swagger-api/swagger-core/wiki/Annotations-1.5.X#api">@Api</a>和<a target="_blank" rel="noopener" href="https://github.com/swagger-api/swagger-core/wiki/Annotations-1.5.X#apioperation">@ApiOperation</a>的输入，而不是直接用于资源和操作。一旦您声明并配置了您在 API 中支持的授权方案，您就可以使用这些注释来记录资源或特定操作需要哪种授权方案。这<code>@AuthorizationScope</code>是特定于 OAuth2 授权方案的情况，您可能希望指定特定的支持范围。</p>
+<p>@Authorization 和 @AuthorizationScope 转换为<a target="_blank" rel="noopener" href="https://github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md#securityRequirementObject">Security Requirement Object</a>。</p>
+<p>实现（JAX-RS、Servlet 或其他）之间的行为是相同的：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">@ApiOperation(value = &quot;Add a new pet to the store&quot;, </span><br><span class="line">  authorizations = &#123;</span><br><span class="line">    @Authorization(</span><br><span class="line">        value=&quot;petoauth&quot;, </span><br><span class="line">        scopes = &#123; @AuthorizationScope(scope = &quot;add:pet&quot;) &#125;</span><br><span class="line">        )</span><br><span class="line">  &#125;</span><br><span class="line">)</span><br><span class="line">public Response addPet(...) &#123;...&#125;</span><br></pre></td></tr></table></figure>
+
+<p>在这种情况下，我们声明该<code>addPet</code>操作使用<code>petoauth</code>授权方案（我们假设它是 OAuth2 授权方案）。然后使用我们通过说它需要范围<code>@AuthorizationScope</code>来微调定义。<code>add:pet</code>如上所述，您可以看到<code>@AuthorizationScope</code>用作 的输入<code>@Authorization</code>，而后者又用作 的输入<code>@ApiOperation</code>。请记住，这些注释只能用作 和 的<code>@Api</code>输入<code>@ApiOperation</code>。直接在类或方法上使用它们中的任何一个都将被忽略。</p>
+<p>输出将是：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&quot;security&quot;: [</span><br><span class="line">  &#123;</span><br><span class="line">    &quot;petoauth&quot;: [</span><br><span class="line">      &quot;add:pet&quot;</span><br><span class="line">    ]</span><br><span class="line">  &#125;</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+
+<p><strong>有关此注解、用法和边缘情况的更多详细信息，请查看 javadocs（<a target="_blank" rel="noopener" href="http://docs.swagger.io/swagger-core/v1.5.X/apidocs/index.html?io/swagger/annotations/Authorization.html">@Authorization</a>、<a target="_blank" rel="noopener" href="http://docs.swagger.io/swagger-core/v1.5.X/apidocs/index.html?io/swagger/annotations/AuthorizationScope.html">@AuthorizationScope</a>）</strong>。</p>
+<h3 id="ApiParam"><a href="#ApiParam" class="headerlink" title="@ApiParam"></a><a target="_blank" rel="noopener" href="http://docs.swagger.io/swagger-core/v1.5.X/apidocs/index.html?io/swagger/annotations/ApiParam.html">@ApiParam</a></h3><p><code>@ApiParam</code>仅与 JAX-RS 参数注释（<code>@PathParam</code>、<code>@QueryParam</code>、<code>@HeaderParam</code>和<code>@FormParam</code>JAX-RS 2 中的）一起使用<code>@BeanParam</code>。虽然 swagger-core 默认扫描这些注释，但<code>@ApiParam</code>可用于在参数中添加更多详细信息或更改从代码中读取的值。</p>
+<p>在 Swagger 规范中，这转换为<a target="_blank" rel="noopener" href="https://github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md#parameterObject">Parameter Object</a>。</p>
+<p>Swagger 将选取<code>value()</code>这些注解并将它们用作参数名称，并且基于注解它还将设置参数类型。</p>
+<p>如果存在，Swagger 还将使用 的值<code>@DefaultValue</code>作为默认值属性。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"> @Path(&quot;/&#123;username&#125;&quot;)</span><br><span class="line"> @ApiOperation(value = &quot;Updated user&quot;,</span><br><span class="line">    notes = &quot;This can only be done by the logged in user.&quot;)</span><br><span class="line">public Response updateUser(</span><br><span class="line">      @ApiParam(value = &quot;name that need to be updated&quot;, required = true) @PathParam(&quot;username&quot;) String username,</span><br><span class="line">      @ApiParam(value = &quot;Updated user object&quot;, required = true) User user) &#123;...&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这里我们有两个参数。第一个，<code>username</code>它是路径的一部分。第二个是主体，在本例中是一个用户对象。请注意，这两个参数的<code>required</code>属性都设置为<code>true</code>。对于@PathParam，这是多余的，因为默认情况下它是强制性的并且不能被覆盖。</p>
+<p>输出将是：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"> &quot;parameters&quot;: [</span><br><span class="line">  &#123;</span><br><span class="line">    &quot;name&quot;: &quot;username&quot;,</span><br><span class="line">    &quot;in&quot;: &quot;path&quot;,</span><br><span class="line">    &quot;description&quot;: &quot;name that need to be deleted&quot;,</span><br><span class="line">    &quot;required&quot;: true,</span><br><span class="line">    &quot;type&quot;: &quot;string&quot;</span><br><span class="line">  &#125;,</span><br><span class="line">  &#123;</span><br><span class="line">    &quot;in&quot;: &quot;body&quot;,</span><br><span class="line">    &quot;name&quot;: &quot;body&quot;,</span><br><span class="line">    &quot;description&quot;: &quot;Updated user object&quot;,</span><br><span class="line">    &quot;required&quot;: true,</span><br><span class="line">    &quot;schema&quot;: &#123;</span><br><span class="line">      &quot;$ref&quot;: &quot;#/definitions/User&quot;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+
+<p><strong>有关此注释、用法和边缘情况的更多详细信息，请查看<a target="_blank" rel="noopener" href="http://docs.swagger.io/swagger-core/v1.5.X/apidocs/index.html?io/swagger/annotations/ApiParam.html">javadocs</a>。</strong></p>
+<h3 id="ApiImplicitParam-ApiImplicitParams"><a href="#ApiImplicitParam-ApiImplicitParams" class="headerlink" title="@ApiImplicitParam , @ApiImplicitParams"></a><a target="_blank" rel="noopener" href="http://docs.swagger.io/swagger-core/v1.5.X/apidocs/index.html?io/swagger/annotations/ApiImplicitParam.html">@ApiImplicitParam</a> , <a target="_blank" rel="noopener" href="http://docs.swagger.io/swagger-core/v1.5.X/apidocs/index.html?io/swagger/annotations/ApiImplicitParams.html">@ApiImplicitParams</a></h3><p>您可能希望手动描述操作参数。这可能有多种原因，例如：</p>
+<ul>
+<li>使用不使用 JAX-RS 注释的 Servlet。</li>
+<li>想要隐藏定义的参数并用完全不同的定义覆盖它。</li>
+<li>描述在到达 JAX-RS 实现之前由过滤器或其他资源使用的参数。</li>
+</ul>
+<p>由于可以包含多个参数，因此<code>@ApiImplicitParams</code>允许多个<code>@ApiImplicitParam</code>定义。</p>
+<p>在 Swagger 规范中，这些转换为<a target="_blank" rel="noopener" href="https://github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md#parameterObject">Parameter Object</a>。</p>
+<p>隐式定义参数时，设置<code>name</code>和<code>dataType</code>Swagger<code>paramType</code>的定义正确很重要。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">@ApiImplicitParams(&#123;</span><br><span class="line">   @ApiImplicitParam(name = &quot;name&quot;, value = &quot;User&#x27;s name&quot;, required = true, dataType = &quot;string&quot;, paramType = &quot;query&quot;),</span><br><span class="line">   @ApiImplicitParam(name = &quot;email&quot;, value = &quot;User&#x27;s email&quot;, required = false, dataType = &quot;string&quot;, paramType = &quot;query&quot;),</span><br><span class="line">   @ApiImplicitParam(name = &quot;id&quot;, value = &quot;User ID&quot;, required = true, dataType = &quot;long&quot;, paramType = &quot;query&quot;)</span><br><span class="line"> &#125;)</span><br><span class="line">public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException &#123;...&#125;</span><br></pre></td></tr></table></figure>
+
+<p>在上面的示例中，我们可以看到一个带有多个参数的 Servlet 定义。<code>dataType</code>可以是原始名称或类名称。可以是 Swagger 支持的<code>paramType</code>任何参数类型（有关详细信息，请参阅 javadocs 或规范）。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"> &quot;parameters&quot;: [</span><br><span class="line">  &#123;</span><br><span class="line">    &quot;name&quot;: &quot;name&quot;,</span><br><span class="line">    &quot;description&quot;: &quot;User&#x27;s name&quot;,</span><br><span class="line">    &quot;required&quot;: true,</span><br><span class="line">    &quot;type&quot;: &quot;string&quot;,</span><br><span class="line">    &quot;in&quot;: &quot;query&quot;</span><br><span class="line">  &#125;,</span><br><span class="line">  &#123;</span><br><span class="line">    &quot;name&quot;: &quot;email&quot;,</span><br><span class="line">    &quot;description&quot;: &quot;User&#x27;s email&quot;,</span><br><span class="line">    &quot;required&quot;: false,</span><br><span class="line">    &quot;type&quot;: &quot;string&quot;,</span><br><span class="line">    &quot;in&quot;: &quot;query&quot;</span><br><span class="line">  &#125;,</span><br><span class="line">  &#123;</span><br><span class="line">    &quot;name&quot;: &quot;id&quot;,</span><br><span class="line">    &quot;description&quot;: &quot;User ID&quot;,</span><br><span class="line">    &quot;required&quot;: true,</span><br><span class="line">    &quot;type&quot;: &quot;integer&quot;,</span><br><span class="line">    &quot;format&quot;: &quot;int64&quot;,</span><br><span class="line">    &quot;in&quot;: &quot;query&quot;</span><br><span class="line">  &#125;</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+
+<p><strong>有关此注释、用法和边缘情况的更多详细信息，请查看 javadocs（<a target="_blank" rel="noopener" href="http://docs.swagger.io/swagger-core/v1.5.X/apidocs/index.html?io/swagger/annotations/ApiImplicitParam.html">@ApiImplicitParam</a>、<a target="_blank" rel="noopener" href="http://docs.swagger.io/swagger-core/v1.5.X/apidocs/index.html?io/swagger/annotations/ApiImplicitParams.html">@ApiImplicitParams</a>）</strong>。</p>
+<h3 id="ResponseHeader"><a href="#ResponseHeader" class="headerlink" title="@ResponseHeader"></a><a target="_blank" rel="noopener" href="http://docs.swagger.io/swagger-core/v1.5.X/apidocs/index.html?io/swagger/annotations/ResponseHeader.html">@ResponseHeader</a></h3><p>如果要描述响应标头，只需将其添加到<a target="_blank" rel="noopener" href="https://github.com/swagger-api/swagger-core/wiki/Annotations-1.5.X#apioperation">@ApiOperation</a>或<a target="_blank" rel="noopener" href="https://github.com/swagger-api/swagger-core/wiki/Annotations-1.5.X#apiresponses-apiresponse">@ApiResponse</a>，同时提供标头的名称、描述和类型。</p>
+<p>例如，在给定的响应中，它将如下所示：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">@ApiResponses(value = &#123; </span><br><span class="line">    @ApiResponse(code = 400, message = &quot;Invalid ID supplied&quot;, </span><br><span class="line">                 responseHeaders = @ResponseHeader(name = &quot;X-Rack-Cache&quot;, description = &quot;Explains whether or not a cache was used&quot;, response = Boolean.class)),</span><br><span class="line">    @ApiResponse(code = 404, message = &quot;Pet not found&quot;) &#125;)</span><br><span class="line">public Response getPetById(...) &#123;...&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>有关此注释、用法和边缘情况的更多详细信息，请查看<a target="_blank" rel="noopener" href="http://docs.swagger.io/swagger-core/v1.5.X/apidocs/index.html?io/swagger/annotations/ResponseHeader.html">javadocs</a>。</strong></p>
+<h3 id="模型声明"><a href="#模型声明" class="headerlink" title="模型声明"></a>模型声明</h3><h3 id="ApiModel"><a href="#ApiModel" class="headerlink" title="@ApiModel"></a><a target="_blank" rel="noopener" href="http://docs.swagger.io/swagger-core/v1.5.X/apidocs/index.html?io/swagger/annotations/ApiModel.html">@ApiModel</a></h3><p>Swagger-core 基于在整个 API 内省中对模型定义的引用来构建模型定义。允许您操作模型的<code>@ApiModel</code>元数据，从简单的描述或名称更改到多态性的定义。</p>
+<p>这转化为 Swagger 规范中的<a target="_blank" rel="noopener" href="https://github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md#schemaObject">模式对象</a>。</p>
+<p>在其基本功能中，您<code>@ApiModel</code>可以更改模型的名称并为其添加描述：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">@ApiModel(value=&quot;DifferentModel&quot;, description=&quot;Sample model for the documentation&quot;)</span><br><span class="line">class OriginalModel &#123;...&#125;</span><br></pre></td></tr></table></figure>
+
+<p>在这里，我们将模型的名称从 OriginalModel 更改为 DifferentModel。</p>
+<p>输出将是：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&quot;DifferentModel&quot;: &#123;</span><br><span class="line">     &quot;description&quot;: &quot;Sample model for the documentation&quot;,</span><br><span class="line">     .</span><br><span class="line">     .</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+
+<p>您还可以<code>@ApiModel</code>通过指定子类型来实现模型组合，例如：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">@ApiModel(value = &quot;Pet&quot;, subTypes = &#123;Cat.class&#125;)</span><br><span class="line">public class Pet &#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>swagger-samples 中提供了此场景的示例：</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/swagger-api/swagger-samples/blob/master/java/java-jaxrs/src/main/java/io/swagger/sample/model/Pet.java">https://github.com/swagger-api/swagger-samples/blob/master/java/java-jaxrs/src/main/java/io/swagger/sample/model/Pet.java</a></p>
+<p><a target="_blank" rel="noopener" href="https://github.com/swagger-api/swagger-samples/blob/master/java/java-jaxrs/src/main/java/io/swagger/sample/model/Vehicle.java">https://github.com/swagger-api/swagger-samples/blob/master/java/java-jaxrs/src/main/java/io/swagger/sample/model/Vehicle.java</a></p>
+<p><strong>有关此注释、用法和边缘情况的更多详细信息，请查看<a target="_blank" rel="noopener" href="http://docs.swagger.io/swagger-core/v1.5.X/apidocs/index.html?io/swagger/annotations/ApiModel.html">javadocs</a>。</strong></p>
+<h3 id="ApiModelProperty"><a href="#ApiModelProperty" class="headerlink" title="@ApiModelProperty"></a><a target="_blank" rel="noopener" href="http://docs.swagger.io/swagger-core/v1.5.X/apidocs/index.html?io/swagger/annotations/ApiModelProperty.html">@ApiModelProperty</a></h3><p>虽然 swagger-core 将自省字段和 setter&#x2F;getter，但它还将读取和处理 JAXB 注释。允许控制 Swagger 特定的<code>@ApiModelProperty</code>定义，例如允许的值和附加注释。如果您想在某些情况下隐藏该属性，它还提供了额外的过滤属性。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">@ApiModelProperty(value = &quot;pet status in the store&quot;, allowableValues = &quot;available,pending,sold&quot;)</span><br><span class="line">public String getStatus() &#123;</span><br><span class="line">  return status;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这是向模型属性添加简短描述的简单示例。还可以观察到，虽然<code>status</code>是一个字符串，但我们将它记录为只有三个可能的值。</p>
+<p>它的输出将是：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">&quot;properties&quot;: &#123;</span><br><span class="line">      ...,</span><br><span class="line">      &quot;status&quot;: &#123;</span><br><span class="line">        &quot;type&quot;: &quot;string&quot;,</span><br><span class="line">        &quot;description&quot;: &quot;pet status in the store&quot;,</span><br><span class="line">        &quot;enum&quot;: [</span><br><span class="line">          &quot;available&quot;,</span><br><span class="line">          &quot;pending&quot;,</span><br><span class="line">          &quot;sold&quot;</span><br><span class="line">        ]</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>有关此注释、用法和边缘情况的更多详细信息，请查看<a target="_blank" rel="noopener" href="http://docs.swagger.io/swagger-core/v1.5.X/apidocs/index.html?io/swagger/annotations/ApiModelProperty.html">javadocs</a>。</strong></p>
+<h2 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h2><h3 id="SwaggerDefinition"><a href="#SwaggerDefinition" class="headerlink" title="@SwaggerDefinition"></a><a target="_blank" rel="noopener" href="http://docs.swagger.io/swagger-core/v1.5.X/apidocs/index.html?io/swagger/annotations/SwaggerDefinition.html">@SwaggerDefinition</a></h3><p><a target="_blank" rel="noopener" href="http://swagger.io/specification#swagger-object">SwaggerDefinition 注释提供了与Swagger</a>对象的许多（但不是全部）顶级属性相对应的属性，允许您为自动生成的定义设置这些属性。注释可以在 Swagger 自动配置过程中扫描的任何类上，即它不必在 JAX-RS API 类上，而可以只是在标记&#x2F;配置接口上，例如：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">@SwaggerDefinition(</span><br><span class="line">        info = @Info(</span><br><span class="line">                description = &quot;Gets the weather&quot;,</span><br><span class="line">                version = &quot;V12.0.12&quot;,</span><br><span class="line">                title = &quot;The Weather API&quot;,</span><br><span class="line">                termsOfService = &quot;http://theweatherapi.io/terms.html&quot;,</span><br><span class="line">                contact = @Contact(</span><br><span class="line">                   name = &quot;Rain Moore&quot;, </span><br><span class="line">                   email = &quot;rain.moore@theweatherapi.io&quot;, </span><br><span class="line">                   url = &quot;http://theweatherapi.io&quot;</span><br><span class="line">                ),</span><br><span class="line">                license = @License(</span><br><span class="line">                   name = &quot;Apache 2.0&quot;, </span><br><span class="line">                   url = &quot;http://www.apache.org/licenses/LICENSE-2.0&quot;</span><br><span class="line">                )</span><br><span class="line">        ),</span><br><span class="line">        consumes = &#123;&quot;application/json&quot;, &quot;application/xml&quot;&#125;,</span><br><span class="line">        produces = &#123;&quot;application/json&quot;, &quot;application/xml&quot;&#125;,</span><br><span class="line">        schemes = &#123;SwaggerDefinition.Scheme.HTTP, SwaggerDefinition.Scheme.HTTPS&#125;,</span><br><span class="line">        tags = &#123;</span><br><span class="line">                @Tag(name = &quot;Private&quot;, description = &quot;Tag used to denote operations as private&quot;)</span><br><span class="line">        &#125;, </span><br><span class="line">        externalDocs = @ExternalDocs(value = &quot;Meteorology&quot;, url = &quot;http://theweatherapi.io/meteorology.html&quot;)</span><br><span class="line">)</span><br><span class="line">public interface TheWeatherApiConfig &#123;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>上面显示的属性会导致相应的元数据被添加到生成的 swagger.json &#x2F; swagger.yaml 文件中</p>
+<p>如果您有多个 @SwaggerDefinition 注释，它们将按照它们被发现的顺序进行聚合 - 任何重复的注释属性都将覆盖以前的属性。</p>
+<h3 id="Info"><a href="#Info" class="headerlink" title="@Info"></a><a target="_blank" rel="noopener" href="http://docs.swagger.io/swagger-core/v1.5.X/apidocs/index.html?io/swagger/annotations/Info.html">@Info</a></h3><p>@Info 注释为 Swagger 定义添加通用元数据属性 - 对应于规范中的<a target="_blank" rel="noopener" href="http://swagger.io/specification#infoObject">Info</a>对象。如上例所示：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">@SwaggerDefinition(</span><br><span class="line">        info = @Info(</span><br><span class="line">                description = &quot;Gets the weather&quot;,</span><br><span class="line">                version = &quot;V12.0.12&quot;,</span><br><span class="line">                title = &quot;The Weather API&quot;,</span><br><span class="line">                termsOfService = &quot;http://theweatherapi.io/terms.html&quot;,</span><br><span class="line">                ...</span><br><span class="line">        ),</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+
+<p>有关受支持属性的完整列表，请参阅<a target="_blank" rel="noopener" href="http://docs.swagger.io/swagger-core/v1.5.X/apidocs/index.html?io/swagger/annotations/Info.html">javadoc 。</a></p>
+<h3 id="Contact"><a href="#Contact" class="headerlink" title="@Contact"></a><a target="_blank" rel="noopener" href="http://docs.swagger.io/swagger-core/v1.5.X/apidocs/index.html?io/swagger/annotations/Contact.html">@Contact</a></h3><p>@Contact 注释将联系人属性添加到 Swagger 定义的 @Info 部分 - 对应于规范中的<a target="_blank" rel="noopener" href="http://swagger.io/specification#contactObject">联系人</a>对象。如上例所示：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">@SwaggerDefinition(</span><br><span class="line">        info = @Info(</span><br><span class="line">                ...</span><br><span class="line">                contact = @Contact(</span><br><span class="line">                   name = &quot;Rain Moore&quot;, </span><br><span class="line">                   email = &quot;rain.moore@theweatherapi.io&quot;, </span><br><span class="line">                   url = &quot;http://theweatherapi.io&quot;</span><br><span class="line">                ),</span><br><span class="line">                ...</span><br><span class="line">        ),</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+
+<p>有关受支持属性的列表，请参阅<a target="_blank" rel="noopener" href="http://docs.swagger.io/swagger-core/v1.5.X/apidocs/index.html?io/swagger/annotations/Contact.html">javadoc 。</a></p>
+<h3 id="License"><a href="#License" class="headerlink" title="@License"></a><a target="_blank" rel="noopener" href="http://docs.swagger.io/swagger-core/v1.5.X/apidocs/index.html?io/swagger/annotations/License.html">@License</a></h3><p>@License 注释将许可证属性添加到 Swagger 定义的 @Info 部分 - 对应于规范中的<a target="_blank" rel="noopener" href="http://swagger.io/specification#licenseObject">许可证</a>对象。如上例所示：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">@SwaggerDefinition(</span><br><span class="line">        info = @Info(</span><br><span class="line">                ...</span><br><span class="line">                license = @License(</span><br><span class="line">                   name = &quot;Apache 2.0&quot;, </span><br><span class="line">                   url = &quot;http://www.apache.org/licenses/LICENSE-2.0&quot;</span><br><span class="line">                )</span><br><span class="line">        ),</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+
+<p>有关受支持属性的列表，请参阅<a target="_blank" rel="noopener" href="http://docs.swagger.io/swagger-core/v1.5.X/apidocs/index.html?io/swagger/annotations/License.html">javadoc 。</a></p>
+<h3 id="Extension"><a href="#Extension" class="headerlink" title="@Extension"></a><a target="_blank" rel="noopener" href="http://docs.swagger.io/swagger-core/v1.5.X/apidocs/index.html?io/swagger/annotations/Extension.html">@Extension</a></h3><p>扩展注释允许将<a target="_blank" rel="noopener" href="http://swagger.io/specification#vendorExtensions">扩展属性</a>添加到 Swagger 定义中。它目前在 @ApiOperation、@Info 和 @Tag 注释中受支持。有两种使用方法：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">...</span><br><span class="line">   extensions = &#123;</span><br><span class="line">       @Extension(properties = &#123;</span><br><span class="line">           @ExtensionProperty(name = &quot;test1&quot;, value = &quot;value1&quot;),</span><br><span class="line">           @ExtensionProperty(name = &quot;test2&quot;, value = &quot;value2&quot;)</span><br><span class="line">       &#125;)</span><br><span class="line">    &#125;</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+
+<p>这将导致以下json：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">...</span><br><span class="line">   &quot;x-test1&quot; : &quot;value1&quot;,</span><br><span class="line">   &quot;x-test2&quot; : &quot;value2&quot;</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+
+<p>如果在注释中没有明确地这样做，属性名称将自动以“x-”为前缀。</p>
+<p>或者，您可以将扩展名命名为：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">...</span><br><span class="line">   extensions = &#123; </span><br><span class="line">       @Extension( name = &quot;my-extension&quot;, properties = &#123;</span><br><span class="line">           @ExtensionProperty(name = &quot;test1&quot;, value = &quot;value1&quot;),</span><br><span class="line">           @ExtensionProperty(name = &quot;test2&quot;, value = &quot;value2&quot;)</span><br><span class="line">       &#125;)</span><br><span class="line">    &#125;</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+
+<p>这将导致以下json：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">...</span><br><span class="line">   &quot;x-my-extension&quot; : &#123;</span><br><span class="line">      &quot;test1&quot; : &quot;value1&quot;,</span><br><span class="line">      &quot;test2&quot; : &quot;value2&quot;</span><br><span class="line">   &#125;</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+
+<p>它将包含的扩展属性包装在 JSON 对象中。</p>
+<h3 id="ExtensionProperty"><a href="#ExtensionProperty" class="headerlink" title="@ExtensionProperty"></a><a target="_blank" rel="noopener" href="http://docs.swagger.io/swagger-core/v1.5.X/apidocs/index.html?io/swagger/annotations/ExtensionProperty.html">@ExtensionProperty</a></h3><p>扩展中的单个属性 - 有关示例，请参见前面的<a target="_blank" rel="noopener" href="https://github.com/swagger-api/swagger-core/wiki/Annotations-1.5.X#extension">@Extension</a>部分。</p>
+<h2 id="自定义-Swagger-定义"><a href="#自定义-Swagger-定义" class="headerlink" title="自定义 Swagger 定义"></a>自定义 Swagger 定义</h2><p>如果您出于任何原因想要自定义生成的 Swagger 定义超出注释的范围，您可以为 Swagger 引擎提供提供相应回调的 ReaderListener：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">public interface ReaderListener &#123;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * Called before the Swagger definition gets populated from scanned classes. Use this method to</span><br><span class="line">     * pre-process the Swagger definition before it gets populated.</span><br><span class="line">     *</span><br><span class="line">     * @param reader the reader used to read annotations and build the Swagger definition</span><br><span class="line">     * @param swagger the initial swagger definition</span><br><span class="line">     */</span><br><span class="line"></span><br><span class="line">    void beforeScan(Reader reader, Swagger swagger);</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * Called after a Swagger definition has been populated from scanned classes. Use this method to</span><br><span class="line">     * post-process Swagger definitions.</span><br><span class="line">     *</span><br><span class="line">     * @param reader the reader used to read annotations and build the Swagger definition</span><br><span class="line">     * @param swagger the configured Swagger definition</span><br><span class="line">     */</span><br><span class="line"></span><br><span class="line">    void afterScan(Reader reader, Swagger swagger);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>在使用此注解进行资源扫描期间找到的任何类都将被实例化并相应地调用。例如下面的类：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">public class BasePathModifier implements ReaderListener &#123;</span><br><span class="line">    void beforeScan(Reader reader, Swagger swagger)&#123;&#125;</span><br><span class="line"></span><br><span class="line">    void afterScan(Reader reader, Swagger swagger)&#123;</span><br><span class="line">        swagger.setBasePath( System.getProperty( &quot;swagger.basepath&quot;, swagger.getBasePath() ));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>将允许您从系统属性覆盖生成的 basePath。</p>
+<h1 id="参考文档"><a href="#参考文档" class="headerlink" title="参考文档"></a>参考文档</h1><ul>
+<li><a target="_blank" rel="noopener" href="https://swagger.io/">Swagger官网</a> </li>
+<li><a target="_blank" rel="noopener" href="https://github.com/swagger-api">Swagger官方Github主页</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/swagger-api/swagger-core">Swagegr Core Github</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/swagger-api/swagger-core/wiki/">Swagger 官方WIKI</a></li>
+</ul>
+
+      
+    </div>
+    <div class="article-footer">
+      <blockquote class="mt-2x">
+  <ul class="post-copyright list-unstyled">
+    
+    <li class="post-copyright-link hidden-xs">
+      <strong>本文链接：</strong>
+      <a href="https://guoshunfa.com/2023/07/SpringBoot2%E9%9B%86%E6%88%90Swagger/" title="SpringBoot2集成Swagger" target="_blank" rel="external">https://guoshunfa.com/2023/07/SpringBoot2集成Swagger/</a>
+    </li>
+    
+    <li class="post-copyright-license">
+      <strong>版权声明： </strong> 本博客所有文章除特别声明外，均采用 <a href="http://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank" rel="external">CC BY 4.0 CN协议</a> 许可协议。转载请注明出处！
+    </li>
+  </ul>
+</blockquote>
+
+
+<div class="panel panel-default panel-badger">
+  <div class="panel-body">
+    <figure class="media">
+      <div class="media-left">
+        <a href="https://github.com/guoshunfa" target="_blank" class="img-burn thumb-sm visible-lg">
+          <img src="/images/avatar.jpg" class="img-rounded w-full" alt="">
+        </a>
+      </div>
+      <div class="media-body">
+        <h3 class="media-heading"><a href="https://github.com/guoshunfa" target="_blank"><span class="text-dark">郭顺发</span><small class="ml-1x">创业中......</small></a></h3>
+        <div>承接：小程序开发、APP开发、网站开发、爬虫开发</div>
+      </div>
+    </figure>
+  </div>
+</div>
+
+
+    </div>
+  </article>
+  
+    
+  <section id="comments">
+  	
+           
+    
+  </section>
+
+
+  
+</div>
+
+  <nav class="bar bar-footer clearfix" data-stick-bottom>
+  <div class="bar-inner">
+  
+  <ul class="pager pull-left">
+    
+    <li class="prev">
+      <a href="/2023/07/SpringBoot3%E9%9B%86%E6%88%90Swagger/" title="SpringBoot3集成Swagger"><i class="icon icon-angle-left" aria-hidden="true"></i><span>&nbsp;&nbsp;上一篇</span></a>
+    </li>
+    
+    
+    <li class="next">
+      <a href="/2023/07/%E5%90%8C%E6%AD%A5%E8%87%B3%E8%85%BE%E8%AE%AF%E4%BA%91%E5%BC%80%E5%8F%91%E8%80%85%E7%A4%BE%E5%8C%BA/" title="同步至腾讯云开发者社区"><span>下一篇&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
+    </li>
+    
+    
+  </ul>
+  
+  
+  
+  <div class="bar-right">
+    
+    <div class="share-component" data-sites="weibo,qq,wechat,facebook,twitter" data-mobile-sites="weibo,qq,qzone"></div>
+    
+  </div>
+  </div>
+</nav>
+  
+
+
+</main>
+
+  <footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
+	
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/guoshunfa" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="https://gitee.com/guoshunfa" target="_blank" title="Gitee" data-toggle=tooltip data-placement=top><i class="icon icon-gitee"></i></a></li>
+        
+        <li><a href="https://juejin.cn/user/166781500267015" target="_blank" title="Juejin" data-toggle=tooltip data-placement=top><i class="icon icon-juejin"></i></a></li>
+        
+        <li><a href="https://cloud.tencent.com/developer/user/7784141" target="_blank" title="Code" data-toggle=tooltip data-placement=top><i class="icon icon-code"></i></a></li>
+        
+        <li><a href="/atom.xml" target="_blank" title="Rss" data-toggle=tooltip data-placement=top><i class="icon icon-rss"></i></a></li>
+        
+    </ul>
+
+    <div class="copyright">
+    	
+        &copy; 2024 guoshunfa
+        
+        <!-- <div class="publishby">
+        	Theme by <a href="https://github.com/cofess" target="_blank"> cofess </a>base on <a href="https://github.com/cofess/hexo-theme-pure" target="_blank">pure</a>.
+        </div> -->
+    </div>
+</footer>
+  <script src="//cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
+<script>
+window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
+</script>
+
+<script src="/js/plugin.min.js"></script>
+
+
+<script src="/js/application.js"></script>
+
+
+    <script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(未命名)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+
+<script src="/js/insight.js"></script>
+
+
+
+    <script>
+(function ($) {
+    $('.search-form').on('submit', function (e) {
+        var keyword = $('.search-form-input[name="wd"]').val();
+        window.location = 'https://www.baidu.com/s?wd=site:guoshunfa.com ' + keyword;
+        return false;
+    });
+})(jQuery);
+</script>
+
+
+
+
+   
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+   
+    
+  <!-- <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css"> -->
+  <script src="//cdn.jsdelivr.net/npm/gitalk@1.7.2/dist/gitalk.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/blueimp-md5@2.10.0/js/md5.min.js"></script>
+  <script type="text/javascript">
+  var gitalk = new Gitalk({
+    clientID: '328529f408a5d1041fe1',
+    clientSecret: '43872fab04fe0accb98439ac77ff71ff81f7b9dd',
+    repo: 'guoshunfa-comment',
+    owner: 'guoshunfa',
+    admin: ['guoshunfa'],
+    id: md5(location.pathname),
+    distractionFreeMode: true,
+    language: 'zh-CN',
+    enableHotKey: 'true'
+  })
+  gitalk.render('comments')
+  </script>
+      
+
+
+
+  <script src="//cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.3.5/dist/jquery.fancybox.min.js"></script>
+  <script>
+  //利用 FancyBox 实现点击图片放大
+  $(document).ready(function() {
+    $('article img').not('[hidden]').not('.panel-body img').each(function() {
+      var $image = $(this);
+      var imageCaption = $image.attr('alt');
+      var $imageWrapLink = $image.parent('a');
+      if ($imageWrapLink.length < 1) {
+        var src = this.getAttribute('src');
+        var idx = src.lastIndexOf('?');
+        if (idx != -1) {
+          src = src.substring(0, idx);
+        }
+        $imageWrapLink = $image.wrap('<a href="' + src + '"></a>').parent('a');
+      }
+      $imageWrapLink.attr('data-fancybox', 'images');
+      if (imageCaption) {
+        $imageWrapLink.attr('data-caption', imageCaption);
+      }
+    });
+    $().fancybox({
+      selector: '[data-fancybox="images"]',
+      hash: false,
+      loop: false,
+    });
+  });
+  </script>
+
+
+
+
+
+</body>
+</html>

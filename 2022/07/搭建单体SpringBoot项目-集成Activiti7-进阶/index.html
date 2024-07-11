@@ -1,0 +1,1106 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+  <meta charset="utf-8">
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-transform" />
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="format-detection" content="telephone=no,email=no,adress=no">
+  <!-- Color theme for statusbar -->
+  <meta name="theme-color" content="#000000" />
+  <!-- 强制页面在当前窗口以独立页面显示,防止别人在框架里调用页面 -->
+  <meta http-equiv="window-target" content="_top" />
+  
+  
+  <title>搭建单体SpringBoot项目 集成Activiti7 进阶 | guoshunfa</title>
+  <meta name="description" content="一、流程实例什么是流程实例流程实例（ProcessInstance）代表流程定义的执行实例。 一个流程实例包括了所有的运行节点。我们可以利用这个对象来了解当前流程实例的进度等信息。 例如：用户或程序按照流程定义内容发起一个流程，这就是一个流程实例。 流程定义和流程实例的图解：  启动流程实例 并添加Businesskey（业务标识）流程定义部署在activiti后，就可以在系统中通过activit">
+<meta property="og:type" content="article">
+<meta property="og:title" content="搭建单体SpringBoot项目 集成Activiti7 进阶">
+<meta property="og:url" content="https://guoshunfa.com/2022/07/%E6%90%AD%E5%BB%BA%E5%8D%95%E4%BD%93SpringBoot%E9%A1%B9%E7%9B%AE-%E9%9B%86%E6%88%90Activiti7-%E8%BF%9B%E9%98%B6/index.html">
+<meta property="og:site_name" content="guoshunfa">
+<meta property="og:description" content="一、流程实例什么是流程实例流程实例（ProcessInstance）代表流程定义的执行实例。 一个流程实例包括了所有的运行节点。我们可以利用这个对象来了解当前流程实例的进度等信息。 例如：用户或程序按照流程定义内容发起一个流程，这就是一个流程实例。 流程定义和流程实例的图解：  启动流程实例 并添加Businesskey（业务标识）流程定义部署在activiti后，就可以在系统中通过activit">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://guoshunfa.com/2022/07/%E6%90%AD%E5%BB%BA%E5%8D%95%E4%BD%93SpringBoot%E9%A1%B9%E7%9B%AE-%E9%9B%86%E6%88%90Activiti7-%E8%BF%9B%E9%98%B6/1577498489089.png">
+<meta property="og:image" content="https://guoshunfa.com/2022/07/%E6%90%AD%E5%BB%BA%E5%8D%95%E4%BD%93SpringBoot%E9%A1%B9%E7%9B%AE-%E9%9B%86%E6%88%90Activiti7-%E8%BF%9B%E9%98%B6/1577261568103.png">
+<meta property="og:image" content="https://guoshunfa.com/2022/07/%E6%90%AD%E5%BB%BA%E5%8D%95%E4%BD%93SpringBoot%E9%A1%B9%E7%9B%AE-%E9%9B%86%E6%88%90Activiti7-%E8%BF%9B%E9%98%B6/1577499812252.png">
+<meta property="og:image" content="https://guoshunfa.com/2022/07/%E6%90%AD%E5%BB%BA%E5%8D%95%E4%BD%93SpringBoot%E9%A1%B9%E7%9B%AE-%E9%9B%86%E6%88%90Activiti7-%E8%BF%9B%E9%98%B6/1577499771599.png">
+<meta property="og:image" content="https://guoshunfa.com/2022/07/%E6%90%AD%E5%BB%BA%E5%8D%95%E4%BD%93SpringBoot%E9%A1%B9%E7%9B%AE-%E9%9B%86%E6%88%90Activiti7-%E8%BF%9B%E9%98%B6/1577499842115.png">
+<meta property="og:image" content="https://guoshunfa.com/2022/07/%E6%90%AD%E5%BB%BA%E5%8D%95%E4%BD%93SpringBoot%E9%A1%B9%E7%9B%AE-%E9%9B%86%E6%88%90Activiti7-%E8%BF%9B%E9%98%B6/1577499914186.png">
+<meta property="og:image" content="https://guoshunfa.com/2022/07/%E6%90%AD%E5%BB%BA%E5%8D%95%E4%BD%93SpringBoot%E9%A1%B9%E7%9B%AE-%E9%9B%86%E6%88%90Activiti7-%E8%BF%9B%E9%98%B6/1577499985580.png">
+<meta property="og:image" content="https://guoshunfa.com/2022/07/%E6%90%AD%E5%BB%BA%E5%8D%95%E4%BD%93SpringBoot%E9%A1%B9%E7%9B%AE-%E9%9B%86%E6%88%90Activiti7-%E8%BF%9B%E9%98%B6/1577500036347.png">
+<meta property="og:image" content="https://guoshunfa.com/2022/07/%E6%90%AD%E5%BB%BA%E5%8D%95%E4%BD%93SpringBoot%E9%A1%B9%E7%9B%AE-%E9%9B%86%E6%88%90Activiti7-%E8%BF%9B%E9%98%B6/1574136375409.png">
+<meta property="og:image" content="https://guoshunfa.com/2022/07/%E6%90%AD%E5%BB%BA%E5%8D%95%E4%BD%93SpringBoot%E9%A1%B9%E7%9B%AE-%E9%9B%86%E6%88%90Activiti7-%E8%BF%9B%E9%98%B6/1575121491752.png">
+<meta property="og:image" content="https://guoshunfa.com/2022/07/%E6%90%AD%E5%BB%BA%E5%8D%95%E4%BD%93SpringBoot%E9%A1%B9%E7%9B%AE-%E9%9B%86%E6%88%90Activiti7-%E8%BF%9B%E9%98%B6/1577503716131.png">
+<meta property="og:image" content="https://guoshunfa.com/2022/07/%E6%90%AD%E5%BB%BA%E5%8D%95%E4%BD%93SpringBoot%E9%A1%B9%E7%9B%AE-%E9%9B%86%E6%88%90Activiti7-%E8%BF%9B%E9%98%B6/1577503804336.png">
+<meta property="og:image" content="https://guoshunfa.com/2022/07/%E6%90%AD%E5%BB%BA%E5%8D%95%E4%BD%93SpringBoot%E9%A1%B9%E7%9B%AE-%E9%9B%86%E6%88%90Activiti7-%E8%BF%9B%E9%98%B6/1585972081.png">
+<meta property="og:image" content="https://guoshunfa.com/2022/07/%E6%90%AD%E5%BB%BA%E5%8D%95%E4%BD%93SpringBoot%E9%A1%B9%E7%9B%AE-%E9%9B%86%E6%88%90Activiti7-%E8%BF%9B%E9%98%B6/1577503716131.png">
+<meta property="og:image" content="https://guoshunfa.com/2022/07/%E6%90%AD%E5%BB%BA%E5%8D%95%E4%BD%93SpringBoot%E9%A1%B9%E7%9B%AE-%E9%9B%86%E6%88%90Activiti7-%E8%BF%9B%E9%98%B6/1585562066-1585562152652.png">
+<meta property="og:image" content="https://guoshunfa.com/2022/07/%E6%90%AD%E5%BB%BA%E5%8D%95%E4%BD%93SpringBoot%E9%A1%B9%E7%9B%AE-%E9%9B%86%E6%88%90Activiti7-%E8%BF%9B%E9%98%B6/1577506842889.png">
+<meta property="og:image" content="https://guoshunfa.com/2022/07/%E6%90%AD%E5%BB%BA%E5%8D%95%E4%BD%93SpringBoot%E9%A1%B9%E7%9B%AE-%E9%9B%86%E6%88%90Activiti7-%E8%BF%9B%E9%98%B6/1585561653.png">
+<meta property="og:image" content="https://guoshunfa.com/2022/07/%E6%90%AD%E5%BB%BA%E5%8D%95%E4%BD%93SpringBoot%E9%A1%B9%E7%9B%AE-%E9%9B%86%E6%88%90Activiti7-%E8%BF%9B%E9%98%B6/20190731150933695.png">
+<meta property="og:image" content="https://guoshunfa.com/2022/07/%E6%90%AD%E5%BB%BA%E5%8D%95%E4%BD%93SpringBoot%E9%A1%B9%E7%9B%AE-%E9%9B%86%E6%88%90Activiti7-%E8%BF%9B%E9%98%B6/1577847570736.png">
+<meta property="og:image" content="https://guoshunfa.com/2022/07/%E6%90%AD%E5%BB%BA%E5%8D%95%E4%BD%93SpringBoot%E9%A1%B9%E7%9B%AE-%E9%9B%86%E6%88%90Activiti7-%E8%BF%9B%E9%98%B6/1577847654279.png">
+<meta property="og:image" content="https://guoshunfa.com/2022/07/%E6%90%AD%E5%BB%BA%E5%8D%95%E4%BD%93SpringBoot%E9%A1%B9%E7%9B%AE-%E9%9B%86%E6%88%90Activiti7-%E8%BF%9B%E9%98%B6/1577847695723.png">
+<meta property="og:image" content="https://guoshunfa.com/2022/07/%E6%90%AD%E5%BB%BA%E5%8D%95%E4%BD%93SpringBoot%E9%A1%B9%E7%9B%AE-%E9%9B%86%E6%88%90Activiti7-%E8%BF%9B%E9%98%B6/1577870487533.png">
+<meta property="og:image" content="https://guoshunfa.com/2022/07/%E6%90%AD%E5%BB%BA%E5%8D%95%E4%BD%93SpringBoot%E9%A1%B9%E7%9B%AE-%E9%9B%86%E6%88%90Activiti7-%E8%BF%9B%E9%98%B6/1577870510159.png">
+<meta property="og:image" content="https://guoshunfa.com/2022/07/%E6%90%AD%E5%BB%BA%E5%8D%95%E4%BD%93SpringBoot%E9%A1%B9%E7%9B%AE-%E9%9B%86%E6%88%90Activiti7-%E8%BF%9B%E9%98%B6/1577847740055.png">
+<meta property="og:image" content="https://guoshunfa.com/2022/07/%E6%90%AD%E5%BB%BA%E5%8D%95%E4%BD%93SpringBoot%E9%A1%B9%E7%9B%AE-%E9%9B%86%E6%88%90Activiti7-%E8%BF%9B%E9%98%B6/1577847766231.png">
+<meta property="og:image" content="https://guoshunfa.com/2022/07/%E6%90%AD%E5%BB%BA%E5%8D%95%E4%BD%93SpringBoot%E9%A1%B9%E7%9B%AE-%E9%9B%86%E6%88%90Activiti7-%E8%BF%9B%E9%98%B6/1577870638264.png">
+<meta property="og:image" content="https://guoshunfa.com/2022/07/%E6%90%AD%E5%BB%BA%E5%8D%95%E4%BD%93SpringBoot%E9%A1%B9%E7%9B%AE-%E9%9B%86%E6%88%90Activiti7-%E8%BF%9B%E9%98%B6/1577870654033.png">
+<meta property="og:image" content="https://guoshunfa.com/2022/07/%E6%90%AD%E5%BB%BA%E5%8D%95%E4%BD%93SpringBoot%E9%A1%B9%E7%9B%AE-%E9%9B%86%E6%88%90Activiti7-%E8%BF%9B%E9%98%B6/1577878753288.png">
+<meta property="og:image" content="https://guoshunfa.com/2022/07/%E6%90%AD%E5%BB%BA%E5%8D%95%E4%BD%93SpringBoot%E9%A1%B9%E7%9B%AE-%E9%9B%86%E6%88%90Activiti7-%E8%BF%9B%E9%98%B6/1577879740282.png">
+<meta property="og:image" content="https://guoshunfa.com/2022/07/%E6%90%AD%E5%BB%BA%E5%8D%95%E4%BD%93SpringBoot%E9%A1%B9%E7%9B%AE-%E9%9B%86%E6%88%90Activiti7-%E8%BF%9B%E9%98%B6/1577879961637.png">
+<meta property="og:image" content="https://guoshunfa.com/2022/07/%E6%90%AD%E5%BB%BA%E5%8D%95%E4%BD%93SpringBoot%E9%A1%B9%E7%9B%AE-%E9%9B%86%E6%88%90Activiti7-%E8%BF%9B%E9%98%B6/1586679201.png">
+<meta property="og:image" content="https://guoshunfa.com/2022/07/%E6%90%AD%E5%BB%BA%E5%8D%95%E4%BD%93SpringBoot%E9%A1%B9%E7%9B%AE-%E9%9B%86%E6%88%90Activiti7-%E8%BF%9B%E9%98%B6/1577880020127.png">
+<meta property="og:image" content="https://guoshunfa.com/2022/07/%E6%90%AD%E5%BB%BA%E5%8D%95%E4%BD%93SpringBoot%E9%A1%B9%E7%9B%AE-%E9%9B%86%E6%88%90Activiti7-%E8%BF%9B%E9%98%B6/1586680533.png">
+<meta property="og:image" content="https://guoshunfa.com/2022/07/%E6%90%AD%E5%BB%BA%E5%8D%95%E4%BD%93SpringBoot%E9%A1%B9%E7%9B%AE-%E9%9B%86%E6%88%90Activiti7-%E8%BF%9B%E9%98%B6/1586680570.png">
+<meta property="og:image" content="https://guoshunfa.com/2022/07/%E6%90%AD%E5%BB%BA%E5%8D%95%E4%BD%93SpringBoot%E9%A1%B9%E7%9B%AE-%E9%9B%86%E6%88%90Activiti7-%E8%BF%9B%E9%98%B6/1586680672.png">
+<meta property="og:image" content="https://guoshunfa.com/2022/07/%E6%90%AD%E5%BB%BA%E5%8D%95%E4%BD%93SpringBoot%E9%A1%B9%E7%9B%AE-%E9%9B%86%E6%88%90Activiti7-%E8%BF%9B%E9%98%B6/1586680728.png">
+<meta property="og:image" content="https://guoshunfa.com/2022/07/%E6%90%AD%E5%BB%BA%E5%8D%95%E4%BD%93SpringBoot%E9%A1%B9%E7%9B%AE-%E9%9B%86%E6%88%90Activiti7-%E8%BF%9B%E9%98%B6/1586680801.png">
+<meta property="og:image" content="https://guoshunfa.com/2022/07/%E6%90%AD%E5%BB%BA%E5%8D%95%E4%BD%93SpringBoot%E9%A1%B9%E7%9B%AE-%E9%9B%86%E6%88%90Activiti7-%E8%BF%9B%E9%98%B6/1577880080004.png">
+<meta property="og:image" content="https://guoshunfa.com/2022/07/%E6%90%AD%E5%BB%BA%E5%8D%95%E4%BD%93SpringBoot%E9%A1%B9%E7%9B%AE-%E9%9B%86%E6%88%90Activiti7-%E8%BF%9B%E9%98%B6/1586689674.png">
+<meta property="og:image" content="https://guoshunfa.com/2022/07/%E6%90%AD%E5%BB%BA%E5%8D%95%E4%BD%93SpringBoot%E9%A1%B9%E7%9B%AE-%E9%9B%86%E6%88%90Activiti7-%E8%BF%9B%E9%98%B6/1586676678.png">
+<meta property="og:image" content="https://guoshunfa.com/2022/07/%E6%90%AD%E5%BB%BA%E5%8D%95%E4%BD%93SpringBoot%E9%A1%B9%E7%9B%AE-%E9%9B%86%E6%88%90Activiti7-%E8%BF%9B%E9%98%B6/1586676828.png">
+<meta property="og:image" content="https://guoshunfa.com/2022/07/%E6%90%AD%E5%BB%BA%E5%8D%95%E4%BD%93SpringBoot%E9%A1%B9%E7%9B%AE-%E9%9B%86%E6%88%90Activiti7-%E8%BF%9B%E9%98%B6/1586677325.png">
+<meta property="og:image" content="https://guoshunfa.com/2022/07/%E6%90%AD%E5%BB%BA%E5%8D%95%E4%BD%93SpringBoot%E9%A1%B9%E7%9B%AE-%E9%9B%86%E6%88%90Activiti7-%E8%BF%9B%E9%98%B6/1586677432.png">
+<meta property="og:image" content="https://guoshunfa.com/2022/07/%E6%90%AD%E5%BB%BA%E5%8D%95%E4%BD%93SpringBoot%E9%A1%B9%E7%9B%AE-%E9%9B%86%E6%88%90Activiti7-%E8%BF%9B%E9%98%B6/1586677665.png">
+<meta property="og:image" content="https://guoshunfa.com/2022/07/%E6%90%AD%E5%BB%BA%E5%8D%95%E4%BD%93SpringBoot%E9%A1%B9%E7%9B%AE-%E9%9B%86%E6%88%90Activiti7-%E8%BF%9B%E9%98%B6/1586677735.png">
+<meta property="og:image" content="https://guoshunfa.com/2022/07/%E6%90%AD%E5%BB%BA%E5%8D%95%E4%BD%93SpringBoot%E9%A1%B9%E7%9B%AE-%E9%9B%86%E6%88%90Activiti7-%E8%BF%9B%E9%98%B6/1586666799.png">
+<meta property="og:image" content="https://guoshunfa.com/2022/07/%E6%90%AD%E5%BB%BA%E5%8D%95%E4%BD%93SpringBoot%E9%A1%B9%E7%9B%AE-%E9%9B%86%E6%88%90Activiti7-%E8%BF%9B%E9%98%B6/1586667342.png">
+<meta property="og:image" content="https://guoshunfa.com/2022/07/%E6%90%AD%E5%BB%BA%E5%8D%95%E4%BD%93SpringBoot%E9%A1%B9%E7%9B%AE-%E9%9B%86%E6%88%90Activiti7-%E8%BF%9B%E9%98%B6/1586667220.png">
+<meta property="og:image" content="https://guoshunfa.com/2022/07/%E6%90%AD%E5%BB%BA%E5%8D%95%E4%BD%93SpringBoot%E9%A1%B9%E7%9B%AE-%E9%9B%86%E6%88%90Activiti7-%E8%BF%9B%E9%98%B6/1586694673.png">
+<meta property="article:published_time" content="2022-07-01T04:01:01.000Z">
+<meta property="article:modified_time" content="2024-01-28T11:41:39.248Z">
+<meta property="article:author" content="guoshunfa">
+<meta property="article:tag" content="SpringBoot">
+<meta property="article:tag" content="Activiti7">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://guoshunfa.com/2022/07/%E6%90%AD%E5%BB%BA%E5%8D%95%E4%BD%93SpringBoot%E9%A1%B9%E7%9B%AE-%E9%9B%86%E6%88%90Activiti7-%E8%BF%9B%E9%98%B6/1577498489089.png">
+  <!-- Canonical links -->
+  <link rel="canonical" href="https://guoshunfa.com/2022/07/%E6%90%AD%E5%BB%BA%E5%8D%95%E4%BD%93SpringBoot%E9%A1%B9%E7%9B%AE-%E9%9B%86%E6%88%90Activiti7-%E8%BF%9B%E9%98%B6/index.html">
+  
+    <link rel="alternate" href="/atom.xml" title="guoshunfa" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="favicon.jpg" type="image/x-icon">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  
+  
+    <link href="//cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.3.5/dist/jquery.fancybox.min.css" rel="stylesheet">
+  
+  
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1.7.2/dist/gitalk.min.css">
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body class="main-center" itemscope itemtype="http://schema.org/WebPage">
+  <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+  <div class="slimContent">
+    <div class="navbar-header">
+      
+      
+      <div class="profile-block text-center">
+        <a id="avatar" href="https://github.com/guoshunfa" target="_blank">
+          <img class="img-circle img-rotate" src="/images/avatar.jpg" width="200" height="200">
+        </a>
+        <h2 id="name" class="hidden-xs hidden-sm">郭顺发</h2>
+        <h3 id="title" class="hidden-xs hidden-sm hidden-md">创业中......</h3>
+        <small id="location" class="text-muted hidden-xs hidden-sm"><i class="icon icon-map-marker"></i> 深圳, China</small>
+      </div>
+      
+      <div class="search" id="search-form-wrap">
+
+    <form class="search-form sidebar-form">
+        <div class="input-group">
+            <input type="text" class="search-form-input form-control" placeholder="搜索" />
+            <span class="input-group-btn">
+                <button type="submit" class="search-form-submit btn btn-flat" onclick="return false;"><i class="icon icon-search"></i></button>
+            </span>
+        </div>
+    </form>
+    <div class="ins-search">
+  <div class="ins-search-mask"></div>
+  <div class="ins-search-container">
+    <div class="ins-input-wrapper">
+      <input type="text" class="ins-search-input" placeholder="想要查找什么..." x-webkit-speech />
+      <button type="button" class="close ins-close ins-selectable" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="ins-section-wrapper">
+      <div class="ins-section-container"></div>
+    </div>
+  </div>
+</div>
+
+
+</div>
+      <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <nav id="main-navbar" class="collapse navbar-collapse" itemscope itemtype="http://schema.org/SiteNavigationElement" role="navigation">
+      <ul class="nav navbar-nav main-nav menu-highlight">
+        
+        
+        <li class="menu-item menu-item-首页">
+          <a href="/.">
+            
+            <i class="icon icon-home-fill"></i>
+            
+            <span class="menu-title">首页</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-归档">
+          <a href="/archives">
+            
+            <i class="icon icon-archives-fill"></i>
+            
+            <span class="menu-title">归档</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-分类">
+          <a href="/categories">
+            
+            <i class="icon icon-folder"></i>
+            
+            <span class="menu-title">分类</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-标签">
+          <a href="/tags">
+            
+            <i class="icon icon-tags"></i>
+            
+            <span class="menu-title">标签</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-github仓库">
+          <a href="/repository">
+            
+            <i class="icon icon-project"></i>
+            
+            <span class="menu-title">github仓库</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-工具箱">
+          <a href="/tools">
+            
+            <i class="icon icon-book-fill"></i>
+            
+            <span class="menu-title">工具箱</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-友链">
+          <a href="/links">
+            
+            <i class="icon icon-friendship"></i>
+            
+            <span class="menu-title">友链</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-关于">
+          <a href="/about">
+            
+            <i class="icon icon-cup-fill"></i>
+            
+            <span class="menu-title">关于</span>
+          </a>
+        </li>
+        
+      </ul>
+      
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/guoshunfa" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="https://gitee.com/guoshunfa" target="_blank" title="Gitee" data-toggle=tooltip data-placement=top><i class="icon icon-gitee"></i></a></li>
+        
+        <li><a href="https://juejin.cn/user/166781500267015" target="_blank" title="Juejin" data-toggle=tooltip data-placement=top><i class="icon icon-juejin"></i></a></li>
+        
+        <li><a href="https://cloud.tencent.com/developer/user/7784141" target="_blank" title="Code" data-toggle=tooltip data-placement=top><i class="icon icon-code"></i></a></li>
+        
+        <li><a href="/atom.xml" target="_blank" title="Rss" data-toggle=tooltip data-placement=top><i class="icon icon-rss"></i></a></li>
+        
+    </ul>
+
+    </nav>
+  </div>
+</header>
+
+  
+    <aside class="sidebar" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    
+      <div class="widget">
+    <h3 class="widget-title">公告</h3>
+    <div class="widget-body">
+        <div id="board">
+            <div class="content">
+                <p>欢迎来到www.guoshunfa.com。</p><hr/><a target="_blank" rel="noopener" href="https://www.oracle.com/cn/java/">前往Java官网<a/><br/><a target="_blank" rel="noopener" href="https://spring.io/">前往Spring官网<a/>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget-body">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/HTML-CSS-JavaScript/">HTML/CSS/JavaScript</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Java/">Java</a><span class="category-list-count">17</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Python/">Python</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/SpringBoot/">SpringBoot</a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Swift/">Swift</a><span class="category-list-count">29</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%88%9B%E4%B8%9A/">创业</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%A4%8D%E7%9B%98/">复盘</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%A8%B1%E4%B9%90/">娱乐</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%8A%80%E6%9C%AF/">技术</a><span class="category-list-count">27</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%8A%80%E6%9C%AF/%E6%90%AD%E5%BB%BA%E5%8D%95%E4%BD%93SpringBoot%E9%A1%B9%E7%9B%AE/">搭建单体SpringBoot项目</a><span class="category-list-count">21</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%90%AD%E5%BB%BA%E5%8D%95%E4%BD%93SpringBoot%E9%A1%B9%E7%9B%AE/">搭建单体SpringBoot项目</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/">数据库</a><span class="category-list-count">17</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%9C%8D%E5%8A%A1/">服务</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%9C%8D%E5%8A%A1-%E7%BB%84%E4%BB%B6/">服务&组件</a><span class="category-list-count">27</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%AE%A1%E7%90%86/">服务器管理</a><span class="category-list-count">21</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E7%AE%97%E6%B3%95/">算法</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E8%BD%AF%E4%BB%B6%E4%BD%BF%E7%94%A8/">软件使用</a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E8%BD%AF%E4%BB%B6%E6%8A%80%E6%9C%AF%E6%A1%86%E6%9E%B6/">软件技术框架</a><span class="category-list-count">44</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E9%98%85%E8%AF%BB/">阅读</a><span class="category-list-count">2</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget-body">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/AJAX/" rel="tag">AJAX</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Activiti7/" rel="tag">Activiti7</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Arthas/" rel="tag">Arthas</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CSS/" rel="tag">CSS</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Curl/" rel="tag">Curl</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Debug/" rel="tag">Debug</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Docker/" rel="tag">Docker</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Druid/" rel="tag">Druid</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Electron/" rel="tag">Electron</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Expect/" rel="tag">Expect</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/FastJson/" rel="tag">FastJson</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/FreeMarker/" rel="tag">FreeMarker</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Git/" rel="tag">Git</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Gitlab/" rel="tag">Gitlab</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/GitlabRunner/" rel="tag">GitlabRunner</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/HTML-CSS-JavaScript/" rel="tag">HTML&#x2F;CSS&#x2F;JavaScript</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hook/" rel="tag">Hook</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Http/" rel="tag">Http</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hutool/" rel="tag">Hutool</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/IDEA/" rel="tag">IDEA</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JS/" rel="tag">JS</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JVM/" rel="tag">JVM</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Jar/" rel="tag">Jar</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java/" rel="tag">Java</a><span class="tag-list-count">27</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Jdk/" rel="tag">Jdk</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Jenkins/" rel="tag">Jenkins</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Jmeter/" rel="tag">Jmeter</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Json/" rel="tag">Json</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Jsoup/" rel="tag">Jsoup</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Kafka/" rel="tag">Kafka</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Leetcode/" rel="tag">Leetcode</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux/" rel="tag">Linux</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Logback/" rel="tag">Logback</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Mac/" rel="tag">Mac</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Maven/" rel="tag">Maven</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MongoDB/" rel="tag">MongoDB</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MyBatis/" rel="tag">MyBatis</a><span class="tag-list-count">7</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Mybatis/" rel="tag">Mybatis</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MybatisPlus/" rel="tag">MybatisPlus</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Mysql/" rel="tag">Mysql</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Nano/" rel="tag">Nano</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Nexus/" rel="tag">Nexus</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Nginx/" rel="tag">Nginx</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Opengrok/" rel="tag">Opengrok</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Oracle/" rel="tag">Oracle</a><span class="tag-list-count">22</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Profile/" rel="tag">Profile</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/PubSubJS/" rel="tag">PubSubJS</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Python/" rel="tag">Python</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Quartz/" rel="tag">Quartz</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/RESTful/" rel="tag">RESTful</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/React/" rel="tag">React</a><span class="tag-list-count">7</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Redis/" rel="tag">Redis</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SQL/" rel="tag">SQL</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SVN/" rel="tag">SVN</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Scheduled/" rel="tag">Scheduled</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Scrapy/" rel="tag">Scrapy</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Shell/" rel="tag">Shell</a><span class="tag-list-count">9</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Spel%E8%A1%A8%E8%BE%BE%E5%BC%8F/" rel="tag">Spel表达式</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Spring/" rel="tag">Spring</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SpringBoot/" rel="tag">SpringBoot</a><span class="tag-list-count">34</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SpringEvent/" rel="tag">SpringEvent</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SpringMVC/" rel="tag">SpringMVC</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SpringSecurity/" rel="tag">SpringSecurity</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Stream/" rel="tag">Stream</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Swagger/" rel="tag">Swagger</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Swift/" rel="tag">Swift</a><span class="tag-list-count">29</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/TestNG/" rel="tag">TestNG</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Tomcat/" rel="tag">Tomcat</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/UI%E7%BB%84%E4%BB%B6%E5%BA%93/" rel="tag">UI组件库</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Validator/" rel="tag">Validator</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Vue/" rel="tag">Vue</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Vuepress/" rel="tag">Vuepress</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Wordpress/" rel="tag">Wordpress</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/XML/" rel="tag">XML</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/assert/" rel="tag">assert</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/docker/" rel="tag">docker</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/gitlab/" rel="tag">gitlab</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/homebrew/" rel="tag">homebrew</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/iframe/" rel="tag">iframe</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java/" rel="tag">java</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/lambda/" rel="tag">lambda</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/less/" rel="tag">less</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/" rel="tag">linux</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mac/" rel="tag">mac</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mybatis-plus/" rel="tag">mybatis-plus</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mysql/" rel="tag">mysql</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/oracle/" rel="tag">oracle</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/pom-xml/" rel="tag">pom.xml</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/quartz/" rel="tag">quartz</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/settings-xml/" rel="tag">settings.xml</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/spring-boot/" rel="tag">spring-boot</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ssh/" rel="tag">ssh</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sshpass/" rel="tag">sshpass</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/yum/" rel="tag">yum</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%B9%90%E8%A7%82%E9%94%81/" rel="tag">乐观锁</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BB%8B%E7%BB%8D/" rel="tag">介绍</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%86%85%E7%BD%91/" rel="tag">内网</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%86%85%E7%BD%91%E7%A9%BF%E9%80%8F/" rel="tag">内网穿透</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%8A%A0%E5%AF%86/" rel="tag">加密</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%8F%8D%E7%BC%96%E8%AF%91%E5%B7%A5%E5%85%B7/" rel="tag">反编译工具</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%9B%BE%E5%BA%8A/" rel="tag">图床</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%9F%BA%E7%A1%80/" rel="tag">基础</a><span class="tag-list-count">29</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%AD%98%E5%82%A8%E5%87%BD%E6%95%B0/" rel="tag">存储函数</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%AD%98%E5%82%A8%E8%BF%87%E7%A8%8B/" rel="tag">存储过程</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%AE%9A%E6%97%B6%E5%99%A8/" rel="tag">定时器</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%AE%9D%E5%A1%94/" rel="tag">宝塔</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%B9%B6%E5%8F%91/" rel="tag">并发</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%BC%82%E5%B8%B8/" rel="tag">异常</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%BF%83%E7%90%86/" rel="tag">心理</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%80%BB%E7%BB%93/" rel="tag">总结</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%8C%81%E4%B9%85%E5%B1%82%E6%A1%86%E6%9E%B6/" rel="tag">持久层框架</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%8E%A5%E5%8F%A3/" rel="tag">接口</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%8F%92%E4%BB%B6/" rel="tag">插件</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/" rel="tag">数据库</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%96%AD%E8%A8%80/" rel="tag">断言</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%A0%91%E8%8E%93%E6%B4%BE/" rel="tag">树莓派</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%A0%91%E8%8E%93%E6%B4%BE4B/" rel="tag">树莓派4B</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%A6%82%E5%BF%B5/" rel="tag">概念</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%A8%A1%E7%89%88%E5%BC%95%E6%93%8E/" rel="tag">模版引擎</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%B3%9B%E5%9E%8B/" rel="tag">泛型</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%B5%8B%E8%AF%95/" rel="tag">测试</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%88%AC%E8%99%AB/" rel="tag">爬虫</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%94%A8%E6%88%B7%E6%9D%83%E9%99%90%E9%AA%8C%E8%AF%81/" rel="tag">用户权限验证</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%9F%A5%E8%AF%86/" rel="tag">知识</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%AE%97%E6%B3%95/" rel="tag">算法</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%B1%BB/" rel="tag">类</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BB%84%E4%BB%B6%E5%BA%93/" rel="tag">组件库</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%84%9A%E6%9C%AC/" rel="tag">脚本</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%87%AA%E5%8A%A8%E5%8C%96%E6%B5%8B%E8%AF%95/" rel="tag">自动化测试</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%8B%A5%E4%BE%9D/" rel="tag">若依</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/" rel="tag">解决方案</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" rel="tag">设计模式</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/" rel="tag">读书笔记</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%B7%A8%E5%9F%9F/" rel="tag">跨域</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%83%A8%E7%BD%B2/" rel="tag">部署</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9B%86%E6%88%90/" rel="tag">集成</a><span class="tag-list-count">14</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1/" rel="tag">面向对象</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9F%A9%E5%89%A7/" rel="tag">韩剧</a><span class="tag-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget-body tagcloud">
+      <a href="/tags/AJAX/" style="font-size: 13px;">AJAX</a> <a href="/tags/Activiti7/" style="font-size: 13.17px;">Activiti7</a> <a href="/tags/Arthas/" style="font-size: 13px;">Arthas</a> <a href="/tags/CSS/" style="font-size: 13px;">CSS</a> <a href="/tags/Curl/" style="font-size: 13px;">Curl</a> <a href="/tags/Debug/" style="font-size: 13px;">Debug</a> <a href="/tags/Docker/" style="font-size: 13.42px;">Docker</a> <a href="/tags/Druid/" style="font-size: 13px;">Druid</a> <a href="/tags/Electron/" style="font-size: 13.08px;">Electron</a> <a href="/tags/Expect/" style="font-size: 13px;">Expect</a> <a href="/tags/FastJson/" style="font-size: 13px;">FastJson</a> <a href="/tags/FreeMarker/" style="font-size: 13px;">FreeMarker</a> <a href="/tags/Git/" style="font-size: 13.08px;">Git</a> <a href="/tags/Gitlab/" style="font-size: 13.25px;">Gitlab</a> <a href="/tags/GitlabRunner/" style="font-size: 13.08px;">GitlabRunner</a> <a href="/tags/HTML-CSS-JavaScript/" style="font-size: 13.17px;">HTML/CSS/JavaScript</a> <a href="/tags/Hook/" style="font-size: 13px;">Hook</a> <a href="/tags/Http/" style="font-size: 13px;">Http</a> <a href="/tags/Hutool/" style="font-size: 13px;">Hutool</a> <a href="/tags/IDEA/" style="font-size: 13.25px;">IDEA</a> <a href="/tags/JS/" style="font-size: 13.08px;">JS</a> <a href="/tags/JVM/" style="font-size: 13px;">JVM</a> <a href="/tags/Jar/" style="font-size: 13.08px;">Jar</a> <a href="/tags/Java/" style="font-size: 13.83px;">Java</a> <a href="/tags/Jdk/" style="font-size: 13px;">Jdk</a> <a href="/tags/Jenkins/" style="font-size: 13px;">Jenkins</a> <a href="/tags/Jmeter/" style="font-size: 13px;">Jmeter</a> <a href="/tags/Json/" style="font-size: 13px;">Json</a> <a href="/tags/Jsoup/" style="font-size: 13px;">Jsoup</a> <a href="/tags/Kafka/" style="font-size: 13.25px;">Kafka</a> <a href="/tags/Leetcode/" style="font-size: 13.33px;">Leetcode</a> <a href="/tags/Linux/" style="font-size: 13px;">Linux</a> <a href="/tags/Logback/" style="font-size: 13px;">Logback</a> <a href="/tags/Mac/" style="font-size: 13px;">Mac</a> <a href="/tags/Maven/" style="font-size: 13.42px;">Maven</a> <a href="/tags/MongoDB/" style="font-size: 13.42px;">MongoDB</a> <a href="/tags/MyBatis/" style="font-size: 13.5px;">MyBatis</a> <a href="/tags/Mybatis/" style="font-size: 13.17px;">Mybatis</a> <a href="/tags/MybatisPlus/" style="font-size: 13.08px;">MybatisPlus</a> <a href="/tags/Mysql/" style="font-size: 13.25px;">Mysql</a> <a href="/tags/Nano/" style="font-size: 13px;">Nano</a> <a href="/tags/Nexus/" style="font-size: 13.08px;">Nexus</a> <a href="/tags/Nginx/" style="font-size: 13.08px;">Nginx</a> <a href="/tags/Opengrok/" style="font-size: 13px;">Opengrok</a> <a href="/tags/Oracle/" style="font-size: 13.75px;">Oracle</a> <a href="/tags/Profile/" style="font-size: 13px;">Profile</a> <a href="/tags/PubSubJS/" style="font-size: 13px;">PubSubJS</a> <a href="/tags/Python/" style="font-size: 13.17px;">Python</a> <a href="/tags/Quartz/" style="font-size: 13.08px;">Quartz</a> <a href="/tags/RESTful/" style="font-size: 13px;">RESTful</a> <a href="/tags/React/" style="font-size: 13.5px;">React</a> <a href="/tags/Redis/" style="font-size: 13.17px;">Redis</a> <a href="/tags/SQL/" style="font-size: 13.25px;">SQL</a> <a href="/tags/SVN/" style="font-size: 13px;">SVN</a> <a href="/tags/Scheduled/" style="font-size: 13px;">Scheduled</a> <a href="/tags/Scrapy/" style="font-size: 13px;">Scrapy</a> <a href="/tags/Shell/" style="font-size: 13.58px;">Shell</a> <a href="/tags/Spel%E8%A1%A8%E8%BE%BE%E5%BC%8F/" style="font-size: 13px;">Spel表达式</a> <a href="/tags/Spring/" style="font-size: 13.33px;">Spring</a> <a href="/tags/SpringBoot/" style="font-size: 14px;">SpringBoot</a> <a href="/tags/SpringEvent/" style="font-size: 13px;">SpringEvent</a> <a href="/tags/SpringMVC/" style="font-size: 13px;">SpringMVC</a> <a href="/tags/SpringSecurity/" style="font-size: 13.17px;">SpringSecurity</a> <a href="/tags/Stream/" style="font-size: 13px;">Stream</a> <a href="/tags/Swagger/" style="font-size: 13.08px;">Swagger</a> <a href="/tags/Swift/" style="font-size: 13.92px;">Swift</a> <a href="/tags/TestNG/" style="font-size: 13px;">TestNG</a> <a href="/tags/Tomcat/" style="font-size: 13px;">Tomcat</a> <a href="/tags/UI%E7%BB%84%E4%BB%B6%E5%BA%93/" style="font-size: 13px;">UI组件库</a> <a href="/tags/Validator/" style="font-size: 13px;">Validator</a> <a href="/tags/Vue/" style="font-size: 13px;">Vue</a> <a href="/tags/Vuepress/" style="font-size: 13.25px;">Vuepress</a> <a href="/tags/Wordpress/" style="font-size: 13px;">Wordpress</a> <a href="/tags/XML/" style="font-size: 13px;">XML</a> <a href="/tags/assert/" style="font-size: 13px;">assert</a> <a href="/tags/docker/" style="font-size: 13px;">docker</a> <a href="/tags/gitlab/" style="font-size: 13px;">gitlab</a> <a href="/tags/homebrew/" style="font-size: 13px;">homebrew</a> <a href="/tags/iframe/" style="font-size: 13px;">iframe</a> <a href="/tags/java/" style="font-size: 13px;">java</a> <a href="/tags/lambda/" style="font-size: 13px;">lambda</a> <a href="/tags/less/" style="font-size: 13px;">less</a> <a href="/tags/linux/" style="font-size: 13.25px;">linux</a> <a href="/tags/mac/" style="font-size: 13.25px;">mac</a> <a href="/tags/mybatis-plus/" style="font-size: 13px;">mybatis-plus</a> <a href="/tags/mysql/" style="font-size: 13px;">mysql</a> <a href="/tags/oracle/" style="font-size: 13px;">oracle</a> <a href="/tags/pom-xml/" style="font-size: 13px;">pom.xml</a> <a href="/tags/quartz/" style="font-size: 13px;">quartz</a> <a href="/tags/settings-xml/" style="font-size: 13px;">settings.xml</a> <a href="/tags/spring-boot/" style="font-size: 13px;">spring-boot</a> <a href="/tags/ssh/" style="font-size: 13px;">ssh</a> <a href="/tags/sshpass/" style="font-size: 13px;">sshpass</a> <a href="/tags/yum/" style="font-size: 13px;">yum</a> <a href="/tags/%E4%B9%90%E8%A7%82%E9%94%81/" style="font-size: 13px;">乐观锁</a> <a href="/tags/%E4%BB%8B%E7%BB%8D/" style="font-size: 13px;">介绍</a> <a href="/tags/%E5%86%85%E7%BD%91/" style="font-size: 13px;">内网</a> <a href="/tags/%E5%86%85%E7%BD%91%E7%A9%BF%E9%80%8F/" style="font-size: 13px;">内网穿透</a> <a href="/tags/%E5%8A%A0%E5%AF%86/" style="font-size: 13.08px;">加密</a> <a href="/tags/%E5%8F%8D%E7%BC%96%E8%AF%91%E5%B7%A5%E5%85%B7/" style="font-size: 13px;">反编译工具</a> <a href="/tags/%E5%9B%BE%E5%BA%8A/" style="font-size: 13px;">图床</a> <a href="/tags/%E5%9F%BA%E7%A1%80/" style="font-size: 13.92px;">基础</a> <a href="/tags/%E5%AD%98%E5%82%A8%E5%87%BD%E6%95%B0/" style="font-size: 13px;">存储函数</a> <a href="/tags/%E5%AD%98%E5%82%A8%E8%BF%87%E7%A8%8B/" style="font-size: 13.08px;">存储过程</a> <a href="/tags/%E5%AE%9A%E6%97%B6%E5%99%A8/" style="font-size: 13px;">定时器</a> <a href="/tags/%E5%AE%9D%E5%A1%94/" style="font-size: 13.08px;">宝塔</a> <a href="/tags/%E5%B9%B6%E5%8F%91/" style="font-size: 13px;">并发</a> <a href="/tags/%E5%BC%82%E5%B8%B8/" style="font-size: 13px;">异常</a> <a href="/tags/%E5%BF%83%E7%90%86/" style="font-size: 13.08px;">心理</a> <a href="/tags/%E6%80%BB%E7%BB%93/" style="font-size: 13px;">总结</a> <a href="/tags/%E6%8C%81%E4%B9%85%E5%B1%82%E6%A1%86%E6%9E%B6/" style="font-size: 13.17px;">持久层框架</a> <a href="/tags/%E6%8E%A5%E5%8F%A3/" style="font-size: 13px;">接口</a> <a href="/tags/%E6%8F%92%E4%BB%B6/" style="font-size: 13px;">插件</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/" style="font-size: 13.33px;">数据库</a> <a href="/tags/%E6%96%AD%E8%A8%80/" style="font-size: 13px;">断言</a> <a href="/tags/%E6%A0%91%E8%8E%93%E6%B4%BE/" style="font-size: 13.08px;">树莓派</a> <a href="/tags/%E6%A0%91%E8%8E%93%E6%B4%BE4B/" style="font-size: 13px;">树莓派4B</a> <a href="/tags/%E6%A6%82%E5%BF%B5/" style="font-size: 13px;">概念</a> <a href="/tags/%E6%A8%A1%E7%89%88%E5%BC%95%E6%93%8E/" style="font-size: 13px;">模版引擎</a> <a href="/tags/%E6%B3%9B%E5%9E%8B/" style="font-size: 13.08px;">泛型</a> <a href="/tags/%E6%B5%8B%E8%AF%95/" style="font-size: 13.33px;">测试</a> <a href="/tags/%E7%88%AC%E8%99%AB/" style="font-size: 13.08px;">爬虫</a> <a href="/tags/%E7%94%A8%E6%88%B7%E6%9D%83%E9%99%90%E9%AA%8C%E8%AF%81/" style="font-size: 13px;">用户权限验证</a> <a href="/tags/%E7%9F%A5%E8%AF%86/" style="font-size: 13px;">知识</a> <a href="/tags/%E7%AE%97%E6%B3%95/" style="font-size: 13.08px;">算法</a> <a href="/tags/%E7%B1%BB/" style="font-size: 13px;">类</a> <a href="/tags/%E7%BB%84%E4%BB%B6%E5%BA%93/" style="font-size: 13px;">组件库</a> <a href="/tags/%E8%84%9A%E6%9C%AC/" style="font-size: 13.25px;">脚本</a> <a href="/tags/%E8%87%AA%E5%8A%A8%E5%8C%96%E6%B5%8B%E8%AF%95/" style="font-size: 13px;">自动化测试</a> <a href="/tags/%E8%8B%A5%E4%BE%9D/" style="font-size: 13px;">若依</a> <a href="/tags/%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/" style="font-size: 13.08px;">解决方案</a> <a href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" style="font-size: 13px;">设计模式</a> <a href="/tags/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/" style="font-size: 13.08px;">读书笔记</a> <a href="/tags/%E8%B7%A8%E5%9F%9F/" style="font-size: 13px;">跨域</a> <a href="/tags/%E9%83%A8%E7%BD%B2/" style="font-size: 13px;">部署</a> <a href="/tags/%E9%9B%86%E6%88%90/" style="font-size: 13.67px;">集成</a> <a href="/tags/%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1/" style="font-size: 13px;">面向对象</a> <a href="/tags/%E9%9F%A9%E5%89%A7/" style="font-size: 13px;">韩剧</a>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget-body">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/07/">七月 2024</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/07/">七月 2023</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/06/">六月 2023</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/01/">一月 2023</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/11/">十一月 2022</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/10/">十月 2022</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/07/">七月 2022</a><span class="archive-list-count">181</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/06/">六月 2022</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/07/">七月 2020</a><span class="archive-list-count">17</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget-body">
+      <ul class="recent-post-list list-unstyled ">
+        
+          <li>
+            
+            <div class="item-thumb">
+              <a href="/2024/07/%E4%B8%8D%E5%8D%B7%E5%AD%A6%E5%8E%86%E5%92%8C%E8%83%8C%E6%99%AF%E7%9A%84%E8%B5%9B%E9%81%93%EF%BC%8C%E4%B9%9F%E8%83%BD%E6%9C%88%E5%85%A5%E8%BF%87%E4%B8%87%EF%BC%9F/" class="thumb">
+    
+    
+        <span class="thumb-image thumb-none"></span>
+    
+</a>
+
+            </div>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/%E5%88%9B%E4%B8%9A/">创业</a>
+              </p>
+              <p class="item-title">
+                <a href="/2024/07/%E4%B8%8D%E5%8D%B7%E5%AD%A6%E5%8E%86%E5%92%8C%E8%83%8C%E6%99%AF%E7%9A%84%E8%B5%9B%E9%81%93%EF%BC%8C%E4%B9%9F%E8%83%BD%E6%9C%88%E5%85%A5%E8%BF%87%E4%B8%87%EF%BC%9F/" class="title">不卷学历和背景的赛道，也能月入过万？</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2024-07-11T05:45:20.000Z" itemprop="datePublished">2024-07-11</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-thumb">
+              <a href="/2024/07/%E5%9B%9E%E9%A1%BE%E5%B7%A5%E4%BD%9C%E8%BF%99%E5%87%A0%E5%B9%B4/" class="thumb">
+    
+    
+        <span class="thumb-image thumb-none"></span>
+    
+</a>
+
+            </div>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/%E5%A4%8D%E7%9B%98/">复盘</a>
+              </p>
+              <p class="item-title">
+                <a href="/2024/07/%E5%9B%9E%E9%A1%BE%E5%B7%A5%E4%BD%9C%E8%BF%99%E5%87%A0%E5%B9%B4/" class="title">回顾工作这几年</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2024-07-09T06:19:23.000Z" itemprop="datePublished">2024-07-09</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-thumb">
+              <a href="/2023/07/SpringBoot3%E9%9B%86%E6%88%90Quartz%E6%9E%81%E7%AE%80%E7%89%88/" class="thumb">
+    
+    
+        <span style="background-image:url(/2023/07/SpringBoot3集成Quartz极简版/logo-quartz-scheduler.png)" alt="SpringBoot3集成Quartz极简版" class="thumb-image"></span>
+    
+</a>
+
+            </div>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/SpringBoot/">SpringBoot</a>
+              </p>
+              <p class="item-title">
+                <a href="/2023/07/SpringBoot3%E9%9B%86%E6%88%90Quartz%E6%9E%81%E7%AE%80%E7%89%88/" class="title">SpringBoot3集成Quartz极简版</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2023-07-18T01:14:01.000Z" itemprop="datePublished">2023-07-18</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-thumb">
+              <a href="/2023/07/SpringBoot3%E9%9B%86%E6%88%90Quartz%E8%AF%A6%E7%BB%86%E7%89%88/" class="thumb">
+    
+    
+        <span style="background-image:url(/2023/07/SpringBoot3集成Quartz极简版/logo-quartz-scheduler.png)" alt="SpringBoot3集成Quartz详细版" class="thumb-image"></span>
+    
+</a>
+
+            </div>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/SpringBoot/">SpringBoot</a>
+              </p>
+              <p class="item-title">
+                <a href="/2023/07/SpringBoot3%E9%9B%86%E6%88%90Quartz%E8%AF%A6%E7%BB%86%E7%89%88/" class="title">SpringBoot3集成Quartz详细版</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2023-07-18T01:14:01.000Z" itemprop="datePublished">2023-07-18</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-thumb">
+              <a href="/2023/07/SpringBoot3%E9%9B%86%E6%88%90Swagger/" class="thumb">
+    
+    
+        <span style="background-image:url(/2023/07/SpringBoot3集成Swagger/swagger_logo.svg)" alt="SpringBoot3集成Swagger" class="thumb-image"></span>
+    
+</a>
+
+            </div>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/SpringBoot/">SpringBoot</a>
+              </p>
+              <p class="item-title">
+                <a href="/2023/07/SpringBoot3%E9%9B%86%E6%88%90Swagger/" class="title">SpringBoot3集成Swagger</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2023-07-11T06:52:01.000Z" itemprop="datePublished">2023-07-11</time>
+              </p>
+            </div>
+          </li>
+          
+      </ul>
+    </div>
+  </div>
+  
+
+    
+  </div>
+</aside>
+
+  
+  
+<main class="main" role="main">
+  <div class="content">
+  <article id="post-软件开发/场景/搭建单体SpringBoot项目/23集成流程引擎/搭建单体SpringBoot项目-集成Activiti7-进阶" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
+    
+    <div class="article-header">
+      
+        
+  
+    <h1 class="article-title" itemprop="name">
+      搭建单体SpringBoot项目 集成Activiti7 进阶
+    </h1>
+  
+
+      
+      <div class="article-meta">
+        <span class="article-date">
+    <i class="icon icon-calendar-check"></i>
+	<a href="/2022/07/%E6%90%AD%E5%BB%BA%E5%8D%95%E4%BD%93SpringBoot%E9%A1%B9%E7%9B%AE-%E9%9B%86%E6%88%90Activiti7-%E8%BF%9B%E9%98%B6/" class="article-date">
+	  <time datetime="2022-07-01T04:01:01.000Z" itemprop="datePublished">2022-07-01</time>
+	</a>
+</span>
+        
+  <span class="article-category">
+    <i class="icon icon-folder"></i>
+    <a class="article-category-link" href="/categories/%E6%8A%80%E6%9C%AF/">技术</a>►<a class="article-category-link" href="/categories/%E6%8A%80%E6%9C%AF/%E6%90%AD%E5%BB%BA%E5%8D%95%E4%BD%93SpringBoot%E9%A1%B9%E7%9B%AE/">搭建单体SpringBoot项目</a>
+  </span>
+
+        
+  <span class="article-tag">
+    <i class="icon icon-tags"></i>
+	<a class="article-tag-link-link" href="/tags/Activiti7/" rel="tag">Activiti7</a>, <a class="article-tag-link-link" href="/tags/SpringBoot/" rel="tag">SpringBoot</a>
+  </span>
+
+
+        
+	<span class="article-read hidden-xs">
+	    <i class="icon icon-eye-fill" aria-hidden="true"></i>
+	    <span id="busuanzi_container_page_pv">
+			<span id="busuanzi_value_page_pv">0</span>
+		</span>
+	</span>
+
+
+        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2022/07/%E6%90%AD%E5%BB%BA%E5%8D%95%E4%BD%93SpringBoot%E9%A1%B9%E7%9B%AE-%E9%9B%86%E6%88%90Activiti7-%E8%BF%9B%E9%98%B6/#comments" class="article-comment-link">评论</a></span>
+        
+	
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">字数统计: 10.4k(字)</span>
+	
+	
+		<span class="post-readcount hidden-xs" itemprop="timeRequired">阅读时长: 41(分)</span>
+	
+
+      </div>
+    </div>
+    <div class="article-entry marked-body" itemprop="articleBody">
+      
+        <h2 id="一、流程实例"><a href="#一、流程实例" class="headerlink" title="一、流程实例"></a>一、流程实例</h2><h3 id="什么是流程实例"><a href="#什么是流程实例" class="headerlink" title="什么是流程实例"></a>什么是流程实例</h3><p><strong>流程实例</strong>（ProcessInstance）代表流程定义的执行实例。</p>
+<p>一个流程实例包括了所有的运行节点。我们可以利用这个对象来了解当前流程实例的进度等信息。</p>
+<p>例如：用户或程序按照流程定义内容发起一个流程，这就是一个流程实例。</p>
+<p>流程定义和流程实例的图解：</p>
+<p><img src="/2022/07/%E6%90%AD%E5%BB%BA%E5%8D%95%E4%BD%93SpringBoot%E9%A1%B9%E7%9B%AE-%E9%9B%86%E6%88%90Activiti7-%E8%BF%9B%E9%98%B6/1577498489089.png" alt="1577498489089"></p>
+<h3 id="启动流程实例-并添加Businesskey（业务标识）"><a href="#启动流程实例-并添加Businesskey（业务标识）" class="headerlink" title="启动流程实例 并添加Businesskey（业务标识）"></a>启动流程实例 并添加Businesskey（业务标识）</h3><p>流程定义部署在activiti后，就可以在系统中通过activiti去管理该流程的执行，执行流程表示流程的一次执行。</p>
+<p>比如部署系统出差流程后，如果某用户要申请出差这时就需要执行这个流程，如果另外一个用户也要申请出差则也需要执行该流程，每个执行互不影响，每个执行是单独的流程实例。</p>
+<p>启动流程实例时，指定的businesskey，就会在act_ru_execution #流程实例的执行表中存储businesskey。</p>
+<p>Businesskey：业务标识，通常为业务表的主键，业务标识和流程实例一一对应。业务标识来源于业务系统。存储业务标识就是根据业务标识来关联查询业务系统的数据。</p>
+<p>比如：出差流程启动一个流程实例，就可以将出差单的id作为业务标识存储到activiti中，将来查询activiti的流程实例信息就可以获取出差单的id从而关联查询业务系统数据库得到出差单信息。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 启动流程实例，添加businessKey</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">addBusinessKey</span><span class="params">()</span>&#123;</span><br><span class="line"><span class="comment">//        1、得到ProcessEngine</span></span><br><span class="line">        <span class="type">ProcessEngine</span> <span class="variable">processEngine</span> <span class="operator">=</span> ProcessEngines.getDefaultProcessEngine();</span><br><span class="line"><span class="comment">//        2、得到RunTimeService</span></span><br><span class="line">        <span class="type">RuntimeService</span> <span class="variable">runtimeService</span> <span class="operator">=</span> processEngine.getRuntimeService();</span><br><span class="line"><span class="comment">//        3、启动流程实例，同时还要指定业务标识businessKey，也就是出差申请单id，这里是1001</span></span><br><span class="line">        <span class="type">ProcessInstance</span> <span class="variable">processInstance</span> <span class="operator">=</span> runtimeService.</span><br><span class="line">                startProcessInstanceByKey(<span class="string">&quot;myEvection&quot;</span>,<span class="string">&quot;1001&quot;</span>);</span><br><span class="line"><span class="comment">//        4、输出processInstance相关属性</span></span><br><span class="line">        System.out.println(<span class="string">&quot;业务id==&quot;</span>+processInstance.getBusinessKey());</span><br><span class="line"></span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<p>Activiti的act_ru_execution中存储业务标识：</p>
+<p><img src="/2022/07/%E6%90%AD%E5%BB%BA%E5%8D%95%E4%BD%93SpringBoot%E9%A1%B9%E7%9B%AE-%E9%9B%86%E6%88%90Activiti7-%E8%BF%9B%E9%98%B6/1577261568103.png" alt="1577261568103"></p>
+<h3 id="操作数据库表"><a href="#操作数据库表" class="headerlink" title="操作数据库表"></a>操作数据库表</h3><p>启动流程实例，操作如下数据库表：</p>
+<p>SELECT * FROM act_ru_execution #流程实例执行表，记录当前流程实例的执行情况</p>
+<p><img src="/2022/07/%E6%90%AD%E5%BB%BA%E5%8D%95%E4%BD%93SpringBoot%E9%A1%B9%E7%9B%AE-%E9%9B%86%E6%88%90Activiti7-%E8%BF%9B%E9%98%B6/1577499812252.png" alt="1577499812252"></p>
+<p>说明：</p>
+<p>流程实例执行，如果当前只有一个分支时，一个流程实例只有一条记录且执行表的主键id和流程实例id相同，如果当前有多个分支正在运行则该执行表中有多条记录，存在执行表的主键和流程实例id不相同的记录。<strong>不论当前有几个分支总会有一条记录的执行表的主键和流程实例</strong>id<strong>相同</strong> </p>
+<p>一个流程实例运行完成，此表中与流程实例相关的记录删除。</p>
+<p>SELECT * FROM act_ru_task #任务执行表，记录当前执行的任务</p>
+<p><img src="/2022/07/%E6%90%AD%E5%BB%BA%E5%8D%95%E4%BD%93SpringBoot%E9%A1%B9%E7%9B%AE-%E9%9B%86%E6%88%90Activiti7-%E8%BF%9B%E9%98%B6/1577499771599.png" alt="1577499771599"></p>
+<p>说明：启动流程实例，流程当前执行到第一个任务结点，此表会插入一条记录表示当前任务的执行情况，如果任务完成则记录删除。</p>
+<p>SELECT * FROM act_ru_identitylink #任务参与者，记录当前参与任务的用户或组</p>
+<p><img src="/2022/07/%E6%90%AD%E5%BB%BA%E5%8D%95%E4%BD%93SpringBoot%E9%A1%B9%E7%9B%AE-%E9%9B%86%E6%88%90Activiti7-%E8%BF%9B%E9%98%B6/1577499842115.png" alt="1577499842115"></p>
+<p>SELECT * FROM act_hi_procinst #流程实例历史表</p>
+<p><img src="/2022/07/%E6%90%AD%E5%BB%BA%E5%8D%95%E4%BD%93SpringBoot%E9%A1%B9%E7%9B%AE-%E9%9B%86%E6%88%90Activiti7-%E8%BF%9B%E9%98%B6/1577499914186.png" alt="1577499914186"></p>
+<p>流程实例启动，会在此表插入一条记录，流程实例运行完成记录也不会删除。</p>
+<p> SELECT * FROM act_hi_taskinst  #任务历史表，记录所有任务</p>
+<p><img src="/2022/07/%E6%90%AD%E5%BB%BA%E5%8D%95%E4%BD%93SpringBoot%E9%A1%B9%E7%9B%AE-%E9%9B%86%E6%88%90Activiti7-%E8%BF%9B%E9%98%B6/1577499985580.png" alt="1577499985580"></p>
+<p>开始一个任务，不仅在act_ru_task表插入记录，也会在历史任务表插入一条记录，任务历史表的主键就是任务id，任务完成此表记录不删除。</p>
+<p> SELECT * FROM act_hi_actinst  #活动历史表，记录所有活动</p>
+<p><img src="/2022/07/%E6%90%AD%E5%BB%BA%E5%8D%95%E4%BD%93SpringBoot%E9%A1%B9%E7%9B%AE-%E9%9B%86%E6%88%90Activiti7-%E8%BF%9B%E9%98%B6/1577500036347.png" alt="1577500036347"></p>
+<p>活动包括任务，所以此表中不仅记录了任务，还记录了流程执行过程的其它活动，比如开始事件、结束事件。</p>
+<h3 id="查询流程实例"><a href="#查询流程实例" class="headerlink" title="查询流程实例"></a>查询流程实例</h3><p>流程在运行过程中可以查询流程实例的状态，当前运行结点等信息。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Test</span></span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">queryProcessInstance</span><span class="params">()</span> &#123;</span><br><span class="line">		<span class="comment">// 流程定义key</span></span><br><span class="line">		<span class="type">String</span> <span class="variable">processDefinitionKey</span> <span class="operator">=</span> <span class="string">&quot;evection&quot;</span>;</span><br><span class="line">        <span class="type">ProcessEngine</span> <span class="variable">processEngine</span> <span class="operator">=</span> ProcessEngines.getDefaultProcessEngine();</span><br><span class="line">		<span class="comment">// 获取RunTimeService</span></span><br><span class="line">		<span class="type">RuntimeService</span> <span class="variable">runtimeService</span> <span class="operator">=</span> processEngine.getRuntimeService();</span><br><span class="line">		List&lt;ProcessInstance&gt; list = runtimeService</span><br><span class="line">				.createProcessInstanceQuery()</span><br><span class="line">				.processDefinitionKey(processDefinitionKey)<span class="comment">//</span></span><br><span class="line">				.list();</span><br><span class="line"></span><br><span class="line">		<span class="keyword">for</span> (ProcessInstance processInstance : list) &#123;</span><br><span class="line">			System.out.println(<span class="string">&quot;----------------------------&quot;</span>);</span><br><span class="line">			System.out.println(<span class="string">&quot;流程实例id：&quot;</span></span><br><span class="line">					+ processInstance.getProcessInstanceId());</span><br><span class="line">			System.out.println(<span class="string">&quot;所属流程定义id：&quot;</span></span><br><span class="line">					+ processInstance.getProcessDefinitionId());</span><br><span class="line">			System.out.println(<span class="string">&quot;是否执行完成：&quot;</span> + processInstance.isEnded());</span><br><span class="line">			System.out.println(<span class="string">&quot;是否暂停：&quot;</span> + processInstance.isSuspended());</span><br><span class="line">			System.out.println(<span class="string">&quot;当前活动标识：&quot;</span> + processInstance.getActivityId());</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="关联BusinessKey"><a href="#关联BusinessKey" class="headerlink" title="关联BusinessKey"></a>关联BusinessKey</h4><p>需求：</p>
+<p>在activiti实际应用时，查询流程实例列表时可能要显示出业务系统的一些相关信息，比如：查询当前运行的出差流程列表需要将出差单名称、出差天数等信息显示出来，出差天数等信息在业务系统中存在，而并没有在activiti数据库中存在，所以是无法通过activiti的api查询到出差天数等信息。</p>
+<p>实现：</p>
+<p>在查询流程实例时，通过businessKey（业务标识 ）关联查询业务系统的出差单表，查询出出差天数等信息。</p>
+<p>通过下面的代码就可以获取activiti中所对应实例保存的业务Key。而这个业务Key一般都会保存相关联的业务操作表的主键，再通过主键ID去查询业务信息，比如通过出差单的ID，去查询更多的请假信息（出差人，出差时间，出差天数，出差目的地等）</p>
+<p>String businessKey &#x3D; processInstance.getBusinessKey();</p>
+<p>在activiti的act_ru_execution表，字段BUSINESS_KEY就是存放业务KEY的。</p>
+<p><img src="/2022/07/%E6%90%AD%E5%BB%BA%E5%8D%95%E4%BD%93SpringBoot%E9%A1%B9%E7%9B%AE-%E9%9B%86%E6%88%90Activiti7-%E8%BF%9B%E9%98%B6/1574136375409.png" alt="1574136375409"></p>
+<h3 id="挂起、激活流程实例"><a href="#挂起、激活流程实例" class="headerlink" title="挂起、激活流程实例"></a>挂起、激活流程实例</h3><p>某些情况可能由于流程变更需要将当前运行的流程暂停而不是直接删除，流程暂停后将不会继续执行。</p>
+<h4 id="全部流程实例挂起"><a href="#全部流程实例挂起" class="headerlink" title="全部流程实例挂起"></a>全部流程实例挂起</h4><p>操作流程定义为挂起状态，该流程定义下边所有的流程实例全部暂停：</p>
+<p>流程定义为挂起状态该流程定义将不允许启动新的流程实例，同时该流程定义下所有的流程实例将全部挂起暂停执行。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 全部流程实例挂起与激活</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">SuspendAllProcessInstance</span><span class="params">()</span>&#123;</span><br><span class="line"><span class="comment">//        获取processEngine</span></span><br><span class="line">        <span class="type">ProcessEngine</span> <span class="variable">processEngine</span> <span class="operator">=</span> ProcessEngines.getDefaultProcessEngine();</span><br><span class="line"><span class="comment">//        获取repositoryService</span></span><br><span class="line">        <span class="type">RepositoryService</span> <span class="variable">repositoryService</span> <span class="operator">=</span> processEngine.getRepositoryService();</span><br><span class="line"><span class="comment">//        查询流程定义的对象</span></span><br><span class="line">        <span class="type">ProcessDefinition</span> <span class="variable">processDefinition</span> <span class="operator">=</span> repositoryService.createProcessDefinitionQuery().</span><br><span class="line">                processDefinitionKey(<span class="string">&quot;myEvection&quot;</span>).</span><br><span class="line">                singleResult();</span><br><span class="line"><span class="comment">//        得到当前流程定义的实例是否都为暂停状态</span></span><br><span class="line">        <span class="type">boolean</span> <span class="variable">suspended</span> <span class="operator">=</span> processDefinition.isSuspended();</span><br><span class="line"><span class="comment">//        流程定义id</span></span><br><span class="line">        <span class="type">String</span> <span class="variable">processDefinitionId</span> <span class="operator">=</span> processDefinition.getId();</span><br><span class="line"><span class="comment">//        判断是否为暂停</span></span><br><span class="line">        <span class="keyword">if</span>(suspended)&#123;</span><br><span class="line"><span class="comment">//         如果是暂停，可以执行激活操作 ,参数1 ：流程定义id ，参数2：是否激活，参数3：激活时间</span></span><br><span class="line">            repositoryService.activateProcessDefinitionById(processDefinitionId,</span><br><span class="line">                    <span class="literal">true</span>,</span><br><span class="line">                    <span class="literal">null</span></span><br><span class="line">            );</span><br><span class="line">            System.out.println(<span class="string">&quot;流程定义：&quot;</span>+processDefinitionId+<span class="string">&quot;,已激活&quot;</span>);</span><br><span class="line">        &#125;<span class="keyword">else</span>&#123;</span><br><span class="line"><span class="comment">//          如果是激活状态，可以暂停，参数1 ：流程定义id ，参数2：是否暂停，参数3：暂停时间</span></span><br><span class="line">            repositoryService.suspendProcessDefinitionById(processDefinitionId,</span><br><span class="line">                    <span class="literal">true</span>,</span><br><span class="line">                    <span class="literal">null</span>);</span><br><span class="line">            System.out.println(<span class="string">&quot;流程定义：&quot;</span>+processDefinitionId+<span class="string">&quot;,已挂起&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="单个流程实例挂起"><a href="#单个流程实例挂起" class="headerlink" title="单个流程实例挂起"></a>单个流程实例挂起</h4><p>操作流程实例对象，针对单个流程执行挂起操作，某个流程实例挂起则此流程不再继续执行，完成该流程实例的当前任务将报异常。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 单个流程实例挂起与激活</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">SuspendSingleProcessInstance</span><span class="params">()</span>&#123;</span><br><span class="line"><span class="comment">//        获取processEngine</span></span><br><span class="line">        <span class="type">ProcessEngine</span> <span class="variable">processEngine</span> <span class="operator">=</span> ProcessEngines.getDefaultProcessEngine();</span><br><span class="line"><span class="comment">//        RuntimeService</span></span><br><span class="line">        <span class="type">RuntimeService</span> <span class="variable">runtimeService</span> <span class="operator">=</span> processEngine.getRuntimeService();</span><br><span class="line"><span class="comment">//        查询流程定义的对象</span></span><br><span class="line">        <span class="type">ProcessInstance</span> <span class="variable">processInstance</span> <span class="operator">=</span> runtimeService.</span><br><span class="line">                createProcessInstanceQuery().</span><br><span class="line">                processInstanceId(<span class="string">&quot;15001&quot;</span>).</span><br><span class="line">                singleResult();</span><br><span class="line"><span class="comment">//        得到当前流程定义的实例是否都为暂停状态</span></span><br><span class="line">        <span class="type">boolean</span> <span class="variable">suspended</span> <span class="operator">=</span> processInstance.isSuspended();</span><br><span class="line"><span class="comment">//        流程定义id</span></span><br><span class="line">        <span class="type">String</span> <span class="variable">processDefinitionId</span> <span class="operator">=</span> processInstance.getId();</span><br><span class="line"><span class="comment">//        判断是否为暂停</span></span><br><span class="line">        <span class="keyword">if</span>(suspended)&#123;</span><br><span class="line"><span class="comment">//         如果是暂停，可以执行激活操作 ,参数：流程定义id</span></span><br><span class="line">            runtimeService.activateProcessInstanceById(processDefinitionId);</span><br><span class="line">            System.out.println(<span class="string">&quot;流程定义：&quot;</span>+processDefinitionId+<span class="string">&quot;,已激活&quot;</span>);</span><br><span class="line">        &#125;<span class="keyword">else</span>&#123;</span><br><span class="line"><span class="comment">//          如果是激活状态，可以暂停，参数：流程定义id</span></span><br><span class="line">            runtimeService.suspendProcessInstanceById( processDefinitionId);</span><br><span class="line">            System.out.println(<span class="string">&quot;流程定义：&quot;</span>+processDefinitionId+<span class="string">&quot;,已挂起&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 测试完成个人任务</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">completTask</span><span class="params">()</span>&#123;</span><br><span class="line"><span class="comment">//        获取引擎</span></span><br><span class="line">        <span class="type">ProcessEngine</span> <span class="variable">processEngine</span> <span class="operator">=</span> ProcessEngines.getDefaultProcessEngine();</span><br><span class="line"><span class="comment">//        获取操作任务的服务 TaskService</span></span><br><span class="line">        <span class="type">TaskService</span> <span class="variable">taskService</span> <span class="operator">=</span> processEngine.getTaskService();</span><br><span class="line"><span class="comment">//        完成任务,参数：流程实例id,完成zhangsan的任务</span></span><br><span class="line">        <span class="type">Task</span> <span class="variable">task</span> <span class="operator">=</span> taskService.createTaskQuery()</span><br><span class="line">                .processInstanceId(<span class="string">&quot;15001&quot;</span>)</span><br><span class="line">                .taskAssignee(<span class="string">&quot;rose&quot;</span>)</span><br><span class="line">                .singleResult();</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        System.out.println(<span class="string">&quot;流程实例id=&quot;</span>+task.getProcessInstanceId());</span><br><span class="line">        System.out.println(<span class="string">&quot;任务Id=&quot;</span>+task.getId());</span><br><span class="line">        System.out.println(<span class="string">&quot;任务负责人=&quot;</span>+task.getAssignee());</span><br><span class="line">        System.out.println(<span class="string">&quot;任务名称=&quot;</span>+task.getName());</span><br><span class="line">        taskService.complete(task.getId());</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="二、个人任务"><a href="#二、个人任务" class="headerlink" title="二、个人任务"></a>二、个人任务</h2><h3 id="2-1、分配任务负责人"><a href="#2-1、分配任务负责人" class="headerlink" title="2.1、分配任务负责人"></a>2.1、分配任务负责人</h3><h4 id="2-1-1、固定分配"><a href="#2-1-1、固定分配" class="headerlink" title="2.1.1、固定分配"></a>2.1.1、固定分配</h4><p>在进行业务流程建模时指定固定的任务负责人， 如图：</p>
+<p><img src="/2022/07/%E6%90%AD%E5%BB%BA%E5%8D%95%E4%BD%93SpringBoot%E9%A1%B9%E7%9B%AE-%E9%9B%86%E6%88%90Activiti7-%E8%BF%9B%E9%98%B6/1575121491752.png" alt="1575121491752"></p>
+<p>并在 properties 视图中，填写 Assignee 项为任务负责人。 </p>
+<h4 id="2-1-2、表达式分配"><a href="#2-1-2、表达式分配" class="headerlink" title="2.1.2、表达式分配"></a>2.1.2、表达式分配</h4><p>由于固定分配方式，任务只管一步一步执行任务，执行到每一个任务将按照 bpmn 的配置去分配任<br>务负责人。 </p>
+<h5 id="2-1-2-1、UEL-表达式"><a href="#2-1-2-1、UEL-表达式" class="headerlink" title="2.1.2.1、UEL 表达式"></a>2.1.2.1、UEL 表达式</h5><p>Activiti 使用 UEL 表达式， UEL 是 java EE6 规范的一部分， UEL（Unified Expression Language）即 统一表达式语言， activiti 支持两个 UEL 表达式： UEL-value 和 UEL-method。 </p>
+<h6 id="1）UEL-value-定义"><a href="#1）UEL-value-定义" class="headerlink" title="1）UEL-value 定义"></a>1）UEL-value 定义</h6><p>如图： </p>
+<p><img src="/2022/07/%E6%90%AD%E5%BB%BA%E5%8D%95%E4%BD%93SpringBoot%E9%A1%B9%E7%9B%AE-%E9%9B%86%E6%88%90Activiti7-%E8%BF%9B%E9%98%B6/1577503716131.png" alt="1577503716131"></p>
+<p>assignee 这个变量是 activiti 的一个流程变量，</p>
+<p>或者使用这种方式定义：</p>
+<p>如图：</p>
+<p><img src="/2022/07/%E6%90%AD%E5%BB%BA%E5%8D%95%E4%BD%93SpringBoot%E9%A1%B9%E7%9B%AE-%E9%9B%86%E6%88%90Activiti7-%E8%BF%9B%E9%98%B6/1577503804336.png" alt="1577503804336"></p>
+<p> user 也是 activiti 的一个流程变量， user.assignee 表示通过调用 user 的 getter 方法获取值。 </p>
+<h6 id="2）UEL-method-方式"><a href="#2）UEL-method-方式" class="headerlink" title="2）UEL-method 方式"></a>2）UEL-method 方式</h6><p>如图： </p>
+<p><img src="/2022/07/%E6%90%AD%E5%BB%BA%E5%8D%95%E4%BD%93SpringBoot%E9%A1%B9%E7%9B%AE-%E9%9B%86%E6%88%90Activiti7-%E8%BF%9B%E9%98%B6/1585972081.png"></p>
+<p>userBean 是 spring 容器中的一个 bean，表示调用该 bean 的 getUserId()方法。 </p>
+<h6 id="3）UEL-method-与-UEL-value-结合"><a href="#3）UEL-method-与-UEL-value-结合" class="headerlink" title="3）UEL-method 与 UEL-value 结合"></a>3）UEL-method 与 UEL-value 结合</h6><p>再比如：<br>${ldapService.findManagerForEmployee(emp)}<br>ldapService 是 spring 容器的一个 bean，findManagerForEmployee 是该 bean 的一个方法，emp 是 activiti<br>流程变量， emp 作为参数传到 ldapService.findManagerForEmployee 方法中。 </p>
+<h6 id="4）其它"><a href="#4）其它" class="headerlink" title="4）其它"></a>4）其它</h6><p>表达式支持解析基础类型、 bean、 list、 array 和 map，也可作为条件判断。<br>如下：<br>${order.price &gt; 100 &amp;&amp; order.price &lt; 250} </p>
+<h5 id="2-1-2-2、编写代码配置负责人"><a href="#2-1-2-2、编写代码配置负责人" class="headerlink" title="2.1.2.2、编写代码配置负责人"></a>2.1.2.2、编写代码配置负责人</h5><h6 id="1-定义任务分配流程变量"><a href="#1-定义任务分配流程变量" class="headerlink" title="1)定义任务分配流程变量"></a>1)定义任务分配流程变量</h6><p>如图：</p>
+<p><img src="/2022/07/%E6%90%AD%E5%BB%BA%E5%8D%95%E4%BD%93SpringBoot%E9%A1%B9%E7%9B%AE-%E9%9B%86%E6%88%90Activiti7-%E8%BF%9B%E9%98%B6/1577503716131.png" alt="1577503716131"></p>
+<h6 id="2-设置流程变量"><a href="#2-设置流程变量" class="headerlink" title="2)设置流程变量"></a>2)设置流程变量</h6><p>在启动流程实例时设置流程变量，如下： </p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"> <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 设置流程负责人</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">assigneeUEL</span><span class="params">()</span>&#123;</span><br><span class="line"><span class="comment">//      获取流程引擎</span></span><br><span class="line">        <span class="type">ProcessEngine</span> <span class="variable">processEngine</span> <span class="operator">=</span> ProcessEngines.getDefaultProcessEngine();</span><br><span class="line"><span class="comment">//        获取 RuntimeService</span></span><br><span class="line">        <span class="type">RuntimeService</span> <span class="variable">runtimeService</span> <span class="operator">=</span> processEngine.getRuntimeService();</span><br><span class="line"><span class="comment">//        设置assignee的取值，用户可以在界面上设置流程的执行</span></span><br><span class="line">        Map&lt;String,Object&gt; assigneeMap = <span class="keyword">new</span> <span class="title class_">HashMap</span>&lt;&gt;();</span><br><span class="line">        assigneeMap.put(<span class="string">&quot;assignee0&quot;</span>,<span class="string">&quot;张三&quot;</span>);</span><br><span class="line">        assigneeMap.put(<span class="string">&quot;assignee1&quot;</span>,<span class="string">&quot;李经理&quot;</span>);</span><br><span class="line">        assigneeMap.put(<span class="string">&quot;assignee2&quot;</span>,<span class="string">&quot;王总经理&quot;</span>);</span><br><span class="line">        assigneeMap.put(<span class="string">&quot;assignee3&quot;</span>,<span class="string">&quot;赵财务&quot;</span>);</span><br><span class="line"><span class="comment">//        启动流程实例，同时还要设置流程定义的assignee的值</span></span><br><span class="line">        runtimeService.startProcessInstanceByKey(<span class="string">&quot;myEvection1&quot;</span>,assigneeMap);</span><br><span class="line"><span class="comment">//       输出</span></span><br><span class="line">        System.out.println(processEngine.getName());</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<p>执行成功后，可以在act_ru_variable表中看到刚才map中的数据</p>
+<p><img src="/2022/07/%E6%90%AD%E5%BB%BA%E5%8D%95%E4%BD%93SpringBoot%E9%A1%B9%E7%9B%AE-%E9%9B%86%E6%88%90Activiti7-%E8%BF%9B%E9%98%B6/1585562066-1585562152652.png"></p>
+<h5 id="2-1-2-3、注意事项"><a href="#2-1-2-3、注意事项" class="headerlink" title="2.1.2.3、注意事项"></a>2.1.2.3、注意事项</h5><p>由于使用了表达式分配，必须保证在任务执行过程表达式执行成功，比如：<br>某个任务使用了表达式${order.price &gt; 100 &amp;&amp; order.price &lt; 250}，当执行该任务时必须保证 order 在<br>流程变量中存在，否则 activiti 异常。 </p>
+<h4 id="2-1-3、监听器分配"><a href="#2-1-3、监听器分配" class="headerlink" title="2.1.3、监听器分配"></a>2.1.3、监听器分配</h4><p>可以使用监听器来完成很多Activiti流程的业务。</p>
+<p>在本章我们使用监听器的方式来指定负责人，那么在流程设计时就不需要指定assignee。</p>
+<p>任务监听器是发生对应的任务相关事件时执行自定义 java 逻辑 或表达式。<br>任务相当事件包括：  </p>
+<p><img src="/2022/07/%E6%90%AD%E5%BB%BA%E5%8D%95%E4%BD%93SpringBoot%E9%A1%B9%E7%9B%AE-%E9%9B%86%E6%88%90Activiti7-%E8%BF%9B%E9%98%B6/1577506842889.png" alt="1577506842889"></p>
+<p>Event的选项包含：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Create：任务创建后触发</span><br><span class="line">Assignment：任务分配后触发</span><br><span class="line">Delete：任务完成后触发</span><br><span class="line">All：所有事件发生都触发</span><br></pre></td></tr></table></figure>
+
+<p>定义任务监听类，且类必须实现 org.activiti.engine.delegate.TaskListener 接口 </p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">MyTaskListener</span> <span class="keyword">implements</span> <span class="title class_">TaskListener</span> &#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">notify</span><span class="params">(DelegateTask delegateTask)</span> &#123;</span><br><span class="line">        <span class="keyword">if</span>(delegateTask.getName().equals(<span class="string">&quot;创建出差申请&quot;</span>)&amp;&amp;</span><br><span class="line">                delegateTask.getEventName().equals(<span class="string">&quot;create&quot;</span>))&#123;</span><br><span class="line">            <span class="comment">//这里指定任务负责人</span></span><br><span class="line">            delegateTask.setAssignee(<span class="string">&quot;张三&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125; </span><br></pre></td></tr></table></figure>
+
+<p>DelegateTask对象的内容如下：</p>
+<p><img src="/2022/07/%E6%90%AD%E5%BB%BA%E5%8D%95%E4%BD%93SpringBoot%E9%A1%B9%E7%9B%AE-%E9%9B%86%E6%88%90Activiti7-%E8%BF%9B%E9%98%B6/1585561653.png"></p>
+<h5 id="2-1-3-1、注意事项"><a href="#2-1-3-1、注意事项" class="headerlink" title="2.1.3.1、注意事项"></a>2.1.3.1、注意事项</h5><p>使用监听器分配方式，按照监听事件去执行监听类的 notify 方法，方法如果不能正常执行也会影响<br>任务的执行。 </p>
+<h3 id="2-2、查询任务"><a href="#2-2、查询任务" class="headerlink" title="2.2、查询任务"></a>2.2、查询任务</h3><h4 id="查询任务负责人的待办任务"><a href="#查询任务负责人的待办任务" class="headerlink" title="查询任务负责人的待办任务"></a>查询任务负责人的待办任务</h4><p>代码如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 查询当前个人待执行的任务</span></span><br><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">findPersonalTaskList</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="comment">// 流程定义key</span></span><br><span class="line">    <span class="type">String</span> <span class="variable">processDefinitionKey</span> <span class="operator">=</span> <span class="string">&quot;myEvection1&quot;</span>;</span><br><span class="line">    <span class="comment">// 任务负责人</span></span><br><span class="line">    <span class="type">String</span> <span class="variable">assignee</span> <span class="operator">=</span> <span class="string">&quot;张三&quot;</span>;</span><br><span class="line">    <span class="comment">// 获取TaskService</span></span><br><span class="line">    <span class="type">TaskService</span> <span class="variable">taskService</span> <span class="operator">=</span> processEngine.getTaskService();</span><br><span class="line">    List&lt;Task&gt; taskList = taskService.createTaskQuery()</span><br><span class="line">    	.processDefinitionKey(processDefinitionKey)</span><br><span class="line">    	.includeProcessVariables()</span><br><span class="line">        .taskAssignee(assignee)</span><br><span class="line">        .list();</span><br><span class="line">    <span class="keyword">for</span> (Task task : taskList) &#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;----------------------------&quot;</span>);</span><br><span class="line">        System.out.println(<span class="string">&quot;流程实例id： &quot;</span> + task.getProcessInstanceId());</span><br><span class="line">        System.out.println(<span class="string">&quot;任务id： &quot;</span> + task.getId());</span><br><span class="line">        System.out.println(<span class="string">&quot;任务负责人： &quot;</span> + task.getAssignee());</span><br><span class="line">        System.out.println(<span class="string">&quot;任务名称： &quot;</span> + task.getName());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="关联-businessKey"><a href="#关联-businessKey" class="headerlink" title="关联 businessKey"></a>关联 businessKey</h4><p>需求：<br>在 activiti 实际应用时，查询待办任务可能要显示出业务系统的一些相关信息。</p>
+<p>比如：查询待审批出差任务列表需要将出差单的日期、 出差天数等信息显示出来。</p>
+<p>出差天数等信息在业务系统中存在，而并没有在 activiti 数据库中存在，所以是无法通过 activiti 的 api 查询到出差天数等信息。<br>实现：<br>在查询待办任务时，通过 businessKey（业务标识 ）关联查询业务系统的出差单表，查询出出差天数等信息。 </p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Test</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">findProcessInstance</span><span class="params">()</span>&#123;</span><br><span class="line"><span class="comment">//        获取processEngine</span></span><br><span class="line">        <span class="type">ProcessEngine</span> <span class="variable">processEngine</span> <span class="operator">=</span> ProcessEngines.getDefaultProcessEngine();</span><br><span class="line"><span class="comment">//        获取TaskService</span></span><br><span class="line">        <span class="type">TaskService</span> <span class="variable">taskService</span> <span class="operator">=</span> processEngine.getTaskService();</span><br><span class="line"><span class="comment">//        获取RuntimeService</span></span><br><span class="line">        <span class="type">RuntimeService</span> <span class="variable">runtimeService</span> <span class="operator">=</span> processEngine.getRuntimeService();</span><br><span class="line"><span class="comment">//        查询流程定义的对象</span></span><br><span class="line">        <span class="type">Task</span> <span class="variable">task</span> <span class="operator">=</span> taskService.createTaskQuery()</span><br><span class="line">                .processDefinitionKey(<span class="string">&quot;myEvection1&quot;</span>)</span><br><span class="line">                .taskAssignee(<span class="string">&quot;张三&quot;</span>)</span><br><span class="line">                .singleResult();</span><br><span class="line"><span class="comment">//        使用task对象获取实例id</span></span><br><span class="line">        <span class="type">String</span> <span class="variable">processInstanceId</span> <span class="operator">=</span> task.getProcessInstanceId();</span><br><span class="line"><span class="comment">//          使用实例id，获取流程实例对象</span></span><br><span class="line">        <span class="type">ProcessInstance</span> <span class="variable">processInstance</span> <span class="operator">=</span> runtimeService.createProcessInstanceQuery()</span><br><span class="line">                .processInstanceId(processInstanceId)</span><br><span class="line">                .singleResult();</span><br><span class="line"><span class="comment">//        使用processInstance，得到 businessKey</span></span><br><span class="line">        <span class="type">String</span> <span class="variable">businessKey</span> <span class="operator">=</span> processInstance.getBusinessKey();</span><br><span class="line"></span><br><span class="line">        System.out.println(<span class="string">&quot;businessKey==&quot;</span>+businessKey);</span><br><span class="line"></span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="2-3、办理任务"><a href="#2-3、办理任务" class="headerlink" title="2.3、办理任务"></a>2.3、办理任务</h3><p>注意：在实际应用中，完成任务前需要校验任务的负责人是否具有该任务的办理权限 。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 完成任务，判断当前用户是否有权限</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">completTask</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="comment">//任务id</span></span><br><span class="line">        <span class="type">String</span> <span class="variable">taskId</span> <span class="operator">=</span> <span class="string">&quot;15005&quot;</span>;</span><br><span class="line"><span class="comment">//        任务负责人</span></span><br><span class="line">        <span class="type">String</span> <span class="variable">assingee</span> <span class="operator">=</span> <span class="string">&quot;张三&quot;</span>;</span><br><span class="line">        <span class="comment">//获取processEngine</span></span><br><span class="line">        <span class="type">ProcessEngine</span> <span class="variable">processEngine</span> <span class="operator">=</span> ProcessEngines.getDefaultProcessEngine();</span><br><span class="line">        <span class="comment">// 创建TaskService</span></span><br><span class="line">        <span class="type">TaskService</span> <span class="variable">taskService</span> <span class="operator">=</span> processEngine.getTaskService();</span><br><span class="line"><span class="comment">//        完成任务前，需要校验该负责人可以完成当前任务</span></span><br><span class="line"><span class="comment">//        校验方法：</span></span><br><span class="line"><span class="comment">//        根据任务id和任务负责人查询当前任务，如果查到该用户有权限，就完成</span></span><br><span class="line">        <span class="type">Task</span> <span class="variable">task</span> <span class="operator">=</span> taskService.createTaskQuery()</span><br><span class="line">                .taskId(taskId)</span><br><span class="line">                .taskAssignee(assingee)</span><br><span class="line">                .singleResult();</span><br><span class="line">        <span class="keyword">if</span>(task != <span class="literal">null</span>)&#123;</span><br><span class="line">            taskService.complete(taskId);</span><br><span class="line">            System.out.println(<span class="string">&quot;完成任务&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="三、流程变量"><a href="#三、流程变量" class="headerlink" title="三、流程变量"></a>三、流程变量</h2><h3 id="3-1、什么是流程变量"><a href="#3-1、什么是流程变量" class="headerlink" title="3.1、什么是流程变量"></a>3.1、什么是流程变量</h3><p>流程变量在 activiti 中是一个非常重要的角色，流程运转有时需要靠流程变量，业务系统和 activiti<br>结合时少不了流程变量，流程变量就是 activiti 在管理工作流时根据管理需要而设置的变量。<br>比如：在出差申请流程流转时如果出差天数大于 3 天则由总经理审核，否则由人事直接审核， 出差天<br>数就可以设置为流程变量，在流程流转时使用。 </p>
+<p><strong>注意：虽然流程变量中可以存储业务数据可以通过activiti的api查询流程变量从而实现 查询业务数据，但是不建议这样使用，因为业务数据查询由业务系统负责，activiti设置流程变量是为了流程执行需要而创建。</strong></p>
+<h3 id="3-2、流程变量类型"><a href="#3-2、流程变量类型" class="headerlink" title="3.2、流程变量类型"></a>3.2、流程变量类型</h3><p>如果将 pojo 存储到流程变量中，必须实现序列化接口 serializable，为了防止由于新增字段无<br>法反序列化，需要生成 serialVersionUID。 </p>
+<p><img src="/2022/07/%E6%90%AD%E5%BB%BA%E5%8D%95%E4%BD%93SpringBoot%E9%A1%B9%E7%9B%AE-%E9%9B%86%E6%88%90Activiti7-%E8%BF%9B%E9%98%B6/20190731150933695.png"></p>
+<h3 id="3-3、流程变量作用域"><a href="#3-3、流程变量作用域" class="headerlink" title="3.3、流程变量作用域"></a>3.3、流程变量作用域</h3><p>流程变量的作用域可以是一个流程实例(processInstance)，或一个任务(task)，或一个执行实例<br>(execution)</p>
+<h4 id="3-3-1、globa变量"><a href="#3-3-1、globa变量" class="headerlink" title="3.3.1、globa变量"></a>3.3.1、globa变量</h4><p>流程变量的默认作用域是流程实例。当一个流程变量的作用域为流程实例时，可以称为 global 变量</p>
+<p>注意：</p>
+<p>如：    Global变量：userId（变量名）、zhangsan（变量值）</p>
+<p>global 变量中变量名不允许重复，设置相同名称的变量，后设置的值会覆盖前设置的变量值。</p>
+<h4 id="3-3-2、local变量"><a href="#3-3-2、local变量" class="headerlink" title="3.3.2、local变量"></a>3.3.2、local变量</h4><p>任务和执行实例仅仅是针对一个任务和一个执行实例范围，范围没有流程实例大， 称为 local 变量。</p>
+<p>Local 变量由于在不同的任务或不同的执行实例中，作用域互不影响，变量名可以相同没有影响。Local 变量名也可以和 global 变量名相同，没有影响。 </p>
+<h3 id="3-4、流程变量的使用方法"><a href="#3-4、流程变量的使用方法" class="headerlink" title="3.4、流程变量的使用方法"></a>3.4、流程变量的使用方法</h3><h4 id="3-4-1、在属性上使用UEL表达式"><a href="#3-4-1、在属性上使用UEL表达式" class="headerlink" title="3.4.1、在属性上使用UEL表达式"></a>3.4.1、在属性上使用UEL表达式</h4><p>可以在 assignee 处设置 UEL 表达式，表达式的值为任务的负责人，比如： ${assignee}， assignee 就是一个流程变量名称。</p>
+<p>Activiti获取UEL表达式的值，即流程变量assignee的值 ，将assignee的值作为任务的负责人进行任务分配</p>
+<h4 id="3-4-2、在连线上使用UEL表达式"><a href="#3-4-2、在连线上使用UEL表达式" class="headerlink" title="3.4.2、在连线上使用UEL表达式"></a>3.4.2、在连线上使用UEL表达式</h4><p>可以在连线上设置UEL表达式，决定流程走向。</p>
+<p>比如：${price&lt;10000} 。price就是一个流程变量名称，uel表达式结果类型为布尔类型。</p>
+<p>如果UEL表达式是true，要决定 流程执行走向。</p>
+<h3 id="3-5、使用Global变量控制流程"><a href="#3-5、使用Global变量控制流程" class="headerlink" title="3.5、使用Global变量控制流程"></a>3.5、使用Global变量控制流程</h3><h4 id="3-5-1、需求"><a href="#3-5-1、需求" class="headerlink" title="3.5.1、需求"></a>3.5.1、需求</h4><p>员工创建出差申请单，由部门经理审核，部门经理审核通过后出差3天及以下由人财务直接审批，3天以上先由总经理审核，总经理审核通过再由财务审批。</p>
+<p><img src="/2022/07/%E6%90%AD%E5%BB%BA%E5%8D%95%E4%BD%93SpringBoot%E9%A1%B9%E7%9B%AE-%E9%9B%86%E6%88%90Activiti7-%E8%BF%9B%E9%98%B6/1577847570736.png" alt="1577847570736"></p>
+<h4 id="3-5-2、流程定义"><a href="#3-5-2、流程定义" class="headerlink" title="3.5.2、流程定义"></a>3.5.2、流程定义</h4><p>1）、出差天数大于等于3连线条件</p>
+<p><img src="/2022/07/%E6%90%AD%E5%BB%BA%E5%8D%95%E4%BD%93SpringBoot%E9%A1%B9%E7%9B%AE-%E9%9B%86%E6%88%90Activiti7-%E8%BF%9B%E9%98%B6/1577847654279.png" alt="1577847654279"><img src="/2022/07/%E6%90%AD%E5%BB%BA%E5%8D%95%E4%BD%93SpringBoot%E9%A1%B9%E7%9B%AE-%E9%9B%86%E6%88%90Activiti7-%E8%BF%9B%E9%98%B6/1577847695723.png" alt="1577847695723"></p>
+<p>也可以使用对象参数命名，如evection.num：</p>
+<p><img src="/2022/07/%E6%90%AD%E5%BB%BA%E5%8D%95%E4%BD%93SpringBoot%E9%A1%B9%E7%9B%AE-%E9%9B%86%E6%88%90Activiti7-%E8%BF%9B%E9%98%B6/1577870487533.png" alt="1577870487533"><img src="/2022/07/%E6%90%AD%E5%BB%BA%E5%8D%95%E4%BD%93SpringBoot%E9%A1%B9%E7%9B%AE-%E9%9B%86%E6%88%90Activiti7-%E8%BF%9B%E9%98%B6/1577870510159.png" alt="1577870510159"></p>
+<p>2）、出差天数小于3连线条件</p>
+<p><img src="/2022/07/%E6%90%AD%E5%BB%BA%E5%8D%95%E4%BD%93SpringBoot%E9%A1%B9%E7%9B%AE-%E9%9B%86%E6%88%90Activiti7-%E8%BF%9B%E9%98%B6/1577847740055.png" alt="1577847740055"><img src="/2022/07/%E6%90%AD%E5%BB%BA%E5%8D%95%E4%BD%93SpringBoot%E9%A1%B9%E7%9B%AE-%E9%9B%86%E6%88%90Activiti7-%E8%BF%9B%E9%98%B6/1577847766231.png" alt="1577847766231"></p>
+<p>也可以使用对象参数命名，如：</p>
+<p><img src="/2022/07/%E6%90%AD%E5%BB%BA%E5%8D%95%E4%BD%93SpringBoot%E9%A1%B9%E7%9B%AE-%E9%9B%86%E6%88%90Activiti7-%E8%BF%9B%E9%98%B6/1577870638264.png" alt="1577870638264"><img src="/2022/07/%E6%90%AD%E5%BB%BA%E5%8D%95%E4%BD%93SpringBoot%E9%A1%B9%E7%9B%AE-%E9%9B%86%E6%88%90Activiti7-%E8%BF%9B%E9%98%B6/1577870654033.png" alt="1577870654033"></p>
+<h4 id="3-5-3、设置global流程变量"><a href="#3-5-3、设置global流程变量" class="headerlink" title="3.5.3、设置global流程变量"></a>3.5.3、设置global流程变量</h4><p>在部门经理审核前设置流程变量，变量值为出差单信息（包括出差天数），部门经理审核后可以根据流程变量的值决定流程走向。</p>
+<p>在设置流程变量时，可以在启动流程时设置，也可以在任务办理时设置</p>
+<h5 id="3-5-3-1、创建POJO对象"><a href="#3-5-3-1、创建POJO对象" class="headerlink" title="3.5.3.1、创建POJO对象"></a>3.5.3.1、创建POJO对象</h5><p>创建出差申请pojo对象</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.itheima.demo.pojo;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.io.Serializable;</span><br><span class="line"><span class="keyword">import</span> java.util.Date;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 出差申请 pojo</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Evection</span> <span class="keyword">implements</span> <span class="title class_">Serializable</span> &#123;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 主键id</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> Long id;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 出差申请单名称</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> String evectionName;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 出差天数</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> Double num;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 预计开始时间</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> Date beginDate;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 预计结束时间</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> Date endDate;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 目的地</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> String destination;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 出差事由</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> String reson;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> Long <span class="title function_">getId</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> id;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">setId</span><span class="params">(Long id)</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>.id = id;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> String <span class="title function_">getEvectionName</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> evectionName;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">setEvectionName</span><span class="params">(String evectionName)</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>.evectionName = evectionName;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> Date <span class="title function_">getBeginDate</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> beginDate;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">setBeginDate</span><span class="params">(Date beginDate)</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>.beginDate = beginDate;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> Date <span class="title function_">getEndDate</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> endDate;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">setEndDate</span><span class="params">(Date endDate)</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>.endDate = endDate;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> String <span class="title function_">getDestination</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> destination;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">setDestination</span><span class="params">(String destination)</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>.destination = destination;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> String <span class="title function_">getReson</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> reson;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">setReson</span><span class="params">(String reson)</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>.reson = reson;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> Double <span class="title function_">getNum</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> num;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">setNum</span><span class="params">(Double num)</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>.num = num;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h5 id="3-5-3-2、启动流程时设置变量"><a href="#3-5-3-2、启动流程时设置变量" class="headerlink" title="3.5.3.2、启动流程时设置变量"></a>3.5.3.2、启动流程时设置变量</h5><p>在启动流程时设置流程变量，变量的作用域是整个流程实例。</p>
+<p>通过Map&lt;key,value&gt;设置流程变量，map中可以设置多个变量，这个key就是流程变量的名字。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br></pre></td><td class="code"><pre><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 启动流程实例,设置流程变量的值</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">startProcess</span><span class="params">()</span>&#123;</span><br><span class="line"><span class="comment">//        获取流程引擎</span></span><br><span class="line">        <span class="type">ProcessEngine</span> <span class="variable">processEngine</span> <span class="operator">=</span> ProcessEngines.getDefaultProcessEngine();</span><br><span class="line"><span class="comment">//        获取RunTimeService</span></span><br><span class="line">        <span class="type">RuntimeService</span> <span class="variable">runtimeService</span> <span class="operator">=</span> processEngine.getRuntimeService();</span><br><span class="line"><span class="comment">//        流程定义key</span></span><br><span class="line">        <span class="type">String</span> <span class="variable">key</span> <span class="operator">=</span> <span class="string">&quot;myEvection2&quot;</span>;</span><br><span class="line"><span class="comment">//       创建变量集合</span></span><br><span class="line">        Map&lt;String, Object&gt; map = <span class="keyword">new</span> <span class="title class_">HashMap</span>&lt;&gt;();</span><br><span class="line"><span class="comment">//        创建出差pojo对象</span></span><br><span class="line">        <span class="type">Evection</span> <span class="variable">evection</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Evection</span>();</span><br><span class="line"><span class="comment">//        设置出差天数</span></span><br><span class="line">        evection.setNum(<span class="number">2d</span>);</span><br><span class="line"><span class="comment">//      定义流程变量，把出差pojo对象放入map</span></span><br><span class="line">        map.put(<span class="string">&quot;evection&quot;</span>,evection);</span><br><span class="line"><span class="comment">//      设置assignee的取值，用户可以在界面上设置流程的执行</span></span><br><span class="line">        map.put(<span class="string">&quot;assignee0&quot;</span>,<span class="string">&quot;张三&quot;</span>);</span><br><span class="line">        map.put(<span class="string">&quot;assignee1&quot;</span>,<span class="string">&quot;李经理&quot;</span>);</span><br><span class="line">        map.put(<span class="string">&quot;assignee2&quot;</span>,<span class="string">&quot;王总经理&quot;</span>);</span><br><span class="line">        map.put(<span class="string">&quot;assignee3&quot;</span>,<span class="string">&quot;赵财务&quot;</span>);</span><br><span class="line"><span class="comment">//        启动流程实例，并设置流程变量的值（把map传入）</span></span><br><span class="line">        <span class="type">ProcessInstance</span> <span class="variable">processInstance</span> <span class="operator">=</span> runtimeService</span><br><span class="line">                .startProcessInstanceByKey(key, map);</span><br><span class="line"><span class="comment">//      输出</span></span><br><span class="line">        System.out.println(<span class="string">&quot;流程实例名称=&quot;</span>+processInstance.getName());</span><br><span class="line">        System.out.println(<span class="string">&quot;流程定义id==&quot;</span>+processInstance.getProcessDefinitionId());</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 完成任务，判断当前用户是否有权限</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">completTask</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="comment">//任务id</span></span><br><span class="line">        <span class="type">String</span> <span class="variable">key</span> <span class="operator">=</span> <span class="string">&quot;myEvection2&quot;</span>;</span><br><span class="line"><span class="comment">//        任务负责人</span></span><br><span class="line">        <span class="type">String</span> <span class="variable">assingee</span> <span class="operator">=</span> <span class="string">&quot;张三&quot;</span>;</span><br><span class="line">        <span class="comment">//获取processEngine</span></span><br><span class="line">        <span class="type">ProcessEngine</span> <span class="variable">processEngine</span> <span class="operator">=</span> ProcessEngines.getDefaultProcessEngine();</span><br><span class="line">        <span class="comment">// 创建TaskService</span></span><br><span class="line">        <span class="type">TaskService</span> <span class="variable">taskService</span> <span class="operator">=</span> processEngine.getTaskService();</span><br><span class="line"><span class="comment">//        完成任务前，需要校验该负责人可以完成当前任务</span></span><br><span class="line"><span class="comment">//        校验方法：</span></span><br><span class="line"><span class="comment">//        根据任务id和任务负责人查询当前任务，如果查到该用户有权限，就完成</span></span><br><span class="line">        <span class="type">Task</span> <span class="variable">task</span> <span class="operator">=</span> taskService.createTaskQuery()</span><br><span class="line">                .processDefinitionKey(key)</span><br><span class="line">                .taskAssignee(assingee)</span><br><span class="line">                .singleResult();</span><br><span class="line">        <span class="keyword">if</span>(task != <span class="literal">null</span>)&#123;</span><br><span class="line">            taskService.complete(task.getId());</span><br><span class="line">            System.out.println(<span class="string">&quot;任务执行完成&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<p>说明：</p>
+<p>startProcessInstanceByKey(processDefinitionKey, variables)</p>
+<p>流程变量作用域是一个流程实例，流程变量使用Map存储，同一个流程实例设置变量map中key相同，后者覆盖前者。</p>
+<h5 id="3-5-3-2、任务办理时设置变量"><a href="#3-5-3-2、任务办理时设置变量" class="headerlink" title="3.5.3.2、任务办理时设置变量"></a>3.5.3.2、任务办理时设置变量</h5><p>在完成任务时设置流程变量，该流程变量只有在该任务完成后其它结点才可使用该变量，它的作用域是整个流程实例，如果设置的流程变量的key在流程实例中已存在相同的名字则后设置的变量替换前边设置的变量。</p>
+<p>这里需要在创建出差单任务完成时设置流程变量</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 完成任务，判断当前用户是否有权限</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">completTask</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="comment">//任务id</span></span><br><span class="line">        <span class="type">String</span> <span class="variable">key</span> <span class="operator">=</span> <span class="string">&quot;myEvection2&quot;</span>;</span><br><span class="line"><span class="comment">//        任务负责人</span></span><br><span class="line">        <span class="type">String</span> <span class="variable">assingee</span> <span class="operator">=</span> <span class="string">&quot;张三&quot;</span>;</span><br><span class="line"><span class="comment">//       获取processEngine</span></span><br><span class="line">        <span class="type">ProcessEngine</span> <span class="variable">processEngine</span> <span class="operator">=</span> ProcessEngines.getDefaultProcessEngine();</span><br><span class="line"><span class="comment">//       创建TaskService</span></span><br><span class="line">        <span class="type">TaskService</span> <span class="variable">taskService</span> <span class="operator">=</span> processEngine.getTaskService();</span><br><span class="line"><span class="comment">//       创建变量集合</span></span><br><span class="line">        Map&lt;String, Object&gt; map = <span class="keyword">new</span> <span class="title class_">HashMap</span>&lt;&gt;();</span><br><span class="line"><span class="comment">//        创建出差pojo对象</span></span><br><span class="line">        <span class="type">Evection</span> <span class="variable">evection</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Evection</span>();</span><br><span class="line"><span class="comment">//        设置出差天数</span></span><br><span class="line">        evection.setNum(<span class="number">2d</span>);</span><br><span class="line"><span class="comment">//      定义流程变量</span></span><br><span class="line">        map.put(<span class="string">&quot;evection&quot;</span>,evection);</span><br><span class="line"><span class="comment">//        完成任务前，需要校验该负责人可以完成当前任务</span></span><br><span class="line"><span class="comment">//        校验方法：</span></span><br><span class="line"><span class="comment">//        根据任务id和任务负责人查询当前任务，如果查到该用户有权限，就完成</span></span><br><span class="line">        <span class="type">Task</span> <span class="variable">task</span> <span class="operator">=</span> taskService.createTaskQuery()</span><br><span class="line">                .processDefinitionKey(key)</span><br><span class="line">                .taskAssignee(assingee)</span><br><span class="line">                .singleResult();</span><br><span class="line">        <span class="keyword">if</span>(task != <span class="literal">null</span>)&#123;</span><br><span class="line">            <span class="comment">//完成任务是，设置流程变量的值</span></span><br><span class="line">            taskService.complete(task.getId(),map);</span><br><span class="line">            System.out.println(<span class="string">&quot;任务执行完成&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<p>说明：</p>
+<p>通过当前任务设置流程变量，需要指定当前任务id，如果当前执行的任务id不存在则抛出异常。</p>
+<p>任务办理时也是通过map&lt;key,value&gt;设置流程变量，一次可以设置多个变量。</p>
+<h5 id="3-5-3-3、通过当前流程实例设置"><a href="#3-5-3-3、通过当前流程实例设置" class="headerlink" title="3.5.3.3、通过当前流程实例设置"></a>3.5.3.3、通过当前流程实例设置</h5><p>通过流程实例id设置全局变量，该流程实例必须未执行完成。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">setGlobalVariableByExecutionId</span><span class="params">()</span>&#123;</span><br><span class="line"><span class="comment">//    当前流程实例执行 id，通常设置为当前执行的流程实例</span></span><br><span class="line">        String executionId=<span class="string">&quot;2601&quot;</span>;</span><br><span class="line"><span class="comment">//     获取processEngine</span></span><br><span class="line">        <span class="type">ProcessEngine</span> <span class="variable">processEngine</span> <span class="operator">=</span> ProcessEngines.getDefaultProcessEngine();</span><br><span class="line"><span class="comment">//        获取RuntimeService</span></span><br><span class="line">        <span class="type">RuntimeService</span> <span class="variable">runtimeService</span> <span class="operator">=</span> processEngine.getRuntimeService();</span><br><span class="line"><span class="comment">//        创建出差pojo对象</span></span><br><span class="line">        <span class="type">Evection</span> <span class="variable">evection</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Evection</span>();</span><br><span class="line"><span class="comment">//        设置天数</span></span><br><span class="line">        evection.setNum(<span class="number">3d</span>);</span><br><span class="line"><span class="comment">//      通过流程实例 id设置流程变量</span></span><br><span class="line">        runtimeService.setVariable(executionId, <span class="string">&quot;evection&quot;</span>, evection);</span><br><span class="line"><span class="comment">//      一次设置多个值</span></span><br><span class="line"><span class="comment">//      runtimeService.setVariables(executionId, variables)</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>注意：</p>
+<p>executionId必须当前未结束 流程实例的执行id，通常此id设置流程实例 的id。也可以通runtimeService.getVariable()获取流程变量。</p>
+<h5 id="3-5-3-4、通过当前任务设置"><a href="#3-5-3-4、通过当前任务设置" class="headerlink" title="3.5.3.4、通过当前任务设置"></a>3.5.3.4、通过当前任务设置</h5><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Test</span></span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">setGlobalVariableByTaskId</span><span class="params">()</span>&#123;</span><br><span class="line">		</span><br><span class="line">		<span class="comment">//当前待办任务id</span></span><br><span class="line">		String taskId=<span class="string">&quot;1404&quot;</span>;</span><br><span class="line"><span class="comment">//     获取processEngine</span></span><br><span class="line">        <span class="type">ProcessEngine</span> <span class="variable">processEngine</span> <span class="operator">=</span> ProcessEngines.getDefaultProcessEngine();</span><br><span class="line">		<span class="type">TaskService</span> <span class="variable">taskService</span> <span class="operator">=</span> processEngine.getTaskService();</span><br><span class="line">		<span class="type">Evection</span> <span class="variable">evection</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Evection</span>();</span><br><span class="line">		evection.setNum(<span class="number">3</span>);</span><br><span class="line">		<span class="comment">//通过任务设置流程变量</span></span><br><span class="line">		taskService.setVariable(taskId, <span class="string">&quot;evection&quot;</span>, evection);</span><br><span class="line">		<span class="comment">//一次设置多个值 </span></span><br><span class="line">		<span class="comment">//taskService.setVariables(taskId, variables)</span></span><br><span class="line">	&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>注意：</p>
+<p>任务id必须是当前待办任务id，act_ru_task中存在。如果该任务已结束，会报错</p>
+<p>也可以通过taskService.getVariable()获取流程变量。</p>
+<h4 id="3-5-4、测试"><a href="#3-5-4、测试" class="headerlink" title="3.5.4、测试"></a>3.5.4、测试</h4><p>正常测试：</p>
+<p>​       设置流程变量的值大于等于3天</p>
+<p>​       设计流程变量的值小于3天</p>
+<p>异常测试：</p>
+<p>​       流程变量不存在</p>
+<p>​       流程变量的值为空NULL，price属性为空</p>
+<p>​       UEL表达式都不符合条件  </p>
+<p>​      不设置连线的条件</p>
+<h4 id="3-5-5、注意事项"><a href="#3-5-5、注意事项" class="headerlink" title="3.5.5、注意事项"></a>3.5.5、注意事项</h4><p>1、  如果UEL表达式中流程变量名不存在则报错。</p>
+<p>2、  如果UEL表达式中流程变量值为空NULL，流程不按UEL表达式去执行，而流程结束 。</p>
+<p>3、  如果UEL表达式都不符合条件，流程结束 </p>
+<p>4、  如果连线不设置条件，会走flow序号小的那条线</p>
+<h4 id="3-5-6、操作数据库表"><a href="#3-5-6、操作数据库表" class="headerlink" title="3.5.6、操作数据库表"></a>3.5.6、操作数据库表</h4><p>设置流程变量会在当前执行流程变量表插入记录，同时也会在历史流程变量表也插入记录。</p>
+ <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="operator">/</span><span class="operator">/</span>当前流程变量表</span><br><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> act_ru_variable </span><br></pre></td></tr></table></figure>
+
+<p>记录当前运行流程实例可使用的流程变量，包括 global和local变量</p>
+<p>Id_：主键</p>
+<p>Type_：变量类型</p>
+<p>Name_：变量名称 </p>
+<p>Execution_id_：所属流程实例执行id，global和local变量都存储</p>
+<p>Proc_inst_id_：所属流程实例id，global和local变量都存储 </p>
+<p>Task_id_：所属任务id，local变量存储</p>
+<p>Bytearray_：serializable类型变量存储对应act_ge_bytearray表的id</p>
+<p>Double_：double类型变量值</p>
+<p>Long_：long类型变量值</p>
+<p>Text_：text类型变量值 </p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"> #历史流程变量表</span><br><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> act_hi_varinst </span><br></pre></td></tr></table></figure>
+
+<p>记录所有已创建的流程变量，包括 global和local变量</p>
+<p>字段意义参考当前流程变量表。</p>
+<h3 id="3-6、设置local流程变量"><a href="#3-6、设置local流程变量" class="headerlink" title="3.6、设置local流程变量"></a>3.6、设置local流程变量</h3><h4 id="3-6-1、任务办理时设置"><a href="#3-6-1、任务办理时设置" class="headerlink" title="3.6.1、任务办理时设置"></a>3.6.1、任务办理时设置</h4><p> 任务办理时设置local流程变量，当前运行的流程实例只能在该任务结束前使用，任务结束该变量无法在当前流程实例使用，可以通过查询历史任务查询。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">*处理任务时设置local流程变量</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">completTask</span><span class="params">()</span> &#123;</span><br><span class="line">   <span class="comment">//任务id</span></span><br><span class="line">   <span class="type">String</span> <span class="variable">taskId</span> <span class="operator">=</span> <span class="string">&quot;1404&quot;</span>;</span><br><span class="line"><span class="comment">//  获取processEngine</span></span><br><span class="line">    <span class="type">ProcessEngine</span> <span class="variable">processEngine</span> <span class="operator">=</span> ProcessEngines.getDefaultProcessEngine();</span><br><span class="line">    <span class="type">TaskService</span> <span class="variable">taskService</span> <span class="operator">=</span> processEngine.getTaskService();</span><br><span class="line"><span class="comment">//  定义流程变量</span></span><br><span class="line">   Map&lt;String, Object&gt; variables = <span class="keyword">new</span> <span class="title class_">HashMap</span>&lt;String, Object&gt;();</span><br><span class="line">   <span class="type">Evection</span> <span class="variable">evection</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Evection</span> ();</span><br><span class="line">   evection.setNum(<span class="number">3d</span>);</span><br><span class="line"><span class="comment">// 定义流程变量</span></span><br><span class="line">   Map&lt;String, Object&gt; variables = <span class="keyword">new</span> <span class="title class_">HashMap</span>&lt;String, Object&gt;();</span><br><span class="line"><span class="comment">//  变量名是holiday，变量值是holiday对象</span></span><br><span class="line">    variables.put(<span class="string">&quot;evection&quot;</span>, evection);</span><br><span class="line"><span class="comment">//  设置local变量，作用域为该任务</span></span><br><span class="line">    taskService.setVariablesLocal(taskId, variables);</span><br><span class="line"><span class="comment">//  完成任务</span></span><br><span class="line">   taskService.complete(taskId);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+<p>​       说明：</p>
+<p>设置作用域为任务的local变量，每个任务可以设置同名的变量，互不影响。</p>
+<h4 id="3-6-2、通过当前任务设置"><a href="#3-6-2、通过当前任务设置" class="headerlink" title="3.6.2、通过当前任务设置"></a>3.6.2、通过当前任务设置</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">setLocalVariableByTaskId</span><span class="params">()</span>&#123;</span><br><span class="line"><span class="comment">//   当前待办任务id</span></span><br><span class="line">    String taskId=<span class="string">&quot;1404&quot;</span>;</span><br><span class="line"><span class="comment">//  获取processEngine</span></span><br><span class="line">    <span class="type">ProcessEngine</span> <span class="variable">processEngine</span> <span class="operator">=</span> ProcessEngines.getDefaultProcessEngine();</span><br><span class="line">    <span class="type">TaskService</span> <span class="variable">taskService</span> <span class="operator">=</span> processEngine.getTaskService();</span><br><span class="line">    <span class="type">Evection</span> <span class="variable">evection</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Evection</span> ();</span><br><span class="line">    evection.setNum(<span class="number">3d</span>);</span><br><span class="line"><span class="comment">//  通过任务设置流程变量</span></span><br><span class="line">    taskService.setVariableLocal(taskId, <span class="string">&quot;evection&quot;</span>, evection);</span><br><span class="line"><span class="comment">//  一次设置多个值 </span></span><br><span class="line">    <span class="comment">//taskService.setVariablesLocal(taskId, variables)</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>注意：</p>
+<p>任务id必须是当前待办任务id，act_ru_task中存在。</p>
+<h4 id="3-6-3、-Local变量测试1"><a href="#3-6-3、-Local变量测试1" class="headerlink" title="3.6.3、  Local变量测试1"></a>3.6.3、  Local变量测试1</h4><p>如果上边例子中设置global变量改为设置local变量是否可行？为什么？</p>
+<p> Local变量在任务结束后无法在当前流程实例执行中使用，如果后续的流程执行需要用到此变量则会报错。</p>
+<h4 id="3-6-4、-Local变量测试2"><a href="#3-6-4、-Local变量测试2" class="headerlink" title="3.6.4、  Local变量测试2"></a>3.6.4、  Local变量测试2</h4><p>在部门经理审核、总经理审核、财务审核时设置local变量，可通过historyService查询每个历史任务时将流程变量的值也查询出来。</p>
+<p> 代码如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 创建历史任务查询对象</span></span><br><span class="line">      <span class="type">HistoricTaskInstanceQuery</span> <span class="variable">historicTaskInstanceQuery</span> <span class="operator">=</span> historyService.createHistoricTaskInstanceQuery();</span><br><span class="line">      <span class="comment">// 查询结果包括 local变量</span></span><br><span class="line">      historicTaskInstanceQuery.includeTaskLocalVariables();</span><br><span class="line"><span class="keyword">for</span> (HistoricTaskInstance historicTaskInstance : list) &#123;</span><br><span class="line">         System.out.println(<span class="string">&quot;==============================&quot;</span>);</span><br><span class="line">         System.out.println(<span class="string">&quot;任务id：&quot;</span> + historicTaskInstance.getId());</span><br><span class="line">         System.out.println(<span class="string">&quot;任务名称：&quot;</span> + historicTaskInstance.getName());</span><br><span class="line">         System.out.println(<span class="string">&quot;任务负责人：&quot;</span> + historicTaskInstance.getAssignee());</span><br><span class="line">     System.out.println(<span class="string">&quot;任务local变量：&quot;</span>+ historicTaskInstance.getTaskLocalVariables());</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>注意：查询历史流程变量，特别是查询pojo变量需要经过反序列化，不推荐使用。</p>
+<h2 id="四、组任务"><a href="#四、组任务" class="headerlink" title="四、组任务"></a>四、组任务</h2><h3 id="4-1、需求"><a href="#4-1、需求" class="headerlink" title="4.1、需求"></a>4.1、需求</h3><p>在流程定义中在任务结点的 assignee 固定设置任务负责人，在流程定义时将参与者固定设置在.bpmn 文件中，如果临时任务负责人变更则需要修改流程定义，系统可扩展性差。</p>
+<p>针对这种情况可以给任务设置多个候选人，可以从候选人中选择参与者来完成任务。 </p>
+<h3 id="4-2、设置任务候选人"><a href="#4-2、设置任务候选人" class="headerlink" title="4.2、设置任务候选人"></a>4.2、设置任务候选人</h3><p>在流程图中任务节点的配置中设置 candidate-users(候选人)，多个候选人之间用逗号分开。 </p>
+<p><img src="/2022/07/%E6%90%AD%E5%BB%BA%E5%8D%95%E4%BD%93SpringBoot%E9%A1%B9%E7%9B%AE-%E9%9B%86%E6%88%90Activiti7-%E8%BF%9B%E9%98%B6/1577878753288.png" alt="1577878753288"></p>
+<p>查看bpmn文件</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">userTask</span> <span class="attr">activiti:candidateUsers</span>=<span class="string">&quot;lisi,wangwu&quot;</span> <span class="attr">activiti:exclusive</span>=<span class="string">&quot;true&quot;</span> <span class="attr">id</span>=<span class="string">&quot;_3&quot;</span> <span class="attr">name</span>=<span class="string">&quot;经理审批&quot;</span>/&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>我们可以看到部门经理的审核人已经设置为 lisi,wangwu 这样的一组候选人，可以使用</p>
+<p>activiti:candiateUsers&#x3D;”用户 1,用户 2,用户 3”的这种方式来实现设置一组候选人 </p>
+<h3 id="4-3、组任务"><a href="#4-3、组任务" class="headerlink" title="4.3、组任务"></a>4.3、组任务</h3><h4 id="4-3-1、组任务办理流程"><a href="#4-3-1、组任务办理流程" class="headerlink" title="4.3.1、组任务办理流程"></a>4.3.1、组任务办理流程</h4><h5 id="a、查询组任务"><a href="#a、查询组任务" class="headerlink" title="a、查询组任务"></a>a、查询组任务</h5><p>指定候选人，查询该候选人当前的待办任务。</p>
+<p>候选人不能立即办理任务。</p>
+<h5 id="b、拾取-claim-任务"><a href="#b、拾取-claim-任务" class="headerlink" title="b、拾取(claim)任务"></a>b、拾取(claim)任务</h5><p>该组任务的所有候选人都能拾取。</p>
+<p>将候选人的组任务，变成个人任务。原来候选人就变成了该任务的负责人。</p>
+<p>如果拾取后不想办理该任务？</p>
+<p>   需要将已经拾取的个人任务归还到组里边，将个人任务变成了组任务。</p>
+<h5 id="c、查询个人任务"><a href="#c、查询个人任务" class="headerlink" title="c、查询个人任务"></a>c、查询个人任务</h5><p>查询方式同个人任务部分，根据assignee查询用户负责的个人任务。</p>
+<h5 id="d、办理个人任务"><a href="#d、办理个人任务" class="headerlink" title="d、办理个人任务"></a>d、办理个人任务</h5><h4 id="4-3-2、-查询组任务"><a href="#4-3-2、-查询组任务" class="headerlink" title="4.3.2、  查询组任务"></a>4.3.2、  查询组任务</h4><p> 根据候选人查询组任务</p>
+ <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Test</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">findGroupTaskList</span><span class="params">()</span> &#123;</span><br><span class="line">       <span class="comment">// 流程定义key</span></span><br><span class="line">       <span class="type">String</span> <span class="variable">processDefinitionKey</span> <span class="operator">=</span> <span class="string">&quot;evection3&quot;</span>;</span><br><span class="line">       <span class="comment">// 任务候选人</span></span><br><span class="line">       <span class="type">String</span> <span class="variable">candidateUser</span> <span class="operator">=</span> <span class="string">&quot;lisi&quot;</span>;</span><br><span class="line">        <span class="comment">//  获取processEngine</span></span><br><span class="line">       <span class="type">ProcessEngine</span> <span class="variable">processEngine</span> <span class="operator">=</span> ProcessEngines.getDefaultProcessEngine();</span><br><span class="line">       <span class="comment">// 创建TaskService</span></span><br><span class="line">       <span class="type">TaskService</span> <span class="variable">taskService</span> <span class="operator">=</span> processEngine.getTaskService();</span><br><span class="line">       <span class="comment">//查询组任务</span></span><br><span class="line">       List&lt;Task&gt; list = taskService.createTaskQuery()</span><br><span class="line">              .processDefinitionKey(processDefinitionKey)</span><br><span class="line">              .taskCandidateUser(candidateUser)<span class="comment">//根据候选人查询</span></span><br><span class="line">              .list();</span><br><span class="line">       <span class="keyword">for</span> (Task task : list) &#123;</span><br><span class="line">           System.out.println(<span class="string">&quot;----------------------------&quot;</span>);</span><br><span class="line">           System.out.println(<span class="string">&quot;流程实例id：&quot;</span> + task.getProcessInstanceId());</span><br><span class="line">           System.out.println(<span class="string">&quot;任务id：&quot;</span> + task.getId());</span><br><span class="line">           System.out.println(<span class="string">&quot;任务负责人：&quot;</span> + task.getAssignee());</span><br><span class="line">           System.out.println(<span class="string">&quot;任务名称：&quot;</span> + task.getName());</span><br><span class="line">       &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="4-3-3-、-拾取组任务"><a href="#4-3-3-、-拾取组任务" class="headerlink" title="4.3.3 、 拾取组任务"></a>4.3.3 、 拾取组任务</h4><p> 候选人员拾取组任务后该任务变为自己的个人任务。</p>
+ <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Test</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">claimTask</span><span class="params">()</span>&#123;</span><br><span class="line">         <span class="comment">//  获取processEngine</span></span><br><span class="line">       <span class="type">ProcessEngine</span> <span class="variable">processEngine</span> <span class="operator">=</span> ProcessEngines.getDefaultProcessEngine();</span><br><span class="line">       <span class="type">TaskService</span> <span class="variable">taskService</span> <span class="operator">=</span> processEngine.getTaskService();</span><br><span class="line">       <span class="comment">//要拾取的任务id</span></span><br><span class="line">       <span class="type">String</span> <span class="variable">taskId</span> <span class="operator">=</span> <span class="string">&quot;6302&quot;</span>;</span><br><span class="line">       <span class="comment">//任务候选人id</span></span><br><span class="line">       <span class="type">String</span> <span class="variable">userId</span> <span class="operator">=</span> <span class="string">&quot;lisi&quot;</span>;</span><br><span class="line">       <span class="comment">//拾取任务</span></span><br><span class="line">       <span class="comment">//即使该用户不是候选人也能拾取(建议拾取时校验是否有资格)    </span></span><br><span class="line">       <span class="comment">//校验该用户有没有拾取任务的资格</span></span><br><span class="line">       <span class="type">Task</span> <span class="variable">task</span> <span class="operator">=</span> taskService.createTaskQuery()</span><br><span class="line">              .taskId(taskId)</span><br><span class="line">              .taskCandidateUser(userId)<span class="comment">//根据候选人查询</span></span><br><span class="line">              .singleResult();</span><br><span class="line">       <span class="keyword">if</span>(task!=<span class="literal">null</span>)&#123;</span><br><span class="line">         <span class="comment">//拾取任务</span></span><br><span class="line">           taskService.claim(taskId, userId);</span><br><span class="line">           System.out.println(<span class="string">&quot;任务拾取成功&quot;</span>);</span><br><span class="line">       &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<p>说明：即使该用户不是候选人也能拾取，建议拾取时校验是否有资格</p>
+<p>组任务拾取后，该任务已有负责人，通过候选人将查询不到该任务</p>
+<h4 id="4-3-4、-查询个人待办任务"><a href="#4-3-4、-查询个人待办任务" class="headerlink" title="4.3.4、  查询个人待办任务"></a>4.3.4、  查询个人待办任务</h4><p> 查询方式同个人任务查询</p>
+ <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">findPersonalTaskList</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="comment">// 流程定义key</span></span><br><span class="line">    <span class="type">String</span> <span class="variable">processDefinitionKey</span> <span class="operator">=</span> <span class="string">&quot;evection1&quot;</span>;</span><br><span class="line">    <span class="comment">// 任务负责人</span></span><br><span class="line">    <span class="type">String</span> <span class="variable">assignee</span> <span class="operator">=</span> <span class="string">&quot;zhangsan&quot;</span>;</span><br><span class="line">     <span class="comment">//  获取processEngine</span></span><br><span class="line">       <span class="type">ProcessEngine</span> <span class="variable">processEngine</span> <span class="operator">=</span> ProcessEngines.getDefaultProcessEngine();</span><br><span class="line">    <span class="comment">// 创建TaskService</span></span><br><span class="line">    <span class="type">TaskService</span> <span class="variable">taskService</span> <span class="operator">=</span> processEngine.getTaskService();</span><br><span class="line">    List&lt;Task&gt; list = taskService.createTaskQuery()</span><br><span class="line">        .processDefinitionKey(processDefinitionKey)</span><br><span class="line">        .taskAssignee(assignee)</span><br><span class="line">        .list();</span><br><span class="line">    <span class="keyword">for</span> (Task task : list) &#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;----------------------------&quot;</span>);</span><br><span class="line">        System.out.println(<span class="string">&quot;流程实例id：&quot;</span> + task.getProcessInstanceId());</span><br><span class="line">        System.out.println(<span class="string">&quot;任务id：&quot;</span> + task.getId());</span><br><span class="line">        System.out.println(<span class="string">&quot;任务负责人：&quot;</span> + task.getAssignee());</span><br><span class="line">        System.out.println(<span class="string">&quot;任务名称：&quot;</span> + task.getName());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="4-3-5、-办理个人任务"><a href="#4-3-5、-办理个人任务" class="headerlink" title="4.3.5、  办理个人任务"></a>4.3.5、  办理个人任务</h4><p>同个人任务办理</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"> <span class="comment">/*完成任务*/</span></span><br><span class="line">   <span class="meta">@Test</span></span><br><span class="line">   <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">completeTask</span><span class="params">()</span>&#123;</span><br><span class="line"><span class="comment">//     任务ID</span></span><br><span class="line">      <span class="type">String</span> <span class="variable">taskId</span> <span class="operator">=</span> <span class="string">&quot;12304&quot;</span>;</span><br><span class="line"><span class="comment">//     获取processEngine</span></span><br><span class="line">      <span class="type">ProcessEngine</span> <span class="variable">processEngine</span> <span class="operator">=</span> ProcessEngines.getDefaultProcessEngine();</span><br><span class="line">      processEngine.getTaskService()</span><br><span class="line">                   .complete(taskId);</span><br><span class="line">      System.out.println(<span class="string">&quot;完成任务：&quot;</span>+taskId);</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+
+<p>说明：建议完成任务前校验该用户是否是该任务的负责人。</p>
+<h4 id="4-3-6、-归还组任务"><a href="#4-3-6、-归还组任务" class="headerlink" title="4.3.6、  归还组任务"></a>4.3.6、  归还组任务</h4><p> 如果个人不想办理该组任务，可以归还组任务，归还后该用户不再是该任务的负责人</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">*归还组任务，由个人任务变为组任务，还可以进行任务交接</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">setAssigneeToGroupTask</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="comment">//  获取processEngine</span></span><br><span class="line">       <span class="type">ProcessEngine</span> <span class="variable">processEngine</span> <span class="operator">=</span> ProcessEngines.getDefaultProcessEngine();</span><br><span class="line">   <span class="comment">// 查询任务使用TaskService</span></span><br><span class="line">   <span class="type">TaskService</span> <span class="variable">taskService</span> <span class="operator">=</span> processEngine.getTaskService();</span><br><span class="line">   <span class="comment">// 当前待办任务</span></span><br><span class="line">   <span class="type">String</span> <span class="variable">taskId</span> <span class="operator">=</span> <span class="string">&quot;6004&quot;</span>;</span><br><span class="line">   <span class="comment">// 任务负责人</span></span><br><span class="line">   <span class="type">String</span> <span class="variable">userId</span> <span class="operator">=</span> <span class="string">&quot;zhangsan2&quot;</span>;</span><br><span class="line">    <span class="comment">// 校验userId是否是taskId的负责人，如果是负责人才可以归还组任务</span></span><br><span class="line">   <span class="type">Task</span> <span class="variable">task</span> <span class="operator">=</span> taskService</span><br><span class="line">       .createTaskQuery()</span><br><span class="line">       .taskId(taskId)</span><br><span class="line">       .taskAssignee(userId)</span><br><span class="line">       .singleResult();</span><br><span class="line">    <span class="keyword">if</span> (task != <span class="literal">null</span>) &#123;</span><br><span class="line">       <span class="comment">// 如果设置为null，归还组任务,该 任务没有负责人</span></span><br><span class="line">       taskService.setAssignee(taskId, <span class="literal">null</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p> 说明：建议归还任务前校验该用户是否是该任务的负责人</p>
+<p>也可以通过setAssignee方法将任务委托给其它用户负责，注意被委托的用户可以不是候选人（建议不要这样使用）</p>
+<h4 id="4-3-7、-任务交接"><a href="#4-3-7、-任务交接" class="headerlink" title="4.3.7、  任务交接"></a>4.3.7、  任务交接</h4><p>任务交接,任务负责人将任务交给其它候选人办理该任务</p>
+ <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Test</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">setAssigneeToCandidateUser</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="comment">//  获取processEngine</span></span><br><span class="line">       <span class="type">ProcessEngine</span> <span class="variable">processEngine</span> <span class="operator">=</span> ProcessEngines.getDefaultProcessEngine();</span><br><span class="line">       <span class="comment">// 查询任务使用TaskService</span></span><br><span class="line">       <span class="type">TaskService</span> <span class="variable">taskService</span> <span class="operator">=</span> processEngine.getTaskService();</span><br><span class="line">       <span class="comment">// 当前待办任务</span></span><br><span class="line">       <span class="type">String</span> <span class="variable">taskId</span> <span class="operator">=</span> <span class="string">&quot;6004&quot;</span>;</span><br><span class="line">       <span class="comment">// 任务负责人</span></span><br><span class="line">       <span class="type">String</span> <span class="variable">userId</span> <span class="operator">=</span> <span class="string">&quot;zhangsan2&quot;</span>;</span><br><span class="line"><span class="comment">// 将此任务交给其它候选人办理该 任务</span></span><br><span class="line">           <span class="type">String</span> <span class="variable">candidateuser</span> <span class="operator">=</span> <span class="string">&quot;zhangsan&quot;</span>;</span><br><span class="line">       <span class="comment">// 校验userId是否是taskId的负责人，如果是负责人才可以归还组任务</span></span><br><span class="line">       <span class="type">Task</span> <span class="variable">task</span> <span class="operator">=</span> taskService</span><br><span class="line">           .createTaskQuery()</span><br><span class="line">           .taskId(taskId)</span><br><span class="line">           .taskAssignee(userId)</span><br><span class="line">           .singleResult();</span><br><span class="line">       <span class="keyword">if</span> (task != <span class="literal">null</span>) &#123;</span><br><span class="line">           taskService.setAssignee(taskId, candidateuser);</span><br><span class="line">       &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="4-3-8、-数据库表操作"><a href="#4-3-8、-数据库表操作" class="headerlink" title="4.3.8、  数据库表操作"></a>4.3.8、  数据库表操作</h4><p>查询当前任务执行表</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> act_ru_task </span><br></pre></td></tr></table></figure>
+
+<p>任务执行表，记录当前执行的任务，由于该任务当前是组任务，所有assignee为空，当拾取任务后该字段就是拾取用户的id</p>
+<p>查询任务参与者</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> act_ru_identitylink</span><br></pre></td></tr></table></figure>
+
+<p> 任务参与者，记录当前参考任务用户或组，当前任务如果设置了候选人，会向该表插入候选人记录，有几个候选就插入几个</p>
+<p>与act_ru_identitylink对应的还有一张历史表act_hi_identitylink，向act_ru_identitylink插入记录的同时也会向历史表插入记录。任务完成</p>
+<h2 id="五、网关"><a href="#五、网关" class="headerlink" title="五、网关"></a>五、网关</h2><p>网关用来控制流程的流向</p>
+<h3 id="5-1-排他网关ExclusiveGateway"><a href="#5-1-排他网关ExclusiveGateway" class="headerlink" title="5.1 排他网关ExclusiveGateway"></a>5.1 排他网关ExclusiveGateway</h3><h4 id="5-1-1-什么是排他网关："><a href="#5-1-1-什么是排他网关：" class="headerlink" title="5.1.1  什么是排他网关："></a>5.1.1  什么是排他网关：</h4><p>排他网关，用来在流程中实现决策。 当流程执行到这个网关，所有分支都会判断条件是否为true，如果为true则执行该分支，</p>
+<p><strong>注意</strong>：排他网关只会选择一个为true的分支执行。如果有两个分支条件都为true，排他网关会选择id值较小的一条分支去执行。</p>
+<p>为什么要用排他网关？</p>
+<p>不用排他网关也可以实现分支，如：在连线的condition条件上设置分支条件。</p>
+<p>在连线设置condition条件的缺点：如果条件都不满足，流程就结束了(是异常结束)。</p>
+<p>如果 使用排他网关决定分支的走向，如下：</p>
+<p><img src="/2022/07/%E6%90%AD%E5%BB%BA%E5%8D%95%E4%BD%93SpringBoot%E9%A1%B9%E7%9B%AE-%E9%9B%86%E6%88%90Activiti7-%E8%BF%9B%E9%98%B6/1577879740282.png" alt="1577879740282"></p>
+<p>如果从网关出去的线所有条件都不满足则系统抛出异常。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">org.activiti.engine.ActivitiException: No outgoing sequence flow of the exclusive gateway <span class="string">&#x27;exclusivegateway1&#x27;</span> could be selected <span class="keyword">for</span> continuing the process</span><br><span class="line">   at org.activiti.engine.impl.bpmn.behavior.ExclusiveGatewayActivityBehavior.leave(ExclusiveGatewayActivityBehavior.java:<span class="number">85</span>)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="5-1-2-流程定义"><a href="#5-1-2-流程定义" class="headerlink" title="5.1.2  流程定义"></a>5.1.2  流程定义</h4><p> 排他网关图标，红框内：</p>
+<p><img src="/2022/07/%E6%90%AD%E5%BB%BA%E5%8D%95%E4%BD%93SpringBoot%E9%A1%B9%E7%9B%AE-%E9%9B%86%E6%88%90Activiti7-%E8%BF%9B%E9%98%B6/1577879961637.png" alt="1577879961637"></p>
+<h4 id="5-1-3-测试"><a href="#5-1-3-测试" class="headerlink" title="5.1.3  测试"></a>5.1.3  测试</h4><p>在部门经理审核后，走排他网关，从排他网关出来的分支有两条，一条是判断出差天数是否大于3天，另一条是判断出差天数是否小于等于3天。</p>
+<p>设置分支条件时，如果所有分支条件都不是true，报错：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">org.activiti.engine.ActivitiException: No outgoing sequence flow of the exclusive gateway <span class="string">&#x27;exclusivegateway1&#x27;</span> could be selected <span class="keyword">for</span> continuing the process</span><br><span class="line"></span><br><span class="line">       at org.activiti.engine.impl.bpmn.behavior.ExclusiveGatewayActivityBehavior.leave(ExclusiveGatewayActivityBehavior.java:<span class="number">85</span>)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h3 id="5-2-并行网关ParallelGateway"><a href="#5-2-并行网关ParallelGateway" class="headerlink" title="5.2 并行网关ParallelGateway"></a>5.2 并行网关ParallelGateway</h3><h4 id="5-2-1-什么是并行网关"><a href="#5-2-1-什么是并行网关" class="headerlink" title="5.2.1  什么是并行网关"></a>5.2.1  什么是并行网关</h4><p>并行网关允许将流程分成多条分支，也可以把多条分支汇聚到一起，并行网关的功能是基于进入和外出顺序流的：</p>
+<p>l  fork分支：</p>
+<p> 并行后的所有外出顺序流，为每个顺序流都创建一个并发分支。</p>
+<p>l  join汇聚： </p>
+<p>所有到达并行网关，在此等待的进入分支， 直到所有进入顺序流的分支都到达以后， 流程就会通过汇聚网关。</p>
+<p>注意，如果同一个并行网关有多个进入和多个外出顺序流， 它就同时具有分支和汇聚功能。 这时，网关会先汇聚所有进入的顺序流，然后再切分成多个并行分支。</p>
+<p><strong>与其他网关的主要区别是，并行网关不会解析条件。</strong> <strong>即使顺序流中定义了条件，也会被忽略。</strong></p>
+<p>例子：</p>
+<p><img src="/2022/07/%E6%90%AD%E5%BB%BA%E5%8D%95%E4%BD%93SpringBoot%E9%A1%B9%E7%9B%AE-%E9%9B%86%E6%88%90Activiti7-%E8%BF%9B%E9%98%B6/1586679201.png"></p>
+<p>说明：</p>
+<p>技术经理和项目经理是两个execution分支，在act_ru_execution表有两条记录分别是技术经理和项目经理，act_ru_execution还有一条记录表示该流程实例。</p>
+<p>待技术经理和项目经理任务全部完成，在汇聚点汇聚，通过parallelGateway并行网关。</p>
+<p>并行网关在业务应用中常用于会签任务，会签任务即多个参与者共同办理的任务。</p>
+<h4 id="5-2-2-流程定义"><a href="#5-2-2-流程定义" class="headerlink" title="5.2.2  流程定义"></a>5.2.2  流程定义</h4><p>并行网关图标，红框内：</p>
+<p><img src="/2022/07/%E6%90%AD%E5%BB%BA%E5%8D%95%E4%BD%93SpringBoot%E9%A1%B9%E7%9B%AE-%E9%9B%86%E6%88%90Activiti7-%E8%BF%9B%E9%98%B6/1577880020127.png" alt="1577880020127"></p>
+<h4 id="5-2-3-测试"><a href="#5-2-3-测试" class="headerlink" title="5.2.3  测试"></a>5.2.3  测试</h4><p>当执行到并行网关数据库跟踪如下：</p>
+<p>当前任务表：SELECT * FROM act_ru_task   </p>
+<p><img src="/2022/07/%E6%90%AD%E5%BB%BA%E5%8D%95%E4%BD%93SpringBoot%E9%A1%B9%E7%9B%AE-%E9%9B%86%E6%88%90Activiti7-%E8%BF%9B%E9%98%B6/1586680533.png"></p>
+<p>上图中：有两个任务当前执行。</p>
+<p>查询流程实例执行表：SELECT * FROM act_ru_execution </p>
+<p><img src="/2022/07/%E6%90%AD%E5%BB%BA%E5%8D%95%E4%BD%93SpringBoot%E9%A1%B9%E7%9B%AE-%E9%9B%86%E6%88%90Activiti7-%E8%BF%9B%E9%98%B6/1586680570.png"></p>
+<p>上图中，说明当前流程实例有多个分支(两个)在运行。</p>
+<p>对并行任务的执行：</p>
+<p>并行任务执行不分前后，由任务的负责人去执行即可。</p>
+<p>执行技术经理任务后，查询当前任务表 SELECT * FROM act_ru_task   </p>
+<p><img src="/2022/07/%E6%90%AD%E5%BB%BA%E5%8D%95%E4%BD%93SpringBoot%E9%A1%B9%E7%9B%AE-%E9%9B%86%E6%88%90Activiti7-%E8%BF%9B%E9%98%B6/1586680672.png"></p>
+<p>已完成的技术经理任务在当前任务表act_ru_task_已被删除。</p>
+<p>在流程实例执行表：SELECT * FROM act_ru_execution有中多个分支存在且有并行网关的汇聚结点。</p>
+<p><img src="/2022/07/%E6%90%AD%E5%BB%BA%E5%8D%95%E4%BD%93SpringBoot%E9%A1%B9%E7%9B%AE-%E9%9B%86%E6%88%90Activiti7-%E8%BF%9B%E9%98%B6/1586680728.png"></p>
+<p>有并行网关的汇聚结点：说明有一个分支已经到汇聚，等待其它的分支到达。</p>
+<p>当所有分支任务都完成，都到达汇聚结点后：</p>
+<p>流程实例执行表：SELECT * FROM act_ru_execution，执行流程实例已经变为总经理审批，说明流程执行已经通过并行网关</p>
+<p><img src="/2022/07/%E6%90%AD%E5%BB%BA%E5%8D%95%E4%BD%93SpringBoot%E9%A1%B9%E7%9B%AE-%E9%9B%86%E6%88%90Activiti7-%E8%BF%9B%E9%98%B6/1586680801.png"></p>
+<p>总结：所有分支到达汇聚结点，并行网关执行完成。         </p>
+<h3 id="5-3-包含网关InclusiveGateway"><a href="#5-3-包含网关InclusiveGateway" class="headerlink" title="5.3    包含网关InclusiveGateway"></a>5.3    包含网关InclusiveGateway</h3><h4 id="5-3-1-什么是包含网关"><a href="#5-3-1-什么是包含网关" class="headerlink" title="5.3.1  什么是包含网关"></a>5.3.1  什么是包含网关</h4><p>包含网关可以看做是排他网关和并行网关的结合体。 </p>
+<p>和排他网关一样，你可以在外出顺序流上定义条件，包含网关会解析它们。 但是主要的区别是包含网关可以选择多于一条顺序流，这和并行网关一样。</p>
+<p>包含网关的功能是基于进入和外出顺序流的：</p>
+<p>l  分支： </p>
+<p>所有外出顺序流的条件都会被解析，结果为true的顺序流会以并行方式继续执行， 会为每个顺序流创建一个分支。</p>
+<p>l  汇聚：</p>
+<p> 所有并行分支到达包含网关，会进入等待状态， 直到每个包含流程token的进入顺序流的分支都到达。 这是与并行网关的最大不同。换句话说，包含网关只会等待被选中执行了的进入顺序流。 在汇聚之后，流程会穿过包含网关继续执行。</p>
+<h4 id="5-3-2-流程定义："><a href="#5-3-2-流程定义：" class="headerlink" title="5.3.2  流程定义："></a>5.3.2  流程定义：</h4><p>出差申请大于等于3天需要由项目经理审批，小于3天由技术经理审批，出差申请必须经过人事经理审批。</p>
+<p> 包含网关图标，红框内：</p>
+<p> <img src="/2022/07/%E6%90%AD%E5%BB%BA%E5%8D%95%E4%BD%93SpringBoot%E9%A1%B9%E7%9B%AE-%E9%9B%86%E6%88%90Activiti7-%E8%BF%9B%E9%98%B6/1577880080004.png" alt="1577880080004"></p>
+<p>定义流程：</p>
+<p><img src="/2022/07/%E6%90%AD%E5%BB%BA%E5%8D%95%E4%BD%93SpringBoot%E9%A1%B9%E7%9B%AE-%E9%9B%86%E6%88%90Activiti7-%E8%BF%9B%E9%98%B6/1586689674.png"></p>
+<p>注意：通过包含网关的每个分支的连线上设置condition条件。</p>
+<h4 id="5-3-3-测试"><a href="#5-3-3-测试" class="headerlink" title="5.3.3  测试"></a>5.3.3  测试</h4><p>如果包含网关设置的条件中，流程变量不存在，报错;</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">org.activiti.engine.ActivitiException: Unknown property used in expression: $&#123;evection.num&gt;=<span class="number">3</span>&#125;</span><br></pre></td></tr></table></figure>
+
+<p>需要在流程启动时设置流程变量evection.num。</p>
+<p>1）、当流程执行到第一个包含网关后，会根据条件判断，当前要走哪几个分支：</p>
+<p>流程实例执行表：SELECT * FROM act_ru_execution</p>
+<p><img src="/2022/07/%E6%90%AD%E5%BB%BA%E5%8D%95%E4%BD%93SpringBoot%E9%A1%B9%E7%9B%AE-%E9%9B%86%E6%88%90Activiti7-%E8%BF%9B%E9%98%B6/1586676678.png"></p>
+<p>第一条记录：包含网关分支。</p>
+<p>后两条记录代表两个要执行的分支：</p>
+<p>ACT_ID &#x3D; “_13” 代表 项目经理神品</p>
+<p>ACT_ID &#x3D; “_5” 代表 人事经理审批</p>
+<p>当前任务表：ACT_RU_TASK</p>
+<p><img src="/2022/07/%E6%90%AD%E5%BB%BA%E5%8D%95%E4%BD%93SpringBoot%E9%A1%B9%E7%9B%AE-%E9%9B%86%E6%88%90Activiti7-%E8%BF%9B%E9%98%B6/1586676828.png"></p>
+<p>上图中，项目经理审批、人事经理审批 都是当前的任务，在并行执行。</p>
+<p>如果有一个分支执行先走到汇聚结点的分支，要等待其它执行分支走到汇聚。</p>
+<p>2）、先执行项目经理审批，然后查询当前任务表：ACT_RU_TASK</p>
+<p><img src="/2022/07/%E6%90%AD%E5%BB%BA%E5%8D%95%E4%BD%93SpringBoot%E9%A1%B9%E7%9B%AE-%E9%9B%86%E6%88%90Activiti7-%E8%BF%9B%E9%98%B6/1586677325.png"></p>
+<p>当前任务还有人事经理审批需要处理。</p>
+<p>流程实例执行表：SELECT * FROM act_ru_execution</p>
+<p><img src="/2022/07/%E6%90%AD%E5%BB%BA%E5%8D%95%E4%BD%93SpringBoot%E9%A1%B9%E7%9B%AE-%E9%9B%86%E6%88%90Activiti7-%E8%BF%9B%E9%98%B6/1586677432.png"></p>
+<p>发现人事经理的分支还存在，而项目经理分支已经走到ACT_ID &#x3D; _18的节点。而ACT_ID&#x3D;__18就是第二个包含网关</p>
+<p>这时，因为有2个分支要执行，包含网关会等所有分支走到汇聚才能执行完成。</p>
+<p>3）、执行人事经理审批</p>
+<p>然后查询当前任务表：ACT_RU_TASK</p>
+<p><img src="/2022/07/%E6%90%AD%E5%BB%BA%E5%8D%95%E4%BD%93SpringBoot%E9%A1%B9%E7%9B%AE-%E9%9B%86%E6%88%90Activiti7-%E8%BF%9B%E9%98%B6/1586677665.png"></p>
+<p>当前任务表已经不是人事经理审批了，说明人事经理审批已经完成。 </p>
+<p>流程实例执行表：SELECT * FROM act_ru_execution</p>
+<p><img src="/2022/07/%E6%90%AD%E5%BB%BA%E5%8D%95%E4%BD%93SpringBoot%E9%A1%B9%E7%9B%AE-%E9%9B%86%E6%88%90Activiti7-%E8%BF%9B%E9%98%B6/1586677735.png"></p>
+<p>包含网关执行完成，分支和汇聚就从act_ru_execution删除。</p>
+<p>小结：在分支时，需要判断条件，<strong>符合条件的分支，将会执行</strong>，符合条件的分支最终才进行汇聚。</p>
+<h3 id="5-4-事件网关EventGateway"><a href="#5-4-事件网关EventGateway" class="headerlink" title="5.4 事件网关EventGateway"></a>5.4 事件网关EventGateway</h3><p>事件网关允许根据事件判断流向。网关的每个外出顺序流都要连接到一个中间捕获事件。 当流程到达一个基于事件网关，网关会进入等待状态：会暂停执行。与此同时，会为每个外出顺序流创建相对的事件订阅。</p>
+<p>事件网关的外出顺序流和普通顺序流不同，这些顺序流不会真的”执行”， 相反它们让流程引擎去决定执行到事件网关的流程需要订阅哪些事件。 要考虑以下条件：</p>
+<ol>
+<li>事件网关必须有两条或以上外出顺序流；</li>
+<li>事件网关后，只能使用intermediateCatchEvent类型（activiti不支持基于事件网关后连接ReceiveTask）</li>
+<li>连接到事件网关的中间捕获事件必须只有一个入口顺序流。</li>
+</ol>
+<h4 id="5-4-1流程定义"><a href="#5-4-1流程定义" class="headerlink" title="5.4.1流程定义"></a>5.4.1流程定义</h4><p>事件网关图标，红框内</p>
+<p><img src="/2022/07/%E6%90%AD%E5%BB%BA%E5%8D%95%E4%BD%93SpringBoot%E9%A1%B9%E7%9B%AE-%E9%9B%86%E6%88%90Activiti7-%E8%BF%9B%E9%98%B6/1586666799.png" alt="1586666799"></p>
+<p>intermediateCatchEvent：</p>
+<p><img src="/2022/07/%E6%90%AD%E5%BB%BA%E5%8D%95%E4%BD%93SpringBoot%E9%A1%B9%E7%9B%AE-%E9%9B%86%E6%88%90Activiti7-%E8%BF%9B%E9%98%B6/1586667342.png"></p>
+<p>intermediateCatchEvent支持的事件类型：</p>
+<p>Message Event: 消息事件</p>
+<p>Singal Event：  信号事件</p>
+<p>Timer Event：  定时事件</p>
+<p><img src="/2022/07/%E6%90%AD%E5%BB%BA%E5%8D%95%E4%BD%93SpringBoot%E9%A1%B9%E7%9B%AE-%E9%9B%86%E6%88%90Activiti7-%E8%BF%9B%E9%98%B6/1586667220.png"></p>
+<p>使用事件网关定义流程：</p>
+<p><img src="/2022/07/%E6%90%AD%E5%BB%BA%E5%8D%95%E4%BD%93SpringBoot%E9%A1%B9%E7%9B%AE-%E9%9B%86%E6%88%90Activiti7-%E8%BF%9B%E9%98%B6/1586694673.png"></p>
+
+      
+    </div>
+    <div class="article-footer">
+      <blockquote class="mt-2x">
+  <ul class="post-copyright list-unstyled">
+    
+    <li class="post-copyright-link hidden-xs">
+      <strong>本文链接：</strong>
+      <a href="https://guoshunfa.com/2022/07/%E6%90%AD%E5%BB%BA%E5%8D%95%E4%BD%93SpringBoot%E9%A1%B9%E7%9B%AE-%E9%9B%86%E6%88%90Activiti7-%E8%BF%9B%E9%98%B6/" title="搭建单体SpringBoot项目 集成Activiti7 进阶" target="_blank" rel="external">https://guoshunfa.com/2022/07/搭建单体SpringBoot项目-集成Activiti7-进阶/</a>
+    </li>
+    
+    <li class="post-copyright-license">
+      <strong>版权声明： </strong> 本博客所有文章除特别声明外，均采用 <a href="http://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank" rel="external">CC BY 4.0 CN协议</a> 许可协议。转载请注明出处！
+    </li>
+  </ul>
+</blockquote>
+
+
+<div class="panel panel-default panel-badger">
+  <div class="panel-body">
+    <figure class="media">
+      <div class="media-left">
+        <a href="https://github.com/guoshunfa" target="_blank" class="img-burn thumb-sm visible-lg">
+          <img src="/images/avatar.jpg" class="img-rounded w-full" alt="">
+        </a>
+      </div>
+      <div class="media-body">
+        <h3 class="media-heading"><a href="https://github.com/guoshunfa" target="_blank"><span class="text-dark">郭顺发</span><small class="ml-1x">创业中......</small></a></h3>
+        <div>承接：小程序开发、APP开发、网站开发、爬虫开发</div>
+      </div>
+    </figure>
+  </div>
+</div>
+
+
+    </div>
+  </article>
+  
+    
+  <section id="comments">
+  	
+           
+    
+  </section>
+
+
+  
+</div>
+
+  <nav class="bar bar-footer clearfix" data-stick-bottom>
+  <div class="bar-inner">
+  
+  <ul class="pager pull-left">
+    
+    <li class="prev">
+      <a href="/2022/07/%E6%90%AD%E5%BB%BA%E5%8D%95%E4%BD%93SpringBoot%E9%A1%B9%E7%9B%AE-%E9%9B%86%E6%88%90Activiti7-%E5%9F%BA%E7%A1%80/" title="搭建单体SpringBoot项目 集成Activiti7 基础"><i class="icon icon-angle-left" aria-hidden="true"></i><span>&nbsp;&nbsp;上一篇</span></a>
+    </li>
+    
+    
+    <li class="next">
+      <a href="/2022/07/%E6%90%AD%E5%BB%BA%E5%8D%95%E4%BD%93SpringBoot%E9%A1%B9%E7%9B%AE-%E9%9B%86%E6%88%90Druid%E6%95%B0%E6%8D%AE%E5%BA%93%E8%BF%9E%E6%8E%A5%E6%B1%A0%E5%92%8C%E7%9B%91%E6%8E%A7/" title="搭建单体SpringBoot项目 集成Druid数据库连接池和监控"><span>下一篇&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
+    </li>
+    
+    
+  </ul>
+  
+  
+  
+  <div class="bar-right">
+    
+    <div class="share-component" data-sites="weibo,qq,wechat,facebook,twitter" data-mobile-sites="weibo,qq,qzone"></div>
+    
+  </div>
+  </div>
+</nav>
+  
+
+
+</main>
+
+  <footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
+	
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/guoshunfa" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="https://gitee.com/guoshunfa" target="_blank" title="Gitee" data-toggle=tooltip data-placement=top><i class="icon icon-gitee"></i></a></li>
+        
+        <li><a href="https://juejin.cn/user/166781500267015" target="_blank" title="Juejin" data-toggle=tooltip data-placement=top><i class="icon icon-juejin"></i></a></li>
+        
+        <li><a href="https://cloud.tencent.com/developer/user/7784141" target="_blank" title="Code" data-toggle=tooltip data-placement=top><i class="icon icon-code"></i></a></li>
+        
+        <li><a href="/atom.xml" target="_blank" title="Rss" data-toggle=tooltip data-placement=top><i class="icon icon-rss"></i></a></li>
+        
+    </ul>
+
+    <div class="copyright">
+    	
+        &copy; 2024 guoshunfa
+        
+        <!-- <div class="publishby">
+        	Theme by <a href="https://github.com/cofess" target="_blank"> cofess </a>base on <a href="https://github.com/cofess/hexo-theme-pure" target="_blank">pure</a>.
+        </div> -->
+    </div>
+</footer>
+  <script src="//cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
+<script>
+window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
+</script>
+
+<script src="/js/plugin.min.js"></script>
+
+
+<script src="/js/application.js"></script>
+
+
+    <script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(未命名)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+
+<script src="/js/insight.js"></script>
+
+
+
+    <script>
+(function ($) {
+    $('.search-form').on('submit', function (e) {
+        var keyword = $('.search-form-input[name="wd"]').val();
+        window.location = 'https://www.baidu.com/s?wd=site:guoshunfa.com ' + keyword;
+        return false;
+    });
+})(jQuery);
+</script>
+
+
+
+
+   
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+   
+    
+  <!-- <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css"> -->
+  <script src="//cdn.jsdelivr.net/npm/gitalk@1.7.2/dist/gitalk.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/blueimp-md5@2.10.0/js/md5.min.js"></script>
+  <script type="text/javascript">
+  var gitalk = new Gitalk({
+    clientID: '328529f408a5d1041fe1',
+    clientSecret: '43872fab04fe0accb98439ac77ff71ff81f7b9dd',
+    repo: 'guoshunfa-comment',
+    owner: 'guoshunfa',
+    admin: ['guoshunfa'],
+    id: md5(location.pathname),
+    distractionFreeMode: true,
+    language: 'zh-CN',
+    enableHotKey: 'true'
+  })
+  gitalk.render('comments')
+  </script>
+      
+
+
+
+  <script src="//cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.3.5/dist/jquery.fancybox.min.js"></script>
+  <script>
+  //利用 FancyBox 实现点击图片放大
+  $(document).ready(function() {
+    $('article img').not('[hidden]').not('.panel-body img').each(function() {
+      var $image = $(this);
+      var imageCaption = $image.attr('alt');
+      var $imageWrapLink = $image.parent('a');
+      if ($imageWrapLink.length < 1) {
+        var src = this.getAttribute('src');
+        var idx = src.lastIndexOf('?');
+        if (idx != -1) {
+          src = src.substring(0, idx);
+        }
+        $imageWrapLink = $image.wrap('<a href="' + src + '"></a>').parent('a');
+      }
+      $imageWrapLink.attr('data-fancybox', 'images');
+      if (imageCaption) {
+        $imageWrapLink.attr('data-caption', imageCaption);
+      }
+    });
+    $().fancybox({
+      selector: '[data-fancybox="images"]',
+      hash: false,
+      loop: false,
+    });
+  });
+  </script>
+
+
+
+
+
+</body>
+</html>

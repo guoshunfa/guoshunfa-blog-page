@@ -1,0 +1,915 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+  <meta charset="utf-8">
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-transform" />
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="format-detection" content="telephone=no,email=no,adress=no">
+  <!-- Color theme for statusbar -->
+  <meta name="theme-color" content="#000000" />
+  <!-- 强制页面在当前窗口以独立页面显示,防止别人在框架里调用页面 -->
+  <meta http-equiv="window-target" content="_top" />
+  
+  
+  <title>Swift基础 字符串和字符 | guoshunfa</title>
+  <meta name="description" content="翻译自：https:&#x2F;&#x2F;docs.swift.org&#x2F;swift-book&#x2F;LanguageGuide&#x2F;StringsAndCharacters.html 字符串是一系列角色，如&quot;hello,world&quot;或&quot;albatross&quot;Swift字符串由String类型表示。String的内容可以通过各种方式访问，包括作为Character值的集合。 Swift的S">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Swift基础 字符串和字符">
+<meta property="og:url" content="https://guoshunfa.com/2022/07/Swift%E5%9F%BA%E7%A1%80-%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%92%8C%E5%AD%97%E7%AC%A6/index.html">
+<meta property="og:site_name" content="guoshunfa">
+<meta property="og:description" content="翻译自：https:&#x2F;&#x2F;docs.swift.org&#x2F;swift-book&#x2F;LanguageGuide&#x2F;StringsAndCharacters.html 字符串是一系列角色，如&quot;hello,world&quot;或&quot;albatross&quot;Swift字符串由String类型表示。String的内容可以通过各种方式访问，包括作为Character值的集合。 Swift的S">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://guoshunfa.com/2022/07/Swift%E5%9F%BA%E7%A1%80-%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%92%8C%E5%AD%97%E7%AC%A6/202204050850070.png">
+<meta property="og:image" content="https://guoshunfa.com/2022/07/Swift%E5%9F%BA%E7%A1%80-%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%92%8C%E5%AD%97%E7%AC%A6/202204050919792.png">
+<meta property="og:image" content="https://guoshunfa.com/2022/07/Swift%E5%9F%BA%E7%A1%80-%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%92%8C%E5%AD%97%E7%AC%A6/202204050928055.png">
+<meta property="og:image" content="https://guoshunfa.com/2022/07/Swift%E5%9F%BA%E7%A1%80-%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%92%8C%E5%AD%97%E7%AC%A6/202204050929164.png">
+<meta property="og:image" content="https://guoshunfa.com/2022/07/Swift%E5%9F%BA%E7%A1%80-%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%92%8C%E5%AD%97%E7%AC%A6/202204050930927.png">
+<meta property="article:published_time" content="2022-07-01T04:01:01.000Z">
+<meta property="article:modified_time" content="2024-01-28T11:41:39.289Z">
+<meta property="article:author" content="guoshunfa">
+<meta property="article:tag" content="Swift">
+<meta property="article:tag" content="基础">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://guoshunfa.com/2022/07/Swift%E5%9F%BA%E7%A1%80-%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%92%8C%E5%AD%97%E7%AC%A6/202204050850070.png">
+  <!-- Canonical links -->
+  <link rel="canonical" href="https://guoshunfa.com/2022/07/Swift%E5%9F%BA%E7%A1%80-%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%92%8C%E5%AD%97%E7%AC%A6/index.html">
+  
+    <link rel="alternate" href="/atom.xml" title="guoshunfa" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="favicon.jpg" type="image/x-icon">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  
+  
+    <link href="//cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.3.5/dist/jquery.fancybox.min.css" rel="stylesheet">
+  
+  
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1.7.2/dist/gitalk.min.css">
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body class="main-center" itemscope itemtype="http://schema.org/WebPage">
+  <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+  <div class="slimContent">
+    <div class="navbar-header">
+      
+      
+      <div class="profile-block text-center">
+        <a id="avatar" href="https://github.com/guoshunfa" target="_blank">
+          <img class="img-circle img-rotate" src="/images/avatar.jpg" width="200" height="200">
+        </a>
+        <h2 id="name" class="hidden-xs hidden-sm">郭顺发</h2>
+        <h3 id="title" class="hidden-xs hidden-sm hidden-md">创业中......</h3>
+        <small id="location" class="text-muted hidden-xs hidden-sm"><i class="icon icon-map-marker"></i> 深圳, China</small>
+      </div>
+      
+      <div class="search" id="search-form-wrap">
+
+    <form class="search-form sidebar-form">
+        <div class="input-group">
+            <input type="text" class="search-form-input form-control" placeholder="搜索" />
+            <span class="input-group-btn">
+                <button type="submit" class="search-form-submit btn btn-flat" onclick="return false;"><i class="icon icon-search"></i></button>
+            </span>
+        </div>
+    </form>
+    <div class="ins-search">
+  <div class="ins-search-mask"></div>
+  <div class="ins-search-container">
+    <div class="ins-input-wrapper">
+      <input type="text" class="ins-search-input" placeholder="想要查找什么..." x-webkit-speech />
+      <button type="button" class="close ins-close ins-selectable" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="ins-section-wrapper">
+      <div class="ins-section-container"></div>
+    </div>
+  </div>
+</div>
+
+
+</div>
+      <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <nav id="main-navbar" class="collapse navbar-collapse" itemscope itemtype="http://schema.org/SiteNavigationElement" role="navigation">
+      <ul class="nav navbar-nav main-nav menu-highlight">
+        
+        
+        <li class="menu-item menu-item-首页">
+          <a href="/.">
+            
+            <i class="icon icon-home-fill"></i>
+            
+            <span class="menu-title">首页</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-归档">
+          <a href="/archives">
+            
+            <i class="icon icon-archives-fill"></i>
+            
+            <span class="menu-title">归档</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-分类">
+          <a href="/categories">
+            
+            <i class="icon icon-folder"></i>
+            
+            <span class="menu-title">分类</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-标签">
+          <a href="/tags">
+            
+            <i class="icon icon-tags"></i>
+            
+            <span class="menu-title">标签</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-github仓库">
+          <a href="/repository">
+            
+            <i class="icon icon-project"></i>
+            
+            <span class="menu-title">github仓库</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-工具箱">
+          <a href="/tools">
+            
+            <i class="icon icon-book-fill"></i>
+            
+            <span class="menu-title">工具箱</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-友链">
+          <a href="/links">
+            
+            <i class="icon icon-friendship"></i>
+            
+            <span class="menu-title">友链</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-关于">
+          <a href="/about">
+            
+            <i class="icon icon-cup-fill"></i>
+            
+            <span class="menu-title">关于</span>
+          </a>
+        </li>
+        
+      </ul>
+      
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/guoshunfa" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="https://gitee.com/guoshunfa" target="_blank" title="Gitee" data-toggle=tooltip data-placement=top><i class="icon icon-gitee"></i></a></li>
+        
+        <li><a href="https://juejin.cn/user/166781500267015" target="_blank" title="Juejin" data-toggle=tooltip data-placement=top><i class="icon icon-juejin"></i></a></li>
+        
+        <li><a href="https://cloud.tencent.com/developer/user/7784141" target="_blank" title="Code" data-toggle=tooltip data-placement=top><i class="icon icon-code"></i></a></li>
+        
+        <li><a href="/atom.xml" target="_blank" title="Rss" data-toggle=tooltip data-placement=top><i class="icon icon-rss"></i></a></li>
+        
+    </ul>
+
+    </nav>
+  </div>
+</header>
+
+  
+    <aside class="sidebar" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    
+      <div class="widget">
+    <h3 class="widget-title">公告</h3>
+    <div class="widget-body">
+        <div id="board">
+            <div class="content">
+                <p>欢迎来到www.guoshunfa.com。</p><hr/><a target="_blank" rel="noopener" href="https://www.oracle.com/cn/java/">前往Java官网<a/><br/><a target="_blank" rel="noopener" href="https://spring.io/">前往Spring官网<a/>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget-body">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/HTML-CSS-JavaScript/">HTML/CSS/JavaScript</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Java/">Java</a><span class="category-list-count">17</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Python/">Python</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/SpringBoot/">SpringBoot</a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Swift/">Swift</a><span class="category-list-count">29</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%88%9B%E4%B8%9A/">创业</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%A4%8D%E7%9B%98/">复盘</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%A8%B1%E4%B9%90/">娱乐</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%8A%80%E6%9C%AF/">技术</a><span class="category-list-count">27</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%8A%80%E6%9C%AF/%E6%90%AD%E5%BB%BA%E5%8D%95%E4%BD%93SpringBoot%E9%A1%B9%E7%9B%AE/">搭建单体SpringBoot项目</a><span class="category-list-count">21</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%90%AD%E5%BB%BA%E5%8D%95%E4%BD%93SpringBoot%E9%A1%B9%E7%9B%AE/">搭建单体SpringBoot项目</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/">数据库</a><span class="category-list-count">17</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%9C%8D%E5%8A%A1/">服务</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%9C%8D%E5%8A%A1-%E7%BB%84%E4%BB%B6/">服务&组件</a><span class="category-list-count">27</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%AE%A1%E7%90%86/">服务器管理</a><span class="category-list-count">21</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E7%AE%97%E6%B3%95/">算法</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E8%BD%AF%E4%BB%B6%E4%BD%BF%E7%94%A8/">软件使用</a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E8%BD%AF%E4%BB%B6%E6%8A%80%E6%9C%AF%E6%A1%86%E6%9E%B6/">软件技术框架</a><span class="category-list-count">44</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E9%98%85%E8%AF%BB/">阅读</a><span class="category-list-count">2</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget-body">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/AJAX/" rel="tag">AJAX</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Activiti7/" rel="tag">Activiti7</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Arthas/" rel="tag">Arthas</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CSS/" rel="tag">CSS</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Curl/" rel="tag">Curl</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Debug/" rel="tag">Debug</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Docker/" rel="tag">Docker</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Druid/" rel="tag">Druid</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Electron/" rel="tag">Electron</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Expect/" rel="tag">Expect</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/FastJson/" rel="tag">FastJson</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/FreeMarker/" rel="tag">FreeMarker</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Git/" rel="tag">Git</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Gitlab/" rel="tag">Gitlab</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/GitlabRunner/" rel="tag">GitlabRunner</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/HTML-CSS-JavaScript/" rel="tag">HTML&#x2F;CSS&#x2F;JavaScript</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hook/" rel="tag">Hook</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Http/" rel="tag">Http</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hutool/" rel="tag">Hutool</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/IDEA/" rel="tag">IDEA</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JS/" rel="tag">JS</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JVM/" rel="tag">JVM</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Jar/" rel="tag">Jar</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java/" rel="tag">Java</a><span class="tag-list-count">27</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Jdk/" rel="tag">Jdk</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Jenkins/" rel="tag">Jenkins</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Jmeter/" rel="tag">Jmeter</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Json/" rel="tag">Json</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Jsoup/" rel="tag">Jsoup</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Kafka/" rel="tag">Kafka</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Leetcode/" rel="tag">Leetcode</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux/" rel="tag">Linux</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Logback/" rel="tag">Logback</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Mac/" rel="tag">Mac</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Maven/" rel="tag">Maven</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MongoDB/" rel="tag">MongoDB</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MyBatis/" rel="tag">MyBatis</a><span class="tag-list-count">7</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Mybatis/" rel="tag">Mybatis</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MybatisPlus/" rel="tag">MybatisPlus</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Mysql/" rel="tag">Mysql</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Nano/" rel="tag">Nano</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Nexus/" rel="tag">Nexus</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Nginx/" rel="tag">Nginx</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Opengrok/" rel="tag">Opengrok</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Oracle/" rel="tag">Oracle</a><span class="tag-list-count">22</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Profile/" rel="tag">Profile</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/PubSubJS/" rel="tag">PubSubJS</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Python/" rel="tag">Python</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Quartz/" rel="tag">Quartz</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/RESTful/" rel="tag">RESTful</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/React/" rel="tag">React</a><span class="tag-list-count">7</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Redis/" rel="tag">Redis</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SQL/" rel="tag">SQL</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SVN/" rel="tag">SVN</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Scheduled/" rel="tag">Scheduled</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Scrapy/" rel="tag">Scrapy</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Shell/" rel="tag">Shell</a><span class="tag-list-count">9</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Spel%E8%A1%A8%E8%BE%BE%E5%BC%8F/" rel="tag">Spel表达式</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Spring/" rel="tag">Spring</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SpringBoot/" rel="tag">SpringBoot</a><span class="tag-list-count">34</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SpringEvent/" rel="tag">SpringEvent</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SpringMVC/" rel="tag">SpringMVC</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SpringSecurity/" rel="tag">SpringSecurity</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Stream/" rel="tag">Stream</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Swagger/" rel="tag">Swagger</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Swift/" rel="tag">Swift</a><span class="tag-list-count">29</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/TestNG/" rel="tag">TestNG</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Tomcat/" rel="tag">Tomcat</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/UI%E7%BB%84%E4%BB%B6%E5%BA%93/" rel="tag">UI组件库</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Validator/" rel="tag">Validator</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Vue/" rel="tag">Vue</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Vuepress/" rel="tag">Vuepress</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Wordpress/" rel="tag">Wordpress</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/XML/" rel="tag">XML</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/assert/" rel="tag">assert</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/docker/" rel="tag">docker</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/gitlab/" rel="tag">gitlab</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/homebrew/" rel="tag">homebrew</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/iframe/" rel="tag">iframe</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java/" rel="tag">java</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/lambda/" rel="tag">lambda</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/less/" rel="tag">less</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/" rel="tag">linux</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mac/" rel="tag">mac</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mybatis-plus/" rel="tag">mybatis-plus</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mysql/" rel="tag">mysql</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/oracle/" rel="tag">oracle</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/pom-xml/" rel="tag">pom.xml</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/quartz/" rel="tag">quartz</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/settings-xml/" rel="tag">settings.xml</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/spring-boot/" rel="tag">spring-boot</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ssh/" rel="tag">ssh</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sshpass/" rel="tag">sshpass</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/yum/" rel="tag">yum</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%B9%90%E8%A7%82%E9%94%81/" rel="tag">乐观锁</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BB%8B%E7%BB%8D/" rel="tag">介绍</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%86%85%E7%BD%91/" rel="tag">内网</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%86%85%E7%BD%91%E7%A9%BF%E9%80%8F/" rel="tag">内网穿透</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%8A%A0%E5%AF%86/" rel="tag">加密</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%8F%8D%E7%BC%96%E8%AF%91%E5%B7%A5%E5%85%B7/" rel="tag">反编译工具</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%9B%BE%E5%BA%8A/" rel="tag">图床</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%9F%BA%E7%A1%80/" rel="tag">基础</a><span class="tag-list-count">29</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%AD%98%E5%82%A8%E5%87%BD%E6%95%B0/" rel="tag">存储函数</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%AD%98%E5%82%A8%E8%BF%87%E7%A8%8B/" rel="tag">存储过程</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%AE%9A%E6%97%B6%E5%99%A8/" rel="tag">定时器</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%AE%9D%E5%A1%94/" rel="tag">宝塔</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%B9%B6%E5%8F%91/" rel="tag">并发</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%BC%82%E5%B8%B8/" rel="tag">异常</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%BF%83%E7%90%86/" rel="tag">心理</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%80%BB%E7%BB%93/" rel="tag">总结</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%8C%81%E4%B9%85%E5%B1%82%E6%A1%86%E6%9E%B6/" rel="tag">持久层框架</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%8E%A5%E5%8F%A3/" rel="tag">接口</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%8F%92%E4%BB%B6/" rel="tag">插件</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/" rel="tag">数据库</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%96%AD%E8%A8%80/" rel="tag">断言</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%A0%91%E8%8E%93%E6%B4%BE/" rel="tag">树莓派</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%A0%91%E8%8E%93%E6%B4%BE4B/" rel="tag">树莓派4B</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%A6%82%E5%BF%B5/" rel="tag">概念</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%A8%A1%E7%89%88%E5%BC%95%E6%93%8E/" rel="tag">模版引擎</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%B3%9B%E5%9E%8B/" rel="tag">泛型</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%B5%8B%E8%AF%95/" rel="tag">测试</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%88%AC%E8%99%AB/" rel="tag">爬虫</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%94%A8%E6%88%B7%E6%9D%83%E9%99%90%E9%AA%8C%E8%AF%81/" rel="tag">用户权限验证</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%9F%A5%E8%AF%86/" rel="tag">知识</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%AE%97%E6%B3%95/" rel="tag">算法</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%B1%BB/" rel="tag">类</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BB%84%E4%BB%B6%E5%BA%93/" rel="tag">组件库</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%84%9A%E6%9C%AC/" rel="tag">脚本</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%87%AA%E5%8A%A8%E5%8C%96%E6%B5%8B%E8%AF%95/" rel="tag">自动化测试</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%8B%A5%E4%BE%9D/" rel="tag">若依</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/" rel="tag">解决方案</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" rel="tag">设计模式</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/" rel="tag">读书笔记</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%B7%A8%E5%9F%9F/" rel="tag">跨域</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%83%A8%E7%BD%B2/" rel="tag">部署</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9B%86%E6%88%90/" rel="tag">集成</a><span class="tag-list-count">14</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1/" rel="tag">面向对象</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9F%A9%E5%89%A7/" rel="tag">韩剧</a><span class="tag-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget-body tagcloud">
+      <a href="/tags/AJAX/" style="font-size: 13px;">AJAX</a> <a href="/tags/Activiti7/" style="font-size: 13.17px;">Activiti7</a> <a href="/tags/Arthas/" style="font-size: 13px;">Arthas</a> <a href="/tags/CSS/" style="font-size: 13px;">CSS</a> <a href="/tags/Curl/" style="font-size: 13px;">Curl</a> <a href="/tags/Debug/" style="font-size: 13px;">Debug</a> <a href="/tags/Docker/" style="font-size: 13.42px;">Docker</a> <a href="/tags/Druid/" style="font-size: 13px;">Druid</a> <a href="/tags/Electron/" style="font-size: 13.08px;">Electron</a> <a href="/tags/Expect/" style="font-size: 13px;">Expect</a> <a href="/tags/FastJson/" style="font-size: 13px;">FastJson</a> <a href="/tags/FreeMarker/" style="font-size: 13px;">FreeMarker</a> <a href="/tags/Git/" style="font-size: 13.08px;">Git</a> <a href="/tags/Gitlab/" style="font-size: 13.25px;">Gitlab</a> <a href="/tags/GitlabRunner/" style="font-size: 13.08px;">GitlabRunner</a> <a href="/tags/HTML-CSS-JavaScript/" style="font-size: 13.17px;">HTML/CSS/JavaScript</a> <a href="/tags/Hook/" style="font-size: 13px;">Hook</a> <a href="/tags/Http/" style="font-size: 13px;">Http</a> <a href="/tags/Hutool/" style="font-size: 13px;">Hutool</a> <a href="/tags/IDEA/" style="font-size: 13.25px;">IDEA</a> <a href="/tags/JS/" style="font-size: 13.08px;">JS</a> <a href="/tags/JVM/" style="font-size: 13px;">JVM</a> <a href="/tags/Jar/" style="font-size: 13.08px;">Jar</a> <a href="/tags/Java/" style="font-size: 13.83px;">Java</a> <a href="/tags/Jdk/" style="font-size: 13px;">Jdk</a> <a href="/tags/Jenkins/" style="font-size: 13px;">Jenkins</a> <a href="/tags/Jmeter/" style="font-size: 13px;">Jmeter</a> <a href="/tags/Json/" style="font-size: 13px;">Json</a> <a href="/tags/Jsoup/" style="font-size: 13px;">Jsoup</a> <a href="/tags/Kafka/" style="font-size: 13.25px;">Kafka</a> <a href="/tags/Leetcode/" style="font-size: 13.33px;">Leetcode</a> <a href="/tags/Linux/" style="font-size: 13px;">Linux</a> <a href="/tags/Logback/" style="font-size: 13px;">Logback</a> <a href="/tags/Mac/" style="font-size: 13px;">Mac</a> <a href="/tags/Maven/" style="font-size: 13.42px;">Maven</a> <a href="/tags/MongoDB/" style="font-size: 13.42px;">MongoDB</a> <a href="/tags/MyBatis/" style="font-size: 13.5px;">MyBatis</a> <a href="/tags/Mybatis/" style="font-size: 13.17px;">Mybatis</a> <a href="/tags/MybatisPlus/" style="font-size: 13.08px;">MybatisPlus</a> <a href="/tags/Mysql/" style="font-size: 13.25px;">Mysql</a> <a href="/tags/Nano/" style="font-size: 13px;">Nano</a> <a href="/tags/Nexus/" style="font-size: 13.08px;">Nexus</a> <a href="/tags/Nginx/" style="font-size: 13.08px;">Nginx</a> <a href="/tags/Opengrok/" style="font-size: 13px;">Opengrok</a> <a href="/tags/Oracle/" style="font-size: 13.75px;">Oracle</a> <a href="/tags/Profile/" style="font-size: 13px;">Profile</a> <a href="/tags/PubSubJS/" style="font-size: 13px;">PubSubJS</a> <a href="/tags/Python/" style="font-size: 13.17px;">Python</a> <a href="/tags/Quartz/" style="font-size: 13.08px;">Quartz</a> <a href="/tags/RESTful/" style="font-size: 13px;">RESTful</a> <a href="/tags/React/" style="font-size: 13.5px;">React</a> <a href="/tags/Redis/" style="font-size: 13.17px;">Redis</a> <a href="/tags/SQL/" style="font-size: 13.25px;">SQL</a> <a href="/tags/SVN/" style="font-size: 13px;">SVN</a> <a href="/tags/Scheduled/" style="font-size: 13px;">Scheduled</a> <a href="/tags/Scrapy/" style="font-size: 13px;">Scrapy</a> <a href="/tags/Shell/" style="font-size: 13.58px;">Shell</a> <a href="/tags/Spel%E8%A1%A8%E8%BE%BE%E5%BC%8F/" style="font-size: 13px;">Spel表达式</a> <a href="/tags/Spring/" style="font-size: 13.33px;">Spring</a> <a href="/tags/SpringBoot/" style="font-size: 14px;">SpringBoot</a> <a href="/tags/SpringEvent/" style="font-size: 13px;">SpringEvent</a> <a href="/tags/SpringMVC/" style="font-size: 13px;">SpringMVC</a> <a href="/tags/SpringSecurity/" style="font-size: 13.17px;">SpringSecurity</a> <a href="/tags/Stream/" style="font-size: 13px;">Stream</a> <a href="/tags/Swagger/" style="font-size: 13.08px;">Swagger</a> <a href="/tags/Swift/" style="font-size: 13.92px;">Swift</a> <a href="/tags/TestNG/" style="font-size: 13px;">TestNG</a> <a href="/tags/Tomcat/" style="font-size: 13px;">Tomcat</a> <a href="/tags/UI%E7%BB%84%E4%BB%B6%E5%BA%93/" style="font-size: 13px;">UI组件库</a> <a href="/tags/Validator/" style="font-size: 13px;">Validator</a> <a href="/tags/Vue/" style="font-size: 13px;">Vue</a> <a href="/tags/Vuepress/" style="font-size: 13.25px;">Vuepress</a> <a href="/tags/Wordpress/" style="font-size: 13px;">Wordpress</a> <a href="/tags/XML/" style="font-size: 13px;">XML</a> <a href="/tags/assert/" style="font-size: 13px;">assert</a> <a href="/tags/docker/" style="font-size: 13px;">docker</a> <a href="/tags/gitlab/" style="font-size: 13px;">gitlab</a> <a href="/tags/homebrew/" style="font-size: 13px;">homebrew</a> <a href="/tags/iframe/" style="font-size: 13px;">iframe</a> <a href="/tags/java/" style="font-size: 13px;">java</a> <a href="/tags/lambda/" style="font-size: 13px;">lambda</a> <a href="/tags/less/" style="font-size: 13px;">less</a> <a href="/tags/linux/" style="font-size: 13.25px;">linux</a> <a href="/tags/mac/" style="font-size: 13.25px;">mac</a> <a href="/tags/mybatis-plus/" style="font-size: 13px;">mybatis-plus</a> <a href="/tags/mysql/" style="font-size: 13px;">mysql</a> <a href="/tags/oracle/" style="font-size: 13px;">oracle</a> <a href="/tags/pom-xml/" style="font-size: 13px;">pom.xml</a> <a href="/tags/quartz/" style="font-size: 13px;">quartz</a> <a href="/tags/settings-xml/" style="font-size: 13px;">settings.xml</a> <a href="/tags/spring-boot/" style="font-size: 13px;">spring-boot</a> <a href="/tags/ssh/" style="font-size: 13px;">ssh</a> <a href="/tags/sshpass/" style="font-size: 13px;">sshpass</a> <a href="/tags/yum/" style="font-size: 13px;">yum</a> <a href="/tags/%E4%B9%90%E8%A7%82%E9%94%81/" style="font-size: 13px;">乐观锁</a> <a href="/tags/%E4%BB%8B%E7%BB%8D/" style="font-size: 13px;">介绍</a> <a href="/tags/%E5%86%85%E7%BD%91/" style="font-size: 13px;">内网</a> <a href="/tags/%E5%86%85%E7%BD%91%E7%A9%BF%E9%80%8F/" style="font-size: 13px;">内网穿透</a> <a href="/tags/%E5%8A%A0%E5%AF%86/" style="font-size: 13.08px;">加密</a> <a href="/tags/%E5%8F%8D%E7%BC%96%E8%AF%91%E5%B7%A5%E5%85%B7/" style="font-size: 13px;">反编译工具</a> <a href="/tags/%E5%9B%BE%E5%BA%8A/" style="font-size: 13px;">图床</a> <a href="/tags/%E5%9F%BA%E7%A1%80/" style="font-size: 13.92px;">基础</a> <a href="/tags/%E5%AD%98%E5%82%A8%E5%87%BD%E6%95%B0/" style="font-size: 13px;">存储函数</a> <a href="/tags/%E5%AD%98%E5%82%A8%E8%BF%87%E7%A8%8B/" style="font-size: 13.08px;">存储过程</a> <a href="/tags/%E5%AE%9A%E6%97%B6%E5%99%A8/" style="font-size: 13px;">定时器</a> <a href="/tags/%E5%AE%9D%E5%A1%94/" style="font-size: 13.08px;">宝塔</a> <a href="/tags/%E5%B9%B6%E5%8F%91/" style="font-size: 13px;">并发</a> <a href="/tags/%E5%BC%82%E5%B8%B8/" style="font-size: 13px;">异常</a> <a href="/tags/%E5%BF%83%E7%90%86/" style="font-size: 13.08px;">心理</a> <a href="/tags/%E6%80%BB%E7%BB%93/" style="font-size: 13px;">总结</a> <a href="/tags/%E6%8C%81%E4%B9%85%E5%B1%82%E6%A1%86%E6%9E%B6/" style="font-size: 13.17px;">持久层框架</a> <a href="/tags/%E6%8E%A5%E5%8F%A3/" style="font-size: 13px;">接口</a> <a href="/tags/%E6%8F%92%E4%BB%B6/" style="font-size: 13px;">插件</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/" style="font-size: 13.33px;">数据库</a> <a href="/tags/%E6%96%AD%E8%A8%80/" style="font-size: 13px;">断言</a> <a href="/tags/%E6%A0%91%E8%8E%93%E6%B4%BE/" style="font-size: 13.08px;">树莓派</a> <a href="/tags/%E6%A0%91%E8%8E%93%E6%B4%BE4B/" style="font-size: 13px;">树莓派4B</a> <a href="/tags/%E6%A6%82%E5%BF%B5/" style="font-size: 13px;">概念</a> <a href="/tags/%E6%A8%A1%E7%89%88%E5%BC%95%E6%93%8E/" style="font-size: 13px;">模版引擎</a> <a href="/tags/%E6%B3%9B%E5%9E%8B/" style="font-size: 13.08px;">泛型</a> <a href="/tags/%E6%B5%8B%E8%AF%95/" style="font-size: 13.33px;">测试</a> <a href="/tags/%E7%88%AC%E8%99%AB/" style="font-size: 13.08px;">爬虫</a> <a href="/tags/%E7%94%A8%E6%88%B7%E6%9D%83%E9%99%90%E9%AA%8C%E8%AF%81/" style="font-size: 13px;">用户权限验证</a> <a href="/tags/%E7%9F%A5%E8%AF%86/" style="font-size: 13px;">知识</a> <a href="/tags/%E7%AE%97%E6%B3%95/" style="font-size: 13.08px;">算法</a> <a href="/tags/%E7%B1%BB/" style="font-size: 13px;">类</a> <a href="/tags/%E7%BB%84%E4%BB%B6%E5%BA%93/" style="font-size: 13px;">组件库</a> <a href="/tags/%E8%84%9A%E6%9C%AC/" style="font-size: 13.25px;">脚本</a> <a href="/tags/%E8%87%AA%E5%8A%A8%E5%8C%96%E6%B5%8B%E8%AF%95/" style="font-size: 13px;">自动化测试</a> <a href="/tags/%E8%8B%A5%E4%BE%9D/" style="font-size: 13px;">若依</a> <a href="/tags/%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/" style="font-size: 13.08px;">解决方案</a> <a href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" style="font-size: 13px;">设计模式</a> <a href="/tags/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/" style="font-size: 13.08px;">读书笔记</a> <a href="/tags/%E8%B7%A8%E5%9F%9F/" style="font-size: 13px;">跨域</a> <a href="/tags/%E9%83%A8%E7%BD%B2/" style="font-size: 13px;">部署</a> <a href="/tags/%E9%9B%86%E6%88%90/" style="font-size: 13.67px;">集成</a> <a href="/tags/%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1/" style="font-size: 13px;">面向对象</a> <a href="/tags/%E9%9F%A9%E5%89%A7/" style="font-size: 13px;">韩剧</a>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget-body">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/07/">七月 2024</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/07/">七月 2023</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/06/">六月 2023</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/01/">一月 2023</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/11/">十一月 2022</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/10/">十月 2022</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/07/">七月 2022</a><span class="archive-list-count">181</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/06/">六月 2022</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/07/">七月 2020</a><span class="archive-list-count">17</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget-body">
+      <ul class="recent-post-list list-unstyled ">
+        
+          <li>
+            
+            <div class="item-thumb">
+              <a href="/2024/07/%E4%B8%8D%E5%8D%B7%E5%AD%A6%E5%8E%86%E5%92%8C%E8%83%8C%E6%99%AF%E7%9A%84%E8%B5%9B%E9%81%93%EF%BC%8C%E4%B9%9F%E8%83%BD%E6%9C%88%E5%85%A5%E8%BF%87%E4%B8%87%EF%BC%9F/" class="thumb">
+    
+    
+        <span class="thumb-image thumb-none"></span>
+    
+</a>
+
+            </div>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/%E5%88%9B%E4%B8%9A/">创业</a>
+              </p>
+              <p class="item-title">
+                <a href="/2024/07/%E4%B8%8D%E5%8D%B7%E5%AD%A6%E5%8E%86%E5%92%8C%E8%83%8C%E6%99%AF%E7%9A%84%E8%B5%9B%E9%81%93%EF%BC%8C%E4%B9%9F%E8%83%BD%E6%9C%88%E5%85%A5%E8%BF%87%E4%B8%87%EF%BC%9F/" class="title">不卷学历和背景的赛道，也能月入过万？</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2024-07-11T05:45:20.000Z" itemprop="datePublished">2024-07-11</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-thumb">
+              <a href="/2024/07/%E5%9B%9E%E9%A1%BE%E5%B7%A5%E4%BD%9C%E8%BF%99%E5%87%A0%E5%B9%B4/" class="thumb">
+    
+    
+        <span class="thumb-image thumb-none"></span>
+    
+</a>
+
+            </div>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/%E5%A4%8D%E7%9B%98/">复盘</a>
+              </p>
+              <p class="item-title">
+                <a href="/2024/07/%E5%9B%9E%E9%A1%BE%E5%B7%A5%E4%BD%9C%E8%BF%99%E5%87%A0%E5%B9%B4/" class="title">回顾工作这几年</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2024-07-09T06:19:23.000Z" itemprop="datePublished">2024-07-09</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-thumb">
+              <a href="/2023/07/SpringBoot3%E9%9B%86%E6%88%90Quartz%E6%9E%81%E7%AE%80%E7%89%88/" class="thumb">
+    
+    
+        <span style="background-image:url(/2023/07/SpringBoot3集成Quartz极简版/logo-quartz-scheduler.png)" alt="SpringBoot3集成Quartz极简版" class="thumb-image"></span>
+    
+</a>
+
+            </div>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/SpringBoot/">SpringBoot</a>
+              </p>
+              <p class="item-title">
+                <a href="/2023/07/SpringBoot3%E9%9B%86%E6%88%90Quartz%E6%9E%81%E7%AE%80%E7%89%88/" class="title">SpringBoot3集成Quartz极简版</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2023-07-18T01:14:01.000Z" itemprop="datePublished">2023-07-18</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-thumb">
+              <a href="/2023/07/SpringBoot3%E9%9B%86%E6%88%90Quartz%E8%AF%A6%E7%BB%86%E7%89%88/" class="thumb">
+    
+    
+        <span style="background-image:url(/2023/07/SpringBoot3集成Quartz极简版/logo-quartz-scheduler.png)" alt="SpringBoot3集成Quartz详细版" class="thumb-image"></span>
+    
+</a>
+
+            </div>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/SpringBoot/">SpringBoot</a>
+              </p>
+              <p class="item-title">
+                <a href="/2023/07/SpringBoot3%E9%9B%86%E6%88%90Quartz%E8%AF%A6%E7%BB%86%E7%89%88/" class="title">SpringBoot3集成Quartz详细版</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2023-07-18T01:14:01.000Z" itemprop="datePublished">2023-07-18</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-thumb">
+              <a href="/2023/07/SpringBoot3%E9%9B%86%E6%88%90Swagger/" class="thumb">
+    
+    
+        <span style="background-image:url(/2023/07/SpringBoot3集成Swagger/swagger_logo.svg)" alt="SpringBoot3集成Swagger" class="thumb-image"></span>
+    
+</a>
+
+            </div>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/SpringBoot/">SpringBoot</a>
+              </p>
+              <p class="item-title">
+                <a href="/2023/07/SpringBoot3%E9%9B%86%E6%88%90Swagger/" class="title">SpringBoot3集成Swagger</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2023-07-11T06:52:01.000Z" itemprop="datePublished">2023-07-11</time>
+              </p>
+            </div>
+          </li>
+          
+      </ul>
+    </div>
+  </div>
+  
+
+    
+  </div>
+</aside>
+
+  
+  
+<main class="main" role="main">
+  <div class="content">
+  <article id="post-软件开发/技术/编程语言/swift/Swift基础-字符串和字符" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
+    
+    <div class="article-header">
+      
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Swift基础 字符串和字符
+    </h1>
+  
+
+      
+      <div class="article-meta">
+        <span class="article-date">
+    <i class="icon icon-calendar-check"></i>
+	<a href="/2022/07/Swift%E5%9F%BA%E7%A1%80-%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%92%8C%E5%AD%97%E7%AC%A6/" class="article-date">
+	  <time datetime="2022-07-01T04:01:01.000Z" itemprop="datePublished">2022-07-01</time>
+	</a>
+</span>
+        
+  <span class="article-category">
+    <i class="icon icon-folder"></i>
+    <a class="article-category-link" href="/categories/Swift/">Swift</a>
+  </span>
+
+        
+  <span class="article-tag">
+    <i class="icon icon-tags"></i>
+	<a class="article-tag-link-link" href="/tags/Swift/" rel="tag">Swift</a>, <a class="article-tag-link-link" href="/tags/%E5%9F%BA%E7%A1%80/" rel="tag">基础</a>
+  </span>
+
+
+        
+	<span class="article-read hidden-xs">
+	    <i class="icon icon-eye-fill" aria-hidden="true"></i>
+	    <span id="busuanzi_container_page_pv">
+			<span id="busuanzi_value_page_pv">0</span>
+		</span>
+	</span>
+
+
+        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2022/07/Swift%E5%9F%BA%E7%A1%80-%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%92%8C%E5%AD%97%E7%AC%A6/#comments" class="article-comment-link">评论</a></span>
+        
+	
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">字数统计: 7.2k(字)</span>
+	
+	
+		<span class="post-readcount hidden-xs" itemprop="timeRequired">阅读时长: 29(分)</span>
+	
+
+      </div>
+    </div>
+    <div class="article-entry marked-body" itemprop="articleBody">
+      
+        <p>翻译自：<a target="_blank" rel="noopener" href="https://docs.swift.org/swift-book/LanguageGuide/StringsAndCharacters.html">https://docs.swift.org/swift-book/LanguageGuide/StringsAndCharacters.html</a></p>
+<p><em>字符串</em>是一系列角色，如<code>&quot;hello,world&quot;</code>或<code>&quot;albatross&quot;</code>Swift字符串由<code>String</code>类型表示。<code>String</code>的内容可以通过各种方式访问，包括作为<code>Character</code>值的集合。</p>
+<p>Swift的<code>String</code>和<code>Character</code>类型提供了一种快速、符合Unicode的方式来处理代码中的文本。字符串创建和操作的语法轻巧且可读，字符串文字语法与C相似。字符串串联就像将两个字符串与<code>+</code>运算符组合在一起一样简单，字符串的可变性通过在常量或变量之间进行选择来管理，就像Swift中的任何其他值一样。您还可以使用字符串将常量、变量、文字和表达式插入较长的字符串中，该过程称为字符串插值。这样可以轻松创建用于显示、存储和打印的自定义字符串值。</p>
+<p>尽管语法简单，但Swift的<code>String</code>类型是一个快速、现代的字符串实现。每个字符串都由独立于编码的Unicode字符组成，并支持在各种Unicode表示中访问这些字符。</p>
+<blockquote>
+<p>注意</p>
+<p>Swift的<code>String</code>类型与Foundation的<code>NSString</code>类桥接。Foundation还扩展了<code>String</code>，以公开<code>NSString</code>定义的方法。这意味着，如果您导入Foundation，您可以在<code>String</code>上访问这些<code>NSString</code>方法，而无需铸造。</p>
+<p>有关将<code>String</code>与Foundation和Cocoa一起使用的更多信息，请参阅<a target="_blank" rel="noopener" href="https://developer.apple.com/documentation/swift/string#2919514">String和NSString之间的桥接</a>。</p>
+</blockquote>
+<h2 id="弦文学"><a href="#弦文学" class="headerlink" title="弦文学"></a>弦文学</h2><p>您可以在代码中包含预定义的<code>String</code>值作为<em>字符串文字</em>。字符串文字是用双引号包围的字符序列（“）。</p>
+<p>使用字符串文字作为常量或变量的初始值：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> someString <span class="operator">=</span> <span class="string">&quot;Some string literal value&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>请注意，Swift推断出<code>someString</code>常量的<code>String</code>类型，因为它是用字符串字面值初始化的。</p>
+<h3 id="多行字符串文字"><a href="#多行字符串文字" class="headerlink" title="多行字符串文字"></a>多行字符串文字</h3><p>如果您需要一个跨越几行的字符串，请使用多行字符串文字——一个由三个双引号包围的字符序列：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> quotation <span class="operator">=</span> <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">The White Rabbit put on his spectacles.  &quot;Where shall I begin,</span></span><br><span class="line"><span class="string">please your Majesty?&quot; he asked.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">&quot;Begin at the beginning,&quot; the King said gravely, &quot;and go on</span></span><br><span class="line"><span class="string">till you come to the end; then stop.&quot;</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>多行字符串文字包括其开头和结尾引号之间的所有行。字符串在开头引号（“”）后的第一行开始，在结束引号之前的一行结束，这意味着下面的字符串都没有以换行符开头或结束：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> singleLineString <span class="operator">=</span> <span class="string">&quot;These are the same.&quot;</span></span><br><span class="line"><span class="keyword">let</span> multilineString <span class="operator">=</span> <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">These are the same.</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>当您的源代码在多行字符串文字中包含换行符时，该换行符也会出现在字符串的值中。如果您想使用换行符使源代码更容易阅读，但不希望换行符成为字符串值的一部分，请在这些行末尾写一个反斜杠（<code>\</code>）：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> softWrappedQuotation <span class="operator">=</span> <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">The White Rabbit put on his spectacles.  &quot;Where shall I begin, <span class="subst">\</span></span></span><br><span class="line"><span class="subst"><span class="string"></span>please your Majesty?&quot; he asked.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">&quot;Begin at the beginning,&quot; the King said gravely, &quot;and go on <span class="subst">\</span></span></span><br><span class="line"><span class="subst"><span class="string"></span>till you come to the end; then stop.&quot;</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>要制作以行提要开头或结尾的多行字符串文字，请写一行作为第一行或最后一行。例如：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> lineBreaks <span class="operator">=</span> <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">This string starts with a line break.</span></span><br><span class="line"><span class="string">It also ends with a line break.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>可以缩进多行字符串以匹配周围的代码。结尾引号（“”）前的空格告诉Swift在所有其他行之前要忽略哪个空格。但是，如果您在行的开头写空格，除了结束引号之前的内容外，则该空格<em>也</em>包括在内。</p>
+<p><img src="/2022/07/Swift%E5%9F%BA%E7%A1%80-%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%92%8C%E5%AD%97%E7%AC%A6/202204050850070.png" alt="../_images/multilineStringWhitespace_2x.png"></p>
+<p>在上面的示例中，即使整个多行字符串文字缩进，字符串中的第一行和最后一行也不会以任何空格开头。中间线的缩进比结束引号更多，所以它从额外的四空格缩进开始。</p>
+<h3 id="文字中的特殊字符"><a href="#文字中的特殊字符" class="headerlink" title="文字中的特殊字符"></a>文字中的特殊字符</h3><p>字符串文字可以包括以下特殊字符：</p>
+<ul>
+<li>转义的特殊字符<code>\0</code>（空字符）、<code>\\</code>（反斜杠）、<code>\t</code>（水平选项卡）、<code>\n</code>（行馈送）、<code>\r</code>（回车）、<code>\&quot;</code>（双引号）和<code>\&#39;</code>（单引号）</li>
+<li>一个任意的Unicode标量值，写为<code>\u&#123;</code><em>n</em><code>&#125;</code>，其中<em>n</em>是一个1-8位十六进制数字（Unicode在下面的<a target="_blank" rel="noopener" href="https://docs.swift.org/swift-book/LanguageGuide/StringsAndCharacters.html#ID293">Unicode</a>中讨论）</li>
+</ul>
+<p>下面的代码显示了这些特殊字符的四个示例。<code>wiseWords</code>常数包含两个转义的双引号。<code>dollarSign</code>、<code>blackHeart</code>和<code>sparklingHeart</code>常量演示了Unicode标量格式：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> wiseWords <span class="operator">=</span> <span class="string">&quot;<span class="subst">\&quot;</span>Imagination is more important than knowledge<span class="subst">\&quot;</span> - Einstein&quot;</span></span><br><span class="line"><span class="comment">// &quot;Imagination is more important than knowledge&quot; - Einstein</span></span><br><span class="line"><span class="keyword">let</span> dollarSign <span class="operator">=</span> <span class="string">&quot;<span class="subst">\u&#123;24&#125;</span>&quot;</span>        <span class="comment">// $,  Unicode scalar U+0024</span></span><br><span class="line"><span class="keyword">let</span> blackHeart <span class="operator">=</span> <span class="string">&quot;<span class="subst">\u&#123;2665&#125;</span>&quot;</span>      <span class="comment">// ♥,  Unicode scalar U+2665</span></span><br><span class="line"><span class="keyword">let</span> sparklingHeart <span class="operator">=</span> <span class="string">&quot;<span class="subst">\u&#123;1F496&#125;</span>&quot;</span> <span class="comment">// 💖, Unicode scalar U+1F496</span></span><br></pre></td></tr></table></figure>
+
+<p>由于多行字符串文字使用三个双引号，而不仅仅是一个，因此您可以在多行字符串文字中包含一个双引号（”）而不逃避它。要在多行字符串中包含文本<code>&quot;&quot;&quot;</code>请至少转义一个引号。例如：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> threeDoubleQuotationMarks <span class="operator">=</span> <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">Escaping the first quotation mark <span class="subst">\&quot;</span>&quot;&quot;</span></span><br><span class="line"><span class="string">Escaping all three quotation marks <span class="subst">\&quot;</span><span class="subst">\&quot;</span><span class="subst">\&quot;</span></span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="扩展字符串分隔符"><a href="#扩展字符串分隔符" class="headerlink" title="扩展字符串分隔符"></a>扩展字符串分隔符</h3><p>你可以在<em>扩展分隔符</em>中放置一个字符串字面值，以包含字符串中的特殊字符而不调用它们的效果。将字符串放在引号( <code>&quot;</code> )内，然后用数字符号( <code>#</code> )包围它。例如，打印字符串字面量 <code>#&quot;Line 1\nLine 2&quot;#</code> 将打印换行转义序列( <code>\n</code> )，而不是跨两行打印字符串。</p>
+<p>如果您需要字符串字面量中的字符的特殊效果，请匹配转义字符(\ ‘)之后字符串中的数字符号的数量。例如，如果你的字符串是#”Line 1\nLine 2”# ‘，而你想要换行，你可以使用#”Line 1#nLine 2”# ‘代替。类似地，“###”Line1###nLine2“###”也会断行。</p>
+<p>使用扩展分隔符创建的字符串文字也可以是多行字符串文字。您可以使用扩展分隔符将文本<code>&quot;&quot;&quot;</code>包含在多行字符串中，覆盖结束文字的默认行为。例如：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> threeMoreDoubleQuotationMarks <span class="operator">=</span> <span class="string">#&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">Here are three more double quotes: &quot;&quot;&quot;</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;#</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="初始化空字符串"><a href="#初始化空字符串" class="headerlink" title="初始化空字符串"></a>初始化空字符串</h2><p>要创建一个空<code>String</code>值作为构建较长字符串的起点，请为变量分配空字符串文字，或使用初始化器语法初始化新的<code>String</code>实例：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> emptyString <span class="operator">=</span> <span class="string">&quot;&quot;</span>               <span class="comment">// empty string literal</span></span><br><span class="line"><span class="keyword">var</span> anotherEmptyString <span class="operator">=</span> <span class="type">String</span>()  <span class="comment">// initializer syntax</span></span><br><span class="line"><span class="comment">// these two strings are both empty, and are equivalent to each other</span></span><br></pre></td></tr></table></figure>
+
+<p>通过检查isEmpty ‘属性来确定String ‘值是否为空:</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> emptyString.isEmpty &#123;</span><br><span class="line">   <span class="built_in">print</span>(<span class="string">&quot;Nothing to see here&quot;</span>)</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// Prints &quot;Nothing to see here&quot;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="字符串可变性"><a href="#字符串可变性" class="headerlink" title="字符串可变性"></a>字符串可变性</h3><p>您指示是否可以通过将特定<code>String</code>分配给变量（在这种情况下可以修改）或常量（在这种情况下无法修改）来修改（或<em>突变</em>）：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> variableString <span class="operator">=</span> <span class="string">&quot;Horse&quot;</span></span><br><span class="line">variableString <span class="operator">+=</span> <span class="string">&quot; and carriage&quot;</span></span><br><span class="line"><span class="comment">// variableString is now &quot;Horse and carriage&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> constantString <span class="operator">=</span> <span class="string">&quot;Highlander&quot;</span></span><br><span class="line">constantString <span class="operator">+=</span> <span class="string">&quot; and another Highlander&quot;</span></span><br><span class="line"><span class="comment">// this reports a compile-time error - a constant string cannot be modified</span></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>注意</p>
+<p>这种方法不同于Objective-C和Cocoa中的字符串突变，在这两个类（<code>NSString</code>和<code>NSMutableString</code>）之间进行选择，以指示字符串是否可以突变。</p>
+</blockquote>
+<h2 id="字符串是值类型"><a href="#字符串是值类型" class="headerlink" title="字符串是值类型"></a>字符串是值类型</h2><p>Swift的<code>String</code>类型是一种<em>值类型</em>。如果您创建新的<code>String</code>值，则该<code>String</code>值在传递给函数或方法时，或分配给常量或变量时将被<em>复制</em>。在每种情况下，都会创建现有<code>String</code>值的新副本，并传递或分配新副本，而不是原始版本。值类型在<a target="_blank" rel="noopener" href="https://docs.swift.org/swift-book/LanguageGuide/ClassesAndStructures.html#ID88">结构</a>中描述<a target="_blank" rel="noopener" href="https://docs.swift.org/swift-book/LanguageGuide/ClassesAndStructures.html#ID88">，枚举是值类型</a>。</p>
+<p>Swift的默认复制<code>String</code>行为确保当函数或方法向您传递<code>String</code>值时，很明显，无论它来自哪里，您都拥有该确切的<code>String</code>值。您可以放心，除非您自己修改，否则传递的字符串不会被修改。</p>
+<p>在幕后，Swift的编译器优化了字符串使用，因此只有在绝对必要的情况下才能进行实际复制。这意味着在将字符串作为值类型使用时，您总是会获得出色的性能。</p>
+<h2 id="与角色合作"><a href="#与角色合作" class="headerlink" title="与角色合作"></a>与角色合作</h2><p>您可以通过使用<code>for</code>-<code>in</code>循环迭代字符串来访问<code>String</code>的单个<code>Character</code>值：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> character <span class="keyword">in</span> <span class="string">&quot;Dog!🐶&quot;</span> &#123;</span><br><span class="line">   <span class="built_in">print</span>(character)</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// D</span></span><br><span class="line"><span class="comment">// o</span></span><br><span class="line"><span class="comment">// g</span></span><br><span class="line"><span class="comment">// !</span></span><br><span class="line"><span class="comment">// 🐶</span></span><br></pre></td></tr></table></figure>
+
+<p><code>for</code>-<code>in</code>循环在<a target="_blank" rel="noopener" href="https://docs.swift.org/swift-book/LanguageGuide/ControlFlow.html#ID121">For-In循环</a>中描述。</p>
+<p>或者，您可以通过提供<code>Character</code>类型注释从单个字符字符串文字中创建独立的<code>Character</code>常量或变量：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> exclamationMark: <span class="type">Character</span> <span class="operator">=</span> <span class="string">&quot;!&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p><code>String</code>可以通过将<code>Character</code>值数组作为参数传递给其初始化器来构建值：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> catCharacters: [<span class="type">Character</span>] <span class="operator">=</span> [<span class="string">&quot;C&quot;</span>, <span class="string">&quot;a&quot;</span>, <span class="string">&quot;t&quot;</span>, <span class="string">&quot;!&quot;</span>, <span class="string">&quot;🐱&quot;</span>]</span><br><span class="line"><span class="keyword">let</span> catString <span class="operator">=</span> <span class="type">String</span>(catCharacters)</span><br><span class="line"><span class="built_in">print</span>(catString)</span><br><span class="line"><span class="comment">// Prints &quot;Cat!🐱&quot;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="串联字符串和字符"><a href="#串联字符串和字符" class="headerlink" title="串联字符串和字符"></a>串联字符串和字符</h2><p><code>String</code>值可以与加法运算符（<code>+</code>）一起添加（或<em>串联</em>），以创建新的<code>String</code>值：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> string1 <span class="operator">=</span> <span class="string">&quot;hello&quot;</span></span><br><span class="line"><span class="keyword">let</span> string2 <span class="operator">=</span> <span class="string">&quot; there&quot;</span></span><br><span class="line"><span class="keyword">var</span> welcome <span class="operator">=</span> string1 <span class="operator">+</span> string2</span><br><span class="line"><span class="comment">// welcome now equals &quot;hello there&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>您还可以使用加法赋值运算符（<code>+=</code>) <code>String</code>值附加到现有的<code>String</code>变量：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> instruction <span class="operator">=</span> <span class="string">&quot;look over&quot;</span></span><br><span class="line">instruction <span class="operator">+=</span> string2</span><br><span class="line"><span class="comment">// instruction now equals &quot;look over there&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>您可以使用<code>String</code>类型的<code>append()</code>方法将<code>Character</code>值附加到<code>String</code>变量：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> exclamationMark: <span class="type">Character</span> <span class="operator">=</span> <span class="string">&quot;!&quot;</span></span><br><span class="line">welcome.append(exclamationMark)</span><br><span class="line"><span class="comment">// welcome now equals &quot;hello there!&quot;</span></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>注意</p>
+<p>您无法将<code>String</code>或<code>Character</code>附加到现有<code>Character</code>变量，因为<code>Character</code>值必须仅包含单个字符。</p>
+</blockquote>
+<p>如果您使用多行字符串文字来构建较长字符串的行，则希望字符串中的每行都以换行符结束，包括最后一行。例如：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> badStart <span class="operator">=</span> <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">one</span></span><br><span class="line"><span class="string">two</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="keyword">let</span> end <span class="operator">=</span> <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">three</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="built_in">print</span>(badStart <span class="operator">+</span> end)</span><br><span class="line"><span class="comment">// Prints two lines:</span></span><br><span class="line"><span class="comment">// one</span></span><br><span class="line"><span class="comment">// twothree</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> goodStart <span class="operator">=</span> <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">one</span></span><br><span class="line"><span class="string">two</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="built_in">print</span>(goodStart <span class="operator">+</span> end)</span><br><span class="line"><span class="comment">// Prints three lines:</span></span><br><span class="line"><span class="comment">// one</span></span><br><span class="line"><span class="comment">// two</span></span><br><span class="line"><span class="comment">// three</span></span><br></pre></td></tr></table></figure>
+
+<p>在上面的代码中，将<code>badStart</code>与<code>end</code>连接会产生一个两行字符串，这不是所需的结果。由于<code>badStart</code>的最后一行不会以换行符结束，因此该行与第一行<code>end</code>相结合。相比之下，两条<code>goodStart</code>线都以换行符结束，因此当它与<code>end</code>相结合时，结果有三条线，正如预期的那样。</p>
+<h2 id="字符串插值"><a href="#字符串插值" class="headerlink" title="字符串插值"></a>字符串插值</h2><p><em>字符串插值</em>是一种通过将常量、变量、文字和表达式的值包含在字符串文字中来构建新<code>String</code>值的方法。您可以在单行和多行字符串文字中使用字符串插值。您插入字符串文字的每个项目都包裹在一对括号中，前缀为反斜杠（<code>\</code>）：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> multiplier <span class="operator">=</span> <span class="number">3</span></span><br><span class="line"><span class="keyword">let</span> message <span class="operator">=</span> <span class="string">&quot;<span class="subst">\(multiplier)</span> times 2.5 is <span class="subst">\(Double(multiplier) <span class="operator">*</span> <span class="number">2.5</span>)</span>&quot;</span></span><br><span class="line"><span class="comment">// message is &quot;3 times 2.5 is 7.5&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>在上面的示例中，<code>multiplier</code>的值被插入字符串文字为<code>\(multiplier)</code>当计算字符串插值以创建实际字符串时，此占位符将被<code>multiplier</code>的实际值取代。</p>
+<p><code>multiplier</code> 的值也是字符串后面更大的表达式的一部分。这个表达式计算 <code>Double(multiplier) * 2.5</code> 的值，并将结果( <code>7.5</code> )插入到字符串中。在本例中，当表达式包含在字符串字面值中时，它被写成<code>\(Double(multiplier) * 2.5)</code> 。</p>
+<p>您可以使用扩展字符串分隔符创建包含字符的字符串，否则这些字符将被视为字符串插值。例如：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">print</span>(<span class="string">#&quot;Write an interpolated string in Swift using \(multiplier).&quot;#</span>)</span><br><span class="line"><span class="comment">// Prints &quot;Write an interpolated string in Swift using \(multiplier).&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>要在使用扩展分隔符的字符串中使用字符串插值，请将反斜杠后的数字符号数量与字符串开头和结尾的数字符号数量匹配。例如：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">print</span>(<span class="string">#&quot;6 times 7 is <span class="subst">\#(<span class="number">6</span> <span class="operator">*</span> <span class="number">7</span>)</span>.&quot;#</span>)</span><br><span class="line"><span class="comment">// Prints &quot;6 times 7 is 42.&quot;</span></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>注意</p>
+<p>您在插值字符串括号内写的表达式不能包含未转义反斜杠（<code>\</code>）、回车或行馈送。然而，它们可以包含其他字符串文字。</p>
+</blockquote>
+<h2 id="Unicode"><a href="#Unicode" class="headerlink" title="Unicode"></a>Unicode</h2><p><em>Unicode</em>是在不同书写系统中编码、表示和处理文本的国际标准。它使您能够以标准化的形式表示来自任何语言的几乎任何字符，并从外部来源（如文本文件或网页）读取和写入这些字符。如本节所述，Swift的<code>String</code>和<code>Character</code>类型完全符合Unicode。</p>
+<h3 id="Unicode标量值"><a href="#Unicode标量值" class="headerlink" title="Unicode标量值"></a>Unicode标量值</h3><p>在幕后，Swift的原生 <code>String</code> 类型是由<em>Unicode标量值</em>构建的。Unicode标量值是字符或修饰符的唯一21位数字，例如’ <code>U+0061</code> 表示’拉丁小写字母A  ( “ A “)，或 <code>U+1F425</code> 表示正面的<code>BABY CHICK</code> ( “🐥”)。</p>
+<p>请注意，并非所有21位Unicode标量值都分配给一个字符——一些标量保留用于未来的分配或用于UTF-16编码。分配给字符的标量值通常也有一个名称，例如上面示例中的<code>LATINSMALLLETTERA</code>和<code>FRONT-FACINGBABY</code>。</p>
+<h3 id="扩展的语法集群"><a href="#扩展的语法集群" class="headerlink" title="扩展的语法集群"></a>扩展的语法集群</h3><p>Swift<code>Character</code>类型的每个实例都代表一个<em>扩展的字素集群</em>。扩展字素集群是一个或多个Unicode标量的序列，（当组合时）产生单个人类可读字符。</p>
+<p>这是一个例子。字母 <code>é</code> 可以表示为单个Unicode标量 <code>é</code> ( <code>拉丁小写字母E WITH ACUTE</code> ，或’ <code>U+00E9</code> ‘)。然而，同样的字母也可以表示为一对标量——一个标准字母 <code>e</code> (<code>拉丁小写字母e</code> ，或’ <code>U+0065</code> ‘)，后面跟着一个<code>组合急性重音</code>标量( <code>U+0301</code> )。 <code>combined ACUTE ACCENT</code> 标量图形化地应用于它前面的标量，当一个支持unicode的文本呈现系统呈现一个 <code>e</code> 时，它就会变成一个’ <code>é</code> ‘。</p>
+<p>在这两种情况下，字母<code>é</code>都表示为单个Swift<code>Character</code>值，表示扩展的字素集群。在第一种情况下，集群包含单个标量；在第二种情况下，它是一个由两个标量组成的集群：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> eAcute: <span class="type">Character</span> <span class="operator">=</span> <span class="string">&quot;<span class="subst">\u&#123;E9&#125;</span>&quot;</span>                         <span class="comment">// é</span></span><br><span class="line"><span class="keyword">let</span> combinedEAcute: <span class="type">Character</span> <span class="operator">=</span> <span class="string">&quot;<span class="subst">\u&#123;65&#125;</span><span class="subst">\u&#123;301&#125;</span>&quot;</span>          <span class="comment">// e followed by ́</span></span><br><span class="line"><span class="comment">// eAcute is é, combinedEAcute is é</span></span><br></pre></td></tr></table></figure>
+
+<p>扩展字素集群是一种灵活的方式，可以将许多复杂的脚本字符表示为单个<code>Character</code>值。例如，韩语字母的韩语音节可以表示为预写或分解序列。这两种表示形式都符合 Swift 中的单个<code>Character</code>值：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> precomposed: <span class="type">Character</span> <span class="operator">=</span> <span class="string">&quot;<span class="subst">\u&#123;D55C&#125;</span>&quot;</span>                  <span class="comment">// 한</span></span><br><span class="line"><span class="keyword">let</span> decomposed: <span class="type">Character</span> <span class="operator">=</span> <span class="string">&quot;<span class="subst">\u&#123;1112&#125;</span><span class="subst">\u&#123;1161&#125;</span><span class="subst">\u&#123;11AB&#125;</span>&quot;</span>   <span class="comment">// ᄒ, ᅡ, ᆫ</span></span><br><span class="line"><span class="comment">// precomposed is 한, decomposed is 한</span></span><br></pre></td></tr></table></figure>
+
+<p>扩展的字素集群使用于封闭标记的标量（如<code>COMBININGENCLOSINGCIRCLE</code>或<code>U+20DD</code>）能够将其他Unicode标量作为单个<code>Character</code>值的一部分包围：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> enclosedEAcute: <span class="type">Character</span> <span class="operator">=</span> <span class="string">&quot;<span class="subst">\u&#123;E9&#125;</span><span class="subst">\u&#123;20DD&#125;</span>&quot;</span></span><br><span class="line"><span class="comment">// enclosedEAcute is é⃝</span></span><br></pre></td></tr></table></figure>
+
+<p>区域指标符号的Unicode标量可以成对组合，形成单个<code>Character</code>值，例如<code>REGIONALINDICATORSYMBOLLETTERU</code>（<code>U+1F1FA</code>）<code>REGIONALINDICATORSYMBOLLETTERS</code>（<code>U+1F1F8</code>的组合：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> regionalIndicatorForUS: <span class="type">Character</span> <span class="operator">=</span> <span class="string">&quot;<span class="subst">\u&#123;1F1FA&#125;</span><span class="subst">\u&#123;1F1F8&#125;</span>&quot;</span></span><br><span class="line"><span class="comment">// regionalIndicatorForUS is 🇺🇸</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="计数字符"><a href="#计数字符" class="headerlink" title="计数字符"></a>计数字符</h2><p>要检索字符串中<code>Character</code>值的计数，请使用字符串的<code>count</code>属性：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> unusualMenagerie <span class="operator">=</span> <span class="string">&quot;Koala 🐨, Snail 🐌, Penguin 🐧, Dromedary 🐪&quot;</span></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;unusualMenagerie has <span class="subst">\(unusualMenagerie.count)</span> characters&quot;</span>)</span><br><span class="line"><span class="comment">// Prints &quot;unusualMenagerie has 40 characters&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>请注意，Swift对<code>Character</code>值使用扩展字素簇意味着字符串串联和修改可能并不总是影响字符串的字符数。</p>
+<p>例如，如果您使用四个字符的单词<code>cafe</code>初始化新字符串，然后在字符串末尾附加<code>COMBININGACUTEACCENT</code>（<code>U+0301</code>），则生成的字符串仍将有4个字符数，第四个字符为é，而不是<code>e</code>：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> word <span class="operator">=</span> <span class="string">&quot;cafe&quot;</span></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;the number of characters in <span class="subst">\(word)</span> is <span class="subst">\(word.count)</span>&quot;</span>)</span><br><span class="line"><span class="comment">// Prints &quot;the number of characters in cafe is 4&quot;</span></span><br><span class="line"></span><br><span class="line">word <span class="operator">+=</span> <span class="string">&quot;<span class="subst">\u&#123;301&#125;</span>&quot;</span>    <span class="comment">// COMBINING ACUTE ACCENT, U+0301</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;the number of characters in <span class="subst">\(word)</span> is <span class="subst">\(word.count)</span>&quot;</span>)</span><br><span class="line"><span class="comment">// Prints &quot;the number of characters in café is 4&quot;</span></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>注意</p>
+<p>扩展的字素集群可以由多个Unicode标量组成。这意味着不同的字符——以及同一字符的不同表示形式——可能需要不同数量的内存来存储。因此，Swift中的字符在字符串表示中不会各自占用相同数量的内存。因此，如果不迭代字符串以确定其扩展的字素集群边界，就无法计算字符串中的字符数。如果您正在处理特别长的字符串值，请注意<code>count</code>属性必须迭代整个字符串中的Unicode标量，以确定该字符串的字符。</p>
+<p><code>count</code>属性返回的字符计数并不总是与包含相同字符的<code>NSString</code>的<code>length</code>属性相同。<code>NSString</code>的长度基于字符串UTF-16表示中的16位代码单元数量，而不是字符串中Unicode扩展字素集群的数量。</p>
+</blockquote>
+<h2 id="访问和修改字符串"><a href="#访问和修改字符串" class="headerlink" title="访问和修改字符串"></a>访问和修改字符串</h2><p>您可以通过字符串的方法和属性或使用下标语法访问和修改字符串。</p>
+<h3 id="字符串索引"><a href="#字符串索引" class="headerlink" title="字符串索引"></a>字符串索引</h3><p>每个<code>String</code>值都有一个关联的<em>索引类型</em><code>String.Index</code>，对应于字符串中每个<code>Character</code>的位置。</p>
+<p>如上所述，不同的字符可能需要不同数量的内存来存储，因此为了确定哪个<code>Character</code>位于特定位置，您必须从该<code>String</code>的开头或结尾迭代每个Unicode标量。因此，Swift字符串无法按整数值进行索引。</p>
+<p>使用<code>startIndex</code>属性访问<code>String</code>的第一个<code>Character</code>的位置。TheendIndex属性是<code>String</code>中最后一个字符后的位置。因此，<code>endIndex</code>属性不是字符串下标的有效参数。如果<code>String</code>为空，<code>startIndex</code>和<code>endIndex</code>是相等的。</p>
+<p>您可以使用<code>String</code>的<code>index(before:)</code>和<code>index(after:)</code>方法访问给定索引之前和之后的索引。要访问离给定索引更远的索引，您可以使用<code>index(_:offsetBy:)</code>方法，而不是多次调用这些方法之一。</p>
+<p>您可以使用下标语法访问特定<code>String</code>索引的<code>Character</code>。</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> greeting <span class="operator">=</span> <span class="string">&quot;Guten Tag!&quot;</span></span><br><span class="line">greeting[greeting.startIndex]</span><br><span class="line"><span class="comment">// G</span></span><br><span class="line">greeting[greeting.index(before: greeting.endIndex)]</span><br><span class="line"><span class="comment">// !</span></span><br><span class="line">greeting[greeting.index(after: greeting.startIndex)]</span><br><span class="line"><span class="comment">// u</span></span><br><span class="line"><span class="keyword">let</span> index <span class="operator">=</span> greeting.index(greeting.startIndex, offsetBy: <span class="number">7</span>)</span><br><span class="line">greeting[index]</span><br><span class="line"><span class="comment">// a</span></span><br></pre></td></tr></table></figure>
+
+<p>尝试访问字符串范围之外的索引或字符串范围之外的索引中的<code>Character</code>将触发运行时错误。</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">greeting[greeting.endIndex] <span class="comment">// Error</span></span><br><span class="line">greeting.index(after: greeting.endIndex) <span class="comment">// Error</span></span><br></pre></td></tr></table></figure>
+
+<p>使用<code>indices</code>属性访问字符串中单个字符的所有索引。</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> index <span class="keyword">in</span> greeting.indices &#123;</span><br><span class="line">   <span class="built_in">print</span>(<span class="string">&quot;<span class="subst">\(greeting[index])</span> &quot;</span>, terminator: <span class="string">&quot;&quot;</span>)</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// Prints &quot;G u t e n   T a g ! &quot;</span></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>注意</p>
+<p>您可以在符合<code>Collection</code>协议的任何类型上使用<code>startIndex</code>和<code>endIndex</code>属性以及<code>index(before:)</code> <code>index(after:)</code>和<code>index(_:offsetBy:)</code>方法。这包括<code>String</code>，如图所示，以及集合类型，如数<code>Array</code>、<code>Dictionary</code>和<code>Set</code>。</p>
+</blockquote>
+<h3 id="插入和移除"><a href="#插入和移除" class="headerlink" title="插入和移除"></a>插入和移除</h3><p>要在指定索引处将单个字符插入字符串，请使用<code>insert(_:at:)</code>方法，要在指定索引处插入另一个字符串的内容，请使用<code>insert(contentsOf:at:)</code>方法。</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> welcome <span class="operator">=</span> <span class="string">&quot;hello&quot;</span></span><br><span class="line">welcome.insert(<span class="string">&quot;!&quot;</span>, at: welcome.endIndex)</span><br><span class="line"><span class="comment">// welcome now equals &quot;hello!&quot;</span></span><br><span class="line"></span><br><span class="line">welcome.insert(contentsOf: <span class="string">&quot; there&quot;</span>, at: welcome.index(before: welcome.endIndex))</span><br><span class="line"><span class="comment">// welcome now equals &quot;hello there!&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>要在指定索引处从字符串中删除单个字符，请使用<code>remove(at:)</code>方法，要删除指定范围内的子字符串，请使用<code>removeSubrange(_:)</code>方法：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">welcome.remove(at: welcome.index(before: welcome.endIndex))</span><br><span class="line"><span class="comment">// welcome now equals &quot;hello there&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> range <span class="operator">=</span> welcome.index(welcome.endIndex, offsetBy: <span class="operator">-</span><span class="number">6</span>)<span class="operator">..&lt;</span>welcome.endIndex</span><br><span class="line">welcome.removeSubrange(range)</span><br><span class="line"><span class="comment">// welcome now equals &quot;hello&quot;</span></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>注意</p>
+<p>你可以使用’ insert(:at:) ‘， ‘ insert(contentsOf:at:) ‘， ‘ remove(at:) ‘和’ removeSubrange(:) ‘方法来处理任何符合’ RangeReplaceableCollection ‘协议的类型。这包括如下所示的’ String ‘，以及’ Array ‘、’ Dictionary ‘和’ Set ‘等集合类型。</p>
+</blockquote>
+<h2 id="子字符串"><a href="#子字符串" class="headerlink" title="子字符串"></a>子字符串</h2><p>当您从字符串（例如，使用下标或类似<code>prefix(_:)</code>的方法获得子字符串时，结果是<a target="_blank" rel="noopener" href="https://developer.apple.com/documentation/swift/substring"><code>Substring</code></a>的实例，而不是另一个字符串。Swift中的子字符串具有大多数与字符串相同的方法，这意味着您可以像处理字符串一样使用子字符串。然而，与字符串不同，您在对字符串执行操作时仅使用子字符串的时间很短。当您准备将结果存储更长时间时，您将子字符串转换为<code>String</code>实例。例如：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> greeting <span class="operator">=</span> <span class="string">&quot;Hello, world!&quot;</span></span><br><span class="line"><span class="keyword">let</span> index <span class="operator">=</span> greeting.firstIndex(of: <span class="string">&quot;,&quot;</span>) <span class="operator">??</span> greeting.endIndex</span><br><span class="line"><span class="keyword">let</span> beginning <span class="operator">=</span> greeting[<span class="operator">..&lt;</span>index]</span><br><span class="line"><span class="comment">// beginning is &quot;Hello&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// Convert the result to a String for long-term storage.</span></span><br><span class="line"><span class="keyword">let</span> newString <span class="operator">=</span> <span class="type">String</span>(beginning)</span><br></pre></td></tr></table></figure>
+
+<p>与字符串一样，每个子字符串都有一个内存区域，其中存储了构成子字符串的字符。字符串和子字符串的区别在于，作为性能优化，子字符串可以重用用于存储原始字符串的部分内存，或用于存储另一个子字符串的部分内存。（字符串具有类似的优化，但如果两个字符串共享内存，它们是相等的。）这种性能优化意味着，在您修改字符串或子字符串之前，您不必支付复制内存的性能成本。如上所述，子字符串不适合长期存储——因为它们重用原始字符串的存储，只要使用其任何子字符串，整个原始字符串都必须保存在内存中。</p>
+<p>在上面的示例中，<code>greeting</code>是一个字符串，这意味着它有一个内存区域，其中存储了构成字符串的字符。因为<code>beginning</code>是<code>greeting</code>的子字符串，所以它重用<code>greeting</code>使用的记忆。相比之下，<code>newString</code>是一个字符串——当它从子字符串创建时，它有自己的存储空间。下图显示了这些关系：</p>
+<p><img src="/2022/07/Swift%E5%9F%BA%E7%A1%80-%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%92%8C%E5%AD%97%E7%AC%A6/202204050919792.png" alt="../_images/stringSubstring_2x.png"></p>
+<blockquote>
+<p>注意</p>
+<p><code>String</code>和<code>Substring</code>都符合<a target="_blank" rel="noopener" href="https://developer.apple.com/documentation/swift/stringprotocol"><code>StringProtocol</code></a>协议，这意味着字符串操作函数通常可以方便地接受<code>StringProtocol</code>值。您可以使用<code>String</code>或<code>Substring</code>值调用此类函数。</p>
+</blockquote>
+<h2 id="比较字符串"><a href="#比较字符串" class="headerlink" title="比较字符串"></a>比较字符串</h2><p>Swift提供了三种比较文本值的方法：字符串和字符平等、前缀平等和后缀平等。</p>
+<h3 id="弦乐和性格平等"><a href="#弦乐和性格平等" class="headerlink" title="弦乐和性格平等"></a>弦乐和性格平等</h3><p>字符串和字符相等性与“等于”运算符（<code>==</code>和“不等于”运算符（<code>!=</code>），如<a target="_blank" rel="noopener" href="https://docs.swift.org/swift-book/LanguageGuide/BasicOperators.html#ID70">比较运算符</a>中所述：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> quotation <span class="operator">=</span> <span class="string">&quot;We&#x27;re a lot alike, you and I.&quot;</span></span><br><span class="line"><span class="keyword">let</span> sameQuotation <span class="operator">=</span> <span class="string">&quot;We&#x27;re a lot alike, you and I.&quot;</span></span><br><span class="line"><span class="keyword">if</span> quotation <span class="operator">==</span> sameQuotation &#123;</span><br><span class="line">   <span class="built_in">print</span>(<span class="string">&quot;These two strings are considered equal&quot;</span>)</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// Prints &quot;These two strings are considered equal&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>如果扩展的字素簇在<em>正典上等价，则</em>两个<code>String</code>值（或两个<code>Character</code>值）被认为是相等的。如果扩展的字素簇具有相同的语言意义和外观，即使它们是由幕后不同的Unicode标量组成的，它们在规范上也是等价的。</p>
+<p>例如，<code>拉丁小写字母E加急音(U+00E9)</code> 在规范上等同于<code>拉丁小写字母E</code>(<code>U+0065</code>)后面跟着<code>组合急音</code>(<code>U+0301</code>)。这两个扩展的字素集群都是表示字符 <code>é</code> 的有效方法，因此它们被认为是规范等价的:</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// &quot;Voulez-vous un café?&quot; using LATIN SMALL LETTER E WITH ACUTE</span></span><br><span class="line"><span class="keyword">let</span> eAcuteQuestion <span class="operator">=</span> <span class="string">&quot;Voulez-vous un caf<span class="subst">\u&#123;E9&#125;</span>?&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// &quot;Voulez-vous un café?&quot; using LATIN SMALL LETTER E and COMBINING ACUTE ACCENT</span></span><br><span class="line"><span class="keyword">let</span> combinedEAcuteQuestion <span class="operator">=</span> <span class="string">&quot;Voulez-vous un caf<span class="subst">\u&#123;65&#125;</span><span class="subst">\u&#123;301&#125;</span>?&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> eAcuteQuestion <span class="operator">==</span> combinedEAcuteQuestion &#123;</span><br><span class="line">   <span class="built_in">print</span>(<span class="string">&quot;These two strings are considered equal&quot;</span>)</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// Prints &quot;These two strings are considered equal&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>相反，英语中使用的<code>LATINCAPITALLETTERA</code>（<code>U+0041</code>或<code>&quot;A&quot;</code><em>不</em>等同于俄语中使用的<code>CYRILLICLETTERA</code>（<code>U+0410</code>或<code>&quot;А&quot;</code>。这些角色在视觉上相似，但没有相同的语言含义：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> latinCapitalLetterA: <span class="type">Character</span> <span class="operator">=</span> <span class="string">&quot;<span class="subst">\u&#123;41&#125;</span>&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> cyrillicCapitalLetterA: <span class="type">Character</span> <span class="operator">=</span> <span class="string">&quot;<span class="subst">\u&#123;0410&#125;</span>&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> latinCapitalLetterA <span class="operator">!=</span> cyrillicCapitalLetterA &#123;</span><br><span class="line">   <span class="built_in">print</span>(<span class="string">&quot;These two characters aren&#x27;t equivalent.&quot;</span>)</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// Prints &quot;These two characters aren&#x27;t equivalent.&quot;</span></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>注意</p>
+<p>Swift 中的字符串和字符比较不区分区域设置。</p>
+</blockquote>
+<h3 id="前缀和后缀平等"><a href="#前缀和后缀平等" class="headerlink" title="前缀和后缀平等"></a>前缀和后缀平等</h3><p>要检查字符串是否具有特定的字符串前缀或后缀，请调用string’shasPrefix<code>hasPrefix(_:)</code>和<code>hasSuffix(_:)</code>方法，这两种方法都采用typeString的单个参数并返回布尔值。</p>
+<p>以下示例考虑了代表莎士比亚《<em>罗密欧与朱丽叶》</em>前两幕场景位置的一系列弦：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> romeoAndJuliet <span class="operator">=</span> [</span><br><span class="line">   <span class="string">&quot;Act 1 Scene 1: Verona, A public place&quot;</span>,</span><br><span class="line">   <span class="string">&quot;Act 1 Scene 2: Capulet&#x27;s mansion&quot;</span>,</span><br><span class="line">   <span class="string">&quot;Act 1 Scene 3: A room in Capulet&#x27;s mansion&quot;</span>,</span><br><span class="line">   <span class="string">&quot;Act 1 Scene 4: A street outside Capulet&#x27;s mansion&quot;</span>,</span><br><span class="line">   <span class="string">&quot;Act 1 Scene 5: The Great Hall in Capulet&#x27;s mansion&quot;</span>,</span><br><span class="line">   <span class="string">&quot;Act 2 Scene 1: Outside Capulet&#x27;s mansion&quot;</span>,</span><br><span class="line">   <span class="string">&quot;Act 2 Scene 2: Capulet&#x27;s orchard&quot;</span>,</span><br><span class="line">   <span class="string">&quot;Act 2 Scene 3: Outside Friar Lawrence&#x27;s cell&quot;</span>,</span><br><span class="line">   <span class="string">&quot;Act 2 Scene 4: A street in Verona&quot;</span>,</span><br><span class="line">   <span class="string">&quot;Act 2 Scene 5: Capulet&#x27;s mansion&quot;</span>,</span><br><span class="line">   <span class="string">&quot;Act 2 Scene 6: Friar Lawrence&#x27;s cell&quot;</span></span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+
+<p>您可以使用<code>hasPrefix(_:)</code>方法与<code>romeoAndJuliet</code>数组一起计算该剧第1幕中的场景数量：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> act1SceneCount <span class="operator">=</span> <span class="number">0</span></span><br><span class="line"><span class="keyword">for</span> scene <span class="keyword">in</span> romeoAndJuliet &#123;</span><br><span class="line">   <span class="keyword">if</span> scene.hasPrefix(<span class="string">&quot;Act 1 &quot;</span>) &#123;</span><br><span class="line">       act1SceneCount <span class="operator">+=</span> <span class="number">1</span></span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;There are <span class="subst">\(act1SceneCount)</span> scenes in Act 1&quot;</span>)</span><br><span class="line"><span class="comment">// Prints &quot;There are 5 scenes in Act 1&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>同样，使用<code>hasSuffix(_:)</code>方法来计算卡普莱特豪宅和劳伦斯修士牢房内或周围发生的场景数量：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> mansionCount <span class="operator">=</span> <span class="number">0</span></span><br><span class="line"><span class="keyword">var</span> cellCount <span class="operator">=</span> <span class="number">0</span></span><br><span class="line"><span class="keyword">for</span> scene <span class="keyword">in</span> romeoAndJuliet &#123;</span><br><span class="line">   <span class="keyword">if</span> scene.hasSuffix(<span class="string">&quot;Capulet&#x27;s mansion&quot;</span>) &#123;</span><br><span class="line">       mansionCount <span class="operator">+=</span> <span class="number">1</span></span><br><span class="line">   &#125; <span class="keyword">else</span> <span class="keyword">if</span> scene.hasSuffix(<span class="string">&quot;Friar Lawrence&#x27;s cell&quot;</span>) &#123;</span><br><span class="line">       cellCount <span class="operator">+=</span> <span class="number">1</span></span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;<span class="subst">\(mansionCount)</span> mansion scenes; <span class="subst">\(cellCount)</span> cell scenes&quot;</span>)</span><br><span class="line"><span class="comment">// Prints &quot;6 mansion scenes; 2 cell scenes&quot;</span></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>注意</p>
+<p><code>hasPrefix(_:)</code>和<code>hasSuffix(_:)</code>方法在每个字符串中的扩展字素簇之间执行逐个字符规范等价比较，如<a target="_blank" rel="noopener" href="https://docs.swift.org/swift-book/LanguageGuide/StringsAndCharacters.html#ID299">String和字符平等</a>中所述。</p>
+</blockquote>
+<h2 id="字符串的Unicode表示"><a href="#字符串的Unicode表示" class="headerlink" title="字符串的Unicode表示"></a>字符串的Unicode表示</h2><p>当将Unicode字符串写入文本文件或其他存储时，该字符串中的Unicode标量将以几种Unicode定义的<em>编码形式</em>之一编码。每个表单都以称为<em>代码单元</em>的小块对字符串进行编码。这些包括UTF-8编码形式（将字符串编码为8位代码单元）、UTF-16编码形式（将字符串编码为16位代码单元）和UTF-32编码形式（将字符串编码为32位代码单元）。</p>
+<p>Swift提供了几种不同的方式来访问字符串的Unicode表示形式。您可以使用<code>in</code>语句迭代字符串，以Unicode扩展字素集群的形式访问其单个<code>Character</code>值。这个过程在《<a target="_blank" rel="noopener" href="https://docs.swift.org/swift-book/LanguageGuide/StringsAndCharacters.html#ID290">处理角色》</a>中进行了描述。</p>
+<p>或者，在其他三种符合Unicode的表示形式之一中访问<code>String</code>值：</p>
+<ul>
+<li>UTF-8代码单元的集合（使用字符串的<code>utf8</code>属性访问）</li>
+<li>UTF-16代码单元的集合（使用字符串的<code>utf16</code>属性访问）</li>
+<li>21位Unicode标量值的集合，相当于字符串的UTF-32编码形式（使用字符串的<code>unicodeScalars</code>属性访问）</li>
+</ul>
+<p>下面的每个例子显示了以下字符串的不同表示形式，该字符串由字符<code>D</code>, <code>o</code>, <code>g</code>, <code>‼</code> (<code>DOUBLE EXCLAMATION MARK</code>, 或Unicode标量<code>U+203C</code>)，和🐶字符(‘ DOG FACE ‘，或Unicode标量’ U+1F436 ‘)组成:</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> dogString <span class="operator">=</span> <span class="string">&quot;Dog‼🐶&quot;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="UTF-8代表"><a href="#UTF-8代表" class="headerlink" title="UTF-8代表"></a>UTF-8代表</h3><p>您可以通过迭代其<code>utf8</code>属性来访问<code>String</code>的UTF-8表示形式。此属性类型为<code>String.UTF8View</code>，这是无符号8位（<code>UInt8</code>）值的集合，字符串UTF-8表示中的每个字节一个：</p>
+<p><img src="/2022/07/Swift%E5%9F%BA%E7%A1%80-%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%92%8C%E5%AD%97%E7%AC%A6/202204050928055.png" alt="../_images/UTF8_2x.png"></p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> codeUnit <span class="keyword">in</span> dogString.utf8 &#123;</span><br><span class="line">   <span class="built_in">print</span>(<span class="string">&quot;<span class="subst">\(codeUnit)</span> &quot;</span>, terminator: <span class="string">&quot;&quot;</span>)</span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;&quot;</span>)</span><br><span class="line"><span class="comment">// Prints &quot;68 111 103 226 128 188 240 159 144 182 &quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>在上面的例子中，前三个十进制’ codeUnit ‘值(‘ 68 ‘，’ 111 ‘，’ 103 ‘)表示字符’ D ‘， ‘ o ‘和’ g ‘，它们的UTF-8表示与它们的ASCII表示相同。接下来的三个十进制’ codeUnit ‘值(‘ 226 ‘，’ 128 ‘，’ 188 ‘)是’ DOUBLE感叹号’字符的三字节UTF-8表示。最后四个’ codeUnit ‘值(‘ 240 ‘，’ 159 ‘，’ 144 ‘，’ 182 ‘)是’ DOG FACE ‘字符的四字节UTF-8表示。</p>
+<h3 id="UTF-16代表"><a href="#UTF-16代表" class="headerlink" title="UTF-16代表"></a>UTF-16代表</h3><p>您可以通过迭代其<code>utf16</code>属性来访问<code>String</code>的UTF-16表示形式。此属性类型为<code>String.UTF16View</code>，这是无符号16位（<code>UInt16</code>）值的集合，字符串UTF-16表示中的每个16位代码单元一个：</p>
+<p><img src="/2022/07/Swift%E5%9F%BA%E7%A1%80-%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%92%8C%E5%AD%97%E7%AC%A6/202204050929164.png" alt="../_images/UTF16_2x.png"></p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> codeUnit <span class="keyword">in</span> dogString.utf16 &#123;</span><br><span class="line">   <span class="built_in">print</span>(<span class="string">&quot;<span class="subst">\(codeUnit)</span> &quot;</span>, terminator: <span class="string">&quot;&quot;</span>)</span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;&quot;</span>)</span><br><span class="line"><span class="comment">// Prints &quot;68 111 103 8252 55357 56374 &quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>同样，前三个<code>codeUnit</code>值（<code>68</code>、<code>111</code>、<code>103</code>）代表字符<code>D</code>、<code>o</code>和<code>g</code>，其UTF-16代码单元的值与字符串的UTF-8表示相同（因为这些Unicode标量代表ASCII字符）。</p>
+<p>第四个<code>codeUnit</code>值（8252）是十六进制值<code>203C</code>的十进制，它表示<code>DOUBLEEXCLAMATIONMARK</code>字符的Unicode标量<code>U+203C</code>。此字符可以在UTF-16中表示为单个代码单元。</p>
+<p>第5和第6个’ codeUnit ‘值(‘ 55357 ‘和’ 56374 ‘)是’ DOG FACE ‘字符的UTF-16代理对表示。这些值是高替代值‘U+D83D’(十进制值‘55357’)和低替代值‘U+DC36’(十进制值‘56374’)。</p>
+<h3 id="Unicode标量表示"><a href="#Unicode标量表示" class="headerlink" title="Unicode标量表示"></a>Unicode标量表示</h3><p>您可以通过迭代其<code>unicodeScalars</code>属性来访问<code>String</code>值的Unicode标量表示形式。此属性类型为<code>UnicodeScalarView</code>，这是<code>UnicodeScalar</code>类型的值集合。</p>
+<p>每个<code>UnicodeScalar</code>都有一个<code>value</code>属性，返回标量的21位值，在<code>UInt32</code>值中表示：</p>
+<p><img src="/2022/07/Swift%E5%9F%BA%E7%A1%80-%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%92%8C%E5%AD%97%E7%AC%A6/202204050930927.png" alt="../_images/UnicodeScalar_2x.png"></p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> scalar <span class="keyword">in</span> dogString.unicodeScalars &#123;</span><br><span class="line">   <span class="built_in">print</span>(<span class="string">&quot;<span class="subst">\(scalar.value)</span> &quot;</span>, terminator: <span class="string">&quot;&quot;</span>)</span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;&quot;</span>)</span><br><span class="line"><span class="comment">// Prints &quot;68 111 103 8252 128054 &quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>前三个<code>UnicodeScalar</code>值（<code>68</code>、<code>111</code>、<code>103</code>）的<code>value</code>属性再次表示字符<code>D</code>、<code>o</code>和<code>g</code>。</p>
+<p>第四个<code>codeUnit</code>值（8252）再次等价于十六进制值<code>203C</code>，该值表示<code>DOUBLEEXCLAMATION</code>字符的Unicode标量<code>U+203C</code>。</p>
+<p>The <code>value</code> property of the fifth and final <code>UnicodeScalar</code>, <code>128054</code>, is a decimal equivalent of the hexadecimal value <code>1F436</code>, which represents the Unicode scalar <code>U+1F436</code> for the <code>DOG FACE</code>character.</p>
+<p>作为查询其<code>value</code>属性的替代方案，每个<code>UnicodeScalar</code>值也可以用于构建新的<code>String</code>值，例如字符串插值：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> scalar <span class="keyword">in</span> dogString.unicodeScalars &#123;</span><br><span class="line">   <span class="built_in">print</span>(<span class="string">&quot;<span class="subst">\(scalar)</span> &quot;</span>)</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// D</span></span><br><span class="line"><span class="comment">// o</span></span><br><span class="line"><span class="comment">// g</span></span><br><span class="line"><span class="comment">// ‼</span></span><br><span class="line"><span class="comment">// 🐶</span></span><br></pre></td></tr></table></figure>
+
+
+      
+    </div>
+    <div class="article-footer">
+      <blockquote class="mt-2x">
+  <ul class="post-copyright list-unstyled">
+    
+    <li class="post-copyright-link hidden-xs">
+      <strong>本文链接：</strong>
+      <a href="https://guoshunfa.com/2022/07/Swift%E5%9F%BA%E7%A1%80-%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%92%8C%E5%AD%97%E7%AC%A6/" title="Swift基础 字符串和字符" target="_blank" rel="external">https://guoshunfa.com/2022/07/Swift基础-字符串和字符/</a>
+    </li>
+    
+    <li class="post-copyright-license">
+      <strong>版权声明： </strong> 本博客所有文章除特别声明外，均采用 <a href="http://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank" rel="external">CC BY 4.0 CN协议</a> 许可协议。转载请注明出处！
+    </li>
+  </ul>
+</blockquote>
+
+
+<div class="panel panel-default panel-badger">
+  <div class="panel-body">
+    <figure class="media">
+      <div class="media-left">
+        <a href="https://github.com/guoshunfa" target="_blank" class="img-burn thumb-sm visible-lg">
+          <img src="/images/avatar.jpg" class="img-rounded w-full" alt="">
+        </a>
+      </div>
+      <div class="media-body">
+        <h3 class="media-heading"><a href="https://github.com/guoshunfa" target="_blank"><span class="text-dark">郭顺发</span><small class="ml-1x">创业中......</small></a></h3>
+        <div>承接：小程序开发、APP开发、网站开发、爬虫开发</div>
+      </div>
+    </figure>
+  </div>
+</div>
+
+
+    </div>
+  </article>
+  
+    
+  <section id="comments">
+  	
+           
+    
+  </section>
+
+
+  
+</div>
+
+  <nav class="bar bar-footer clearfix" data-stick-bottom>
+  <div class="bar-inner">
+  
+  <ul class="pager pull-left">
+    
+    <li class="prev">
+      <a href="/2022/07/Swift%E5%9F%BA%E7%A1%80-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/" title="Swift基础 基础知识"><i class="icon icon-angle-left" aria-hidden="true"></i><span>&nbsp;&nbsp;上一篇</span></a>
+    </li>
+    
+    
+    <li class="next">
+      <a href="/2022/07/Swift%E5%9F%BA%E7%A1%80-%E5%B1%9E%E6%80%A7/" title="Swift基础 属性"><span>下一篇&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
+    </li>
+    
+    
+  </ul>
+  
+  
+  
+  <div class="bar-right">
+    
+    <div class="share-component" data-sites="weibo,qq,wechat,facebook,twitter" data-mobile-sites="weibo,qq,qzone"></div>
+    
+  </div>
+  </div>
+</nav>
+  
+
+
+</main>
+
+  <footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
+	
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/guoshunfa" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="https://gitee.com/guoshunfa" target="_blank" title="Gitee" data-toggle=tooltip data-placement=top><i class="icon icon-gitee"></i></a></li>
+        
+        <li><a href="https://juejin.cn/user/166781500267015" target="_blank" title="Juejin" data-toggle=tooltip data-placement=top><i class="icon icon-juejin"></i></a></li>
+        
+        <li><a href="https://cloud.tencent.com/developer/user/7784141" target="_blank" title="Code" data-toggle=tooltip data-placement=top><i class="icon icon-code"></i></a></li>
+        
+        <li><a href="/atom.xml" target="_blank" title="Rss" data-toggle=tooltip data-placement=top><i class="icon icon-rss"></i></a></li>
+        
+    </ul>
+
+    <div class="copyright">
+    	
+        &copy; 2024 guoshunfa
+        
+        <!-- <div class="publishby">
+        	Theme by <a href="https://github.com/cofess" target="_blank"> cofess </a>base on <a href="https://github.com/cofess/hexo-theme-pure" target="_blank">pure</a>.
+        </div> -->
+    </div>
+</footer>
+  <script src="//cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
+<script>
+window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
+</script>
+
+<script src="/js/plugin.min.js"></script>
+
+
+<script src="/js/application.js"></script>
+
+
+    <script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(未命名)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+
+<script src="/js/insight.js"></script>
+
+
+
+    <script>
+(function ($) {
+    $('.search-form').on('submit', function (e) {
+        var keyword = $('.search-form-input[name="wd"]').val();
+        window.location = 'https://www.baidu.com/s?wd=site:guoshunfa.com ' + keyword;
+        return false;
+    });
+})(jQuery);
+</script>
+
+
+
+
+   
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+   
+    
+  <!-- <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css"> -->
+  <script src="//cdn.jsdelivr.net/npm/gitalk@1.7.2/dist/gitalk.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/blueimp-md5@2.10.0/js/md5.min.js"></script>
+  <script type="text/javascript">
+  var gitalk = new Gitalk({
+    clientID: '328529f408a5d1041fe1',
+    clientSecret: '43872fab04fe0accb98439ac77ff71ff81f7b9dd',
+    repo: 'guoshunfa-comment',
+    owner: 'guoshunfa',
+    admin: ['guoshunfa'],
+    id: md5(location.pathname),
+    distractionFreeMode: true,
+    language: 'zh-CN',
+    enableHotKey: 'true'
+  })
+  gitalk.render('comments')
+  </script>
+      
+
+
+
+  <script src="//cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.3.5/dist/jquery.fancybox.min.js"></script>
+  <script>
+  //利用 FancyBox 实现点击图片放大
+  $(document).ready(function() {
+    $('article img').not('[hidden]').not('.panel-body img').each(function() {
+      var $image = $(this);
+      var imageCaption = $image.attr('alt');
+      var $imageWrapLink = $image.parent('a');
+      if ($imageWrapLink.length < 1) {
+        var src = this.getAttribute('src');
+        var idx = src.lastIndexOf('?');
+        if (idx != -1) {
+          src = src.substring(0, idx);
+        }
+        $imageWrapLink = $image.wrap('<a href="' + src + '"></a>').parent('a');
+      }
+      $imageWrapLink.attr('data-fancybox', 'images');
+      if (imageCaption) {
+        $imageWrapLink.attr('data-caption', imageCaption);
+      }
+    });
+    $().fancybox({
+      selector: '[data-fancybox="images"]',
+      hash: false,
+      loop: false,
+    });
+  });
+  </script>
+
+
+
+
+
+</body>
+</html>

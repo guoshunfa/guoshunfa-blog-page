@@ -1,0 +1,886 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+  <meta charset="utf-8">
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-transform" />
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="format-detection" content="telephone=no,email=no,adress=no">
+  <!-- Color theme for statusbar -->
+  <meta name="theme-color" content="#000000" />
+  <!-- 强制页面在当前窗口以独立页面显示,防止别人在框架里调用页面 -->
+  <meta http-equiv="window-target" content="_top" />
+  
+  
+  <title>Oracle Java异常 | guoshunfa</title>
+  <meta name="description" content="本文章以jdk8为基础进行编写，如果想查看后续的版本可以前往jdk版本目录下查看。 翻译自：https:&#x2F;&#x2F;docs.oracle.com&#x2F;javase&#x2F;tutorial&#x2F;essential&#x2F;exceptions&#x2F;index.html  Java编程语言使用异常来处理错误和其他异常事件。本课程介绍何时以及如何使用异常。 什么是异常？术语exception是短语“exceptionevent”的缩">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Oracle Java异常">
+<meta property="og:url" content="https://guoshunfa.com/2020/07/Oracle-Java%E5%BC%82%E5%B8%B8/index.html">
+<meta property="og:site_name" content="guoshunfa">
+<meta property="og:description" content="本文章以jdk8为基础进行编写，如果想查看后续的版本可以前往jdk版本目录下查看。 翻译自：https:&#x2F;&#x2F;docs.oracle.com&#x2F;javase&#x2F;tutorial&#x2F;essential&#x2F;exceptions&#x2F;index.html  Java编程语言使用异常来处理错误和其他异常事件。本课程介绍何时以及如何使用异常。 什么是异常？术语exception是短语“exceptionevent”的缩">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://guoshunfa.com/2020/07/Oracle-Java%E5%BC%82%E5%B8%B8/exceptions-callstack.gif">
+<meta property="og:image" content="https://guoshunfa.com/2020/07/Oracle-Java%E5%BC%82%E5%B8%B8/exceptions-errorOccurs.gif">
+<meta property="og:image" content="https://guoshunfa.com/2020/07/Oracle-Java%E5%BC%82%E5%B8%B8/exceptions-throwable.gif">
+<meta property="og:image" content="https://guoshunfa.com/2020/07/Oracle-Java%E5%BC%82%E5%B8%B8/exceptions-hierarchy.gif">
+<meta property="article:published_time" content="2020-07-01T04:01:01.000Z">
+<meta property="article:modified_time" content="2024-01-28T11:41:39.281Z">
+<meta property="article:author" content="guoshunfa">
+<meta property="article:tag" content="Oracle">
+<meta property="article:tag" content="Java">
+<meta property="article:tag" content="异常">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://guoshunfa.com/2020/07/Oracle-Java%E5%BC%82%E5%B8%B8/exceptions-callstack.gif">
+  <!-- Canonical links -->
+  <link rel="canonical" href="https://guoshunfa.com/2020/07/Oracle-Java%E5%BC%82%E5%B8%B8/index.html">
+  
+    <link rel="alternate" href="/atom.xml" title="guoshunfa" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="favicon.jpg" type="image/x-icon">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  
+  
+    <link href="//cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.3.5/dist/jquery.fancybox.min.css" rel="stylesheet">
+  
+  
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1.7.2/dist/gitalk.min.css">
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body class="main-center" itemscope itemtype="http://schema.org/WebPage">
+  <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+  <div class="slimContent">
+    <div class="navbar-header">
+      
+      
+      <div class="profile-block text-center">
+        <a id="avatar" href="https://github.com/guoshunfa" target="_blank">
+          <img class="img-circle img-rotate" src="/images/avatar.jpg" width="200" height="200">
+        </a>
+        <h2 id="name" class="hidden-xs hidden-sm">郭顺发</h2>
+        <h3 id="title" class="hidden-xs hidden-sm hidden-md">创业中......</h3>
+        <small id="location" class="text-muted hidden-xs hidden-sm"><i class="icon icon-map-marker"></i> 深圳, China</small>
+      </div>
+      
+      <div class="search" id="search-form-wrap">
+
+    <form class="search-form sidebar-form">
+        <div class="input-group">
+            <input type="text" class="search-form-input form-control" placeholder="搜索" />
+            <span class="input-group-btn">
+                <button type="submit" class="search-form-submit btn btn-flat" onclick="return false;"><i class="icon icon-search"></i></button>
+            </span>
+        </div>
+    </form>
+    <div class="ins-search">
+  <div class="ins-search-mask"></div>
+  <div class="ins-search-container">
+    <div class="ins-input-wrapper">
+      <input type="text" class="ins-search-input" placeholder="想要查找什么..." x-webkit-speech />
+      <button type="button" class="close ins-close ins-selectable" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="ins-section-wrapper">
+      <div class="ins-section-container"></div>
+    </div>
+  </div>
+</div>
+
+
+</div>
+      <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <nav id="main-navbar" class="collapse navbar-collapse" itemscope itemtype="http://schema.org/SiteNavigationElement" role="navigation">
+      <ul class="nav navbar-nav main-nav menu-highlight">
+        
+        
+        <li class="menu-item menu-item-首页">
+          <a href="/.">
+            
+            <i class="icon icon-home-fill"></i>
+            
+            <span class="menu-title">首页</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-归档">
+          <a href="/archives">
+            
+            <i class="icon icon-archives-fill"></i>
+            
+            <span class="menu-title">归档</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-分类">
+          <a href="/categories">
+            
+            <i class="icon icon-folder"></i>
+            
+            <span class="menu-title">分类</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-标签">
+          <a href="/tags">
+            
+            <i class="icon icon-tags"></i>
+            
+            <span class="menu-title">标签</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-github仓库">
+          <a href="/repository">
+            
+            <i class="icon icon-project"></i>
+            
+            <span class="menu-title">github仓库</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-工具箱">
+          <a href="/tools">
+            
+            <i class="icon icon-book-fill"></i>
+            
+            <span class="menu-title">工具箱</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-友链">
+          <a href="/links">
+            
+            <i class="icon icon-friendship"></i>
+            
+            <span class="menu-title">友链</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-关于">
+          <a href="/about">
+            
+            <i class="icon icon-cup-fill"></i>
+            
+            <span class="menu-title">关于</span>
+          </a>
+        </li>
+        
+      </ul>
+      
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/guoshunfa" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="https://gitee.com/guoshunfa" target="_blank" title="Gitee" data-toggle=tooltip data-placement=top><i class="icon icon-gitee"></i></a></li>
+        
+        <li><a href="https://juejin.cn/user/166781500267015" target="_blank" title="Juejin" data-toggle=tooltip data-placement=top><i class="icon icon-juejin"></i></a></li>
+        
+        <li><a href="https://cloud.tencent.com/developer/user/7784141" target="_blank" title="Code" data-toggle=tooltip data-placement=top><i class="icon icon-code"></i></a></li>
+        
+        <li><a href="/atom.xml" target="_blank" title="Rss" data-toggle=tooltip data-placement=top><i class="icon icon-rss"></i></a></li>
+        
+    </ul>
+
+    </nav>
+  </div>
+</header>
+
+  
+    <aside class="sidebar" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    
+      <div class="widget">
+    <h3 class="widget-title">公告</h3>
+    <div class="widget-body">
+        <div id="board">
+            <div class="content">
+                <p>欢迎来到www.guoshunfa.com。</p><hr/><a target="_blank" rel="noopener" href="https://www.oracle.com/cn/java/">前往Java官网<a/><br/><a target="_blank" rel="noopener" href="https://spring.io/">前往Spring官网<a/>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget-body">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/HTML-CSS-JavaScript/">HTML/CSS/JavaScript</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Java/">Java</a><span class="category-list-count">17</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Python/">Python</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/SpringBoot/">SpringBoot</a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Swift/">Swift</a><span class="category-list-count">29</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%88%9B%E4%B8%9A/">创业</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%A4%8D%E7%9B%98/">复盘</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%A8%B1%E4%B9%90/">娱乐</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%8A%80%E6%9C%AF/">技术</a><span class="category-list-count">27</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%8A%80%E6%9C%AF/%E6%90%AD%E5%BB%BA%E5%8D%95%E4%BD%93SpringBoot%E9%A1%B9%E7%9B%AE/">搭建单体SpringBoot项目</a><span class="category-list-count">21</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%90%AD%E5%BB%BA%E5%8D%95%E4%BD%93SpringBoot%E9%A1%B9%E7%9B%AE/">搭建单体SpringBoot项目</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/">数据库</a><span class="category-list-count">17</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%9C%8D%E5%8A%A1/">服务</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%9C%8D%E5%8A%A1-%E7%BB%84%E4%BB%B6/">服务&组件</a><span class="category-list-count">27</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%AE%A1%E7%90%86/">服务器管理</a><span class="category-list-count">21</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E7%AE%97%E6%B3%95/">算法</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E8%BD%AF%E4%BB%B6%E4%BD%BF%E7%94%A8/">软件使用</a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E8%BD%AF%E4%BB%B6%E6%8A%80%E6%9C%AF%E6%A1%86%E6%9E%B6/">软件技术框架</a><span class="category-list-count">44</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E9%98%85%E8%AF%BB/">阅读</a><span class="category-list-count">2</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget-body">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/AJAX/" rel="tag">AJAX</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Activiti7/" rel="tag">Activiti7</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Arthas/" rel="tag">Arthas</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CSS/" rel="tag">CSS</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Curl/" rel="tag">Curl</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Debug/" rel="tag">Debug</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Docker/" rel="tag">Docker</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Druid/" rel="tag">Druid</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Electron/" rel="tag">Electron</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Expect/" rel="tag">Expect</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/FastJson/" rel="tag">FastJson</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/FreeMarker/" rel="tag">FreeMarker</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Git/" rel="tag">Git</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Gitlab/" rel="tag">Gitlab</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/GitlabRunner/" rel="tag">GitlabRunner</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/HTML-CSS-JavaScript/" rel="tag">HTML&#x2F;CSS&#x2F;JavaScript</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hook/" rel="tag">Hook</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Http/" rel="tag">Http</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hutool/" rel="tag">Hutool</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/IDEA/" rel="tag">IDEA</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JS/" rel="tag">JS</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JVM/" rel="tag">JVM</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Jar/" rel="tag">Jar</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java/" rel="tag">Java</a><span class="tag-list-count">27</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Jdk/" rel="tag">Jdk</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Jenkins/" rel="tag">Jenkins</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Jmeter/" rel="tag">Jmeter</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Json/" rel="tag">Json</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Jsoup/" rel="tag">Jsoup</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Kafka/" rel="tag">Kafka</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Leetcode/" rel="tag">Leetcode</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux/" rel="tag">Linux</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Logback/" rel="tag">Logback</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Mac/" rel="tag">Mac</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Maven/" rel="tag">Maven</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MongoDB/" rel="tag">MongoDB</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MyBatis/" rel="tag">MyBatis</a><span class="tag-list-count">7</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Mybatis/" rel="tag">Mybatis</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MybatisPlus/" rel="tag">MybatisPlus</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Mysql/" rel="tag">Mysql</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Nano/" rel="tag">Nano</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Nexus/" rel="tag">Nexus</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Nginx/" rel="tag">Nginx</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Opengrok/" rel="tag">Opengrok</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Oracle/" rel="tag">Oracle</a><span class="tag-list-count">22</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Profile/" rel="tag">Profile</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/PubSubJS/" rel="tag">PubSubJS</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Python/" rel="tag">Python</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Quartz/" rel="tag">Quartz</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/RESTful/" rel="tag">RESTful</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/React/" rel="tag">React</a><span class="tag-list-count">7</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Redis/" rel="tag">Redis</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SQL/" rel="tag">SQL</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SVN/" rel="tag">SVN</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Scheduled/" rel="tag">Scheduled</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Scrapy/" rel="tag">Scrapy</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Shell/" rel="tag">Shell</a><span class="tag-list-count">9</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Spel%E8%A1%A8%E8%BE%BE%E5%BC%8F/" rel="tag">Spel表达式</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Spring/" rel="tag">Spring</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SpringBoot/" rel="tag">SpringBoot</a><span class="tag-list-count">34</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SpringEvent/" rel="tag">SpringEvent</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SpringMVC/" rel="tag">SpringMVC</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SpringSecurity/" rel="tag">SpringSecurity</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Stream/" rel="tag">Stream</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Swagger/" rel="tag">Swagger</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Swift/" rel="tag">Swift</a><span class="tag-list-count">29</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/TestNG/" rel="tag">TestNG</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Tomcat/" rel="tag">Tomcat</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/UI%E7%BB%84%E4%BB%B6%E5%BA%93/" rel="tag">UI组件库</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Validator/" rel="tag">Validator</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Vue/" rel="tag">Vue</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Vuepress/" rel="tag">Vuepress</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Wordpress/" rel="tag">Wordpress</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/XML/" rel="tag">XML</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/assert/" rel="tag">assert</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/docker/" rel="tag">docker</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/gitlab/" rel="tag">gitlab</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/homebrew/" rel="tag">homebrew</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/iframe/" rel="tag">iframe</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java/" rel="tag">java</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/lambda/" rel="tag">lambda</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/less/" rel="tag">less</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/" rel="tag">linux</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mac/" rel="tag">mac</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mybatis-plus/" rel="tag">mybatis-plus</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mysql/" rel="tag">mysql</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/oracle/" rel="tag">oracle</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/pom-xml/" rel="tag">pom.xml</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/quartz/" rel="tag">quartz</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/settings-xml/" rel="tag">settings.xml</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/spring-boot/" rel="tag">spring-boot</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ssh/" rel="tag">ssh</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sshpass/" rel="tag">sshpass</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/yum/" rel="tag">yum</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%B9%90%E8%A7%82%E9%94%81/" rel="tag">乐观锁</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BB%8B%E7%BB%8D/" rel="tag">介绍</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%86%85%E7%BD%91/" rel="tag">内网</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%86%85%E7%BD%91%E7%A9%BF%E9%80%8F/" rel="tag">内网穿透</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%8A%A0%E5%AF%86/" rel="tag">加密</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%8F%8D%E7%BC%96%E8%AF%91%E5%B7%A5%E5%85%B7/" rel="tag">反编译工具</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%9B%BE%E5%BA%8A/" rel="tag">图床</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%9F%BA%E7%A1%80/" rel="tag">基础</a><span class="tag-list-count">29</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%AD%98%E5%82%A8%E5%87%BD%E6%95%B0/" rel="tag">存储函数</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%AD%98%E5%82%A8%E8%BF%87%E7%A8%8B/" rel="tag">存储过程</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%AE%9A%E6%97%B6%E5%99%A8/" rel="tag">定时器</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%AE%9D%E5%A1%94/" rel="tag">宝塔</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%B9%B6%E5%8F%91/" rel="tag">并发</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%BC%82%E5%B8%B8/" rel="tag">异常</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%BF%83%E7%90%86/" rel="tag">心理</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%80%BB%E7%BB%93/" rel="tag">总结</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%8C%81%E4%B9%85%E5%B1%82%E6%A1%86%E6%9E%B6/" rel="tag">持久层框架</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%8E%A5%E5%8F%A3/" rel="tag">接口</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%8F%92%E4%BB%B6/" rel="tag">插件</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/" rel="tag">数据库</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%96%AD%E8%A8%80/" rel="tag">断言</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%A0%91%E8%8E%93%E6%B4%BE/" rel="tag">树莓派</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%A0%91%E8%8E%93%E6%B4%BE4B/" rel="tag">树莓派4B</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%A6%82%E5%BF%B5/" rel="tag">概念</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%A8%A1%E7%89%88%E5%BC%95%E6%93%8E/" rel="tag">模版引擎</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%B3%9B%E5%9E%8B/" rel="tag">泛型</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%B5%8B%E8%AF%95/" rel="tag">测试</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%88%AC%E8%99%AB/" rel="tag">爬虫</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%94%A8%E6%88%B7%E6%9D%83%E9%99%90%E9%AA%8C%E8%AF%81/" rel="tag">用户权限验证</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%9F%A5%E8%AF%86/" rel="tag">知识</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%AE%97%E6%B3%95/" rel="tag">算法</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%B1%BB/" rel="tag">类</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BB%84%E4%BB%B6%E5%BA%93/" rel="tag">组件库</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%84%9A%E6%9C%AC/" rel="tag">脚本</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%87%AA%E5%8A%A8%E5%8C%96%E6%B5%8B%E8%AF%95/" rel="tag">自动化测试</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%8B%A5%E4%BE%9D/" rel="tag">若依</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/" rel="tag">解决方案</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" rel="tag">设计模式</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/" rel="tag">读书笔记</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%B7%A8%E5%9F%9F/" rel="tag">跨域</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%83%A8%E7%BD%B2/" rel="tag">部署</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9B%86%E6%88%90/" rel="tag">集成</a><span class="tag-list-count">14</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1/" rel="tag">面向对象</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9F%A9%E5%89%A7/" rel="tag">韩剧</a><span class="tag-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget-body tagcloud">
+      <a href="/tags/AJAX/" style="font-size: 13px;">AJAX</a> <a href="/tags/Activiti7/" style="font-size: 13.17px;">Activiti7</a> <a href="/tags/Arthas/" style="font-size: 13px;">Arthas</a> <a href="/tags/CSS/" style="font-size: 13px;">CSS</a> <a href="/tags/Curl/" style="font-size: 13px;">Curl</a> <a href="/tags/Debug/" style="font-size: 13px;">Debug</a> <a href="/tags/Docker/" style="font-size: 13.42px;">Docker</a> <a href="/tags/Druid/" style="font-size: 13px;">Druid</a> <a href="/tags/Electron/" style="font-size: 13.08px;">Electron</a> <a href="/tags/Expect/" style="font-size: 13px;">Expect</a> <a href="/tags/FastJson/" style="font-size: 13px;">FastJson</a> <a href="/tags/FreeMarker/" style="font-size: 13px;">FreeMarker</a> <a href="/tags/Git/" style="font-size: 13.08px;">Git</a> <a href="/tags/Gitlab/" style="font-size: 13.25px;">Gitlab</a> <a href="/tags/GitlabRunner/" style="font-size: 13.08px;">GitlabRunner</a> <a href="/tags/HTML-CSS-JavaScript/" style="font-size: 13.17px;">HTML/CSS/JavaScript</a> <a href="/tags/Hook/" style="font-size: 13px;">Hook</a> <a href="/tags/Http/" style="font-size: 13px;">Http</a> <a href="/tags/Hutool/" style="font-size: 13px;">Hutool</a> <a href="/tags/IDEA/" style="font-size: 13.25px;">IDEA</a> <a href="/tags/JS/" style="font-size: 13.08px;">JS</a> <a href="/tags/JVM/" style="font-size: 13px;">JVM</a> <a href="/tags/Jar/" style="font-size: 13.08px;">Jar</a> <a href="/tags/Java/" style="font-size: 13.83px;">Java</a> <a href="/tags/Jdk/" style="font-size: 13px;">Jdk</a> <a href="/tags/Jenkins/" style="font-size: 13px;">Jenkins</a> <a href="/tags/Jmeter/" style="font-size: 13px;">Jmeter</a> <a href="/tags/Json/" style="font-size: 13px;">Json</a> <a href="/tags/Jsoup/" style="font-size: 13px;">Jsoup</a> <a href="/tags/Kafka/" style="font-size: 13.25px;">Kafka</a> <a href="/tags/Leetcode/" style="font-size: 13.33px;">Leetcode</a> <a href="/tags/Linux/" style="font-size: 13px;">Linux</a> <a href="/tags/Logback/" style="font-size: 13px;">Logback</a> <a href="/tags/Mac/" style="font-size: 13px;">Mac</a> <a href="/tags/Maven/" style="font-size: 13.42px;">Maven</a> <a href="/tags/MongoDB/" style="font-size: 13.42px;">MongoDB</a> <a href="/tags/MyBatis/" style="font-size: 13.5px;">MyBatis</a> <a href="/tags/Mybatis/" style="font-size: 13.17px;">Mybatis</a> <a href="/tags/MybatisPlus/" style="font-size: 13.08px;">MybatisPlus</a> <a href="/tags/Mysql/" style="font-size: 13.25px;">Mysql</a> <a href="/tags/Nano/" style="font-size: 13px;">Nano</a> <a href="/tags/Nexus/" style="font-size: 13.08px;">Nexus</a> <a href="/tags/Nginx/" style="font-size: 13.08px;">Nginx</a> <a href="/tags/Opengrok/" style="font-size: 13px;">Opengrok</a> <a href="/tags/Oracle/" style="font-size: 13.75px;">Oracle</a> <a href="/tags/Profile/" style="font-size: 13px;">Profile</a> <a href="/tags/PubSubJS/" style="font-size: 13px;">PubSubJS</a> <a href="/tags/Python/" style="font-size: 13.17px;">Python</a> <a href="/tags/Quartz/" style="font-size: 13.08px;">Quartz</a> <a href="/tags/RESTful/" style="font-size: 13px;">RESTful</a> <a href="/tags/React/" style="font-size: 13.5px;">React</a> <a href="/tags/Redis/" style="font-size: 13.17px;">Redis</a> <a href="/tags/SQL/" style="font-size: 13.25px;">SQL</a> <a href="/tags/SVN/" style="font-size: 13px;">SVN</a> <a href="/tags/Scheduled/" style="font-size: 13px;">Scheduled</a> <a href="/tags/Scrapy/" style="font-size: 13px;">Scrapy</a> <a href="/tags/Shell/" style="font-size: 13.58px;">Shell</a> <a href="/tags/Spel%E8%A1%A8%E8%BE%BE%E5%BC%8F/" style="font-size: 13px;">Spel表达式</a> <a href="/tags/Spring/" style="font-size: 13.33px;">Spring</a> <a href="/tags/SpringBoot/" style="font-size: 14px;">SpringBoot</a> <a href="/tags/SpringEvent/" style="font-size: 13px;">SpringEvent</a> <a href="/tags/SpringMVC/" style="font-size: 13px;">SpringMVC</a> <a href="/tags/SpringSecurity/" style="font-size: 13.17px;">SpringSecurity</a> <a href="/tags/Stream/" style="font-size: 13px;">Stream</a> <a href="/tags/Swagger/" style="font-size: 13.08px;">Swagger</a> <a href="/tags/Swift/" style="font-size: 13.92px;">Swift</a> <a href="/tags/TestNG/" style="font-size: 13px;">TestNG</a> <a href="/tags/Tomcat/" style="font-size: 13px;">Tomcat</a> <a href="/tags/UI%E7%BB%84%E4%BB%B6%E5%BA%93/" style="font-size: 13px;">UI组件库</a> <a href="/tags/Validator/" style="font-size: 13px;">Validator</a> <a href="/tags/Vue/" style="font-size: 13px;">Vue</a> <a href="/tags/Vuepress/" style="font-size: 13.25px;">Vuepress</a> <a href="/tags/Wordpress/" style="font-size: 13px;">Wordpress</a> <a href="/tags/XML/" style="font-size: 13px;">XML</a> <a href="/tags/assert/" style="font-size: 13px;">assert</a> <a href="/tags/docker/" style="font-size: 13px;">docker</a> <a href="/tags/gitlab/" style="font-size: 13px;">gitlab</a> <a href="/tags/homebrew/" style="font-size: 13px;">homebrew</a> <a href="/tags/iframe/" style="font-size: 13px;">iframe</a> <a href="/tags/java/" style="font-size: 13px;">java</a> <a href="/tags/lambda/" style="font-size: 13px;">lambda</a> <a href="/tags/less/" style="font-size: 13px;">less</a> <a href="/tags/linux/" style="font-size: 13.25px;">linux</a> <a href="/tags/mac/" style="font-size: 13.25px;">mac</a> <a href="/tags/mybatis-plus/" style="font-size: 13px;">mybatis-plus</a> <a href="/tags/mysql/" style="font-size: 13px;">mysql</a> <a href="/tags/oracle/" style="font-size: 13px;">oracle</a> <a href="/tags/pom-xml/" style="font-size: 13px;">pom.xml</a> <a href="/tags/quartz/" style="font-size: 13px;">quartz</a> <a href="/tags/settings-xml/" style="font-size: 13px;">settings.xml</a> <a href="/tags/spring-boot/" style="font-size: 13px;">spring-boot</a> <a href="/tags/ssh/" style="font-size: 13px;">ssh</a> <a href="/tags/sshpass/" style="font-size: 13px;">sshpass</a> <a href="/tags/yum/" style="font-size: 13px;">yum</a> <a href="/tags/%E4%B9%90%E8%A7%82%E9%94%81/" style="font-size: 13px;">乐观锁</a> <a href="/tags/%E4%BB%8B%E7%BB%8D/" style="font-size: 13px;">介绍</a> <a href="/tags/%E5%86%85%E7%BD%91/" style="font-size: 13px;">内网</a> <a href="/tags/%E5%86%85%E7%BD%91%E7%A9%BF%E9%80%8F/" style="font-size: 13px;">内网穿透</a> <a href="/tags/%E5%8A%A0%E5%AF%86/" style="font-size: 13.08px;">加密</a> <a href="/tags/%E5%8F%8D%E7%BC%96%E8%AF%91%E5%B7%A5%E5%85%B7/" style="font-size: 13px;">反编译工具</a> <a href="/tags/%E5%9B%BE%E5%BA%8A/" style="font-size: 13px;">图床</a> <a href="/tags/%E5%9F%BA%E7%A1%80/" style="font-size: 13.92px;">基础</a> <a href="/tags/%E5%AD%98%E5%82%A8%E5%87%BD%E6%95%B0/" style="font-size: 13px;">存储函数</a> <a href="/tags/%E5%AD%98%E5%82%A8%E8%BF%87%E7%A8%8B/" style="font-size: 13.08px;">存储过程</a> <a href="/tags/%E5%AE%9A%E6%97%B6%E5%99%A8/" style="font-size: 13px;">定时器</a> <a href="/tags/%E5%AE%9D%E5%A1%94/" style="font-size: 13.08px;">宝塔</a> <a href="/tags/%E5%B9%B6%E5%8F%91/" style="font-size: 13px;">并发</a> <a href="/tags/%E5%BC%82%E5%B8%B8/" style="font-size: 13px;">异常</a> <a href="/tags/%E5%BF%83%E7%90%86/" style="font-size: 13.08px;">心理</a> <a href="/tags/%E6%80%BB%E7%BB%93/" style="font-size: 13px;">总结</a> <a href="/tags/%E6%8C%81%E4%B9%85%E5%B1%82%E6%A1%86%E6%9E%B6/" style="font-size: 13.17px;">持久层框架</a> <a href="/tags/%E6%8E%A5%E5%8F%A3/" style="font-size: 13px;">接口</a> <a href="/tags/%E6%8F%92%E4%BB%B6/" style="font-size: 13px;">插件</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/" style="font-size: 13.33px;">数据库</a> <a href="/tags/%E6%96%AD%E8%A8%80/" style="font-size: 13px;">断言</a> <a href="/tags/%E6%A0%91%E8%8E%93%E6%B4%BE/" style="font-size: 13.08px;">树莓派</a> <a href="/tags/%E6%A0%91%E8%8E%93%E6%B4%BE4B/" style="font-size: 13px;">树莓派4B</a> <a href="/tags/%E6%A6%82%E5%BF%B5/" style="font-size: 13px;">概念</a> <a href="/tags/%E6%A8%A1%E7%89%88%E5%BC%95%E6%93%8E/" style="font-size: 13px;">模版引擎</a> <a href="/tags/%E6%B3%9B%E5%9E%8B/" style="font-size: 13.08px;">泛型</a> <a href="/tags/%E6%B5%8B%E8%AF%95/" style="font-size: 13.33px;">测试</a> <a href="/tags/%E7%88%AC%E8%99%AB/" style="font-size: 13.08px;">爬虫</a> <a href="/tags/%E7%94%A8%E6%88%B7%E6%9D%83%E9%99%90%E9%AA%8C%E8%AF%81/" style="font-size: 13px;">用户权限验证</a> <a href="/tags/%E7%9F%A5%E8%AF%86/" style="font-size: 13px;">知识</a> <a href="/tags/%E7%AE%97%E6%B3%95/" style="font-size: 13.08px;">算法</a> <a href="/tags/%E7%B1%BB/" style="font-size: 13px;">类</a> <a href="/tags/%E7%BB%84%E4%BB%B6%E5%BA%93/" style="font-size: 13px;">组件库</a> <a href="/tags/%E8%84%9A%E6%9C%AC/" style="font-size: 13.25px;">脚本</a> <a href="/tags/%E8%87%AA%E5%8A%A8%E5%8C%96%E6%B5%8B%E8%AF%95/" style="font-size: 13px;">自动化测试</a> <a href="/tags/%E8%8B%A5%E4%BE%9D/" style="font-size: 13px;">若依</a> <a href="/tags/%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/" style="font-size: 13.08px;">解决方案</a> <a href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" style="font-size: 13px;">设计模式</a> <a href="/tags/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/" style="font-size: 13.08px;">读书笔记</a> <a href="/tags/%E8%B7%A8%E5%9F%9F/" style="font-size: 13px;">跨域</a> <a href="/tags/%E9%83%A8%E7%BD%B2/" style="font-size: 13px;">部署</a> <a href="/tags/%E9%9B%86%E6%88%90/" style="font-size: 13.67px;">集成</a> <a href="/tags/%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1/" style="font-size: 13px;">面向对象</a> <a href="/tags/%E9%9F%A9%E5%89%A7/" style="font-size: 13px;">韩剧</a>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget-body">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/07/">七月 2024</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/07/">七月 2023</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/06/">六月 2023</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/01/">一月 2023</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/11/">十一月 2022</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/10/">十月 2022</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/07/">七月 2022</a><span class="archive-list-count">181</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/06/">六月 2022</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/07/">七月 2020</a><span class="archive-list-count">17</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget-body">
+      <ul class="recent-post-list list-unstyled ">
+        
+          <li>
+            
+            <div class="item-thumb">
+              <a href="/2024/07/%E4%B8%8D%E5%8D%B7%E5%AD%A6%E5%8E%86%E5%92%8C%E8%83%8C%E6%99%AF%E7%9A%84%E8%B5%9B%E9%81%93%EF%BC%8C%E4%B9%9F%E8%83%BD%E6%9C%88%E5%85%A5%E8%BF%87%E4%B8%87%EF%BC%9F/" class="thumb">
+    
+    
+        <span class="thumb-image thumb-none"></span>
+    
+</a>
+
+            </div>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/%E5%88%9B%E4%B8%9A/">创业</a>
+              </p>
+              <p class="item-title">
+                <a href="/2024/07/%E4%B8%8D%E5%8D%B7%E5%AD%A6%E5%8E%86%E5%92%8C%E8%83%8C%E6%99%AF%E7%9A%84%E8%B5%9B%E9%81%93%EF%BC%8C%E4%B9%9F%E8%83%BD%E6%9C%88%E5%85%A5%E8%BF%87%E4%B8%87%EF%BC%9F/" class="title">不卷学历和背景的赛道，也能月入过万？</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2024-07-11T05:45:20.000Z" itemprop="datePublished">2024-07-11</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-thumb">
+              <a href="/2024/07/%E5%9B%9E%E9%A1%BE%E5%B7%A5%E4%BD%9C%E8%BF%99%E5%87%A0%E5%B9%B4/" class="thumb">
+    
+    
+        <span class="thumb-image thumb-none"></span>
+    
+</a>
+
+            </div>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/%E5%A4%8D%E7%9B%98/">复盘</a>
+              </p>
+              <p class="item-title">
+                <a href="/2024/07/%E5%9B%9E%E9%A1%BE%E5%B7%A5%E4%BD%9C%E8%BF%99%E5%87%A0%E5%B9%B4/" class="title">回顾工作这几年</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2024-07-09T06:19:23.000Z" itemprop="datePublished">2024-07-09</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-thumb">
+              <a href="/2023/07/SpringBoot3%E9%9B%86%E6%88%90Quartz%E6%9E%81%E7%AE%80%E7%89%88/" class="thumb">
+    
+    
+        <span style="background-image:url(/2023/07/SpringBoot3集成Quartz极简版/logo-quartz-scheduler.png)" alt="SpringBoot3集成Quartz极简版" class="thumb-image"></span>
+    
+</a>
+
+            </div>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/SpringBoot/">SpringBoot</a>
+              </p>
+              <p class="item-title">
+                <a href="/2023/07/SpringBoot3%E9%9B%86%E6%88%90Quartz%E6%9E%81%E7%AE%80%E7%89%88/" class="title">SpringBoot3集成Quartz极简版</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2023-07-18T01:14:01.000Z" itemprop="datePublished">2023-07-18</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-thumb">
+              <a href="/2023/07/SpringBoot3%E9%9B%86%E6%88%90Quartz%E8%AF%A6%E7%BB%86%E7%89%88/" class="thumb">
+    
+    
+        <span style="background-image:url(/2023/07/SpringBoot3集成Quartz极简版/logo-quartz-scheduler.png)" alt="SpringBoot3集成Quartz详细版" class="thumb-image"></span>
+    
+</a>
+
+            </div>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/SpringBoot/">SpringBoot</a>
+              </p>
+              <p class="item-title">
+                <a href="/2023/07/SpringBoot3%E9%9B%86%E6%88%90Quartz%E8%AF%A6%E7%BB%86%E7%89%88/" class="title">SpringBoot3集成Quartz详细版</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2023-07-18T01:14:01.000Z" itemprop="datePublished">2023-07-18</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-thumb">
+              <a href="/2023/07/SpringBoot3%E9%9B%86%E6%88%90Swagger/" class="thumb">
+    
+    
+        <span style="background-image:url(/2023/07/SpringBoot3集成Swagger/swagger_logo.svg)" alt="SpringBoot3集成Swagger" class="thumb-image"></span>
+    
+</a>
+
+            </div>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/SpringBoot/">SpringBoot</a>
+              </p>
+              <p class="item-title">
+                <a href="/2023/07/SpringBoot3%E9%9B%86%E6%88%90Swagger/" class="title">SpringBoot3集成Swagger</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2023-07-11T06:52:01.000Z" itemprop="datePublished">2023-07-11</time>
+              </p>
+            </div>
+          </li>
+          
+      </ul>
+    </div>
+  </div>
+  
+
+    
+  </div>
+</aside>
+
+  
+  
+<main class="main" role="main">
+  <div class="content">
+  <article id="post-软件开发/技术/编程语言/java/Oracle-Java异常" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
+    
+    <div class="article-header">
+      
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Oracle Java异常
+    </h1>
+  
+
+      
+      <div class="article-meta">
+        <span class="article-date">
+    <i class="icon icon-calendar-check"></i>
+	<a href="/2020/07/Oracle-Java%E5%BC%82%E5%B8%B8/" class="article-date">
+	  <time datetime="2020-07-01T04:01:01.000Z" itemprop="datePublished">2020-07-01</time>
+	</a>
+</span>
+        
+  <span class="article-category">
+    <i class="icon icon-folder"></i>
+    <a class="article-category-link" href="/categories/Java/">Java</a>
+  </span>
+
+        
+  <span class="article-tag">
+    <i class="icon icon-tags"></i>
+	<a class="article-tag-link-link" href="/tags/Java/" rel="tag">Java</a>, <a class="article-tag-link-link" href="/tags/Oracle/" rel="tag">Oracle</a>, <a class="article-tag-link-link" href="/tags/%E5%BC%82%E5%B8%B8/" rel="tag">异常</a>
+  </span>
+
+
+        
+	<span class="article-read hidden-xs">
+	    <i class="icon icon-eye-fill" aria-hidden="true"></i>
+	    <span id="busuanzi_container_page_pv">
+			<span id="busuanzi_value_page_pv">0</span>
+		</span>
+	</span>
+
+
+        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2020/07/Oracle-Java%E5%BC%82%E5%B8%B8/#comments" class="article-comment-link">评论</a></span>
+        
+	
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">字数统计: 8.2k(字)</span>
+	
+	
+		<span class="post-readcount hidden-xs" itemprop="timeRequired">阅读时长: 32(分)</span>
+	
+
+      </div>
+    </div>
+    <div class="article-entry marked-body" itemprop="articleBody">
+      
+        <blockquote>
+<p>本文章以jdk8为基础进行编写，如果想查看后续的版本可以前往jdk版本目录下查看。</p>
+<p>翻译自：<a target="_blank" rel="noopener" href="https://docs.oracle.com/javase/tutorial/essential/exceptions/index.html">https://docs.oracle.com/javase/tutorial/essential/exceptions/index.html</a></p>
+</blockquote>
+<p>Java编程语言使用异常来处理错误和其他异常事件。本课程介绍何时以及如何使用异常。</p>
+<h2 id="什么是异常？"><a href="#什么是异常？" class="headerlink" title="什么是异常？"></a>什么是异常？</h2><p>术语<em>exception</em>是短语“exceptionevent”的缩写</p>
+<hr>
+<p><strong>Definition:</strong> <em>异常</em>是在程序执行过程中发生的事件，它会中断程序的正常指令流。</p>
+<hr>
+<p>当方法中发生错误时，该方法会创建一个对象并将其移交给运行时系统。该对象称为“异常对象”，包含有关错误的信息，包括错误发生时程序的类型和状态。创建异常对象并将其传递给运行时系统称为“抛出异常”。</p>
+<p>方法抛出异常后，运行时系统会尝试找到处理它的方法。处理异常的一组可能的“something”是为获取发生错误的方法而调用的方法的有序列表。方法列表称为<em>调用堆栈</em>（参见下图）。</p>
+<p><img src="/2020/07/Oracle-Java%E5%BC%82%E5%B8%B8/exceptions-callstack.gif" alt="The call stack showing three method calls, where the first method called has the exception handler."></p>
+<p>调用堆栈。</p>
+<p>运行时系统在调用堆栈中搜索包含可处理异常的代码块的方法。这段代码称为<em>异常处理程序</em>。搜索从发生错误的方法开始，并按照调用方法的相反顺序继续执行调用堆栈。找到适当的处理程序后，运行时系统将异常传递给处理程序。如果抛出的异常对象的类型与处理程序可以处理的类型匹配，则认为异常处理程序是合适的。</p>
+<p>所选的异常处理程序被称为“捕获异常”。如果运行时系统穷尽地搜索调用堆栈上的所有方法，而没有找到适当的异常处理程序，如下图所示，则运行时系统（因此，程序）终止。</p>
+<p><img src="/2020/07/Oracle-Java%E5%BC%82%E5%B8%B8/exceptions-errorOccurs.gif" alt="The call stack showing three method calls, where the first method called has the exception handler."></p>
+<p>正在调用堆栈中搜索异常处理程序。</p>
+<p>与传统的错误管理技术相比，使用异常来管理错误具有一些优势。您可以在<a target="_blank" rel="noopener" href="https://docs.oracle.com/javase/tutorial/essential/exceptions/advantages.html">例外情况的优点</a>中了解更多信息第节。</p>
+<h2 id="捕捉或指定要求"><a href="#捕捉或指定要求" class="headerlink" title="捕捉或指定要求"></a>捕捉或指定要求</h2><p>有效的Java编程语言代码必须符合<em>捕获或指定要求</em>。这意味着可能引发某些异常的代码必须由以下任一项括起来：</p>
+<ul>
+<li>捕获异常的“try”语句。“try”必须为异常提供处理程序，如<a target="_blank" rel="noopener" href="https://docs.oracle.com/javase/tutorial/essential/exceptions/handling.html">Catching and Handling Exceptions</a>中所述.</li>
+<li>指定可以引发异常的方法。该方法必须提供列出异常的“throws”子句，如<a target="_blank" rel="noopener" href="https://docs.oracle.com/javase/tutorial/essential/exceptions/declaring.html">指定方法引发的异常</a>中所述.</li>
+</ul>
+<p>无法满足Catch或Specify要求的代码将不会编译。</p>
+<p>并非所有例外都符合“捕获或指定要求”。为了理解原因，我们需要研究三种基本的例外情况，其中只有一种例外情况符合要求。</p>
+<h3 id="三种例外"><a href="#三种例外" class="headerlink" title="三种例外"></a>三种例外</h3><p>第一种异常是<em>checked异常</em>。这些都是编写良好的应用程序应该预见并从中恢复的例外情况。例如，假设应用程序提示用户输入文件名，然后通过将名称传递给“java.io.FileReader”的构造函数来打开文件。通常，用户提供现有可读文件的名称，因此“FileReader”对象的构造成功，应用程序的执行正常进行。但有时用户提供一个不存在的文件名，构造函数抛出“java.io.FileNotFoundException”。编写良好的程序将捕获此异常并通知用户错误，可能会提示用户更正文件名。</p>
+<p>选中的异常*受捕获或指定要求的约束。除“错误”、“运行时异常”及其子类指示的异常外，所有异常都是检查异常。</p>
+<p>第二种异常是<em>error</em>。这些是应用程序外部的异常情况，应用程序通常无法预测或从中恢复。例如，假设应用程序成功打开文件进行输入，但由于硬件或系统故障而无法读取文件。读取失败将引发“java.io.IOError”。应用程序可能会选择捕获此异常，以便通知用户问题，但程序打印堆栈跟踪并退出也可能有意义。</p>
+<p><em>错误</em>不受捕获或指定要求的约束。错误是由“错误”及其子类指示的异常。</p>
+<p>第三种异常是<em>运行时异常</em>。这些是应用程序内部的异常情况，应用程序通常无法预测或从中恢复。这些通常表示编程错误，例如逻辑错误或API使用不当。例如，考虑前面描述的将文件名传递给“FileReader”构造函数的应用程序。如果逻辑错误导致向构造函数传递“null”，则构造函数将引发“NullPointerException”。应用程序可以捕获此异常，但消除导致异常发生的错误可能更有意义。</p>
+<p>运行时<em>异常</em>不受捕获或指定要求的约束。运行时异常是由“RuntimeException”及其子类指示的异常。</p>
+<p>错误和运行时异常统称为“未检查异常”。</p>
+<h3 id="绕过捕获或指定"><a href="#绕过捕获或指定" class="headerlink" title="绕过捕获或指定"></a>绕过捕获或指定</h3><p>一些程序员认为Catch或Specify Requirement是异常机制中的一个严重缺陷，并通过使用未检查的异常代替已检查的异常来绕过它。一般来说，不建议这样做。部分<a target="_blank" rel="noopener" href="https://docs.oracle.com/javase/tutorial/essential/exceptions/runtime.html">未选中的例外-争议</a>讨论何时使用未检查的异常。</p>
+<h2 id="捕获和处理异常"><a href="#捕获和处理异常" class="headerlink" title="捕获和处理异常"></a>捕获和处理异常</h2><p>本节介绍如何使用三个异常处理程序组件（“try”、“catch”和“finally”块）来编写异常处理程序。然后，解释了JavaSE7中引入的“try-”with resources语句。“try-”with resources语句特别适用于使用“Closeable”资源的情况，例如流。</p>
+<p>本节的最后一部分将通过一个示例，分析各种场景中发生的情况。</p>
+<p>下面的示例定义并实现了一个名为“ListOfNumbers”的类。构造时，“ListOfNumbers”创建一个“ArrayList”，其中包含10个“Integer”元素，这些元素的顺序值为0到9。“ListOfNumber”类还定义了一个名为“writeList”的方法，该方法将数字列表写入名为“OutFile.txt”的文本文件中。此示例使用<code>java中定义的输出类。io</code>，包括在<a target="_blank" rel="noopener" href="https://docs.oracle.com/javase/tutorial/essential/io/index.html">基本I&#x2F;O</a>中.</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Note: This class will not compile yet.</span></span><br><span class="line"><span class="keyword">import</span> java.io.*;</span><br><span class="line"><span class="keyword">import</span> java.util.List;</span><br><span class="line"><span class="keyword">import</span> java.util.ArrayList;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">ListOfNumbers</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> List&lt;Integer&gt; list;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">int</span> <span class="variable">SIZE</span> <span class="operator">=</span> <span class="number">10</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">ListOfNumbers</span> <span class="params">()</span> &#123;</span><br><span class="line">        list = <span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;Integer&gt;(SIZE);</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; SIZE; i++) &#123;</span><br><span class="line">            list.add(<span class="keyword">new</span> <span class="title class_">Integer</span>(i));</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">writeList</span><span class="params">()</span> &#123;</span><br><span class="line">	<span class="comment">// The FileWriter constructor throws IOException, which must be caught.</span></span><br><span class="line">        <span class="type">PrintWriter</span> <span class="variable">out</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">PrintWriter</span>(<span class="keyword">new</span> <span class="title class_">FileWriter</span>(<span class="string">&quot;OutFile.txt&quot;</span>));</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; SIZE; i++) &#123;</span><br><span class="line">            <span class="comment">// The get(int) method throws IndexOutOfBoundsException, which must be caught.</span></span><br><span class="line">            out.println(<span class="string">&quot;Value at: &quot;</span> + i + <span class="string">&quot; = &quot;</span> + list.get(i));</span><br><span class="line">        &#125;</span><br><span class="line">        out.close();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>粗体的第一行是对构造函数的调用。构造函数初始化文件上的输出流。如果无法打开文件，构造函数将抛出“IOException”。第二个粗体行是对“ArrayList”类的“get”方法的调用，如果其参数值太小（小于0）或太大（大于“ArrayList”当前包含的元素数），则会抛出“IndexOutOfBoundsException”。</p>
+<p>如果尝试编译<a target="_blank" rel="noopener" href="https://docs.oracle.com/javase/tutorial/essential/exceptions/examples/ListOfNumbers.java"><code>ListOfNumbers</code></a>类，编译器将打印一条关于“FileWriter”构造函数引发的异常的错误消息。但是，它不会显示有关“get”引发的异常的错误消息。原因是构造函数抛出的异常“IOException”是一个已检查的异常，而“get”方法引发的异常“IndexOutOfBoundsException”是未检查的异常。</p>
+<p>现在，您已经熟悉了“ListOfNumbers”类以及可以在其中抛出异常的位置，现在就可以编写异常处理程序来捕获和处理这些异常了。</p>
+<h3 id="The-try-Block"><a href="#The-try-Block" class="headerlink" title="The try Block"></a>The try Block</h3><p>构造异常处理程序的第一步是将可能引发异常的代码封装在“try”块中。通常，“try”块如下所示：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">try</span> &#123;</span><br><span class="line">    code</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">catch</span> and <span class="keyword">finally</span> blocks . . .</span><br></pre></td></tr></table></figure>
+
+<p>示例中标记为“<em>code</em>”的段包含一个或多个可能引发异常的合法代码行。（“catch”和“finally”块将在接下来的两个小节中解释。）</p>
+<p>要从“ListOfNumbers”类构造“writeList”方法的异常处理程序，请在“try”块中包含“writeList“方法的异常抛出语句。有不止一种方法可以做到这一点。您可以将可能引发异常的每一行代码放在自己的“try”块中，并为每一行提供单独的异常处理程序。或者，您可以将所有“writeList”代码放在一个“try”块中，并将多个处理程序与之关联。下面的列表对整个方法使用一个“try”块，因为所讨论的代码很短。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> List&lt;Integer&gt; list;</span><br><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">int</span> <span class="variable">SIZE</span> <span class="operator">=</span> <span class="number">10</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">writeList</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="type">PrintWriter</span> <span class="variable">out</span> <span class="operator">=</span> <span class="literal">null</span>;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;Entered try statement&quot;</span>);</span><br><span class="line">        <span class="type">FileWriter</span> <span class="variable">f</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">FileWriter</span>(<span class="string">&quot;OutFile.txt&quot;</span>);</span><br><span class="line">        out = <span class="keyword">new</span> <span class="title class_">PrintWriter</span>(f);</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; SIZE; i++) &#123;</span><br><span class="line">            out.println(<span class="string">&quot;Value at: &quot;</span> + i + <span class="string">&quot; = &quot;</span> + list.get(i));</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">catch</span> and <span class="keyword">finally</span> blocks  . . .</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>如果“try”块中发生异常，则该异常将由与其关联的异常处理程序处理。要将异常处理程序与“try”块关联，必须在其后面放置“catch”块；下一节，<a target="_blank" rel="noopener" href="https://docs.oracle.com/javase/tutorial/essential/exceptions/catch.html">捕捉块</a>，向您展示了如何操作。</p>
+<h3 id="The-catch-Blocks"><a href="#The-catch-Blocks" class="headerlink" title="The catch Blocks"></a>The catch Blocks</h3><p>通过在“try”块之后直接提供一个或多个“catch”块，可以将异常处理程序与“try”块相关联。“try”块的结尾和第一个“catch”块的开头之间不能有代码。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">try</span> &#123;</span><br><span class="line"></span><br><span class="line">&#125; <span class="keyword">catch</span> (ExceptionType name) &#123;</span><br><span class="line"></span><br><span class="line">&#125; <span class="keyword">catch</span> (ExceptionType name) &#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>每个“catch”块都是一个异常处理程序，用于处理其参数所指示的异常类型。参数类型“<em>ExceptionType</em>”声明处理程序可以处理的异常类型，并且必须是从“Throwable”类继承的类的名称。处理程序可以使用“<em>name</em>”引用异常。</p>
+<p>“catch”块包含在调用异常处理程序时执行的代码。当异常处理程序是调用堆栈中第一个“<em>ExceptionType</em>”与抛出的异常类型匹配的异常处理程序时，运行时系统调用异常处理程序。如果抛出的对象可以合法地分配给异常处理程序的参数，则系统认为它是匹配的。</p>
+<p>以下是“writeList”方法的两个异常处理程序：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">try</span> &#123;</span><br><span class="line"></span><br><span class="line">&#125; <span class="keyword">catch</span> (IndexOutOfBoundsException e) &#123;</span><br><span class="line">    System.err.println(<span class="string">&quot;IndexOutOfBoundsException: &quot;</span> + e.getMessage());</span><br><span class="line">&#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">    System.err.println(<span class="string">&quot;Caught IOException: &quot;</span> + e.getMessage());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>异常处理程序可以做的不仅仅是打印错误消息或停止程序。他们可以执行错误恢复，提示用户做出决定，或使用链式异常将错误传播到更高级别的处理程序，如<a target="_blank" rel="noopener" href="https://docs.oracle.com/javase/tutorial/essential/exceptions/chained.html">chained exceptions</a>中所述第节。</p>
+<h4 id="用一个异常处理程序捕获多种类型的异常"><a href="#用一个异常处理程序捕获多种类型的异常" class="headerlink" title="用一个异常处理程序捕获多种类型的异常"></a>用一个异常处理程序捕获多种类型的异常</h4><p>在JavaSE7及更高版本中，单个“catch”块可以处理多种类型的异常。此功能可以减少代码重复，并减少捕捉过大异常的诱惑。</p>
+<p>在“catch”子句中，指定块可以处理的异常类型，并用竖条（“|”）分隔每个异常类型：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">catch</span> (IOException|SQLException ex) &#123;</span><br><span class="line">    logger.log(ex);</span><br><span class="line">    <span class="keyword">throw</span> ex;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>Note</strong>: 如果“catch”块处理多个异常类型，则“catch”参数隐式为“final”。在此示例中，“catch”参数“ex”是“final”，因此不能在“catch”块中为其赋值。</p>
+<h3 id="The-finally-Block"><a href="#The-finally-Block" class="headerlink" title="The finally Block"></a>The finally Block</h3><p>当“try”块退出时，“finally”块<em>始终</em>执行。这确保即使发生意外异常，也执行“finally”块。但“finally”不仅仅对异常处理有用，它允许程序员避免清理代码被“return”、“continue”或“break”意外绕过。将清理代码放在“finally”块中始终是一种很好的做法，即使预计不会出现异常。</p>
+<hr>
+<p><strong>注意：</strong>如果在执行“try”或“catch”代码时JVM退出，则“finally”块可能不会执行。</p>
+<hr>
+<p>您在此使用的“writeList”方法的“try”块将打开一个“PrintWriter”。程序应在退出“writeList”方法之前关闭该流。这带来了一个有点复杂的问题，因为“writeList”的“try”块可以通过三种方式之一退出。</p>
+<ol>
+<li>“new FileWriter”语句失败并引发“IOException”。</li>
+<li><code>list.get(i)</code>语句失败并抛出<code>IndexOutOfBoundsException</code>。</li>
+<li>一切都成功，“try”块正常退出。</li>
+</ol>
+<p>运行时系统总是在“finally”块中执行语句，而不管“try”块中发生了什么。所以这是进行清理的最佳场所。</p>
+<p>“writeList”方法的以下“finally”块将清除，然后关闭“PrintWriter”和“FileWriter”。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">finally</span> &#123;</span><br><span class="line">    <span class="keyword">if</span> (out != <span class="literal">null</span>) &#123; </span><br><span class="line">        System.out.println(<span class="string">&quot;Closing PrintWriter&quot;</span>);</span><br><span class="line">        out.close(); </span><br><span class="line">    &#125; <span class="keyword">else</span> &#123; </span><br><span class="line">        System.out.println(<span class="string">&quot;PrintWriter not open&quot;</span>);</span><br><span class="line">    &#125; </span><br><span class="line">    <span class="keyword">if</span> (f != <span class="literal">null</span>) &#123;</span><br><span class="line">	    System.out.println(<span class="string">&quot;Closing FileWriter&quot;</span>);</span><br><span class="line">	    f.close();</span><br><span class="line">	&#125;	</span><br><span class="line">&#125; </span><br></pre></td></tr></table></figure>
+
+<hr>
+<p><strong>重要的:</strong> 关闭文件或以其他方式恢复资源时，请使用“try-”with resources语句，而不是“finally”块。以下示例使用“try”-with-resources语句清理并关闭“writeList”方法的“PrintWriter”和“FileWriter”：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">writeList</span><span class="params">()</span> <span class="keyword">throws</span> IOException &#123;</span><br><span class="line">    <span class="keyword">try</span> (<span class="type">FileWriter</span> <span class="variable">f</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">FileWriter</span>(<span class="string">&quot;OutFile.txt&quot;</span>);</span><br><span class="line">         <span class="type">PrintWriter</span> <span class="variable">out</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">PrintWriter</span>(f)) &#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; SIZE; i++) &#123;</span><br><span class="line">            out.println(<span class="string">&quot;Value at: &quot;</span> + i + <span class="string">&quot; = &quot;</span> + list.get(i));</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>“try”-with-resources语句在不再需要时自动释放系统资源。 See <a target="_blank" rel="noopener" href="https://docs.oracle.com/javase/tutorial/essential/exceptions/tryResourceClose.html">The try-with-resources Statement</a>.</p>
+<hr>
+<h3 id="The-try-with-resources-Statement"><a href="#The-try-with-resources-Statement" class="headerlink" title="The try-with-resources Statement"></a>The try-with-resources Statement</h3><p>“try”-with-resources语句是声明一个或多个资源的“try”语句。<em>资源</em>是程序完成后必须关闭的对象。“try”-with-resources语句确保每个资源都在语句末尾关闭。 实现<code>java.lang.AutoCloseable</code>的任何对象，包括实现<code>java.io.AutoCloseable</code>，可用作资源。</p>
+<p>以下示例从文件中读取第一行。它使用“FileReader”和“BufferedReader”的实例从文件中读取数据。<code>FileReader</code>和<code>BufferedReader</code>是程序完成后必须关闭的资源：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">static</span> String <span class="title function_">readFirstLineFromFile</span><span class="params">(String path)</span> <span class="keyword">throws</span> IOException &#123;</span><br><span class="line">    <span class="keyword">try</span> (<span class="type">FileReader</span> <span class="variable">fr</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">FileReader</span>(path);</span><br><span class="line">         <span class="type">BufferedReader</span> <span class="variable">br</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">BufferedReader</span>(fr)) &#123;</span><br><span class="line">        <span class="keyword">return</span> br.readLine();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;	</span><br></pre></td></tr></table></figure>
+
+<p>在此示例中，“try”-with-resources语句中声明的资源是“FileReader”和“BufferedReader”。这些资源的声明语句出现在“try”关键字后面的括号内。Java SE 7和更高版本中的类“FileReader”和“BufferedReader”实现了接口“Java.lang.AutoCloseable”。由于“FileReader”和“BufferedReader”实例是在“try”with resource语句中声明的，因此无论“try语句是正常完成还是突然完成（由于方法“BufferedReader.readLine”引发了“IOException”），它们都将被关闭。</p>
+<p>在JavaSE7之前，您可以使用“finally”块来确保关闭资源，而不管“try”语句是正常完成还是突然完成。以下示例使用“finally”块而不是“try”-with-resources语句：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">static</span> String <span class="title function_">readFirstLineFromFileWithFinallyBlock</span><span class="params">(String path)</span> <span class="keyword">throws</span> IOException &#123;</span><br><span class="line">   </span><br><span class="line">    <span class="type">FileReader</span> <span class="variable">fr</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">FileReader</span>(path);</span><br><span class="line">    <span class="type">BufferedReader</span> <span class="variable">br</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">BufferedReader</span>(fr);</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> br.readLine();</span><br><span class="line">    &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">        br.close();</span><br><span class="line">        fr.close();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>但是，此示例可能存在资源泄漏。程序在使用完资源后，除了依靠垃圾收集器（GC）回收资源的内存之外，还需要做更多的工作。程序还必须将资源释放回操作系统，通常通过调用资源的“close”方法。但是，如果程序在GC回收资源之前未能做到这一点，那么释放资源所需的信息就会丢失。运行系统仍认为正在使用的资源已经泄漏。</p>
+<p>在此示例中，如果“readLine”方法引发异常，则语句“br”。“finally”块中的close（）”引发异常，则“FileReader”已泄漏。因此，使用“try”-with-resources语句而不是“finally”块来关闭程序的资源。</p>
+<p>如果方法“readLine”和“close”都抛出异常，则方法“readFirstLineFromFileWithFinallyBlock”抛出从“finally”块抛出的异常；抑制从“try”块抛出的异常。相反，在示例“readFirstLineFromFile”中，如果同时从“try”块和“try-with resources”语句抛出异常，则方法“readFirst LineFromFile”将抛出从“try”块抛出的异常；从“try”-with-resources块抛出的异常被抑制。在Java SE 7及更高版本中，您可以检索抑制的异常；请参见<a target="_blank" rel="noopener" href="https://docs.oracle.com/javase/tutorial/essential/exceptions/tryResourceClose.html#suppressed-%E4%BE%8B%E5%A4%96">抑制的异常</a>一节以获取更多信息。</p>
+<p>以下示例检索zip文件“zipFileName”中打包的文件的名称，并创建包含这些文件名称的文本文件：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">writeToFileZipFileContents</span><span class="params">(String zipFileName,</span></span><br><span class="line"><span class="params">                                           String outputFileName)</span></span><br><span class="line">                                           <span class="keyword">throws</span> java.io.IOException &#123;</span><br><span class="line"></span><br><span class="line">    java.nio.charset.<span class="type">Charset</span> <span class="variable">charset</span> <span class="operator">=</span></span><br><span class="line">         java.nio.charset.StandardCharsets.US_ASCII;</span><br><span class="line">    java.nio.file.<span class="type">Path</span> <span class="variable">outputFilePath</span> <span class="operator">=</span></span><br><span class="line">         java.nio.file.Paths.get(outputFileName);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Open zip file and create output file with </span></span><br><span class="line">    <span class="comment">// try-with-resources statement</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">try</span> (</span><br><span class="line">        java.util.zip.<span class="type">ZipFile</span> <span class="variable">zf</span> <span class="operator">=</span></span><br><span class="line">             <span class="keyword">new</span> <span class="title class_">java</span>.util.zip.ZipFile(zipFileName);</span><br><span class="line">        java.io.<span class="type">BufferedWriter</span> <span class="variable">writer</span> <span class="operator">=</span> </span><br><span class="line">            java.nio.file.Files.newBufferedWriter(outputFilePath, charset)</span><br><span class="line">    ) &#123;</span><br><span class="line">        <span class="comment">// Enumerate each entry</span></span><br><span class="line">        <span class="keyword">for</span> (java.util.<span class="type">Enumeration</span> <span class="variable">entries</span> <span class="operator">=</span></span><br><span class="line">                                zf.entries(); entries.hasMoreElements();) &#123;</span><br><span class="line">            <span class="comment">// Get the entry name and write it to the output file</span></span><br><span class="line">            <span class="type">String</span> <span class="variable">newLine</span> <span class="operator">=</span> System.getProperty(<span class="string">&quot;line.separator&quot;</span>);</span><br><span class="line">            <span class="type">String</span> <span class="variable">zipEntryName</span> <span class="operator">=</span></span><br><span class="line">                 ((java.util.zip.ZipEntry)entries.nextElement()).getName() +</span><br><span class="line">                 newLine;</span><br><span class="line">            writer.write(zipEntryName, <span class="number">0</span>, zipEntryName.length());</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>在此示例中，“try”-with-resources语句包含两个用分号分隔的声明：“ZipFile”和“BufferedWriter”。当直接跟随它的代码块终止时，无论是正常终止还是由于异常终止，“BufferedWriter”和“ZipFile”对象的“close”方法都会按此顺序自动调用。请注意，资源的“close”方法的调用顺序与其创建顺序相反。</p>
+<p>以下示例使用“try”-with-resources语句自动关闭“java.sql”。语句&#96;object:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">viewTable</span><span class="params">(Connection con)</span> <span class="keyword">throws</span> SQLException &#123;</span><br><span class="line"></span><br><span class="line">    <span class="type">String</span> <span class="variable">query</span> <span class="operator">=</span> <span class="string">&quot;select COF_NAME, SUP_ID, PRICE, SALES, TOTAL from COFFEES&quot;</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">try</span> (<span class="type">Statement</span> <span class="variable">stmt</span> <span class="operator">=</span> con.createStatement()) &#123;</span><br><span class="line">        <span class="type">ResultSet</span> <span class="variable">rs</span> <span class="operator">=</span> stmt.executeQuery(query);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">while</span> (rs.next()) &#123;</span><br><span class="line">            <span class="type">String</span> <span class="variable">coffeeName</span> <span class="operator">=</span> rs.getString(<span class="string">&quot;COF_NAME&quot;</span>);</span><br><span class="line">            <span class="type">int</span> <span class="variable">supplierID</span> <span class="operator">=</span> rs.getInt(<span class="string">&quot;SUP_ID&quot;</span>);</span><br><span class="line">            <span class="type">float</span> <span class="variable">price</span> <span class="operator">=</span> rs.getFloat(<span class="string">&quot;PRICE&quot;</span>);</span><br><span class="line">            <span class="type">int</span> <span class="variable">sales</span> <span class="operator">=</span> rs.getInt(<span class="string">&quot;SALES&quot;</span>);</span><br><span class="line">            <span class="type">int</span> <span class="variable">total</span> <span class="operator">=</span> rs.getInt(<span class="string">&quot;TOTAL&quot;</span>);</span><br><span class="line"></span><br><span class="line">            System.out.println(coffeeName + <span class="string">&quot;, &quot;</span> + supplierID + <span class="string">&quot;, &quot;</span> + </span><br><span class="line">                               price + <span class="string">&quot;, &quot;</span> + sales + <span class="string">&quot;, &quot;</span> + total);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; <span class="keyword">catch</span> (SQLException e) &#123;</span><br><span class="line">        JDBCTutorialUtilities.printSQLException(e);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>资源&#96;java.sql。本例中使用的语句是JDBC4.1和更高版本API的一部分。</p>
+<p><strong>注意</strong>：“try”-with-resources语句可以有“catch”和“finally”块，就像普通的“try”语句一样。在“try”-with-resources语句中，任何“catch”或“finally”块都在声明的资源关闭后运行。</p>
+<h4 id="抑制的异常"><a href="#抑制的异常" class="headerlink" title="抑制的异常"></a>抑制的异常</h4><p>可以从与“try”-with-resources语句关联的代码块中抛出异常。在示例“writeToFileZipFileContents”中，当试图关闭“ZipFile”和“BufferedWriter”对象时，可以从“try”块引发一个异常，而“try-with resources”语句最多可以引发两个异常。如果从“try”块中抛出异常，并且从“try-with-resources”语句中抛出一个或多个异常，那么将抑制从“try&#x2F;with-resources”语句中引发的异常，并且该块引发的异常是由“writeToFileZipFileContents”方法引发的异常。您可以通过调用“Throwable”来检索这些被抑制的异常。“try”块引发的异常中的getSuppressed”方法。</p>
+<h4 id="实现AutoCloseable或Closeable接口的类"><a href="#实现AutoCloseable或Closeable接口的类" class="headerlink" title="实现AutoCloseable或Closeable接口的类"></a>实现AutoCloseable或Closeable接口的类</h4><p>参见<a target="_blank" rel="noopener" href="https://docs.oracle.com/javase/8/docs/api/java/lang/AutoCloseable.html"><code>AutoCloseable</code></a>的Javadoc和<a target="_blank" rel="noopener" href="https://docs.oracle.com/javase/8/docs/api/java/io/Closeable.html"><code>Closeable</code></a>实现这些接口的类列表的接口。“可关闭”接口扩展了“自动关闭”接口。“Closeable”接口的“close”方法抛出类型为“IOException”的异常，而“AutoCloseable”界面的“close”方法抛出“Exception”类型的异常。因此，“AutoCloseable”接口的子类可以覆盖“close”方法的这种行为，以引发特殊异常，例如“IOException”，或者根本没有异常。</p>
+<h3 id="把一切放在一起"><a href="#把一切放在一起" class="headerlink" title="把一切放在一起"></a>把一切放在一起</h3><p>前几节描述了如何为ListOfNumbers类中的writeList方法构造try、catch和finally代码块。现在，让我们浏览代码并调查可能发生的情况。</p>
+<p>当所有组件放在一起时，writeList方法如下所示。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">writeList</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="type">PrintWriter</span> <span class="variable">out</span> <span class="operator">=</span> <span class="literal">null</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;Entering&quot;</span> + <span class="string">&quot; try statement&quot;</span>);</span><br><span class="line"></span><br><span class="line">        out = <span class="keyword">new</span> <span class="title class_">PrintWriter</span>(<span class="keyword">new</span> <span class="title class_">FileWriter</span>(<span class="string">&quot;OutFile.txt&quot;</span>));</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; SIZE; i++) &#123;</span><br><span class="line">            out.println(<span class="string">&quot;Value at: &quot;</span> + i + <span class="string">&quot; = &quot;</span> + list.get(i));</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; <span class="keyword">catch</span> (IndexOutOfBoundsException e) &#123;</span><br><span class="line">        System.err.println(<span class="string">&quot;Caught IndexOutOfBoundsException: &quot;</span></span><br><span class="line">                           +  e.getMessage());</span><br><span class="line">                                 </span><br><span class="line">    &#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">        System.err.println(<span class="string">&quot;Caught IOException: &quot;</span> +  e.getMessage());</span><br><span class="line">                                 </span><br><span class="line">    &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> (out != <span class="literal">null</span>) &#123;</span><br><span class="line">            System.out.println(<span class="string">&quot;Closing PrintWriter&quot;</span>);</span><br><span class="line">            out.close();</span><br><span class="line">        &#125; </span><br><span class="line">        <span class="keyword">else</span> &#123;</span><br><span class="line">            System.out.println(<span class="string">&quot;PrintWriter not open&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>如前所述，该方法的try块有三种不同的退出可能性；这里有两个。</p>
+<ol>
+<li>“try”语句中的代码失败并引发异常。这可能是“new FileWriter”语句导致的“IOException”，也可能是“for”循环中索引值错误导致的“IndexOutOfBoundsException”。</li>
+<li>一切都成功，“try”语句正常退出。</li>
+</ol>
+<p>让我们看看在这两种退出可能性期间，“writeList”方法中发生了什么。</p>
+<h4 id="设想-1-发生异常"><a href="#设想-1-发生异常" class="headerlink" title="设想 1: 发生异常"></a>设想 1: 发生异常</h4><p>创建“FileWriter”的语句可能因多种原因而失败。例如，如果程序无法创建或写入指定的文件，则“FileWriter”的构造函数将抛出“IOException”。</p>
+<p>当“FileWriter”抛出“IOException”时，运行时系统立即停止执行“try”块；正在执行的方法调用未完成。然后，运行时系统开始在方法调用堆栈的顶部搜索适当的异常处理程序。在本例中，当发生“IOException”时，“FileWriter”构造函数位于调用堆栈的顶部。但是，“FileWriter”构造函数没有适当的异常处理程序，因此运行时系统会检查方法调用堆栈中的下一个方法“writeList”方法。“writeList”方法有两个异常处理程序：一个用于“IOException”，另一个为“IndexOutOfBoundsException”。</p>
+<p>运行时系统按照“try”语句之后出现的顺序检查“writeList”的处理程序。第一个异常处理程序的参数是“IndexOutOfBoundsException”。这与引发的异常类型不匹配，因此运行时系统检查下一个异常处理程序-“IOException”。这与引发的异常类型相匹配，因此运行时系统结束对适当异常处理程序的搜索。现在运行时已经找到了合适的处理程序，“catch”块中的代码将被执行。</p>
+<p>异常处理程序执行后，运行时系统将控制传递给“finally”块。“finally”块中的代码将执行，而不管上面捕获到什么异常。在这种情况下，“FileWriter”从未打开，不需要关闭。在“finally”块完成执行后，程序继续执行“finally”块后的第一条语句。</p>
+<p>这是抛出“IOException”时出现的“ListOfNumbers”程序的完整输出。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Entering try statement</span><br><span class="line">Caught IOException: OutFile.txt</span><br><span class="line">PrintWriter not open </span><br></pre></td></tr></table></figure>
+
+<p>以下列表中的粗体代码显示了在此场景中执行的语句：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">writeList</span><span class="params">()</span> &#123;</span><br><span class="line">   <span class="type">PrintWriter</span> <span class="variable">out</span> <span class="operator">=</span> <span class="literal">null</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;Entering try statement&quot;</span>);</span><br><span class="line">        out = <span class="keyword">new</span> <span class="title class_">PrintWriter</span>(<span class="keyword">new</span> <span class="title class_">FileWriter</span>(<span class="string">&quot;OutFile.txt&quot;</span>));</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; SIZE; i++)</span><br><span class="line">            out.println(<span class="string">&quot;Value at: &quot;</span> + i + <span class="string">&quot; = &quot;</span> + list.get(i));</span><br><span class="line">                               </span><br><span class="line">    &#125; <span class="keyword">catch</span> (IndexOutOfBoundsException e) &#123;</span><br><span class="line">        System.err.println(<span class="string">&quot;Caught IndexOutOfBoundsException: &quot;</span></span><br><span class="line">                           + e.getMessage());</span><br><span class="line">                                 </span><br><span class="line">    &#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">        System.err.println(<span class="string">&quot;Caught IOException: &quot;</span> + e.getMessage());</span><br><span class="line">    &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> (out != <span class="literal">null</span>) &#123;</span><br><span class="line">            System.out.println(<span class="string">&quot;Closing PrintWriter&quot;</span>);</span><br><span class="line">            out.close();</span><br><span class="line">        &#125; </span><br><span class="line">        <span class="keyword">else</span> &#123;</span><br><span class="line">            System.out.println(<span class="string">&quot;PrintWriter not open&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="设想-2-try块正常退出"><a href="#设想-2-try块正常退出" class="headerlink" title="设想 2: try块正常退出"></a>设想 2: try块正常退出</h4><p>在这种情况下，“try”块范围内的所有语句都成功执行，没有抛出异常。执行从“try”块的末尾落下，运行时系统将控制权传递给“finally”块。由于一切都成功，当控件到达“finally”块时，“PrintWriter”将打开，该块将关闭“PrintWriter”。同样，在“finally”块完成执行之后，程序继续执行“finally”块之后的第一条语句。</p>
+<p>这是“ListOfNumbers”程序在未引发异常时的输出。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Entering try statement</span><br><span class="line">Closing PrintWriter</span><br></pre></td></tr></table></figure>
+
+<p>下面示例中的粗体代码显示了在此场景中执行的语句。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">writeList</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="type">PrintWriter</span> <span class="variable">out</span> <span class="operator">=</span> <span class="literal">null</span>;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;Entering try statement&quot;</span>);</span><br><span class="line">        out = <span class="keyword">new</span> <span class="title class_">PrintWriter</span>(<span class="keyword">new</span> <span class="title class_">FileWriter</span>(<span class="string">&quot;OutFile.txt&quot;</span>));</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; SIZE; i++)</span><br><span class="line">            out.println(<span class="string">&quot;Value at: &quot;</span> + i + <span class="string">&quot; = &quot;</span> + list.get(i));</span><br><span class="line">                  </span><br><span class="line">    &#125; <span class="keyword">catch</span> (IndexOutOfBoundsException e) &#123;</span><br><span class="line">        System.err.println(<span class="string">&quot;Caught IndexOutOfBoundsException: &quot;</span></span><br><span class="line">                           + e.getMessage());</span><br><span class="line"></span><br><span class="line">    &#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">        System.err.println(<span class="string">&quot;Caught IOException: &quot;</span> + e.getMessage());</span><br><span class="line">                                 </span><br><span class="line">    &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> (out != <span class="literal">null</span>) &#123;</span><br><span class="line">            System.out.println(<span class="string">&quot;Closing PrintWriter&quot;</span>);</span><br><span class="line">            out.close();</span><br><span class="line">        &#125; </span><br><span class="line">        <span class="keyword">else</span> &#123;</span><br><span class="line">            System.out.println(<span class="string">&quot;PrintWriter not open&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="指定方法引发的异常"><a href="#指定方法引发的异常" class="headerlink" title="指定方法引发的异常"></a>指定方法引发的异常</h2><p>上一节介绍了如何为“ListOfNumbers”类中的“writeList”方法编写异常处理程序。有时，代码捕捉可能在其中发生的异常是合适的。然而，在其他情况下，最好让调用堆栈更上层的方法处理异常。例如，如果您将“ListOfNumbers”类作为一个类包的一部分提供，那么您可能无法预测包中所有用户的需求。在这种情况下，最好不要捕捉到异常，并允许调用堆栈更上层的方法来处理它。</p>
+<p>如果“writeList”方法没有捕获可能在其中发生的已检查异常，则“writeList”方法必须指定它可以引发这些异常。让我们修改原始的“writeList”方法，以指定它可以抛出的异常，而不是捕获它们。为了提醒您，这里是无法编译的“writeList”方法的原始版本。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">writeList</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="type">PrintWriter</span> <span class="variable">out</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">PrintWriter</span>(<span class="keyword">new</span> <span class="title class_">FileWriter</span>(<span class="string">&quot;OutFile.txt&quot;</span>));</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; SIZE; i++) &#123;</span><br><span class="line">        out.println(<span class="string">&quot;Value at: &quot;</span> + i + <span class="string">&quot; = &quot;</span> + list.get(i));</span><br><span class="line">    &#125;</span><br><span class="line">    out.close();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>若要指定“writeList”可以引发两个异常，请在“writeList”方法的方法声明中添加“throws”子句。“throws”子句包含“throws”关键字，后跟该方法引发的所有异常的逗号分隔列表。该子句位于方法名称和参数列表之后，位于定义方法范围的大括号之前；这是一个例子。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">writeList</span><span class="params">()</span> <span class="keyword">throws</span> IOException, IndexOutOfBoundsException &#123;</span><br></pre></td></tr></table></figure>
+
+<p>请记住，“IndexOutOfBoundsException”是未选中的异常；在“throws”子句中包含它不是强制性的。你可以写以下内容。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">writeList</span><span class="params">()</span> <span class="keyword">throws</span> IOException &#123;</span><br></pre></td></tr></table></figure>
+
+<h2 id="如何抛出异常"><a href="#如何抛出异常" class="headerlink" title="如何抛出异常"></a>如何抛出异常</h2><p>在捕获异常之前，某些代码必须在某处抛出异常。任何代码都可能引发异常：您的代码、来自其他人编写的包（如Java平台附带的包或Java运行时环境）的代码。无论抛出异常的是什么，它总是与“throw”语句一起抛出。</p>
+<p>正如您可能注意到的，Java平台提供了许多异常类。所有类都是<a target="_blank" rel="noopener" href="https://docs.oracle.com/javase/8/docs/api/java/lang/Throwable.html"><code>Throwable</code></a>的后代类，所有这些都允许程序区分在程序执行期间可能发生的各种类型的异常。</p>
+<p>您还可以创建自己的异常类来表示您编写的类中可能出现的问题。事实上，如果您是包开发人员，您可能需要创建自己的一组异常类，以允许用户区分包中可能发生的错误和Java平台或其他包中发生的错误。</p>
+<p>您还可以创建<em>链式</em>异常。有关详细信息，请参阅<a target="_blank" rel="noopener" href="https://docs.oracle.com/javase/tutorial/essential/exceptions/chained.html">Chained Exceptions</a>第节。</p>
+<h3 id="投掷声明"><a href="#投掷声明" class="headerlink" title="投掷声明"></a>投掷声明</h3><p>所有方法都使用“throw”语句引发异常。“throw”语句需要一个参数：一个可丢弃的对象。可抛出对象是“可抛出”类的任何子类的实例。下面是一个“throw”语句的示例。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">throw someThrowableObject;</span><br></pre></td></tr></table></figure>
+
+<p>让我们看看上下文中的“throw”语句。以下“pop”方法取自实现公共堆栈对象的类。该方法从堆栈中移除顶部元素并返回对象。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> Object <span class="title function_">pop</span><span class="params">()</span> &#123;</span><br><span class="line">    Object obj;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (size == <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">EmptyStackException</span>();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    obj = objectAt(size - <span class="number">1</span>);</span><br><span class="line">    setObjectAt(size - <span class="number">1</span>, <span class="literal">null</span>);</span><br><span class="line">    size--;</span><br><span class="line">    <span class="keyword">return</span> obj;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>“pop”方法检查堆栈中是否有任何元素。如果堆栈为空（其大小等于“0”），“pop”将实例化一个新的“EmptyStackException”对象（“java.util”的成员）并将其抛出。<a target="_blank" rel="noopener" href="https://docs.oracle.com/javase/tutorial/essential/exceptions/creating.html">创建异常类</a>本章的一节介绍如何创建自己的异常类。现在，您需要记住的是，只能抛出从“java.lang.Throwable”类继承的对象。</p>
+<p>请注意，“pop”方法的声明不包含“throws”子句<code>EmptyStackException</code>不是已检查的异常，因此不需要“pop”来声明可能发生此异常。</p>
+<h3 id="Throwable-类及其子类"><a href="#Throwable-类及其子类" class="headerlink" title="Throwable 类及其子类"></a>Throwable 类及其子类</h3><p>从“Throwable”类继承的对象包括直接后代（从“Throuble”类直接继承的对象）和间接后代（从‘Throwable’类的子代或子代继承的对象。下图说明了“Throwable”类及其最重要的子类的类层次结构。如您所见，“Throwable”有两个直接后代：<a target="_blank" rel="noopener" href="https://docs.oracle.com/javase/8/docs/api/java/lang/Error.html"><code>Error</code></a>和<a target="_blank" rel="noopener" href="https://docs.oracle.com/javase/8/docs/api/java/lang/Exception.html"><code>Exception</code></a>.</p>
+<p><img src="/2020/07/Oracle-Java%E5%BC%82%E5%B8%B8/exceptions-throwable.gif" alt="The Throwable class and its most significant subclasses."></p>
+<p>The Throwable class.</p>
+<h3 id="Error-Class"><a href="#Error-Class" class="headerlink" title="Error Class"></a>Error Class</h3><p>当Java虚拟机中发生动态链接故障或其他硬故障时，虚拟机将抛出“Error”。简单程序通常不会捕获或抛出“Error”。</p>
+<h3 id="Exception-Class"><a href="#Exception-Class" class="headerlink" title="Exception Class"></a>Exception Class</h3><p>大多数程序抛出和捕获从“Exception”类派生的对象。“异常”表示出现了问题，但不是严重的系统问题。您编写的大多数程序都会抛出和捕获“异常”，而不是“错误”。</p>
+<p>Java平台定义了“Exception”类的许多后代。这些子体指示可能发生的各种类型的异常。例如，“IllegalAccessException”表示找不到特定的方法，而“NegativeArray SizeException”表示程序试图创建大小为负的数组。</p>
+<p>一个<code>Exception</code>子类<code>RuntimeException</code>是为指示错误使用API的异常保留的。运行时异常的一个示例是“NullPointerException”，当方法试图通过“null”引用访问对象的成员时，会发生这种异常。部分<a target="_blank" rel="noopener" href="https://docs.oracle.com/javase/tutorial/essential/exceptions/runtime.html">未选中的例外-争议</a>讨论了为什么大多数应用程序不应该抛出运行时异常或子类“RuntimeException”。</p>
+<h3 id="链式异常"><a href="#链式异常" class="headerlink" title="链式异常"></a>链式异常</h3><p>应用程序通常通过抛出另一个异常来响应异常。实际上，第一个异常<em>导致</em>第二个异常。了解一个异常何时导致另一个异常非常有用<em>Chained Exceptions</em>可帮助程序员执行此操作。</p>
+<p>以下是“Throwable”中支持链式异常的方法和构造函数。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Throwable <span class="title function_">getCause</span><span class="params">()</span></span><br><span class="line">Throwable <span class="title function_">initCause</span><span class="params">(Throwable)</span></span><br><span class="line">Throwable(String, Throwable)</span><br><span class="line">Throwable(Throwable)</span><br></pre></td></tr></table></figure>
+
+<p>“initCause”的“Throwable”参数和“Throwable”构造函数是导致当前异常的异常<code>getCause </code>返回导致当前异常的异常，<code>initCause </code>设置当前异常的原因。</p>
+<p>以下示例显示如何使用链式异常。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">try</span> &#123;</span><br><span class="line"></span><br><span class="line">&#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">    <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">SampleException</span>(<span class="string">&quot;Other IOException&quot;</span>, e);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>在本例中，当捕获到“IOException”时，将创建一个新的“SampleException”异常，并附加原始原因，然后将异常链抛出到下一个更高级别的异常处理程序。</p>
+<h4 id="访问堆栈跟踪信息"><a href="#访问堆栈跟踪信息" class="headerlink" title="访问堆栈跟踪信息"></a>访问堆栈跟踪信息</h4><p>现在让我们假设高级异常处理程序希望以自己的格式转储堆栈跟踪。</p>
+<hr>
+<p><strong>释义:</strong> <em>堆栈跟踪</em>提供有关当前线程执行历史的信息，并列出在异常发生时调用的类和方法的名称。堆栈跟踪是一个有用的调试工具，当抛出异常时，通常可以利用它。</p>
+<hr>
+<p>下面的代码显示了如何对异常对象调用“getStackTrace”方法。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">catch</span> (Exception cause) &#123;</span><br><span class="line">    StackTraceElement elements[] = cause.getStackTrace();</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>, n = elements.length; i &lt; n; i++) &#123;       </span><br><span class="line">        System.err.println(elements[i].getFileName()</span><br><span class="line">            + <span class="string">&quot;:&quot;</span> + elements[i].getLineNumber() </span><br><span class="line">            + <span class="string">&quot;&gt;&gt; &quot;</span></span><br><span class="line">            + elements[i].getMethodName() + <span class="string">&quot;()&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="Logging-API"><a href="#Logging-API" class="headerlink" title="Logging API"></a>Logging API</h4><p>下一个代码段记录“catch”块中发生异常的位置。但是，不要手动解析堆栈跟踪并将输出发送到<code>System.err()</code>，它使用<a target="_blank" rel="noopener" href="https://docs.oracle.com/javase/8/docs/api/java/util/logging/package-summary.html"><code>java.util.logging</code></a>中的日志记录工具将输出发送到文件包装。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">try</span> &#123;</span><br><span class="line">    <span class="type">Handler</span> <span class="variable">handler</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">FileHandler</span>(<span class="string">&quot;OutFile.log&quot;</span>);</span><br><span class="line">    Logger.getLogger(<span class="string">&quot;&quot;</span>).addHandler(handler);</span><br><span class="line">    </span><br><span class="line">&#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">    <span class="type">Logger</span> <span class="variable">logger</span> <span class="operator">=</span> Logger.getLogger(<span class="string">&quot;package.name&quot;</span>); </span><br><span class="line">    StackTraceElement elements[] = e.getStackTrace();</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>, n = elements.length; i &lt; n; i++) &#123;</span><br><span class="line">        logger.log(Level.WARNING, elements[i].getMethodName());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="Creating-Exception-Classes"><a href="#Creating-Exception-Classes" class="headerlink" title="Creating Exception Classes"></a>Creating Exception Classes</h3><p>在选择要抛出的异常类型时，您可以使用其他人编写的异常类（Java平台提供了许多可以使用的异常类），也可以编写自己的异常类。如果您对以下任何一个问题回答“是”，您应该编写自己的异常类；否则，你可能会用别人的。</p>
+<ul>
+<li>您是否需要Java平台中没有表示的异常类型？</li>
+<li>如果用户能够将您的异常与其他供应商编写的类引发的异常区分开来，这对他们有帮助吗？</li>
+<li>您的代码是否引发多个相关异常？</li>
+<li>如果您使用其他人的异常，用户是否可以访问这些异常？一个类似的问题是，您的软件包是否应该是独立和独立的？</li>
+</ul>
+<h4 id="An-Example"><a href="#An-Example" class="headerlink" title="An Example"></a>An Example</h4><p>假设您正在编写一个链表类。该类支持以下方法：</p>
+<ul>
+<li><strong><code>objectAt(int n)</code></strong> — 返回列表中第n个位置的对象。如果参数小于0或大于列表中当前对象的数量，则引发异常。</li>
+<li><strong><code>firstObject()</code></strong> — 返回列表中的第一个对象。如果列表中不包含对象，则引发异常。</li>
+<li><strong><code>indexOf(Object o)</code></strong> — 在列表中搜索指定的“对象”并返回其在列表中的位置。如果传入方法的对象不在列表中，则引发异常。</li>
+</ul>
+<p>链表类可以抛出多个异常，如果能够用一个异常处理程序捕获链表抛出的所有异常，将非常方便。此外，如果您计划在一个包中分发链接列表，所有相关的代码都应该打包在一起。因此，链接列表应该提供自己的一组异常类。</p>
+<p>下图说明了链接列表引发的异常的一个可能的类层次结构。</p>
+<p><img src="/2020/07/Oracle-Java%E5%BC%82%E5%B8%B8/exceptions-hierarchy.gif" alt="A possible class hierarchy for the exceptions thrown by a linked list."></p>
+<p>异常类层次结构示例。</p>
+<h4 id="选择超级类"><a href="#选择超级类" class="headerlink" title="选择超级类"></a>选择超级类</h4><p>任何“Exception”子类都可以用作“LinkedListException”的父类。然而，快速阅读这些子类会发现它们是不合适的，因为它们要么过于专业化，要么与“LinkedListException”完全无关。因此，“LinkedListException”的父类应为“Exception”。</p>
+<p>您编写的大多数小程序和应用程序都会抛出“异常”对象&#96;错误通常用于系统中严重的硬错误，例如阻止JVM运行的错误。</p>
+<hr>
+<p><strong>Note:</strong> For readable code, it’s good practice to append the string <code>Exception</code> to the names of all classes that inherit (directly or indirectly) from the <code>Exception</code> class.</p>
+<hr>
+
+      
+    </div>
+    <div class="article-footer">
+      <blockquote class="mt-2x">
+  <ul class="post-copyright list-unstyled">
+    
+    <li class="post-copyright-link hidden-xs">
+      <strong>本文链接：</strong>
+      <a href="https://guoshunfa.com/2020/07/Oracle-Java%E5%BC%82%E5%B8%B8/" title="Oracle Java异常" target="_blank" rel="external">https://guoshunfa.com/2020/07/Oracle-Java异常/</a>
+    </li>
+    
+    <li class="post-copyright-license">
+      <strong>版权声明： </strong> 本博客所有文章除特别声明外，均采用 <a href="http://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank" rel="external">CC BY 4.0 CN协议</a> 许可协议。转载请注明出处！
+    </li>
+  </ul>
+</blockquote>
+
+
+<div class="panel panel-default panel-badger">
+  <div class="panel-body">
+    <figure class="media">
+      <div class="media-left">
+        <a href="https://github.com/guoshunfa" target="_blank" class="img-burn thumb-sm visible-lg">
+          <img src="/images/avatar.jpg" class="img-rounded w-full" alt="">
+        </a>
+      </div>
+      <div class="media-body">
+        <h3 class="media-heading"><a href="https://github.com/guoshunfa" target="_blank"><span class="text-dark">郭顺发</span><small class="ml-1x">创业中......</small></a></h3>
+        <div>承接：小程序开发、APP开发、网站开发、爬虫开发</div>
+      </div>
+    </figure>
+  </div>
+</div>
+
+
+    </div>
+  </article>
+  
+    
+  <section id="comments">
+  	
+           
+    
+  </section>
+
+
+  
+</div>
+
+  <nav class="bar bar-footer clearfix" data-stick-bottom>
+  <div class="bar-inner">
+  
+  <ul class="pager pull-left">
+    
+    <li class="prev">
+      <a href="/2020/07/Oracle-Java%E5%AE%98%E6%96%B9%E4%BB%8B%E7%BB%8D/" title="Oracle Java官方介绍"><i class="icon icon-angle-left" aria-hidden="true"></i><span>&nbsp;&nbsp;上一篇</span></a>
+    </li>
+    
+    
+    <li class="next">
+      <a href="/2020/07/Oracle-Java%E6%B3%A8%E8%A7%A3/" title="Oracle Java注解"><span>下一篇&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
+    </li>
+    
+    
+  </ul>
+  
+  
+  
+  <div class="bar-right">
+    
+    <div class="share-component" data-sites="weibo,qq,wechat,facebook,twitter" data-mobile-sites="weibo,qq,qzone"></div>
+    
+  </div>
+  </div>
+</nav>
+  
+
+
+</main>
+
+  <footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
+	
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/guoshunfa" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="https://gitee.com/guoshunfa" target="_blank" title="Gitee" data-toggle=tooltip data-placement=top><i class="icon icon-gitee"></i></a></li>
+        
+        <li><a href="https://juejin.cn/user/166781500267015" target="_blank" title="Juejin" data-toggle=tooltip data-placement=top><i class="icon icon-juejin"></i></a></li>
+        
+        <li><a href="https://cloud.tencent.com/developer/user/7784141" target="_blank" title="Code" data-toggle=tooltip data-placement=top><i class="icon icon-code"></i></a></li>
+        
+        <li><a href="/atom.xml" target="_blank" title="Rss" data-toggle=tooltip data-placement=top><i class="icon icon-rss"></i></a></li>
+        
+    </ul>
+
+    <div class="copyright">
+    	
+        &copy; 2024 guoshunfa
+        
+        <!-- <div class="publishby">
+        	Theme by <a href="https://github.com/cofess" target="_blank"> cofess </a>base on <a href="https://github.com/cofess/hexo-theme-pure" target="_blank">pure</a>.
+        </div> -->
+    </div>
+</footer>
+  <script src="//cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
+<script>
+window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
+</script>
+
+<script src="/js/plugin.min.js"></script>
+
+
+<script src="/js/application.js"></script>
+
+
+    <script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(未命名)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+
+<script src="/js/insight.js"></script>
+
+
+
+    <script>
+(function ($) {
+    $('.search-form').on('submit', function (e) {
+        var keyword = $('.search-form-input[name="wd"]').val();
+        window.location = 'https://www.baidu.com/s?wd=site:guoshunfa.com ' + keyword;
+        return false;
+    });
+})(jQuery);
+</script>
+
+
+
+
+   
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+   
+    
+  <!-- <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css"> -->
+  <script src="//cdn.jsdelivr.net/npm/gitalk@1.7.2/dist/gitalk.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/blueimp-md5@2.10.0/js/md5.min.js"></script>
+  <script type="text/javascript">
+  var gitalk = new Gitalk({
+    clientID: '328529f408a5d1041fe1',
+    clientSecret: '43872fab04fe0accb98439ac77ff71ff81f7b9dd',
+    repo: 'guoshunfa-comment',
+    owner: 'guoshunfa',
+    admin: ['guoshunfa'],
+    id: md5(location.pathname),
+    distractionFreeMode: true,
+    language: 'zh-CN',
+    enableHotKey: 'true'
+  })
+  gitalk.render('comments')
+  </script>
+      
+
+
+
+  <script src="//cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.3.5/dist/jquery.fancybox.min.js"></script>
+  <script>
+  //利用 FancyBox 实现点击图片放大
+  $(document).ready(function() {
+    $('article img').not('[hidden]').not('.panel-body img').each(function() {
+      var $image = $(this);
+      var imageCaption = $image.attr('alt');
+      var $imageWrapLink = $image.parent('a');
+      if ($imageWrapLink.length < 1) {
+        var src = this.getAttribute('src');
+        var idx = src.lastIndexOf('?');
+        if (idx != -1) {
+          src = src.substring(0, idx);
+        }
+        $imageWrapLink = $image.wrap('<a href="' + src + '"></a>').parent('a');
+      }
+      $imageWrapLink.attr('data-fancybox', 'images');
+      if (imageCaption) {
+        $imageWrapLink.attr('data-caption', imageCaption);
+      }
+    });
+    $().fancybox({
+      selector: '[data-fancybox="images"]',
+      hash: false,
+      loop: false,
+    });
+  });
+  </script>
+
+
+
+
+
+</body>
+</html>

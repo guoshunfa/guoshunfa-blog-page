@@ -1,0 +1,871 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+  <meta charset="utf-8">
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-transform" />
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="format-detection" content="telephone=no,email=no,adress=no">
+  <!-- Color theme for statusbar -->
+  <meta name="theme-color" content="#000000" />
+  <!-- 强制页面在当前窗口以独立页面显示,防止别人在框架里调用页面 -->
+  <meta http-equiv="window-target" content="_top" />
+  
+  
+  <title>Swift基础 基本运算符 | guoshunfa</title>
+  <meta name="description" content="翻译自：https:&#x2F;&#x2F;docs.swift.org&#x2F;swift-book&#x2F;LanguageGuide&#x2F;BasicOperators.html#ID72 操作符是用来检查、更改或合并值的特殊符号或短语。例如，加法运算符(‘ + ‘)将两个数字相加，如’ let i &#x3D; 1 + 2 ‘，逻辑和运算符(‘ &amp;&amp; ‘)结合两个布尔值，如’ if enteredDoorCode">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Swift基础 基本运算符">
+<meta property="og:url" content="https://guoshunfa.com/2022/07/Swift%E5%9F%BA%E7%A1%80-%E5%9F%BA%E6%9C%AC%E8%BF%90%E7%AE%97%E7%AC%A6/index.html">
+<meta property="og:site_name" content="guoshunfa">
+<meta property="og:description" content="翻译自：https:&#x2F;&#x2F;docs.swift.org&#x2F;swift-book&#x2F;LanguageGuide&#x2F;BasicOperators.html#ID72 操作符是用来检查、更改或合并值的特殊符号或短语。例如，加法运算符(‘ + ‘)将两个数字相加，如’ let i &#x3D; 1 + 2 ‘，逻辑和运算符(‘ &amp;&amp; ‘)结合两个布尔值，如’ if enteredDoorCode">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://guoshunfa.com/2022/07/Swift%E5%9F%BA%E7%A1%80-%E5%9F%BA%E6%9C%AC%E8%BF%90%E7%AE%97%E7%AC%A6/202204042043654.png">
+<meta property="article:published_time" content="2022-07-01T04:01:01.000Z">
+<meta property="article:modified_time" content="2024-01-28T11:41:39.289Z">
+<meta property="article:author" content="guoshunfa">
+<meta property="article:tag" content="Swift">
+<meta property="article:tag" content="基础">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://guoshunfa.com/2022/07/Swift%E5%9F%BA%E7%A1%80-%E5%9F%BA%E6%9C%AC%E8%BF%90%E7%AE%97%E7%AC%A6/202204042043654.png">
+  <!-- Canonical links -->
+  <link rel="canonical" href="https://guoshunfa.com/2022/07/Swift%E5%9F%BA%E7%A1%80-%E5%9F%BA%E6%9C%AC%E8%BF%90%E7%AE%97%E7%AC%A6/index.html">
+  
+    <link rel="alternate" href="/atom.xml" title="guoshunfa" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="favicon.jpg" type="image/x-icon">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  
+  
+    <link href="//cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.3.5/dist/jquery.fancybox.min.css" rel="stylesheet">
+  
+  
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1.7.2/dist/gitalk.min.css">
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body class="main-center" itemscope itemtype="http://schema.org/WebPage">
+  <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+  <div class="slimContent">
+    <div class="navbar-header">
+      
+      
+      <div class="profile-block text-center">
+        <a id="avatar" href="https://github.com/guoshunfa" target="_blank">
+          <img class="img-circle img-rotate" src="/images/avatar.jpg" width="200" height="200">
+        </a>
+        <h2 id="name" class="hidden-xs hidden-sm">郭顺发</h2>
+        <h3 id="title" class="hidden-xs hidden-sm hidden-md">创业中......</h3>
+        <small id="location" class="text-muted hidden-xs hidden-sm"><i class="icon icon-map-marker"></i> 深圳, China</small>
+      </div>
+      
+      <div class="search" id="search-form-wrap">
+
+    <form class="search-form sidebar-form">
+        <div class="input-group">
+            <input type="text" class="search-form-input form-control" placeholder="搜索" />
+            <span class="input-group-btn">
+                <button type="submit" class="search-form-submit btn btn-flat" onclick="return false;"><i class="icon icon-search"></i></button>
+            </span>
+        </div>
+    </form>
+    <div class="ins-search">
+  <div class="ins-search-mask"></div>
+  <div class="ins-search-container">
+    <div class="ins-input-wrapper">
+      <input type="text" class="ins-search-input" placeholder="想要查找什么..." x-webkit-speech />
+      <button type="button" class="close ins-close ins-selectable" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="ins-section-wrapper">
+      <div class="ins-section-container"></div>
+    </div>
+  </div>
+</div>
+
+
+</div>
+      <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <nav id="main-navbar" class="collapse navbar-collapse" itemscope itemtype="http://schema.org/SiteNavigationElement" role="navigation">
+      <ul class="nav navbar-nav main-nav menu-highlight">
+        
+        
+        <li class="menu-item menu-item-首页">
+          <a href="/.">
+            
+            <i class="icon icon-home-fill"></i>
+            
+            <span class="menu-title">首页</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-归档">
+          <a href="/archives">
+            
+            <i class="icon icon-archives-fill"></i>
+            
+            <span class="menu-title">归档</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-分类">
+          <a href="/categories">
+            
+            <i class="icon icon-folder"></i>
+            
+            <span class="menu-title">分类</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-标签">
+          <a href="/tags">
+            
+            <i class="icon icon-tags"></i>
+            
+            <span class="menu-title">标签</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-github仓库">
+          <a href="/repository">
+            
+            <i class="icon icon-project"></i>
+            
+            <span class="menu-title">github仓库</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-工具箱">
+          <a href="/tools">
+            
+            <i class="icon icon-book-fill"></i>
+            
+            <span class="menu-title">工具箱</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-友链">
+          <a href="/links">
+            
+            <i class="icon icon-friendship"></i>
+            
+            <span class="menu-title">友链</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-关于">
+          <a href="/about">
+            
+            <i class="icon icon-cup-fill"></i>
+            
+            <span class="menu-title">关于</span>
+          </a>
+        </li>
+        
+      </ul>
+      
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/guoshunfa" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="https://gitee.com/guoshunfa" target="_blank" title="Gitee" data-toggle=tooltip data-placement=top><i class="icon icon-gitee"></i></a></li>
+        
+        <li><a href="https://juejin.cn/user/166781500267015" target="_blank" title="Juejin" data-toggle=tooltip data-placement=top><i class="icon icon-juejin"></i></a></li>
+        
+        <li><a href="https://cloud.tencent.com/developer/user/7784141" target="_blank" title="Code" data-toggle=tooltip data-placement=top><i class="icon icon-code"></i></a></li>
+        
+        <li><a href="/atom.xml" target="_blank" title="Rss" data-toggle=tooltip data-placement=top><i class="icon icon-rss"></i></a></li>
+        
+    </ul>
+
+    </nav>
+  </div>
+</header>
+
+  
+    <aside class="sidebar" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    
+      <div class="widget">
+    <h3 class="widget-title">公告</h3>
+    <div class="widget-body">
+        <div id="board">
+            <div class="content">
+                <p>欢迎来到www.guoshunfa.com。</p><hr/><a target="_blank" rel="noopener" href="https://www.oracle.com/cn/java/">前往Java官网<a/><br/><a target="_blank" rel="noopener" href="https://spring.io/">前往Spring官网<a/>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget-body">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/HTML-CSS-JavaScript/">HTML/CSS/JavaScript</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Java/">Java</a><span class="category-list-count">17</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Python/">Python</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/SpringBoot/">SpringBoot</a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Swift/">Swift</a><span class="category-list-count">29</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%88%9B%E4%B8%9A/">创业</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%A4%8D%E7%9B%98/">复盘</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%A8%B1%E4%B9%90/">娱乐</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%8A%80%E6%9C%AF/">技术</a><span class="category-list-count">27</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%8A%80%E6%9C%AF/%E6%90%AD%E5%BB%BA%E5%8D%95%E4%BD%93SpringBoot%E9%A1%B9%E7%9B%AE/">搭建单体SpringBoot项目</a><span class="category-list-count">21</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%90%AD%E5%BB%BA%E5%8D%95%E4%BD%93SpringBoot%E9%A1%B9%E7%9B%AE/">搭建单体SpringBoot项目</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/">数据库</a><span class="category-list-count">17</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%9C%8D%E5%8A%A1/">服务</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%9C%8D%E5%8A%A1-%E7%BB%84%E4%BB%B6/">服务&组件</a><span class="category-list-count">27</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%AE%A1%E7%90%86/">服务器管理</a><span class="category-list-count">21</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E7%AE%97%E6%B3%95/">算法</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E8%BD%AF%E4%BB%B6%E4%BD%BF%E7%94%A8/">软件使用</a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E8%BD%AF%E4%BB%B6%E6%8A%80%E6%9C%AF%E6%A1%86%E6%9E%B6/">软件技术框架</a><span class="category-list-count">44</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E9%98%85%E8%AF%BB/">阅读</a><span class="category-list-count">2</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget-body">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/AJAX/" rel="tag">AJAX</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Activiti7/" rel="tag">Activiti7</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Arthas/" rel="tag">Arthas</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CSS/" rel="tag">CSS</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Curl/" rel="tag">Curl</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Debug/" rel="tag">Debug</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Docker/" rel="tag">Docker</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Druid/" rel="tag">Druid</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Electron/" rel="tag">Electron</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Expect/" rel="tag">Expect</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/FastJson/" rel="tag">FastJson</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/FreeMarker/" rel="tag">FreeMarker</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Git/" rel="tag">Git</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Gitlab/" rel="tag">Gitlab</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/GitlabRunner/" rel="tag">GitlabRunner</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/HTML-CSS-JavaScript/" rel="tag">HTML&#x2F;CSS&#x2F;JavaScript</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hook/" rel="tag">Hook</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Http/" rel="tag">Http</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hutool/" rel="tag">Hutool</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/IDEA/" rel="tag">IDEA</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JS/" rel="tag">JS</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JVM/" rel="tag">JVM</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Jar/" rel="tag">Jar</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java/" rel="tag">Java</a><span class="tag-list-count">27</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Jdk/" rel="tag">Jdk</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Jenkins/" rel="tag">Jenkins</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Jmeter/" rel="tag">Jmeter</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Json/" rel="tag">Json</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Jsoup/" rel="tag">Jsoup</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Kafka/" rel="tag">Kafka</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Leetcode/" rel="tag">Leetcode</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux/" rel="tag">Linux</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Logback/" rel="tag">Logback</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Mac/" rel="tag">Mac</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Maven/" rel="tag">Maven</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MongoDB/" rel="tag">MongoDB</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MyBatis/" rel="tag">MyBatis</a><span class="tag-list-count">7</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Mybatis/" rel="tag">Mybatis</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MybatisPlus/" rel="tag">MybatisPlus</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Mysql/" rel="tag">Mysql</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Nano/" rel="tag">Nano</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Nexus/" rel="tag">Nexus</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Nginx/" rel="tag">Nginx</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Opengrok/" rel="tag">Opengrok</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Oracle/" rel="tag">Oracle</a><span class="tag-list-count">22</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Profile/" rel="tag">Profile</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/PubSubJS/" rel="tag">PubSubJS</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Python/" rel="tag">Python</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Quartz/" rel="tag">Quartz</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/RESTful/" rel="tag">RESTful</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/React/" rel="tag">React</a><span class="tag-list-count">7</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Redis/" rel="tag">Redis</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SQL/" rel="tag">SQL</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SVN/" rel="tag">SVN</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Scheduled/" rel="tag">Scheduled</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Scrapy/" rel="tag">Scrapy</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Shell/" rel="tag">Shell</a><span class="tag-list-count">9</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Spel%E8%A1%A8%E8%BE%BE%E5%BC%8F/" rel="tag">Spel表达式</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Spring/" rel="tag">Spring</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SpringBoot/" rel="tag">SpringBoot</a><span class="tag-list-count">34</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SpringEvent/" rel="tag">SpringEvent</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SpringMVC/" rel="tag">SpringMVC</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SpringSecurity/" rel="tag">SpringSecurity</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Stream/" rel="tag">Stream</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Swagger/" rel="tag">Swagger</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Swift/" rel="tag">Swift</a><span class="tag-list-count">29</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/TestNG/" rel="tag">TestNG</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Tomcat/" rel="tag">Tomcat</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/UI%E7%BB%84%E4%BB%B6%E5%BA%93/" rel="tag">UI组件库</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Validator/" rel="tag">Validator</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Vue/" rel="tag">Vue</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Vuepress/" rel="tag">Vuepress</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Wordpress/" rel="tag">Wordpress</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/XML/" rel="tag">XML</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/assert/" rel="tag">assert</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/docker/" rel="tag">docker</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/gitlab/" rel="tag">gitlab</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/homebrew/" rel="tag">homebrew</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/iframe/" rel="tag">iframe</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java/" rel="tag">java</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/lambda/" rel="tag">lambda</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/less/" rel="tag">less</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/" rel="tag">linux</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mac/" rel="tag">mac</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mybatis-plus/" rel="tag">mybatis-plus</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mysql/" rel="tag">mysql</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/oracle/" rel="tag">oracle</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/pom-xml/" rel="tag">pom.xml</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/quartz/" rel="tag">quartz</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/settings-xml/" rel="tag">settings.xml</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/spring-boot/" rel="tag">spring-boot</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ssh/" rel="tag">ssh</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sshpass/" rel="tag">sshpass</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/yum/" rel="tag">yum</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%B9%90%E8%A7%82%E9%94%81/" rel="tag">乐观锁</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BB%8B%E7%BB%8D/" rel="tag">介绍</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%86%85%E7%BD%91/" rel="tag">内网</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%86%85%E7%BD%91%E7%A9%BF%E9%80%8F/" rel="tag">内网穿透</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%8A%A0%E5%AF%86/" rel="tag">加密</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%8F%8D%E7%BC%96%E8%AF%91%E5%B7%A5%E5%85%B7/" rel="tag">反编译工具</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%9B%BE%E5%BA%8A/" rel="tag">图床</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%9F%BA%E7%A1%80/" rel="tag">基础</a><span class="tag-list-count">29</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%AD%98%E5%82%A8%E5%87%BD%E6%95%B0/" rel="tag">存储函数</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%AD%98%E5%82%A8%E8%BF%87%E7%A8%8B/" rel="tag">存储过程</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%AE%9A%E6%97%B6%E5%99%A8/" rel="tag">定时器</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%AE%9D%E5%A1%94/" rel="tag">宝塔</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%B9%B6%E5%8F%91/" rel="tag">并发</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%BC%82%E5%B8%B8/" rel="tag">异常</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%BF%83%E7%90%86/" rel="tag">心理</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%80%BB%E7%BB%93/" rel="tag">总结</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%8C%81%E4%B9%85%E5%B1%82%E6%A1%86%E6%9E%B6/" rel="tag">持久层框架</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%8E%A5%E5%8F%A3/" rel="tag">接口</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%8F%92%E4%BB%B6/" rel="tag">插件</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/" rel="tag">数据库</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%96%AD%E8%A8%80/" rel="tag">断言</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%A0%91%E8%8E%93%E6%B4%BE/" rel="tag">树莓派</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%A0%91%E8%8E%93%E6%B4%BE4B/" rel="tag">树莓派4B</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%A6%82%E5%BF%B5/" rel="tag">概念</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%A8%A1%E7%89%88%E5%BC%95%E6%93%8E/" rel="tag">模版引擎</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%B3%9B%E5%9E%8B/" rel="tag">泛型</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%B5%8B%E8%AF%95/" rel="tag">测试</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%88%AC%E8%99%AB/" rel="tag">爬虫</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%94%A8%E6%88%B7%E6%9D%83%E9%99%90%E9%AA%8C%E8%AF%81/" rel="tag">用户权限验证</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%9F%A5%E8%AF%86/" rel="tag">知识</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%AE%97%E6%B3%95/" rel="tag">算法</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%B1%BB/" rel="tag">类</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BB%84%E4%BB%B6%E5%BA%93/" rel="tag">组件库</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%84%9A%E6%9C%AC/" rel="tag">脚本</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%87%AA%E5%8A%A8%E5%8C%96%E6%B5%8B%E8%AF%95/" rel="tag">自动化测试</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%8B%A5%E4%BE%9D/" rel="tag">若依</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/" rel="tag">解决方案</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" rel="tag">设计模式</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/" rel="tag">读书笔记</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%B7%A8%E5%9F%9F/" rel="tag">跨域</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%83%A8%E7%BD%B2/" rel="tag">部署</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9B%86%E6%88%90/" rel="tag">集成</a><span class="tag-list-count">14</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1/" rel="tag">面向对象</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9F%A9%E5%89%A7/" rel="tag">韩剧</a><span class="tag-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget-body tagcloud">
+      <a href="/tags/AJAX/" style="font-size: 13px;">AJAX</a> <a href="/tags/Activiti7/" style="font-size: 13.17px;">Activiti7</a> <a href="/tags/Arthas/" style="font-size: 13px;">Arthas</a> <a href="/tags/CSS/" style="font-size: 13px;">CSS</a> <a href="/tags/Curl/" style="font-size: 13px;">Curl</a> <a href="/tags/Debug/" style="font-size: 13px;">Debug</a> <a href="/tags/Docker/" style="font-size: 13.42px;">Docker</a> <a href="/tags/Druid/" style="font-size: 13px;">Druid</a> <a href="/tags/Electron/" style="font-size: 13.08px;">Electron</a> <a href="/tags/Expect/" style="font-size: 13px;">Expect</a> <a href="/tags/FastJson/" style="font-size: 13px;">FastJson</a> <a href="/tags/FreeMarker/" style="font-size: 13px;">FreeMarker</a> <a href="/tags/Git/" style="font-size: 13.08px;">Git</a> <a href="/tags/Gitlab/" style="font-size: 13.25px;">Gitlab</a> <a href="/tags/GitlabRunner/" style="font-size: 13.08px;">GitlabRunner</a> <a href="/tags/HTML-CSS-JavaScript/" style="font-size: 13.17px;">HTML/CSS/JavaScript</a> <a href="/tags/Hook/" style="font-size: 13px;">Hook</a> <a href="/tags/Http/" style="font-size: 13px;">Http</a> <a href="/tags/Hutool/" style="font-size: 13px;">Hutool</a> <a href="/tags/IDEA/" style="font-size: 13.25px;">IDEA</a> <a href="/tags/JS/" style="font-size: 13.08px;">JS</a> <a href="/tags/JVM/" style="font-size: 13px;">JVM</a> <a href="/tags/Jar/" style="font-size: 13.08px;">Jar</a> <a href="/tags/Java/" style="font-size: 13.83px;">Java</a> <a href="/tags/Jdk/" style="font-size: 13px;">Jdk</a> <a href="/tags/Jenkins/" style="font-size: 13px;">Jenkins</a> <a href="/tags/Jmeter/" style="font-size: 13px;">Jmeter</a> <a href="/tags/Json/" style="font-size: 13px;">Json</a> <a href="/tags/Jsoup/" style="font-size: 13px;">Jsoup</a> <a href="/tags/Kafka/" style="font-size: 13.25px;">Kafka</a> <a href="/tags/Leetcode/" style="font-size: 13.33px;">Leetcode</a> <a href="/tags/Linux/" style="font-size: 13px;">Linux</a> <a href="/tags/Logback/" style="font-size: 13px;">Logback</a> <a href="/tags/Mac/" style="font-size: 13px;">Mac</a> <a href="/tags/Maven/" style="font-size: 13.42px;">Maven</a> <a href="/tags/MongoDB/" style="font-size: 13.42px;">MongoDB</a> <a href="/tags/MyBatis/" style="font-size: 13.5px;">MyBatis</a> <a href="/tags/Mybatis/" style="font-size: 13.17px;">Mybatis</a> <a href="/tags/MybatisPlus/" style="font-size: 13.08px;">MybatisPlus</a> <a href="/tags/Mysql/" style="font-size: 13.25px;">Mysql</a> <a href="/tags/Nano/" style="font-size: 13px;">Nano</a> <a href="/tags/Nexus/" style="font-size: 13.08px;">Nexus</a> <a href="/tags/Nginx/" style="font-size: 13.08px;">Nginx</a> <a href="/tags/Opengrok/" style="font-size: 13px;">Opengrok</a> <a href="/tags/Oracle/" style="font-size: 13.75px;">Oracle</a> <a href="/tags/Profile/" style="font-size: 13px;">Profile</a> <a href="/tags/PubSubJS/" style="font-size: 13px;">PubSubJS</a> <a href="/tags/Python/" style="font-size: 13.17px;">Python</a> <a href="/tags/Quartz/" style="font-size: 13.08px;">Quartz</a> <a href="/tags/RESTful/" style="font-size: 13px;">RESTful</a> <a href="/tags/React/" style="font-size: 13.5px;">React</a> <a href="/tags/Redis/" style="font-size: 13.17px;">Redis</a> <a href="/tags/SQL/" style="font-size: 13.25px;">SQL</a> <a href="/tags/SVN/" style="font-size: 13px;">SVN</a> <a href="/tags/Scheduled/" style="font-size: 13px;">Scheduled</a> <a href="/tags/Scrapy/" style="font-size: 13px;">Scrapy</a> <a href="/tags/Shell/" style="font-size: 13.58px;">Shell</a> <a href="/tags/Spel%E8%A1%A8%E8%BE%BE%E5%BC%8F/" style="font-size: 13px;">Spel表达式</a> <a href="/tags/Spring/" style="font-size: 13.33px;">Spring</a> <a href="/tags/SpringBoot/" style="font-size: 14px;">SpringBoot</a> <a href="/tags/SpringEvent/" style="font-size: 13px;">SpringEvent</a> <a href="/tags/SpringMVC/" style="font-size: 13px;">SpringMVC</a> <a href="/tags/SpringSecurity/" style="font-size: 13.17px;">SpringSecurity</a> <a href="/tags/Stream/" style="font-size: 13px;">Stream</a> <a href="/tags/Swagger/" style="font-size: 13.08px;">Swagger</a> <a href="/tags/Swift/" style="font-size: 13.92px;">Swift</a> <a href="/tags/TestNG/" style="font-size: 13px;">TestNG</a> <a href="/tags/Tomcat/" style="font-size: 13px;">Tomcat</a> <a href="/tags/UI%E7%BB%84%E4%BB%B6%E5%BA%93/" style="font-size: 13px;">UI组件库</a> <a href="/tags/Validator/" style="font-size: 13px;">Validator</a> <a href="/tags/Vue/" style="font-size: 13px;">Vue</a> <a href="/tags/Vuepress/" style="font-size: 13.25px;">Vuepress</a> <a href="/tags/Wordpress/" style="font-size: 13px;">Wordpress</a> <a href="/tags/XML/" style="font-size: 13px;">XML</a> <a href="/tags/assert/" style="font-size: 13px;">assert</a> <a href="/tags/docker/" style="font-size: 13px;">docker</a> <a href="/tags/gitlab/" style="font-size: 13px;">gitlab</a> <a href="/tags/homebrew/" style="font-size: 13px;">homebrew</a> <a href="/tags/iframe/" style="font-size: 13px;">iframe</a> <a href="/tags/java/" style="font-size: 13px;">java</a> <a href="/tags/lambda/" style="font-size: 13px;">lambda</a> <a href="/tags/less/" style="font-size: 13px;">less</a> <a href="/tags/linux/" style="font-size: 13.25px;">linux</a> <a href="/tags/mac/" style="font-size: 13.25px;">mac</a> <a href="/tags/mybatis-plus/" style="font-size: 13px;">mybatis-plus</a> <a href="/tags/mysql/" style="font-size: 13px;">mysql</a> <a href="/tags/oracle/" style="font-size: 13px;">oracle</a> <a href="/tags/pom-xml/" style="font-size: 13px;">pom.xml</a> <a href="/tags/quartz/" style="font-size: 13px;">quartz</a> <a href="/tags/settings-xml/" style="font-size: 13px;">settings.xml</a> <a href="/tags/spring-boot/" style="font-size: 13px;">spring-boot</a> <a href="/tags/ssh/" style="font-size: 13px;">ssh</a> <a href="/tags/sshpass/" style="font-size: 13px;">sshpass</a> <a href="/tags/yum/" style="font-size: 13px;">yum</a> <a href="/tags/%E4%B9%90%E8%A7%82%E9%94%81/" style="font-size: 13px;">乐观锁</a> <a href="/tags/%E4%BB%8B%E7%BB%8D/" style="font-size: 13px;">介绍</a> <a href="/tags/%E5%86%85%E7%BD%91/" style="font-size: 13px;">内网</a> <a href="/tags/%E5%86%85%E7%BD%91%E7%A9%BF%E9%80%8F/" style="font-size: 13px;">内网穿透</a> <a href="/tags/%E5%8A%A0%E5%AF%86/" style="font-size: 13.08px;">加密</a> <a href="/tags/%E5%8F%8D%E7%BC%96%E8%AF%91%E5%B7%A5%E5%85%B7/" style="font-size: 13px;">反编译工具</a> <a href="/tags/%E5%9B%BE%E5%BA%8A/" style="font-size: 13px;">图床</a> <a href="/tags/%E5%9F%BA%E7%A1%80/" style="font-size: 13.92px;">基础</a> <a href="/tags/%E5%AD%98%E5%82%A8%E5%87%BD%E6%95%B0/" style="font-size: 13px;">存储函数</a> <a href="/tags/%E5%AD%98%E5%82%A8%E8%BF%87%E7%A8%8B/" style="font-size: 13.08px;">存储过程</a> <a href="/tags/%E5%AE%9A%E6%97%B6%E5%99%A8/" style="font-size: 13px;">定时器</a> <a href="/tags/%E5%AE%9D%E5%A1%94/" style="font-size: 13.08px;">宝塔</a> <a href="/tags/%E5%B9%B6%E5%8F%91/" style="font-size: 13px;">并发</a> <a href="/tags/%E5%BC%82%E5%B8%B8/" style="font-size: 13px;">异常</a> <a href="/tags/%E5%BF%83%E7%90%86/" style="font-size: 13.08px;">心理</a> <a href="/tags/%E6%80%BB%E7%BB%93/" style="font-size: 13px;">总结</a> <a href="/tags/%E6%8C%81%E4%B9%85%E5%B1%82%E6%A1%86%E6%9E%B6/" style="font-size: 13.17px;">持久层框架</a> <a href="/tags/%E6%8E%A5%E5%8F%A3/" style="font-size: 13px;">接口</a> <a href="/tags/%E6%8F%92%E4%BB%B6/" style="font-size: 13px;">插件</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/" style="font-size: 13.33px;">数据库</a> <a href="/tags/%E6%96%AD%E8%A8%80/" style="font-size: 13px;">断言</a> <a href="/tags/%E6%A0%91%E8%8E%93%E6%B4%BE/" style="font-size: 13.08px;">树莓派</a> <a href="/tags/%E6%A0%91%E8%8E%93%E6%B4%BE4B/" style="font-size: 13px;">树莓派4B</a> <a href="/tags/%E6%A6%82%E5%BF%B5/" style="font-size: 13px;">概念</a> <a href="/tags/%E6%A8%A1%E7%89%88%E5%BC%95%E6%93%8E/" style="font-size: 13px;">模版引擎</a> <a href="/tags/%E6%B3%9B%E5%9E%8B/" style="font-size: 13.08px;">泛型</a> <a href="/tags/%E6%B5%8B%E8%AF%95/" style="font-size: 13.33px;">测试</a> <a href="/tags/%E7%88%AC%E8%99%AB/" style="font-size: 13.08px;">爬虫</a> <a href="/tags/%E7%94%A8%E6%88%B7%E6%9D%83%E9%99%90%E9%AA%8C%E8%AF%81/" style="font-size: 13px;">用户权限验证</a> <a href="/tags/%E7%9F%A5%E8%AF%86/" style="font-size: 13px;">知识</a> <a href="/tags/%E7%AE%97%E6%B3%95/" style="font-size: 13.08px;">算法</a> <a href="/tags/%E7%B1%BB/" style="font-size: 13px;">类</a> <a href="/tags/%E7%BB%84%E4%BB%B6%E5%BA%93/" style="font-size: 13px;">组件库</a> <a href="/tags/%E8%84%9A%E6%9C%AC/" style="font-size: 13.25px;">脚本</a> <a href="/tags/%E8%87%AA%E5%8A%A8%E5%8C%96%E6%B5%8B%E8%AF%95/" style="font-size: 13px;">自动化测试</a> <a href="/tags/%E8%8B%A5%E4%BE%9D/" style="font-size: 13px;">若依</a> <a href="/tags/%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/" style="font-size: 13.08px;">解决方案</a> <a href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" style="font-size: 13px;">设计模式</a> <a href="/tags/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/" style="font-size: 13.08px;">读书笔记</a> <a href="/tags/%E8%B7%A8%E5%9F%9F/" style="font-size: 13px;">跨域</a> <a href="/tags/%E9%83%A8%E7%BD%B2/" style="font-size: 13px;">部署</a> <a href="/tags/%E9%9B%86%E6%88%90/" style="font-size: 13.67px;">集成</a> <a href="/tags/%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1/" style="font-size: 13px;">面向对象</a> <a href="/tags/%E9%9F%A9%E5%89%A7/" style="font-size: 13px;">韩剧</a>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget-body">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/07/">七月 2024</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/07/">七月 2023</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/06/">六月 2023</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/01/">一月 2023</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/11/">十一月 2022</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/10/">十月 2022</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/07/">七月 2022</a><span class="archive-list-count">181</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/06/">六月 2022</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/07/">七月 2020</a><span class="archive-list-count">17</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget-body">
+      <ul class="recent-post-list list-unstyled ">
+        
+          <li>
+            
+            <div class="item-thumb">
+              <a href="/2024/07/%E4%B8%8D%E5%8D%B7%E5%AD%A6%E5%8E%86%E5%92%8C%E8%83%8C%E6%99%AF%E7%9A%84%E8%B5%9B%E9%81%93%EF%BC%8C%E4%B9%9F%E8%83%BD%E6%9C%88%E5%85%A5%E8%BF%87%E4%B8%87%EF%BC%9F/" class="thumb">
+    
+    
+        <span class="thumb-image thumb-none"></span>
+    
+</a>
+
+            </div>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/%E5%88%9B%E4%B8%9A/">创业</a>
+              </p>
+              <p class="item-title">
+                <a href="/2024/07/%E4%B8%8D%E5%8D%B7%E5%AD%A6%E5%8E%86%E5%92%8C%E8%83%8C%E6%99%AF%E7%9A%84%E8%B5%9B%E9%81%93%EF%BC%8C%E4%B9%9F%E8%83%BD%E6%9C%88%E5%85%A5%E8%BF%87%E4%B8%87%EF%BC%9F/" class="title">不卷学历和背景的赛道，也能月入过万？</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2024-07-11T05:45:20.000Z" itemprop="datePublished">2024-07-11</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-thumb">
+              <a href="/2024/07/%E5%9B%9E%E9%A1%BE%E5%B7%A5%E4%BD%9C%E8%BF%99%E5%87%A0%E5%B9%B4/" class="thumb">
+    
+    
+        <span class="thumb-image thumb-none"></span>
+    
+</a>
+
+            </div>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/%E5%A4%8D%E7%9B%98/">复盘</a>
+              </p>
+              <p class="item-title">
+                <a href="/2024/07/%E5%9B%9E%E9%A1%BE%E5%B7%A5%E4%BD%9C%E8%BF%99%E5%87%A0%E5%B9%B4/" class="title">回顾工作这几年</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2024-07-09T06:19:23.000Z" itemprop="datePublished">2024-07-09</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-thumb">
+              <a href="/2023/07/SpringBoot3%E9%9B%86%E6%88%90Quartz%E6%9E%81%E7%AE%80%E7%89%88/" class="thumb">
+    
+    
+        <span style="background-image:url(/2023/07/SpringBoot3集成Quartz极简版/logo-quartz-scheduler.png)" alt="SpringBoot3集成Quartz极简版" class="thumb-image"></span>
+    
+</a>
+
+            </div>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/SpringBoot/">SpringBoot</a>
+              </p>
+              <p class="item-title">
+                <a href="/2023/07/SpringBoot3%E9%9B%86%E6%88%90Quartz%E6%9E%81%E7%AE%80%E7%89%88/" class="title">SpringBoot3集成Quartz极简版</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2023-07-18T01:14:01.000Z" itemprop="datePublished">2023-07-18</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-thumb">
+              <a href="/2023/07/SpringBoot3%E9%9B%86%E6%88%90Quartz%E8%AF%A6%E7%BB%86%E7%89%88/" class="thumb">
+    
+    
+        <span style="background-image:url(/2023/07/SpringBoot3集成Quartz极简版/logo-quartz-scheduler.png)" alt="SpringBoot3集成Quartz详细版" class="thumb-image"></span>
+    
+</a>
+
+            </div>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/SpringBoot/">SpringBoot</a>
+              </p>
+              <p class="item-title">
+                <a href="/2023/07/SpringBoot3%E9%9B%86%E6%88%90Quartz%E8%AF%A6%E7%BB%86%E7%89%88/" class="title">SpringBoot3集成Quartz详细版</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2023-07-18T01:14:01.000Z" itemprop="datePublished">2023-07-18</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-thumb">
+              <a href="/2023/07/SpringBoot3%E9%9B%86%E6%88%90Swagger/" class="thumb">
+    
+    
+        <span style="background-image:url(/2023/07/SpringBoot3集成Swagger/swagger_logo.svg)" alt="SpringBoot3集成Swagger" class="thumb-image"></span>
+    
+</a>
+
+            </div>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/SpringBoot/">SpringBoot</a>
+              </p>
+              <p class="item-title">
+                <a href="/2023/07/SpringBoot3%E9%9B%86%E6%88%90Swagger/" class="title">SpringBoot3集成Swagger</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2023-07-11T06:52:01.000Z" itemprop="datePublished">2023-07-11</time>
+              </p>
+            </div>
+          </li>
+          
+      </ul>
+    </div>
+  </div>
+  
+
+    
+  </div>
+</aside>
+
+  
+  
+<main class="main" role="main">
+  <div class="content">
+  <article id="post-软件开发/技术/编程语言/swift/Swift基础-基本运算符" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
+    
+    <div class="article-header">
+      
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Swift基础 基本运算符
+    </h1>
+  
+
+      
+      <div class="article-meta">
+        <span class="article-date">
+    <i class="icon icon-calendar-check"></i>
+	<a href="/2022/07/Swift%E5%9F%BA%E7%A1%80-%E5%9F%BA%E6%9C%AC%E8%BF%90%E7%AE%97%E7%AC%A6/" class="article-date">
+	  <time datetime="2022-07-01T04:01:01.000Z" itemprop="datePublished">2022-07-01</time>
+	</a>
+</span>
+        
+  <span class="article-category">
+    <i class="icon icon-folder"></i>
+    <a class="article-category-link" href="/categories/Swift/">Swift</a>
+  </span>
+
+        
+  <span class="article-tag">
+    <i class="icon icon-tags"></i>
+	<a class="article-tag-link-link" href="/tags/Swift/" rel="tag">Swift</a>, <a class="article-tag-link-link" href="/tags/%E5%9F%BA%E7%A1%80/" rel="tag">基础</a>
+  </span>
+
+
+        
+	<span class="article-read hidden-xs">
+	    <i class="icon icon-eye-fill" aria-hidden="true"></i>
+	    <span id="busuanzi_container_page_pv">
+			<span id="busuanzi_value_page_pv">0</span>
+		</span>
+	</span>
+
+
+        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2022/07/Swift%E5%9F%BA%E7%A1%80-%E5%9F%BA%E6%9C%AC%E8%BF%90%E7%AE%97%E7%AC%A6/#comments" class="article-comment-link">评论</a></span>
+        
+	
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">字数统计: 4.7k(字)</span>
+	
+	
+		<span class="post-readcount hidden-xs" itemprop="timeRequired">阅读时长: 18(分)</span>
+	
+
+      </div>
+    </div>
+    <div class="article-entry marked-body" itemprop="articleBody">
+      
+        <p>翻译自：<a target="_blank" rel="noopener" href="https://docs.swift.org/swift-book/LanguageGuide/BasicOperators.html#ID72">https://docs.swift.org/swift-book/LanguageGuide/BasicOperators.html#ID72</a></p>
+<p>操作符是用来检查、更改或合并值的特殊符号或短语。例如，加法运算符(‘ + ‘)将两个数字相加，如’ let i &#x3D; 1 + 2 ‘，逻辑和运算符(‘ &amp;&amp; ‘)结合两个布尔值，如’ if enteredDoorCode &amp;&amp; passsedretinascan ‘。</p>
+<p>Swift支持您可能已经从C等语言中知道的运算符，并改进了几种功能来消除常见的编码错误。赋值运算符（&#x3D;）不返回值，以防止在等于运算符（<code>==</code>时被错误使用。算术运算符（<code>+</code>、<code>-</code>、<code>*</code>、<code>/</code>、<code>%</code>等）检测并禁止值溢出，以避免在处理大于或小于存储它们的类型允许值范围的数字时出现意外结果。您可以选择使用Swift的溢出运算符来评估溢出行为，如<a target="_blank" rel="noopener" href="https://docs.swift.org/swift-book/LanguageGuide/AdvancedOperators.html#ID37">溢出运算符</a>中所述。</p>
+<p>Swift还提供了C中找不到的范围运算符，例如<code>a..&lt;b</code>和<code>a...b</code>，作为表达一系列值的快捷方式。</p>
+<p>本章介绍了Swift中的常见运算符。<a href="/pages/b5a382/">高级运算符</a>涵盖了Swift的高级运算符，并描述了如何定义自己的自定义运算符，并实现您自己的自定义类型的标准运算符。</p>
+<h2 id="术语"><a href="#术语" class="headerlink" title="术语"></a>术语</h2><p>运算符是一元、二进制或三元：</p>
+<ul>
+<li><em>一元</em>运算符对单个目标（如<code>-a</code>）进行操作。元<em>前缀</em>运算符出现在目标之前（例如<code>!b</code>），一元<em>后缀</em>运算符立即出现在目标后面（例如<code>c!</code>）。</li>
+<li><em>Binary</em> operators operate on two targets (such as <code>2 + 3</code>) and are <em>infix</em> because they appear in between their two targets.</li>
+<li><em>Ternary</em> operators operate on three targets. Like C, Swift has only one ternary operator, the ternary conditional operator (<code>a ? b : c</code>).</li>
+</ul>
+<p>操作符影响的值是<em>操作数</em>。在表达式 <code>1 + 2</code> 中，<code>+</code> 符号是一个中缀操作符，它的两个操作数是值 <code>1</code> 和 <code>2</code> 。</p>
+<h2 id="分配操作员"><a href="#分配操作员" class="headerlink" title="分配操作员"></a>分配操作员</h2><p>赋值操作符 ( <code>a = b</code> )用 <code>b</code> 的值初始化或更新 <code>a</code> 的值:</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> b <span class="operator">=</span> <span class="number">10</span></span><br><span class="line"><span class="keyword">var</span> a <span class="operator">=</span> <span class="number">5</span></span><br><span class="line">a <span class="operator">=</span> b</span><br><span class="line"><span class="comment">// a is now equal to 10</span></span><br></pre></td></tr></table></figure>
+
+<p>如果赋值的右侧是一个具有多个值的元组，则其元素可以同时分解为多个常量或变量：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> (x, y) <span class="operator">=</span> (<span class="number">1</span>, <span class="number">2</span>)</span><br><span class="line"><span class="comment">// x is equal to 1, and y is equal to 2</span></span><br></pre></td></tr></table></figure>
+
+<p>与C和Objective-C中的赋值运算符不同，Swift中的赋值运算符本身不会返回值。以下陈述无效：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> x <span class="operator">=</span> y &#123;</span><br><span class="line">   <span class="comment">// This isn&#x27;t valid, because x = y doesn&#x27;t return a value.</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这个特性可以防止在实际使用等于操作符( <code>==</code> )时意外使用赋值操作符( <code>=</code> )。通过使 <code>if x = y</code> 无效，Swift可以帮助你在代码中避免这类错误。</p>
+<h2 id="算术运算符"><a href="#算术运算符" class="headerlink" title="算术运算符"></a>算术运算符</h2><p>Swift支持所有数字类型的四个标准<em>算术运算符</em>：</p>
+<ul>
+<li>添加（<code>+</code>）</li>
+<li>减法（<code>-</code>）</li>
+<li>乘法（<code>*</code>）</li>
+<li>司（<code>/</code>）</li>
+</ul>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">1</span> <span class="operator">+</span> <span class="number">2</span>       <span class="comment">// equals 3</span></span><br><span class="line"><span class="number">5</span> <span class="operator">-</span> <span class="number">3</span>       <span class="comment">// equals 2</span></span><br><span class="line"><span class="number">2</span> <span class="operator">*</span> <span class="number">3</span>       <span class="comment">// equals 6</span></span><br><span class="line"><span class="number">10.0</span> <span class="operator">/</span> <span class="number">2.5</span>  <span class="comment">// equals 4.0</span></span><br></pre></td></tr></table></figure>
+
+<p>与C和Objective-C中的算术操作符不同，Swift的算术操作符默认情况下不允许值溢出。你可以通过使用Swift的溢出操作符(例如 <code>a &amp;+ b</code> )来选择值溢出行为。See <a target="_blank" rel="noopener" href="https://docs.swift.org/swift-book/LanguageGuide/AdvancedOperators.html#ID37">Overflow Operators</a>.</p>
+<p><code>String</code>串联也支持加法运算符：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&quot;hello, &quot;</span> <span class="operator">+</span> <span class="string">&quot;world&quot;</span>  <span class="comment">// equals &quot;hello, world&quot;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="剩余运算符"><a href="#剩余运算符" class="headerlink" title="剩余运算符"></a>剩余运算符</h3><p><em>remainder操作符</em> ( <code>a % b</code> )计算出 <code>b</code> 的多少倍将适合于 <code>a</code> 并返回剩余的值(称为<em>remainder</em>)。</p>
+<blockquote>
+<p>注意</p>
+<p>其余运算符（<code>%</code>）在其他语言中也被称为<em>模运算符</em>。然而，它在Swift中对负数的行为意味着，严格来说，它是一个剩余的操作，而不是一个模块化操作。</p>
+</blockquote>
+<p>以下是剩余运算符的工作原理。要计算<code>%</code>，您首先计算出<code>9</code>个<code>4</code>个内部有多少个：</p>
+<p><img src="/2022/07/Swift%E5%9F%BA%E7%A1%80-%E5%9F%BA%E6%9C%AC%E8%BF%90%E7%AE%97%E7%AC%A6/202204042043654.png" alt="../_images/remainderInteger_2x.png"></p>
+<p>您可以在9个内部安装两个<code>4</code>s，其余为<code>1</code>（以橙色显示）。</p>
+<p>在Swift中，这将写为：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">9</span> <span class="operator">%</span> <span class="number">4</span>    <span class="comment">// equals 1</span></span><br></pre></td></tr></table></figure>
+
+<p>为了确定<code>%b</code>的答案，<code>%</code>运算符计算以下方程，并将<code>remainder</code>作为其输出返回：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">a <span class="operator">=</span> (b x <span class="keyword">some</span> multiplier) <span class="operator">+</span> remainder</span><br></pre></td></tr></table></figure>
+
+<p>其中<code>somemultiplier</code>是适合<code>a</code>内部的<code>b</code>的最大倍数。</p>
+<p>将<code>9</code>和<code>4</code>插入此方程会产生：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">9</span><span class="operator">=</span>(<span class="number">4</span> x <span class="number">2</span>)<span class="operator">+</span><span class="number">1</span></span><br></pre></td></tr></table></figure>
+
+<p>在计算负值的余数时，也应用了相同的方法：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="operator">-</span><span class="number">9</span> <span class="operator">%</span> <span class="number">4</span>   <span class="comment">// equals -1</span></span><br></pre></td></tr></table></figure>
+
+<p>在方程中插入<code>-9</code>和<code>4</code>会产生：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="operator">-</span><span class="number">9</span><span class="operator">=</span>(<span class="number">4</span> x <span class="operator">-</span><span class="number">2</span>)<span class="operator">-</span><span class="number">1</span></span><br></pre></td></tr></table></figure>
+
+<p>给出剩余值<code>-1</code>。</p>
+<p>当 <code>b</code> 值为负值时， <code>b</code> 的符号将被忽略。这意味着 <code>a % b</code> 和 <code>a % -b</code> 总是给出相同的答案。</p>
+<h3 id="一元减号运算符"><a href="#一元减号运算符" class="headerlink" title="一元减号运算符"></a>一元减号运算符</h3><p>数字值的符号可以使用前缀<code>-</code>（称为<em>一元减号运算符</em>）切换：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> three <span class="operator">=</span> <span class="number">3</span></span><br><span class="line"><span class="keyword">let</span> minusThree <span class="operator">=</span> <span class="operator">-</span>three       <span class="comment">// minusThree equals -3</span></span><br><span class="line"><span class="keyword">let</span> plusThree <span class="operator">=</span> <span class="operator">-</span>minusThree   <span class="comment">// plusThree equals 3, or &quot;minus minus three&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>一元减算符（<code>-</code>）直接放在它操作的值之前，没有任何空格。</p>
+<h3 id="Unary-Plus运算符"><a href="#Unary-Plus运算符" class="headerlink" title="Unary Plus运算符"></a>Unary Plus运算符</h3><p><em>一元加运算符</em>（<code>+</code>）只需返回其操作的值，无需任何更改：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> minusSix <span class="operator">=</span> <span class="operator">-</span><span class="number">6</span></span><br><span class="line"><span class="keyword">let</span> alsoMinusSix <span class="operator">=</span> <span class="operator">+</span>minusSix  <span class="comment">// alsoMinusSix equals -6</span></span><br></pre></td></tr></table></figure>
+
+<p>虽然一元加运算符实际上什么都没做，但当使用一元减运算符进行负数时，您可以使用它来在代码中为正数提供对称性。</p>
+<h2 id="复合分配运算符"><a href="#复合分配运算符" class="headerlink" title="复合分配运算符"></a>复合分配运算符</h2><p>与C一样，Swift提供了将赋值（&#x3D;）与另一个操作相结合的<em>复合赋值运算符</em>。一个例子是<em>加法赋值运算符</em>（<code>+=</code>：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> a <span class="operator">=</span> <span class="number">1</span></span><br><span class="line">a <span class="operator">+=</span> <span class="number">2</span></span><br><span class="line"><span class="comment">// a is now equal to 3</span></span><br></pre></td></tr></table></figure>
+
+<p>表达式 <code>a += 2</code> 是 <code>a = a + 2</code> 的缩写。实际上，加法和赋值被合并到一个操作符中，同时执行这两个任务。</p>
+<blockquote>
+<p>注意</p>
+<p>复合赋值操作符不返回值。例如，你不能写<code>let b = a += 2</code>。</p>
+</blockquote>
+<p>有关Swift标准库提供的运算符的信息，请参阅<a target="_blank" rel="noopener" href="https://developer.apple.com/documentation/swift/operator_declarations">运算符声明</a>。</p>
+<h2 id="比较运算符"><a href="#比较运算符" class="headerlink" title="比较运算符"></a>比较运算符</h2><p>Swift 支持以下比较运算符：</p>
+<ul>
+<li>Equal to (<code>a == b</code>)</li>
+<li>Not equal to (<code>a != b</code>)</li>
+<li>Greater than (<code>a &gt; b</code>)</li>
+<li>Less than (<code>a &lt; b</code>)</li>
+<li>Greater than or equal to (<code>a &gt;= b</code>)</li>
+<li>Less than or equal to (<code>a &lt;= b</code>)</li>
+</ul>
+<blockquote>
+<p>注意</p>
+<p>Swift还提供了两个<em>身份运算符</em>（<code>===</code>和<code>!==</code>，用于测试两个对象引用是否都引用同一个对象实例。有关更多信息，请参阅<a target="_blank" rel="noopener" href="https://docs.swift.org/swift-book/LanguageGuide/ClassesAndStructures.html#ID90">身份运营商</a>。</p>
+</blockquote>
+<p>每个比较运算符都返回一个<code>Bool</code>值，以指示语句是否为真：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">1</span> <span class="operator">==</span> <span class="number">1</span>   <span class="comment">// true because 1 is equal to 1</span></span><br><span class="line"><span class="number">2</span> <span class="operator">!=</span> <span class="number">1</span>   <span class="comment">// true because 2 isn&#x27;t equal to 1</span></span><br><span class="line"><span class="number">2</span> <span class="operator">&gt;</span> <span class="number">1</span>    <span class="comment">// true because 2 is greater than 1</span></span><br><span class="line"><span class="number">1</span> <span class="operator">&lt;</span> <span class="number">2</span>    <span class="comment">// true because 1 is less than 2</span></span><br><span class="line"><span class="number">1</span> <span class="operator">&gt;=</span> <span class="number">1</span>   <span class="comment">// true because 1 is greater than or equal to 1</span></span><br><span class="line"><span class="number">2</span> <span class="operator">&lt;=</span> <span class="number">1</span>   <span class="comment">// false because 2 isn&#x27;t less than or equal to 1</span></span><br></pre></td></tr></table></figure>
+
+<p>比较运算符通常用于条件语句，例如<code>if</code>语句：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> name <span class="operator">=</span> <span class="string">&quot;world&quot;</span></span><br><span class="line"><span class="keyword">if</span> name <span class="operator">==</span> <span class="string">&quot;world&quot;</span> &#123;</span><br><span class="line">   <span class="built_in">print</span>(<span class="string">&quot;hello, world&quot;</span>)</span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">   <span class="built_in">print</span>(<span class="string">&quot;I&#x27;m sorry <span class="subst">\(name)</span>, but I don&#x27;t recognize you&quot;</span>)</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// Prints &quot;hello, world&quot;, because name is indeed equal to &quot;world&quot;.</span></span><br></pre></td></tr></table></figure>
+
+<p>有关<code>if</code>语句的更多信息，请参阅<a target="_blank" rel="noopener" href="https://docs.swift.org/swift-book/LanguageGuide/ControlFlow.html">控制流</a>。</p>
+<p>如果两个元组具有相同的类型和相同数量的值，您可以比较它们。元组从左到右比较，一次一个值，直到比较发现两个不相等的值。对这两个值进行了比较，比较的结果决定了元组比较的总体结果。如果所有元素都是相等的，那么元组本身就是相等的。例如：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">(<span class="number">1</span>, <span class="string">&quot;zebra&quot;</span>) <span class="operator">&lt;</span> (<span class="number">2</span>, <span class="string">&quot;apple&quot;</span>)   <span class="comment">// true because 1 is less than 2; &quot;zebra&quot; and &quot;apple&quot; aren&#x27;t compared</span></span><br><span class="line">(<span class="number">3</span>, <span class="string">&quot;apple&quot;</span>) <span class="operator">&lt;</span> (<span class="number">3</span>, <span class="string">&quot;bird&quot;</span>)    <span class="comment">// true because 3 is equal to 3, and &quot;apple&quot; is less than &quot;bird&quot;</span></span><br><span class="line">(<span class="number">4</span>, <span class="string">&quot;dog&quot;</span>) <span class="operator">==</span> (<span class="number">4</span>, <span class="string">&quot;dog&quot;</span>)      <span class="comment">// true because 4 is equal to 4, and &quot;dog&quot; is equal to &quot;dog&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>在上面的示例中，您可以在第一行看到从左到右的比较行为。因为<code>1</code>小于2<code>(1,&quot;zebra&quot;)</code>被认为是小于<code>(2,&quot;apple&quot;)</code>，无论元组中的任何其他值如何。<code>&quot;zebra&quot;</code>不亚于<code>&quot;apple&quot;</code>并不重要，因为比较已经由元组的第一个元素决定了。然而，当元组的第一个元素相同时，它们的第二个元素<em>会</em>进行比较——这就是第二行和第三行发生的事情。</p>
+<p>只有当运算符可以应用于各自元组中的每个值时，元组才能与给定运算符进行比较。例如，如下代码所示，您可以比较两个类型的元组<code>(String,Int)</code>因为可以使用<code>&lt;</code>运算符比较<code>String</code>和<code>Int</code>值。相比之下，两个类型的元组<code>(String,Bool)</code>无法与<code>&lt;</code>运算符进行比较，因为<code>&lt;</code>运算符不能应用于<code>Bool</code>值。</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">(<span class="string">&quot;blue&quot;</span>, <span class="operator">-</span><span class="number">1</span>) <span class="operator">&lt;</span> (<span class="string">&quot;purple&quot;</span>, <span class="number">1</span>)        <span class="comment">// OK, evaluates to true</span></span><br><span class="line">(<span class="string">&quot;blue&quot;</span>, <span class="literal">false</span>) <span class="operator">&lt;</span> (<span class="string">&quot;purple&quot;</span>, <span class="literal">true</span>)  <span class="comment">// Error because &lt; can&#x27;t compare Boolean values</span></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>注意</p>
+<p>Swift标准库包括少于七个元素的元组的元组比较运算符。要将元组与七个或更多元素进行比较，您必须自己实现比较运算符。</p>
+</blockquote>
+<h2 id="三元条件运算符"><a href="#三元条件运算符" class="headerlink" title="三元条件运算符"></a>三元条件运算符</h2><p><em>三元条件算子</em>是一个有三个部分的特殊算子，它接受形式<code>question?answer1:answer2</code>。这是根据<code>question</code>是真还是假来评估两个表达式之一的快捷方式。如果<code>question</code>属实，它会评估<code>answer1</code>并返回其值；否则，它会评估<code>answer2</code>并返回其值。</p>
+<p>三元条件运算符是以下代码的缩写：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> question &#123;</span><br><span class="line">   answer1</span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">   answer2</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这里有一个例子，它计算了表格行的高度。如果行有标题，行高应比内容高度高50分，如果行没有标头，则高20分：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> contentHeight <span class="operator">=</span> <span class="number">40</span></span><br><span class="line"><span class="keyword">let</span> hasHeader <span class="operator">=</span> <span class="literal">true</span></span><br><span class="line"><span class="keyword">let</span> rowHeight <span class="operator">=</span> contentHeight <span class="operator">+</span> (hasHeader <span class="operator">?</span> <span class="number">50</span> : <span class="number">20</span>)</span><br><span class="line"><span class="comment">// rowHeight is equal to 90</span></span><br></pre></td></tr></table></figure>
+
+<p>上面的示例是以下代码的简写：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> contentHeight <span class="operator">=</span> <span class="number">40</span></span><br><span class="line"><span class="keyword">let</span> hasHeader <span class="operator">=</span> <span class="literal">true</span></span><br><span class="line"><span class="keyword">let</span> rowHeight: <span class="type">Int</span></span><br><span class="line"><span class="keyword">if</span> hasHeader &#123;</span><br><span class="line">   rowHeight <span class="operator">=</span> contentHeight <span class="operator">+</span> <span class="number">50</span></span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">   rowHeight <span class="operator">=</span> contentHeight <span class="operator">+</span> <span class="number">20</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// rowHeight is equal to 90</span></span><br></pre></td></tr></table></figure>
+
+<p>第一个示例对三元条件运算符的使用意味着<code>rowHeight</code>可以在一行代码上设置为正确的值，这比第二个示例中使用的代码更简洁。</p>
+<p>三元条件算子为决定考虑两个表达式中的哪一个提供了一个高效的简写。然而，请小心使用三元条件操作员。如果过度使用，它的简洁性可能会导致难以阅读的代码。避免将三元条件运算符的多个实例组合成一个复合语句。</p>
+<h2 id="nil-合并运算符"><a href="#nil-合并运算符" class="headerlink" title="nil 合并运算符"></a>nil 合并运算符</h2><p><em>零共同化操作员</em>（<code>a??b</code>) 如果可选<code>a</code>包含一个值，则解开它，如果<code>a</code>为<code>nil</code>则返回默认值<code>b</code>。表达式<code>a</code>总是可选类型。表达式<code>b</code>必须与存储在<code>a</code>中的类型匹配。</p>
+<p>零共同算符是以下代码的缩写：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">a <span class="operator">!=</span> <span class="literal">nil</span> <span class="operator">?</span> a<span class="operator">!</span> : b</span><br></pre></td></tr></table></figure>
+
+<p>上面的代码使用三元条件运算符和强制展开（<code>a!</code>）当<code>a</code>不是<code>nil</code>，访问包裹在<code>a</code>中的值，否则返回<code>b</code>。零凝聚运算符提供了一种更优雅的方式，以简洁易读的形式封装这种有条件的检查和展开包装。</p>
+<blockquote>
+<p>注意</p>
+<p>如果<code>a</code>的值非<code>nil</code>，则不计算<code>b</code>的值。这被称为<em>短路评估</em>。</p>
+</blockquote>
+<p>以下示例使用零共同化运算符在默认颜色名称和可选用户定义的颜色名称之间进行选择：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> defaultColorName <span class="operator">=</span> <span class="string">&quot;red&quot;</span></span><br><span class="line"><span class="keyword">var</span> userDefinedColorName: <span class="type">String</span>?   <span class="comment">// defaults to nil</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> colorNameToUse <span class="operator">=</span> userDefinedColorName <span class="operator">??</span> defaultColorName</span><br><span class="line"><span class="comment">// userDefinedColorName is nil, so colorNameToUse is set to the default of &quot;red&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p><code>userDefinedColorName</code>变量定义为可选<code>String</code>，默认值为<code>nil</code>。由于<code>userDefinedColorName</code>是可选类型，因此您可以使用零强制运算符来考虑其值。在上面的示例中，运算符用于确定名为<code>colorNameToUse</code>的<code>String</code>变量的初始值。因为<code>userDefinedColorName</code>，所以表达式<code>userDefinedColorName??defaultColorName</code>返回<code>defaultColorName</code>或<code>&quot;red&quot;</code>的值。</p>
+<p>如果您将非<code>nil</code>值分配给<code>userDefinedColorName</code>，并再次执行零共同计算符检查，则使用<code>userDefinedColorName</code>中包装的值，而不是默认值：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">userDefinedColorName <span class="operator">=</span> <span class="string">&quot;green&quot;</span></span><br><span class="line">colorNameToUse <span class="operator">=</span> userDefinedColorName <span class="operator">??</span> defaultColorName</span><br><span class="line"><span class="comment">// userDefinedColorName isn&#x27;t nil, so colorNameToUse is set to &quot;green&quot;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="范围操作员"><a href="#范围操作员" class="headerlink" title="范围操作员"></a>范围操作员</h2><p>Swift包括几个<em>范围运算符</em>，它们是表达一系列值的快捷方式。</p>
+<h3 id="封闭式距离操作员"><a href="#封闭式距离操作员" class="headerlink" title="封闭式距离操作员"></a>封闭式距离操作员</h3><p><em>闭范围运算符</em>（<code>a...b</code>）定义了一个从<code>a</code>到<code>b</code>的范围，包括值<code>a</code>和<code>b</code>。<code>a</code>的值不得大于<code>b</code>。</p>
+<p>在您想要使用所有值的范围上迭代时，闭合范围运算符非常有用，例如<code>for</code>-<code>in</code>循环：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> index <span class="keyword">in</span> <span class="number">1</span><span class="operator">...</span><span class="number">5</span> &#123;</span><br><span class="line">   <span class="built_in">print</span>(<span class="string">&quot;<span class="subst">\(index)</span> times 5 is <span class="subst">\(index <span class="operator">*</span> <span class="number">5</span>)</span>&quot;</span>)</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 1 times 5 is 5</span></span><br><span class="line"><span class="comment">// 2 times 5 is 10</span></span><br><span class="line"><span class="comment">// 3 times 5 is 15</span></span><br><span class="line"><span class="comment">// 4 times 5 is 20</span></span><br><span class="line"><span class="comment">// 5 times 5 is 25</span></span><br></pre></td></tr></table></figure>
+
+<p>有关<code>for</code>-<code>in</code>循环的更多信息，请参阅<a href="/pages/24ff35/">控制流</a>。</p>
+<h3 id="半开放式范围操作员"><a href="#半开放式范围操作员" class="headerlink" title="半开放式范围操作员"></a>半开放式范围操作员</h3><p><em>半开范围运算符</em>（<code>a..&lt;b</code>）定义了一个从<code>a</code>到<code>b</code>运行的范围，但不包括<code>b</code>。据说它是<em>半开放的</em>，因为它包含它的第一个值，但不包含它的最终值。与闭区间运算符一样，<code>a</code>的值不得大于<code>b</code>。如果<code>a</code>的值等于<code>b</code>，那么结果范围将是空的。</p>
+<p>当您使用基于零的列表（如数组）时，半开放范围特别有用，其中最多（但不包括）列表的长度非常有用：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> names <span class="operator">=</span> [<span class="string">&quot;Anna&quot;</span>, <span class="string">&quot;Alex&quot;</span>, <span class="string">&quot;Brian&quot;</span>, <span class="string">&quot;Jack&quot;</span>]</span><br><span class="line"><span class="keyword">let</span> count <span class="operator">=</span> names.count</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="number">0</span><span class="operator">..&lt;</span>count &#123;</span><br><span class="line">   <span class="built_in">print</span>(<span class="string">&quot;Person <span class="subst">\(i <span class="operator">+</span> <span class="number">1</span>)</span> is called <span class="subst">\(names[i])</span>&quot;</span>)</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// Person 1 is called Anna</span></span><br><span class="line"><span class="comment">// Person 2 is called Alex</span></span><br><span class="line"><span class="comment">// Person 3 is called Brian</span></span><br><span class="line"><span class="comment">// Person 4 is called Jack</span></span><br></pre></td></tr></table></figure>
+
+<p>请注意，数组包含四个项目，但<code>0..&lt;count</code>仅计入<code>3</code>（数组中最后一个项目的索引），因为它是一个半开放的范围。有关数组的更多信息，请参阅<a target="_blank" rel="noopener" href="https://docs.swift.org/swift-book/LanguageGuide/CollectionTypes.html#ID107">数组</a>。</p>
+<h3 id="单面范围"><a href="#单面范围" class="headerlink" title="单面范围"></a>单面范围</h3><p>闭区间运算符对尽可能在一个方向上继续的范围有另一种形式——例如，范围包括从索引2到数组末尾的数组的所有元素。在这些情况下，您可以省略范围运算符一侧的值。这种范围被称为<em>单边范围</em>，因为运算符只在一边有一个值。例如：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> name <span class="keyword">in</span> names[<span class="number">2</span><span class="operator">...</span>] &#123;</span><br><span class="line">   <span class="built_in">print</span>(name)</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// Brian</span></span><br><span class="line"><span class="comment">// Jack</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> name <span class="keyword">in</span> names[<span class="operator">...</span><span class="number">2</span>] &#123;</span><br><span class="line">   <span class="built_in">print</span>(name)</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// Anna</span></span><br><span class="line"><span class="comment">// Alex</span></span><br><span class="line"><span class="comment">// Brian</span></span><br></pre></td></tr></table></figure>
+
+<p>半开范围运算符还有一个单边形式，仅用其最终值书写。就像您在两侧都包含一个值一样，最终值不是范围的一部分。例如：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> name <span class="keyword">in</span> names[<span class="operator">..&lt;</span><span class="number">2</span>] &#123;</span><br><span class="line">   <span class="built_in">print</span>(name)</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// Anna</span></span><br><span class="line"><span class="comment">// Alex</span></span><br></pre></td></tr></table></figure>
+
+<p>单边范围可用于其他上下文，而不仅仅是下标。您无法迭代省略第一个值的单边范围，因为不清楚迭代应该从哪里开始。<em>您可以</em>迭代省略其最终值的单边范围；但是，由于范围无限期地持续，请确保为循环添加显式结束条件。您还可以检查单边范围是否包含特定值，如下代码所示。</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> range <span class="operator">=</span> <span class="operator">...</span><span class="number">5</span></span><br><span class="line">range.contains(<span class="number">7</span>)   <span class="comment">// false</span></span><br><span class="line">range.contains(<span class="number">4</span>)   <span class="comment">// true</span></span><br><span class="line">range.contains(<span class="operator">-</span><span class="number">1</span>)  <span class="comment">// true</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="逻辑运算符"><a href="#逻辑运算符" class="headerlink" title="逻辑运算符"></a>逻辑运算符</h2><p><em>逻辑运算符</em>修改或组合布尔逻辑值<code>true</code>和<code>false</code>。Swift支持在基于C的语言中找到的三个标准逻辑运算符：</p>
+<ul>
+<li>逻辑不是（<code>!a</code>）</li>
+<li>逻辑和（<code>a&amp;&amp;b</code>）</li>
+<li>Logical OR (<code>a || b</code>)</li>
+</ul>
+<h3 id="逻辑非运算符"><a href="#逻辑非运算符" class="headerlink" title="逻辑非运算符"></a>逻辑非运算符</h3><p><em>逻辑非运算符</em>（<code>!a</code>）反转布尔值，使<code>true</code>变成<code>false</code>，<code>false</code>变成<code>true</code>。</p>
+<p>逻辑NOt运算符是一个前缀运算符，并显示在其操作的值之前，没有任何空格。它可以读作“不是<code>a</code>”，如以下示例所示：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> allowedEntry <span class="operator">=</span> <span class="literal">false</span></span><br><span class="line"><span class="keyword">if</span> <span class="operator">!</span>allowedEntry &#123;</span><br><span class="line">   <span class="built_in">print</span>(<span class="string">&quot;ACCESS DENIED&quot;</span>)</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// Prints &quot;ACCESS DENIED&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>短语<code>if!allowedEntry</code>可以读作“如果不允许进入”。只有当“不允许输入”为true时，才会执行后续行；也就是说，如果<code>allowedEntry</code>为<code>false</code>。</p>
+<p>与本示例一样，仔细选择布尔常量和变量名称有助于保持代码的可读性和简洁性，同时避免双重否定或混淆逻辑语句。</p>
+<h3 id="逻辑和运算符-amp-amp"><a href="#逻辑和运算符-amp-amp" class="headerlink" title="逻辑和运算符(&amp;&amp;)"></a>逻辑和运算符(&amp;&amp;)</h3><p><em>逻辑和运算符</em>（<code>a&amp;&amp;b</code>）创建逻辑表达式，其中两个值都必须<code>true</code>，整体表达式也为<code>true</code>。</p>
+<p>如果任一值为<code>false</code>，则整体表达式也为<code>false</code>。事实上，如果<em>第一个</em>值是<code>false</code>的，第二个值甚至不会被计算，因为它不可能使整个表达式等同于<code>true</code>。这被称为<em>短路评估</em>。</p>
+<p>此示例考虑两个<code>Bool</code>值，并且仅当两个值都为<code>true</code>时才允许访问：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> enteredDoorCode <span class="operator">=</span> <span class="literal">true</span></span><br><span class="line"><span class="keyword">let</span> passedRetinaScan <span class="operator">=</span> <span class="literal">false</span></span><br><span class="line"><span class="keyword">if</span> enteredDoorCode <span class="operator">&amp;&amp;</span> passedRetinaScan &#123;</span><br><span class="line">   <span class="built_in">print</span>(<span class="string">&quot;Welcome!&quot;</span>)</span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">   <span class="built_in">print</span>(<span class="string">&quot;ACCESS DENIED&quot;</span>)</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// Prints &quot;ACCESS DENIED&quot;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="逻辑OR运算符"><a href="#逻辑OR运算符" class="headerlink" title="逻辑OR运算符(||)"></a>逻辑OR运算符(||)</h3><p>逻辑OR操作符 ( <code>a || b</code> )是由两个相邻管道字符组成的中缀操作符。你可以用它来创建逻辑表达式，其中只有两个值中的一个必须为“true”，才能使整个表达式为“true”。</p>
+<p>与上面的逻辑和运算符一样，逻辑OR运算符使用短路求值来考虑其表达式。如果逻辑OR表达式的左侧为<code>true</code>，则不会计算右侧，因为它无法改变整体表达式的结果。</p>
+<p>在下面的示例中，第一个<code>Bool</code>值（<code>hasDoorKey</code>）为<code>false</code>，但第二个值（<code>knowsOverridePassword</code>）为<code>true</code>。因为一个值为<code>true</code>，因此整体表达式也计算为<code>true</code>，并且允许访问：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> hasDoorKey <span class="operator">=</span> <span class="literal">false</span></span><br><span class="line"><span class="keyword">let</span> knowsOverridePassword <span class="operator">=</span> <span class="literal">true</span></span><br><span class="line"><span class="keyword">if</span> hasDoorKey <span class="operator">||</span> knowsOverridePassword &#123;</span><br><span class="line">   <span class="built_in">print</span>(<span class="string">&quot;Welcome!&quot;</span>)</span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">   <span class="built_in">print</span>(<span class="string">&quot;ACCESS DENIED&quot;</span>)</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// Prints &quot;Welcome!&quot;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="组合逻辑运算符"><a href="#组合逻辑运算符" class="headerlink" title="组合逻辑运算符"></a>组合逻辑运算符</h3><p>您可以组合多个逻辑运算符来创建更长的复合表达式：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> enteredDoorCode <span class="operator">&amp;&amp;</span> passedRetinaScan <span class="operator">||</span> hasDoorKey <span class="operator">||</span> knowsOverridePassword &#123;</span><br><span class="line">   <span class="built_in">print</span>(<span class="string">&quot;Welcome!&quot;</span>)</span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">   <span class="built_in">print</span>(<span class="string">&quot;ACCESS DENIED&quot;</span>)</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// Prints &quot;Welcome!&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>此示例使用多个<code>&amp;&amp;</code>和<code>||</code>运算符来创建更长的复合表达式。然而，<code>&amp;&amp;</code>和<code>||</code>运算符仍然只在两个值上运行，因此这实际上是三个较小的表达式链在一起。该示例可以理解为：</p>
+<p>如果我们输入了正确的门密码并通过了视网膜扫描，或者我们有有效的门钥匙，或者我们知道紧急覆盖密码，那么允许访问。</p>
+<p>根据 <code>enteredDoorCode</code> ，  <code>passedRetinaScan</code> 和 <code>hasDoorKey</code> 的值，前两个子表达式为 <code>false</code> 。但是，紧急重写密码是已知的，因此整个复合表达式的计算结果仍然为“true”。</p>
+<blockquote>
+<p>注意</p>
+<p>Swift逻辑运算符<code>&amp;&amp;</code>和<code>||</code>是左关联，这意味着具有多个逻辑运算符的复合表达式首先计算最左边的子表达式。</p>
+</blockquote>
+<h3 id="显式括号"><a href="#显式括号" class="headerlink" title="显式括号"></a>显式括号</h3><p>有时，在不严格需要括号时包含括号是有用的，以使复杂表达式的意图更容易阅读。在上面的门访问示例中，在复合表达式的第一部分周围添加括号以明确其意图是有用的：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (enteredDoorCode <span class="operator">&amp;&amp;</span> passedRetinaScan) <span class="operator">||</span> hasDoorKey <span class="operator">||</span> knowsOverridePassword &#123;</span><br><span class="line">   <span class="built_in">print</span>(<span class="string">&quot;Welcome!&quot;</span>)</span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">   <span class="built_in">print</span>(<span class="string">&quot;ACCESS DENIED&quot;</span>)</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// Prints &quot;Welcome!&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>括号清楚地表明，前两个值被视为整体逻辑中单独可能状态的一部分。复合表达式的输出不会改变，但整体意图对读者来说更清楚。可读性总是比简洁更受欢迎；使用括号，它们有助于明确你的意图。</p>
+
+      
+    </div>
+    <div class="article-footer">
+      <blockquote class="mt-2x">
+  <ul class="post-copyright list-unstyled">
+    
+    <li class="post-copyright-link hidden-xs">
+      <strong>本文链接：</strong>
+      <a href="https://guoshunfa.com/2022/07/Swift%E5%9F%BA%E7%A1%80-%E5%9F%BA%E6%9C%AC%E8%BF%90%E7%AE%97%E7%AC%A6/" title="Swift基础 基本运算符" target="_blank" rel="external">https://guoshunfa.com/2022/07/Swift基础-基本运算符/</a>
+    </li>
+    
+    <li class="post-copyright-license">
+      <strong>版权声明： </strong> 本博客所有文章除特别声明外，均采用 <a href="http://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank" rel="external">CC BY 4.0 CN协议</a> 许可协议。转载请注明出处！
+    </li>
+  </ul>
+</blockquote>
+
+
+<div class="panel panel-default panel-badger">
+  <div class="panel-body">
+    <figure class="media">
+      <div class="media-left">
+        <a href="https://github.com/guoshunfa" target="_blank" class="img-burn thumb-sm visible-lg">
+          <img src="/images/avatar.jpg" class="img-rounded w-full" alt="">
+        </a>
+      </div>
+      <div class="media-body">
+        <h3 class="media-heading"><a href="https://github.com/guoshunfa" target="_blank"><span class="text-dark">郭顺发</span><small class="ml-1x">创业中......</small></a></h3>
+        <div>承接：小程序开发、APP开发、网站开发、爬虫开发</div>
+      </div>
+    </figure>
+  </div>
+</div>
+
+
+    </div>
+  </article>
+  
+    
+  <section id="comments">
+  	
+           
+    
+  </section>
+
+
+  
+</div>
+
+  <nav class="bar bar-footer clearfix" data-stick-bottom>
+  <div class="bar-inner">
+  
+  <ul class="pager pull-left">
+    
+    <li class="prev">
+      <a href="/2022/07/Swift%E5%9F%BA%E7%A1%80-%E5%8F%AF%E9%80%89%E9%93%BE%E6%9D%A1/" title="Swift基础 可选链条"><i class="icon icon-angle-left" aria-hidden="true"></i><span>&nbsp;&nbsp;上一篇</span></a>
+    </li>
+    
+    
+    <li class="next">
+      <a href="/2022/07/Swift%E5%9F%BA%E7%A1%80-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/" title="Swift基础 基础知识"><span>下一篇&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
+    </li>
+    
+    
+  </ul>
+  
+  
+  
+  <div class="bar-right">
+    
+    <div class="share-component" data-sites="weibo,qq,wechat,facebook,twitter" data-mobile-sites="weibo,qq,qzone"></div>
+    
+  </div>
+  </div>
+</nav>
+  
+
+
+</main>
+
+  <footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
+	
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/guoshunfa" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="https://gitee.com/guoshunfa" target="_blank" title="Gitee" data-toggle=tooltip data-placement=top><i class="icon icon-gitee"></i></a></li>
+        
+        <li><a href="https://juejin.cn/user/166781500267015" target="_blank" title="Juejin" data-toggle=tooltip data-placement=top><i class="icon icon-juejin"></i></a></li>
+        
+        <li><a href="https://cloud.tencent.com/developer/user/7784141" target="_blank" title="Code" data-toggle=tooltip data-placement=top><i class="icon icon-code"></i></a></li>
+        
+        <li><a href="/atom.xml" target="_blank" title="Rss" data-toggle=tooltip data-placement=top><i class="icon icon-rss"></i></a></li>
+        
+    </ul>
+
+    <div class="copyright">
+    	
+        &copy; 2024 guoshunfa
+        
+        <!-- <div class="publishby">
+        	Theme by <a href="https://github.com/cofess" target="_blank"> cofess </a>base on <a href="https://github.com/cofess/hexo-theme-pure" target="_blank">pure</a>.
+        </div> -->
+    </div>
+</footer>
+  <script src="//cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
+<script>
+window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
+</script>
+
+<script src="/js/plugin.min.js"></script>
+
+
+<script src="/js/application.js"></script>
+
+
+    <script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(未命名)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+
+<script src="/js/insight.js"></script>
+
+
+
+    <script>
+(function ($) {
+    $('.search-form').on('submit', function (e) {
+        var keyword = $('.search-form-input[name="wd"]').val();
+        window.location = 'https://www.baidu.com/s?wd=site:guoshunfa.com ' + keyword;
+        return false;
+    });
+})(jQuery);
+</script>
+
+
+
+
+   
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+   
+    
+  <!-- <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css"> -->
+  <script src="//cdn.jsdelivr.net/npm/gitalk@1.7.2/dist/gitalk.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/blueimp-md5@2.10.0/js/md5.min.js"></script>
+  <script type="text/javascript">
+  var gitalk = new Gitalk({
+    clientID: '328529f408a5d1041fe1',
+    clientSecret: '43872fab04fe0accb98439ac77ff71ff81f7b9dd',
+    repo: 'guoshunfa-comment',
+    owner: 'guoshunfa',
+    admin: ['guoshunfa'],
+    id: md5(location.pathname),
+    distractionFreeMode: true,
+    language: 'zh-CN',
+    enableHotKey: 'true'
+  })
+  gitalk.render('comments')
+  </script>
+      
+
+
+
+  <script src="//cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.3.5/dist/jquery.fancybox.min.js"></script>
+  <script>
+  //利用 FancyBox 实现点击图片放大
+  $(document).ready(function() {
+    $('article img').not('[hidden]').not('.panel-body img').each(function() {
+      var $image = $(this);
+      var imageCaption = $image.attr('alt');
+      var $imageWrapLink = $image.parent('a');
+      if ($imageWrapLink.length < 1) {
+        var src = this.getAttribute('src');
+        var idx = src.lastIndexOf('?');
+        if (idx != -1) {
+          src = src.substring(0, idx);
+        }
+        $imageWrapLink = $image.wrap('<a href="' + src + '"></a>').parent('a');
+      }
+      $imageWrapLink.attr('data-fancybox', 'images');
+      if (imageCaption) {
+        $imageWrapLink.attr('data-caption', imageCaption);
+      }
+    });
+    $().fancybox({
+      selector: '[data-fancybox="images"]',
+      hash: false,
+      loop: false,
+    });
+  });
+  </script>
+
+
+
+
+
+</body>
+</html>

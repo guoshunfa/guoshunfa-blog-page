@@ -1,0 +1,1159 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+  <meta charset="utf-8">
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-transform" />
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="format-detection" content="telephone=no,email=no,adress=no">
+  <!-- Color theme for statusbar -->
+  <meta name="theme-color" content="#000000" />
+  <!-- 强制页面在当前窗口以独立页面显示,防止别人在框架里调用页面 -->
+  <meta http-equiv="window-target" content="_top" />
+  
+  
+  <title>MongoDB 命令记录 | guoshunfa</title>
+  <meta name="description" content="一下内容基于MongoDB 4.4.11版本。 命令行连接数据库方式：  直接输入mongo。 mongo mongodb:&#x2F;&#x2F;username:password@hostname&#x2F;dbname。例子：mongo mongodb:&#x2F;&#x2F;admin:123456@123.1.2.3:12345&#x2F;test01   1. MongoDB 主要命令描述 这里直接通过help命令的放回内容进行记录。 备注：">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MongoDB 命令记录">
+<meta property="og:url" content="https://guoshunfa.com/2022/07/MongoDB-%E5%91%BD%E4%BB%A4%E8%AE%B0%E5%BD%95/index.html">
+<meta property="og:site_name" content="guoshunfa">
+<meta property="og:description" content="一下内容基于MongoDB 4.4.11版本。 命令行连接数据库方式：  直接输入mongo。 mongo mongodb:&#x2F;&#x2F;username:password@hostname&#x2F;dbname。例子：mongo mongodb:&#x2F;&#x2F;admin:123456@123.1.2.3:12345&#x2F;test01   1. MongoDB 主要命令描述 这里直接通过help命令的放回内容进行记录。 备注：">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://file.pandacode.cn//blog/202109111301481.png">
+<meta property="article:published_time" content="2022-07-01T03:37:06.000Z">
+<meta property="article:modified_time" content="2024-01-28T11:41:39.250Z">
+<meta property="article:author" content="guoshunfa">
+<meta property="article:tag" content="MongoDB">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://file.pandacode.cn//blog/202109111301481.png">
+  <!-- Canonical links -->
+  <link rel="canonical" href="https://guoshunfa.com/2022/07/MongoDB-%E5%91%BD%E4%BB%A4%E8%AE%B0%E5%BD%95/index.html">
+  
+    <link rel="alternate" href="/atom.xml" title="guoshunfa" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="favicon.jpg" type="image/x-icon">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  
+  
+    <link href="//cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.3.5/dist/jquery.fancybox.min.css" rel="stylesheet">
+  
+  
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1.7.2/dist/gitalk.min.css">
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body class="main-center" itemscope itemtype="http://schema.org/WebPage">
+  <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+  <div class="slimContent">
+    <div class="navbar-header">
+      
+      
+      <div class="profile-block text-center">
+        <a id="avatar" href="https://github.com/guoshunfa" target="_blank">
+          <img class="img-circle img-rotate" src="/images/avatar.jpg" width="200" height="200">
+        </a>
+        <h2 id="name" class="hidden-xs hidden-sm">郭顺发</h2>
+        <h3 id="title" class="hidden-xs hidden-sm hidden-md">创业中......</h3>
+        <small id="location" class="text-muted hidden-xs hidden-sm"><i class="icon icon-map-marker"></i> 深圳, China</small>
+      </div>
+      
+      <div class="search" id="search-form-wrap">
+
+    <form class="search-form sidebar-form">
+        <div class="input-group">
+            <input type="text" class="search-form-input form-control" placeholder="搜索" />
+            <span class="input-group-btn">
+                <button type="submit" class="search-form-submit btn btn-flat" onclick="return false;"><i class="icon icon-search"></i></button>
+            </span>
+        </div>
+    </form>
+    <div class="ins-search">
+  <div class="ins-search-mask"></div>
+  <div class="ins-search-container">
+    <div class="ins-input-wrapper">
+      <input type="text" class="ins-search-input" placeholder="想要查找什么..." x-webkit-speech />
+      <button type="button" class="close ins-close ins-selectable" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="ins-section-wrapper">
+      <div class="ins-section-container"></div>
+    </div>
+  </div>
+</div>
+
+
+</div>
+      <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <nav id="main-navbar" class="collapse navbar-collapse" itemscope itemtype="http://schema.org/SiteNavigationElement" role="navigation">
+      <ul class="nav navbar-nav main-nav menu-highlight">
+        
+        
+        <li class="menu-item menu-item-首页">
+          <a href="/.">
+            
+            <i class="icon icon-home-fill"></i>
+            
+            <span class="menu-title">首页</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-归档">
+          <a href="/archives">
+            
+            <i class="icon icon-archives-fill"></i>
+            
+            <span class="menu-title">归档</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-分类">
+          <a href="/categories">
+            
+            <i class="icon icon-folder"></i>
+            
+            <span class="menu-title">分类</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-标签">
+          <a href="/tags">
+            
+            <i class="icon icon-tags"></i>
+            
+            <span class="menu-title">标签</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-github仓库">
+          <a href="/repository">
+            
+            <i class="icon icon-project"></i>
+            
+            <span class="menu-title">github仓库</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-工具箱">
+          <a href="/tools">
+            
+            <i class="icon icon-book-fill"></i>
+            
+            <span class="menu-title">工具箱</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-友链">
+          <a href="/links">
+            
+            <i class="icon icon-friendship"></i>
+            
+            <span class="menu-title">友链</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-关于">
+          <a href="/about">
+            
+            <i class="icon icon-cup-fill"></i>
+            
+            <span class="menu-title">关于</span>
+          </a>
+        </li>
+        
+      </ul>
+      
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/guoshunfa" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="https://gitee.com/guoshunfa" target="_blank" title="Gitee" data-toggle=tooltip data-placement=top><i class="icon icon-gitee"></i></a></li>
+        
+        <li><a href="https://juejin.cn/user/166781500267015" target="_blank" title="Juejin" data-toggle=tooltip data-placement=top><i class="icon icon-juejin"></i></a></li>
+        
+        <li><a href="https://cloud.tencent.com/developer/user/7784141" target="_blank" title="Code" data-toggle=tooltip data-placement=top><i class="icon icon-code"></i></a></li>
+        
+        <li><a href="/atom.xml" target="_blank" title="Rss" data-toggle=tooltip data-placement=top><i class="icon icon-rss"></i></a></li>
+        
+    </ul>
+
+    </nav>
+  </div>
+</header>
+
+  
+    <aside class="sidebar" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    
+      <div class="widget">
+    <h3 class="widget-title">公告</h3>
+    <div class="widget-body">
+        <div id="board">
+            <div class="content">
+                <p>欢迎来到www.guoshunfa.com。</p><hr/><a target="_blank" rel="noopener" href="https://www.oracle.com/cn/java/">前往Java官网<a/><br/><a target="_blank" rel="noopener" href="https://spring.io/">前往Spring官网<a/>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget-body">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/HTML-CSS-JavaScript/">HTML/CSS/JavaScript</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Java/">Java</a><span class="category-list-count">17</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Python/">Python</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/SpringBoot/">SpringBoot</a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Swift/">Swift</a><span class="category-list-count">29</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%88%9B%E4%B8%9A/">创业</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%A4%8D%E7%9B%98/">复盘</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%A8%B1%E4%B9%90/">娱乐</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%8A%80%E6%9C%AF/">技术</a><span class="category-list-count">27</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%8A%80%E6%9C%AF/%E6%90%AD%E5%BB%BA%E5%8D%95%E4%BD%93SpringBoot%E9%A1%B9%E7%9B%AE/">搭建单体SpringBoot项目</a><span class="category-list-count">21</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%90%AD%E5%BB%BA%E5%8D%95%E4%BD%93SpringBoot%E9%A1%B9%E7%9B%AE/">搭建单体SpringBoot项目</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/">数据库</a><span class="category-list-count">17</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%9C%8D%E5%8A%A1/">服务</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%9C%8D%E5%8A%A1-%E7%BB%84%E4%BB%B6/">服务&组件</a><span class="category-list-count">27</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%AE%A1%E7%90%86/">服务器管理</a><span class="category-list-count">21</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E7%AE%97%E6%B3%95/">算法</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E8%BD%AF%E4%BB%B6%E4%BD%BF%E7%94%A8/">软件使用</a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E8%BD%AF%E4%BB%B6%E6%8A%80%E6%9C%AF%E6%A1%86%E6%9E%B6/">软件技术框架</a><span class="category-list-count">44</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E9%98%85%E8%AF%BB/">阅读</a><span class="category-list-count">2</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget-body">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/AJAX/" rel="tag">AJAX</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Activiti7/" rel="tag">Activiti7</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Arthas/" rel="tag">Arthas</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CSS/" rel="tag">CSS</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Curl/" rel="tag">Curl</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Debug/" rel="tag">Debug</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Docker/" rel="tag">Docker</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Druid/" rel="tag">Druid</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Electron/" rel="tag">Electron</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Expect/" rel="tag">Expect</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/FastJson/" rel="tag">FastJson</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/FreeMarker/" rel="tag">FreeMarker</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Git/" rel="tag">Git</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Gitlab/" rel="tag">Gitlab</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/GitlabRunner/" rel="tag">GitlabRunner</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/HTML-CSS-JavaScript/" rel="tag">HTML&#x2F;CSS&#x2F;JavaScript</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hook/" rel="tag">Hook</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Http/" rel="tag">Http</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hutool/" rel="tag">Hutool</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/IDEA/" rel="tag">IDEA</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JS/" rel="tag">JS</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JVM/" rel="tag">JVM</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Jar/" rel="tag">Jar</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java/" rel="tag">Java</a><span class="tag-list-count">27</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Jdk/" rel="tag">Jdk</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Jenkins/" rel="tag">Jenkins</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Jmeter/" rel="tag">Jmeter</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Json/" rel="tag">Json</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Jsoup/" rel="tag">Jsoup</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Kafka/" rel="tag">Kafka</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Leetcode/" rel="tag">Leetcode</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux/" rel="tag">Linux</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Logback/" rel="tag">Logback</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Mac/" rel="tag">Mac</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Maven/" rel="tag">Maven</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MongoDB/" rel="tag">MongoDB</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MyBatis/" rel="tag">MyBatis</a><span class="tag-list-count">7</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Mybatis/" rel="tag">Mybatis</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MybatisPlus/" rel="tag">MybatisPlus</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Mysql/" rel="tag">Mysql</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Nano/" rel="tag">Nano</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Nexus/" rel="tag">Nexus</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Nginx/" rel="tag">Nginx</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Opengrok/" rel="tag">Opengrok</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Oracle/" rel="tag">Oracle</a><span class="tag-list-count">22</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Profile/" rel="tag">Profile</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/PubSubJS/" rel="tag">PubSubJS</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Python/" rel="tag">Python</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Quartz/" rel="tag">Quartz</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/RESTful/" rel="tag">RESTful</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/React/" rel="tag">React</a><span class="tag-list-count">7</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Redis/" rel="tag">Redis</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SQL/" rel="tag">SQL</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SVN/" rel="tag">SVN</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Scheduled/" rel="tag">Scheduled</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Scrapy/" rel="tag">Scrapy</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Shell/" rel="tag">Shell</a><span class="tag-list-count">9</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Spel%E8%A1%A8%E8%BE%BE%E5%BC%8F/" rel="tag">Spel表达式</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Spring/" rel="tag">Spring</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SpringBoot/" rel="tag">SpringBoot</a><span class="tag-list-count">34</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SpringEvent/" rel="tag">SpringEvent</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SpringMVC/" rel="tag">SpringMVC</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SpringSecurity/" rel="tag">SpringSecurity</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Stream/" rel="tag">Stream</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Swagger/" rel="tag">Swagger</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Swift/" rel="tag">Swift</a><span class="tag-list-count">29</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/TestNG/" rel="tag">TestNG</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Tomcat/" rel="tag">Tomcat</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/UI%E7%BB%84%E4%BB%B6%E5%BA%93/" rel="tag">UI组件库</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Validator/" rel="tag">Validator</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Vue/" rel="tag">Vue</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Vuepress/" rel="tag">Vuepress</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Wordpress/" rel="tag">Wordpress</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/XML/" rel="tag">XML</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/assert/" rel="tag">assert</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/docker/" rel="tag">docker</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/gitlab/" rel="tag">gitlab</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/homebrew/" rel="tag">homebrew</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/iframe/" rel="tag">iframe</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java/" rel="tag">java</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/lambda/" rel="tag">lambda</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/less/" rel="tag">less</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/" rel="tag">linux</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mac/" rel="tag">mac</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mybatis-plus/" rel="tag">mybatis-plus</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mysql/" rel="tag">mysql</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/oracle/" rel="tag">oracle</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/pom-xml/" rel="tag">pom.xml</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/quartz/" rel="tag">quartz</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/settings-xml/" rel="tag">settings.xml</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/spring-boot/" rel="tag">spring-boot</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ssh/" rel="tag">ssh</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sshpass/" rel="tag">sshpass</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/yum/" rel="tag">yum</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%B9%90%E8%A7%82%E9%94%81/" rel="tag">乐观锁</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BB%8B%E7%BB%8D/" rel="tag">介绍</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%86%85%E7%BD%91/" rel="tag">内网</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%86%85%E7%BD%91%E7%A9%BF%E9%80%8F/" rel="tag">内网穿透</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%8A%A0%E5%AF%86/" rel="tag">加密</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%8F%8D%E7%BC%96%E8%AF%91%E5%B7%A5%E5%85%B7/" rel="tag">反编译工具</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%9B%BE%E5%BA%8A/" rel="tag">图床</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%9F%BA%E7%A1%80/" rel="tag">基础</a><span class="tag-list-count">29</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%AD%98%E5%82%A8%E5%87%BD%E6%95%B0/" rel="tag">存储函数</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%AD%98%E5%82%A8%E8%BF%87%E7%A8%8B/" rel="tag">存储过程</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%AE%9A%E6%97%B6%E5%99%A8/" rel="tag">定时器</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%AE%9D%E5%A1%94/" rel="tag">宝塔</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%B9%B6%E5%8F%91/" rel="tag">并发</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%BC%82%E5%B8%B8/" rel="tag">异常</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%BF%83%E7%90%86/" rel="tag">心理</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%80%BB%E7%BB%93/" rel="tag">总结</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%8C%81%E4%B9%85%E5%B1%82%E6%A1%86%E6%9E%B6/" rel="tag">持久层框架</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%8E%A5%E5%8F%A3/" rel="tag">接口</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%8F%92%E4%BB%B6/" rel="tag">插件</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/" rel="tag">数据库</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%96%AD%E8%A8%80/" rel="tag">断言</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%A0%91%E8%8E%93%E6%B4%BE/" rel="tag">树莓派</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%A0%91%E8%8E%93%E6%B4%BE4B/" rel="tag">树莓派4B</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%A6%82%E5%BF%B5/" rel="tag">概念</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%A8%A1%E7%89%88%E5%BC%95%E6%93%8E/" rel="tag">模版引擎</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%B3%9B%E5%9E%8B/" rel="tag">泛型</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%B5%8B%E8%AF%95/" rel="tag">测试</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%88%AC%E8%99%AB/" rel="tag">爬虫</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%94%A8%E6%88%B7%E6%9D%83%E9%99%90%E9%AA%8C%E8%AF%81/" rel="tag">用户权限验证</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%9F%A5%E8%AF%86/" rel="tag">知识</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%AE%97%E6%B3%95/" rel="tag">算法</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%B1%BB/" rel="tag">类</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BB%84%E4%BB%B6%E5%BA%93/" rel="tag">组件库</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%84%9A%E6%9C%AC/" rel="tag">脚本</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%87%AA%E5%8A%A8%E5%8C%96%E6%B5%8B%E8%AF%95/" rel="tag">自动化测试</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%8B%A5%E4%BE%9D/" rel="tag">若依</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/" rel="tag">解决方案</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" rel="tag">设计模式</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/" rel="tag">读书笔记</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%B7%A8%E5%9F%9F/" rel="tag">跨域</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%83%A8%E7%BD%B2/" rel="tag">部署</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9B%86%E6%88%90/" rel="tag">集成</a><span class="tag-list-count">14</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1/" rel="tag">面向对象</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9F%A9%E5%89%A7/" rel="tag">韩剧</a><span class="tag-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget-body tagcloud">
+      <a href="/tags/AJAX/" style="font-size: 13px;">AJAX</a> <a href="/tags/Activiti7/" style="font-size: 13.17px;">Activiti7</a> <a href="/tags/Arthas/" style="font-size: 13px;">Arthas</a> <a href="/tags/CSS/" style="font-size: 13px;">CSS</a> <a href="/tags/Curl/" style="font-size: 13px;">Curl</a> <a href="/tags/Debug/" style="font-size: 13px;">Debug</a> <a href="/tags/Docker/" style="font-size: 13.42px;">Docker</a> <a href="/tags/Druid/" style="font-size: 13px;">Druid</a> <a href="/tags/Electron/" style="font-size: 13.08px;">Electron</a> <a href="/tags/Expect/" style="font-size: 13px;">Expect</a> <a href="/tags/FastJson/" style="font-size: 13px;">FastJson</a> <a href="/tags/FreeMarker/" style="font-size: 13px;">FreeMarker</a> <a href="/tags/Git/" style="font-size: 13.08px;">Git</a> <a href="/tags/Gitlab/" style="font-size: 13.25px;">Gitlab</a> <a href="/tags/GitlabRunner/" style="font-size: 13.08px;">GitlabRunner</a> <a href="/tags/HTML-CSS-JavaScript/" style="font-size: 13.17px;">HTML/CSS/JavaScript</a> <a href="/tags/Hook/" style="font-size: 13px;">Hook</a> <a href="/tags/Http/" style="font-size: 13px;">Http</a> <a href="/tags/Hutool/" style="font-size: 13px;">Hutool</a> <a href="/tags/IDEA/" style="font-size: 13.25px;">IDEA</a> <a href="/tags/JS/" style="font-size: 13.08px;">JS</a> <a href="/tags/JVM/" style="font-size: 13px;">JVM</a> <a href="/tags/Jar/" style="font-size: 13.08px;">Jar</a> <a href="/tags/Java/" style="font-size: 13.83px;">Java</a> <a href="/tags/Jdk/" style="font-size: 13px;">Jdk</a> <a href="/tags/Jenkins/" style="font-size: 13px;">Jenkins</a> <a href="/tags/Jmeter/" style="font-size: 13px;">Jmeter</a> <a href="/tags/Json/" style="font-size: 13px;">Json</a> <a href="/tags/Jsoup/" style="font-size: 13px;">Jsoup</a> <a href="/tags/Kafka/" style="font-size: 13.25px;">Kafka</a> <a href="/tags/Leetcode/" style="font-size: 13.33px;">Leetcode</a> <a href="/tags/Linux/" style="font-size: 13px;">Linux</a> <a href="/tags/Logback/" style="font-size: 13px;">Logback</a> <a href="/tags/Mac/" style="font-size: 13px;">Mac</a> <a href="/tags/Maven/" style="font-size: 13.42px;">Maven</a> <a href="/tags/MongoDB/" style="font-size: 13.42px;">MongoDB</a> <a href="/tags/MyBatis/" style="font-size: 13.5px;">MyBatis</a> <a href="/tags/Mybatis/" style="font-size: 13.17px;">Mybatis</a> <a href="/tags/MybatisPlus/" style="font-size: 13.08px;">MybatisPlus</a> <a href="/tags/Mysql/" style="font-size: 13.25px;">Mysql</a> <a href="/tags/Nano/" style="font-size: 13px;">Nano</a> <a href="/tags/Nexus/" style="font-size: 13.08px;">Nexus</a> <a href="/tags/Nginx/" style="font-size: 13.08px;">Nginx</a> <a href="/tags/Opengrok/" style="font-size: 13px;">Opengrok</a> <a href="/tags/Oracle/" style="font-size: 13.75px;">Oracle</a> <a href="/tags/Profile/" style="font-size: 13px;">Profile</a> <a href="/tags/PubSubJS/" style="font-size: 13px;">PubSubJS</a> <a href="/tags/Python/" style="font-size: 13.17px;">Python</a> <a href="/tags/Quartz/" style="font-size: 13.08px;">Quartz</a> <a href="/tags/RESTful/" style="font-size: 13px;">RESTful</a> <a href="/tags/React/" style="font-size: 13.5px;">React</a> <a href="/tags/Redis/" style="font-size: 13.17px;">Redis</a> <a href="/tags/SQL/" style="font-size: 13.25px;">SQL</a> <a href="/tags/SVN/" style="font-size: 13px;">SVN</a> <a href="/tags/Scheduled/" style="font-size: 13px;">Scheduled</a> <a href="/tags/Scrapy/" style="font-size: 13px;">Scrapy</a> <a href="/tags/Shell/" style="font-size: 13.58px;">Shell</a> <a href="/tags/Spel%E8%A1%A8%E8%BE%BE%E5%BC%8F/" style="font-size: 13px;">Spel表达式</a> <a href="/tags/Spring/" style="font-size: 13.33px;">Spring</a> <a href="/tags/SpringBoot/" style="font-size: 14px;">SpringBoot</a> <a href="/tags/SpringEvent/" style="font-size: 13px;">SpringEvent</a> <a href="/tags/SpringMVC/" style="font-size: 13px;">SpringMVC</a> <a href="/tags/SpringSecurity/" style="font-size: 13.17px;">SpringSecurity</a> <a href="/tags/Stream/" style="font-size: 13px;">Stream</a> <a href="/tags/Swagger/" style="font-size: 13.08px;">Swagger</a> <a href="/tags/Swift/" style="font-size: 13.92px;">Swift</a> <a href="/tags/TestNG/" style="font-size: 13px;">TestNG</a> <a href="/tags/Tomcat/" style="font-size: 13px;">Tomcat</a> <a href="/tags/UI%E7%BB%84%E4%BB%B6%E5%BA%93/" style="font-size: 13px;">UI组件库</a> <a href="/tags/Validator/" style="font-size: 13px;">Validator</a> <a href="/tags/Vue/" style="font-size: 13px;">Vue</a> <a href="/tags/Vuepress/" style="font-size: 13.25px;">Vuepress</a> <a href="/tags/Wordpress/" style="font-size: 13px;">Wordpress</a> <a href="/tags/XML/" style="font-size: 13px;">XML</a> <a href="/tags/assert/" style="font-size: 13px;">assert</a> <a href="/tags/docker/" style="font-size: 13px;">docker</a> <a href="/tags/gitlab/" style="font-size: 13px;">gitlab</a> <a href="/tags/homebrew/" style="font-size: 13px;">homebrew</a> <a href="/tags/iframe/" style="font-size: 13px;">iframe</a> <a href="/tags/java/" style="font-size: 13px;">java</a> <a href="/tags/lambda/" style="font-size: 13px;">lambda</a> <a href="/tags/less/" style="font-size: 13px;">less</a> <a href="/tags/linux/" style="font-size: 13.25px;">linux</a> <a href="/tags/mac/" style="font-size: 13.25px;">mac</a> <a href="/tags/mybatis-plus/" style="font-size: 13px;">mybatis-plus</a> <a href="/tags/mysql/" style="font-size: 13px;">mysql</a> <a href="/tags/oracle/" style="font-size: 13px;">oracle</a> <a href="/tags/pom-xml/" style="font-size: 13px;">pom.xml</a> <a href="/tags/quartz/" style="font-size: 13px;">quartz</a> <a href="/tags/settings-xml/" style="font-size: 13px;">settings.xml</a> <a href="/tags/spring-boot/" style="font-size: 13px;">spring-boot</a> <a href="/tags/ssh/" style="font-size: 13px;">ssh</a> <a href="/tags/sshpass/" style="font-size: 13px;">sshpass</a> <a href="/tags/yum/" style="font-size: 13px;">yum</a> <a href="/tags/%E4%B9%90%E8%A7%82%E9%94%81/" style="font-size: 13px;">乐观锁</a> <a href="/tags/%E4%BB%8B%E7%BB%8D/" style="font-size: 13px;">介绍</a> <a href="/tags/%E5%86%85%E7%BD%91/" style="font-size: 13px;">内网</a> <a href="/tags/%E5%86%85%E7%BD%91%E7%A9%BF%E9%80%8F/" style="font-size: 13px;">内网穿透</a> <a href="/tags/%E5%8A%A0%E5%AF%86/" style="font-size: 13.08px;">加密</a> <a href="/tags/%E5%8F%8D%E7%BC%96%E8%AF%91%E5%B7%A5%E5%85%B7/" style="font-size: 13px;">反编译工具</a> <a href="/tags/%E5%9B%BE%E5%BA%8A/" style="font-size: 13px;">图床</a> <a href="/tags/%E5%9F%BA%E7%A1%80/" style="font-size: 13.92px;">基础</a> <a href="/tags/%E5%AD%98%E5%82%A8%E5%87%BD%E6%95%B0/" style="font-size: 13px;">存储函数</a> <a href="/tags/%E5%AD%98%E5%82%A8%E8%BF%87%E7%A8%8B/" style="font-size: 13.08px;">存储过程</a> <a href="/tags/%E5%AE%9A%E6%97%B6%E5%99%A8/" style="font-size: 13px;">定时器</a> <a href="/tags/%E5%AE%9D%E5%A1%94/" style="font-size: 13.08px;">宝塔</a> <a href="/tags/%E5%B9%B6%E5%8F%91/" style="font-size: 13px;">并发</a> <a href="/tags/%E5%BC%82%E5%B8%B8/" style="font-size: 13px;">异常</a> <a href="/tags/%E5%BF%83%E7%90%86/" style="font-size: 13.08px;">心理</a> <a href="/tags/%E6%80%BB%E7%BB%93/" style="font-size: 13px;">总结</a> <a href="/tags/%E6%8C%81%E4%B9%85%E5%B1%82%E6%A1%86%E6%9E%B6/" style="font-size: 13.17px;">持久层框架</a> <a href="/tags/%E6%8E%A5%E5%8F%A3/" style="font-size: 13px;">接口</a> <a href="/tags/%E6%8F%92%E4%BB%B6/" style="font-size: 13px;">插件</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/" style="font-size: 13.33px;">数据库</a> <a href="/tags/%E6%96%AD%E8%A8%80/" style="font-size: 13px;">断言</a> <a href="/tags/%E6%A0%91%E8%8E%93%E6%B4%BE/" style="font-size: 13.08px;">树莓派</a> <a href="/tags/%E6%A0%91%E8%8E%93%E6%B4%BE4B/" style="font-size: 13px;">树莓派4B</a> <a href="/tags/%E6%A6%82%E5%BF%B5/" style="font-size: 13px;">概念</a> <a href="/tags/%E6%A8%A1%E7%89%88%E5%BC%95%E6%93%8E/" style="font-size: 13px;">模版引擎</a> <a href="/tags/%E6%B3%9B%E5%9E%8B/" style="font-size: 13.08px;">泛型</a> <a href="/tags/%E6%B5%8B%E8%AF%95/" style="font-size: 13.33px;">测试</a> <a href="/tags/%E7%88%AC%E8%99%AB/" style="font-size: 13.08px;">爬虫</a> <a href="/tags/%E7%94%A8%E6%88%B7%E6%9D%83%E9%99%90%E9%AA%8C%E8%AF%81/" style="font-size: 13px;">用户权限验证</a> <a href="/tags/%E7%9F%A5%E8%AF%86/" style="font-size: 13px;">知识</a> <a href="/tags/%E7%AE%97%E6%B3%95/" style="font-size: 13.08px;">算法</a> <a href="/tags/%E7%B1%BB/" style="font-size: 13px;">类</a> <a href="/tags/%E7%BB%84%E4%BB%B6%E5%BA%93/" style="font-size: 13px;">组件库</a> <a href="/tags/%E8%84%9A%E6%9C%AC/" style="font-size: 13.25px;">脚本</a> <a href="/tags/%E8%87%AA%E5%8A%A8%E5%8C%96%E6%B5%8B%E8%AF%95/" style="font-size: 13px;">自动化测试</a> <a href="/tags/%E8%8B%A5%E4%BE%9D/" style="font-size: 13px;">若依</a> <a href="/tags/%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/" style="font-size: 13.08px;">解决方案</a> <a href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" style="font-size: 13px;">设计模式</a> <a href="/tags/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/" style="font-size: 13.08px;">读书笔记</a> <a href="/tags/%E8%B7%A8%E5%9F%9F/" style="font-size: 13px;">跨域</a> <a href="/tags/%E9%83%A8%E7%BD%B2/" style="font-size: 13px;">部署</a> <a href="/tags/%E9%9B%86%E6%88%90/" style="font-size: 13.67px;">集成</a> <a href="/tags/%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1/" style="font-size: 13px;">面向对象</a> <a href="/tags/%E9%9F%A9%E5%89%A7/" style="font-size: 13px;">韩剧</a>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget-body">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/07/">七月 2024</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/07/">七月 2023</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/06/">六月 2023</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/01/">一月 2023</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/11/">十一月 2022</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/10/">十月 2022</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/07/">七月 2022</a><span class="archive-list-count">181</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/06/">六月 2022</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/07/">七月 2020</a><span class="archive-list-count">17</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget-body">
+      <ul class="recent-post-list list-unstyled ">
+        
+          <li>
+            
+            <div class="item-thumb">
+              <a href="/2024/07/%E4%B8%8D%E5%8D%B7%E5%AD%A6%E5%8E%86%E5%92%8C%E8%83%8C%E6%99%AF%E7%9A%84%E8%B5%9B%E9%81%93%EF%BC%8C%E4%B9%9F%E8%83%BD%E6%9C%88%E5%85%A5%E8%BF%87%E4%B8%87%EF%BC%9F/" class="thumb">
+    
+    
+        <span class="thumb-image thumb-none"></span>
+    
+</a>
+
+            </div>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/%E5%88%9B%E4%B8%9A/">创业</a>
+              </p>
+              <p class="item-title">
+                <a href="/2024/07/%E4%B8%8D%E5%8D%B7%E5%AD%A6%E5%8E%86%E5%92%8C%E8%83%8C%E6%99%AF%E7%9A%84%E8%B5%9B%E9%81%93%EF%BC%8C%E4%B9%9F%E8%83%BD%E6%9C%88%E5%85%A5%E8%BF%87%E4%B8%87%EF%BC%9F/" class="title">不卷学历和背景的赛道，也能月入过万？</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2024-07-11T05:45:20.000Z" itemprop="datePublished">2024-07-11</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-thumb">
+              <a href="/2024/07/%E5%9B%9E%E9%A1%BE%E5%B7%A5%E4%BD%9C%E8%BF%99%E5%87%A0%E5%B9%B4/" class="thumb">
+    
+    
+        <span class="thumb-image thumb-none"></span>
+    
+</a>
+
+            </div>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/%E5%A4%8D%E7%9B%98/">复盘</a>
+              </p>
+              <p class="item-title">
+                <a href="/2024/07/%E5%9B%9E%E9%A1%BE%E5%B7%A5%E4%BD%9C%E8%BF%99%E5%87%A0%E5%B9%B4/" class="title">回顾工作这几年</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2024-07-09T06:19:23.000Z" itemprop="datePublished">2024-07-09</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-thumb">
+              <a href="/2023/07/SpringBoot3%E9%9B%86%E6%88%90Quartz%E6%9E%81%E7%AE%80%E7%89%88/" class="thumb">
+    
+    
+        <span style="background-image:url(/2023/07/SpringBoot3集成Quartz极简版/logo-quartz-scheduler.png)" alt="SpringBoot3集成Quartz极简版" class="thumb-image"></span>
+    
+</a>
+
+            </div>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/SpringBoot/">SpringBoot</a>
+              </p>
+              <p class="item-title">
+                <a href="/2023/07/SpringBoot3%E9%9B%86%E6%88%90Quartz%E6%9E%81%E7%AE%80%E7%89%88/" class="title">SpringBoot3集成Quartz极简版</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2023-07-18T01:14:01.000Z" itemprop="datePublished">2023-07-18</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-thumb">
+              <a href="/2023/07/SpringBoot3%E9%9B%86%E6%88%90Quartz%E8%AF%A6%E7%BB%86%E7%89%88/" class="thumb">
+    
+    
+        <span style="background-image:url(/2023/07/SpringBoot3集成Quartz极简版/logo-quartz-scheduler.png)" alt="SpringBoot3集成Quartz详细版" class="thumb-image"></span>
+    
+</a>
+
+            </div>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/SpringBoot/">SpringBoot</a>
+              </p>
+              <p class="item-title">
+                <a href="/2023/07/SpringBoot3%E9%9B%86%E6%88%90Quartz%E8%AF%A6%E7%BB%86%E7%89%88/" class="title">SpringBoot3集成Quartz详细版</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2023-07-18T01:14:01.000Z" itemprop="datePublished">2023-07-18</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-thumb">
+              <a href="/2023/07/SpringBoot3%E9%9B%86%E6%88%90Swagger/" class="thumb">
+    
+    
+        <span style="background-image:url(/2023/07/SpringBoot3集成Swagger/swagger_logo.svg)" alt="SpringBoot3集成Swagger" class="thumb-image"></span>
+    
+</a>
+
+            </div>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/SpringBoot/">SpringBoot</a>
+              </p>
+              <p class="item-title">
+                <a href="/2023/07/SpringBoot3%E9%9B%86%E6%88%90Swagger/" class="title">SpringBoot3集成Swagger</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2023-07-11T06:52:01.000Z" itemprop="datePublished">2023-07-11</time>
+              </p>
+            </div>
+          </li>
+          
+      </ul>
+    </div>
+  </div>
+  
+
+    
+  </div>
+</aside>
+
+  
+  
+<main class="main" role="main">
+  <div class="content">
+  <article id="post-软件开发/技术/数据库/MongoDB-命令记录" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
+    
+    <div class="article-header">
+      
+        
+  
+    <h1 class="article-title" itemprop="name">
+      MongoDB 命令记录
+    </h1>
+  
+
+      
+      <div class="article-meta">
+        <span class="article-date">
+    <i class="icon icon-calendar-check"></i>
+	<a href="/2022/07/MongoDB-%E5%91%BD%E4%BB%A4%E8%AE%B0%E5%BD%95/" class="article-date">
+	  <time datetime="2022-07-01T03:37:06.000Z" itemprop="datePublished">2022-07-01</time>
+	</a>
+</span>
+        
+  <span class="article-category">
+    <i class="icon icon-folder"></i>
+    <a class="article-category-link" href="/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/">数据库</a>
+  </span>
+
+        
+  <span class="article-tag">
+    <i class="icon icon-tags"></i>
+	<a class="article-tag-link-link" href="/tags/MongoDB/" rel="tag">MongoDB</a>
+  </span>
+
+
+        
+	<span class="article-read hidden-xs">
+	    <i class="icon icon-eye-fill" aria-hidden="true"></i>
+	    <span id="busuanzi_container_page_pv">
+			<span id="busuanzi_value_page_pv">0</span>
+		</span>
+	</span>
+
+
+        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2022/07/MongoDB-%E5%91%BD%E4%BB%A4%E8%AE%B0%E5%BD%95/#comments" class="article-comment-link">评论</a></span>
+        
+	
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">字数统计: 5.6k(字)</span>
+	
+	
+		<span class="post-readcount hidden-xs" itemprop="timeRequired">阅读时长: 28(分)</span>
+	
+
+      </div>
+    </div>
+    <div class="article-entry marked-body" itemprop="articleBody">
+      
+        <blockquote>
+<p>一下内容基于MongoDB 4.4.11版本。</p>
+<p>命令行连接数据库方式：</p>
+<ol>
+<li>直接输入<code>mongo</code>。</li>
+<li><code>mongo mongodb://username:password@hostname/dbname</code>。例子：<code>mongo mongodb://admin:123456@123.1.2.3:12345/test01</code></li>
+</ol>
+</blockquote>
+<h2 id="1-MongoDB-主要命令描述"><a href="#1-MongoDB-主要命令描述" class="headerlink" title="1. MongoDB 主要命令描述"></a>1. MongoDB 主要命令描述</h2><blockquote>
+<p><strong>这里直接通过help命令的放回内容进行记录。</strong></p>
+<p>备注：这里描述的表、集合、文档，都是表达数据库表的意思。</p>
+</blockquote>
+<h3 id="1-1-help-命令"><a href="#1-1-help-命令" class="headerlink" title="1.1. help 命令"></a>1.1. help 命令</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">&gt; </span><span class="language-bash"><span class="built_in">help</span>												 关于mongodb主要方法的帮助</span></span><br><span class="line">	db.help()                    关于数据库方法的帮助</span><br><span class="line">	db.mycoll.help()             关于数据库表方法的帮助</span><br><span class="line">	sh.help()                    分片方法的帮助</span><br><span class="line">	rs.help()                    副本集方法的帮助</span><br><span class="line">	help admin                   行政帮助</span><br><span class="line">	help connect                 连接到数据库的帮助</span><br><span class="line">	help keys                    键的快捷方式</span><br><span class="line">	help misc                    misc things to know</span><br><span class="line">	help mr                      mapreduce（一种分布式并行编程模型）</span><br><span class="line"></span><br><span class="line">	show dbs                     展示所有数据库的名称</span><br><span class="line">	show collections             展示当前数据库的所有集合（表）名称</span><br><span class="line">	show users                   展示当前数据库的所有用户</span><br><span class="line">	show profile                 显示时间为&gt;= 1ms的最近的system.profile条目</span><br><span class="line">	show logs                    显示可访问的log名称</span><br><span class="line">	show log [name]              打印出内存中日志的最后一段，global是默认值</span><br><span class="line">	use &lt;db_name&gt;                设置当前数据库</span><br><span class="line">	db.mycoll.find()             查询集合mycoll中所有的记录</span><br><span class="line">	db.mycoll.find( &#123; a : 1 &#125; )  查询集合mycoll中的记录，只查询满足条件a=1的记录</span><br><span class="line">	it                           最后一行求值的结果;用于进一步迭代（目前不知道在哪使用）</span><br><span class="line">	DBQuery.shellBatchSize = x   设置shell上显示的项目的默认数量（目前不知道在哪使用）</span><br><span class="line">	exit                         退出mongo shell</span><br></pre></td></tr></table></figure>
+
+<h3 id="1-2-db-help-命令"><a href="#1-2-db-help-命令" class="headerlink" title="1.2. db.help() 命令"></a>1.2. db.help() 命令</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">&gt; </span><span class="language-bash">db.help()</span></span><br><span class="line">DB methods:</span><br><span class="line">	db.adminCommand(nameOrDocument) - 切换到&#x27;admin&#x27; db，并运行命令 [只调用 db.runCommand(...)]（目前不知道在哪使用）</span><br><span class="line">	db.aggregate([pipeline], &#123;options&#125;) - 对该数据库执行无集合聚合;返回一个指针（目前不知道在哪使用）</span><br><span class="line">	db.auth(username, password)（目前不知道在哪使用）</span><br><span class="line">	db.cloneDatabase(fromhost) - will only function with MongoDB 4.0 and below</span><br><span class="line">	db.commandHelp(name) returns the help for the command</span><br><span class="line">	db.copyDatabase(fromdb, todb, fromhost) - will only function with MongoDB 4.0 and below</span><br><span class="line">	db.createCollection(name, &#123;size: ..., capped: ..., max: ...&#125;)</span><br><span class="line">	db.createUser(userDocument)</span><br><span class="line">	db.createView(name, viewOn, [&#123;$operator: &#123;...&#125;&#125;, ...], &#123;viewOptions&#125;)</span><br><span class="line">	db.currentOp() displays currently executing operations in the db</span><br><span class="line">	db.dropDatabase(writeConcern)</span><br><span class="line">	db.dropUser(username)</span><br><span class="line">	db.eval() - deprecated</span><br><span class="line">	db.fsyncLock() flush data to disk and lock server for backups</span><br><span class="line">	db.fsyncUnlock() unlocks server following a db.fsyncLock()</span><br><span class="line">	db.getCollection(cname) same as db[&#x27;cname&#x27;] or db.cname</span><br><span class="line">	db.getCollectionInfos([filter]) - returns a list that contains the names and options of the db&#x27;s collections</span><br><span class="line">	db.getCollectionNames()</span><br><span class="line">	db.getLastError() - just returns the err msg string</span><br><span class="line">	db.getLastErrorObj() - return full status object</span><br><span class="line">	db.getLogComponents()</span><br><span class="line">	db.getMongo() get the server connection object</span><br><span class="line">	db.getMongo().setSlaveOk() allow queries on a replication slave server</span><br><span class="line">	db.getName()</span><br><span class="line">	db.getProfilingLevel() - deprecated</span><br><span class="line">	db.getProfilingStatus() - returns if profiling is on and slow threshold</span><br><span class="line">	db.getReplicationInfo()</span><br><span class="line">	db.getSiblingDB(name) get the db at the same server as this one</span><br><span class="line">	db.getWriteConcern() - returns the write concern used for any operations on this db, inherited from server object if set</span><br><span class="line">	db.hostInfo() get details about the server&#x27;s host</span><br><span class="line">	db.isMaster() check replica primary status</span><br><span class="line">	db.killOp(opid) kills the current operation in the db</span><br><span class="line">	db.listCommands() lists all the db commands</span><br><span class="line">	db.loadServerScripts() loads all the myscripts in db.system.js</span><br><span class="line">	db.logout()</span><br><span class="line">	db.printCollectionStats()</span><br><span class="line">	db.printReplicationInfo()</span><br><span class="line">	db.printShardingStatus()</span><br><span class="line">	db.printSlaveReplicationInfo()</span><br><span class="line">	db.resetError()</span><br><span class="line">	db.runCommand(cmdObj) run a database command.  if cmdObj is a string, turns it into &#123;cmdObj: 1&#125;</span><br><span class="line">	db.serverStatus()</span><br><span class="line">	db.setLogLevel(level,&lt;component&gt;)</span><br><span class="line">	db.setProfilingLevel(level,slowms) 0=off 1=slow 2=all</span><br><span class="line">	db.setVerboseShell(flag) display extra information in shell output</span><br><span class="line">	db.setWriteConcern(&lt;write concern doc&gt;) - sets the write concern for writes to the db</span><br><span class="line">	db.shutdownServer()</span><br><span class="line">	db.stats()</span><br><span class="line">	db.unsetWriteConcern(&lt;write concern doc&gt;) - unsets the write concern for writes to the db</span><br><span class="line">	db.version() current version of the server</span><br><span class="line">	db.watch() - opens a change stream cursor for a database to report on all  changes to its non-system collections.</span><br></pre></td></tr></table></figure>
+
+<h3 id="1-3-db-collection-help-命令"><a href="#1-3-db-collection-help-命令" class="headerlink" title="1.3. db.collection.help() 命令"></a>1.3. db.collection.help() 命令</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">&gt; </span><span class="language-bash">db.demo.help()</span></span><br><span class="line">DBCollection help</span><br><span class="line">	db.demo.find().help() - 展示 DBCursor 方法帮助</span><br><span class="line">	db.demo.bulkWrite( operations, &lt;optional params&gt; ) - bulk execute write operations, optional parameters are: w, wtimeout, j</span><br><span class="line">	db.demo.count( query = &#123;&#125;, &lt;optional params&gt; ) - 计算匹配查询的文档数量，可选参数有:limit、skip、hint、maxTimeMS</span><br><span class="line">	db.demo.countDocuments( query = &#123;&#125;, &lt;optional params&gt; ) - count the number of documents that matches the query, optional parameters are: limit, skip, hint, maxTimeMS</span><br><span class="line">	db.demo.estimatedDocumentCount( &lt;optional params&gt; ) - estimate the document count using collection metadata, optional parameters are: maxTimeMS</span><br><span class="line">	db.demo.convertToCapped(maxBytes) - calls &#123;convertToCapped:&#x27;demo&#x27;, size:maxBytes&#125;&#125; command</span><br><span class="line">	db.demo.createIndex(keypattern[,options])</span><br><span class="line">	db.demo.createIndexes([keypatterns], &lt;options&gt;)</span><br><span class="line">	db.demo.dataSize()</span><br><span class="line">	db.demo.deleteOne( filter, &lt;optional params&gt; ) - delete first matching document, optional parameters are: w, wtimeout, j</span><br><span class="line">	db.demo.deleteMany( filter, &lt;optional params&gt; ) - delete all matching documents, optional parameters are: w, wtimeout, j</span><br><span class="line">	db.demo.distinct( key, query, &lt;optional params&gt; ) - e.g. db.demo.distinct( &#x27;x&#x27; ), optional parameters are: maxTimeMS</span><br><span class="line">	db.demo.drop() drop the collection</span><br><span class="line">	db.demo.dropIndex(index) - e.g. db.demo.dropIndex( &quot;indexName&quot; ) or db.demo.dropIndex( &#123; &quot;indexKey&quot; : 1 &#125; )</span><br><span class="line">	db.demo.hideIndex(index) - e.g. db.demo.hideIndex( &quot;indexName&quot; ) or db.demo.hideIndex( &#123; &quot;indexKey&quot; : 1 &#125; )</span><br><span class="line">	db.demo.unhideIndex(index) - e.g. db.demo.unhideIndex( &quot;indexName&quot; ) or db.demo.unhideIndex( &#123; &quot;indexKey&quot; : 1 &#125; )</span><br><span class="line">	db.demo.dropIndexes()</span><br><span class="line">	db.demo.ensureIndex(keypattern[,options]) - DEPRECATED, use createIndex() instead</span><br><span class="line">	db.demo.explain().help() - show explain help</span><br><span class="line">	db.demo.reIndex()</span><br><span class="line">	db.demo.find([query],[fields]) - query is an optional query filter. fields is optional set of fields to return.</span><br><span class="line">	                                              e.g. db.demo.find( &#123;x:77&#125; , &#123;name:1, x:1&#125; )</span><br><span class="line">	db.demo.find(...).count()</span><br><span class="line">	db.demo.find(...).limit(n)</span><br><span class="line">	db.demo.find(...).skip(n)</span><br><span class="line">	db.demo.find(...).sort(...)</span><br><span class="line">	db.demo.findOne([query], [fields], [options], [readConcern])</span><br><span class="line">	db.demo.findOneAndDelete( filter, &lt;optional params&gt; ) - delete first matching document, optional parameters are: projection, sort, maxTimeMS</span><br><span class="line">	db.demo.findOneAndReplace( filter, replacement, &lt;optional params&gt; ) - replace first matching document, optional parameters are: projection, sort, maxTimeMS, upsert, returnNewDocument</span><br><span class="line">	db.demo.findOneAndUpdate( filter, &lt;update object or pipeline&gt;, &lt;optional params&gt; ) - update first matching document, optional parameters are: projection, sort, maxTimeMS, upsert, returnNewDocument</span><br><span class="line">	db.demo.getDB() get DB object associated with collection</span><br><span class="line">	db.demo.getPlanCache() get query plan cache associated with collection</span><br><span class="line">	db.demo.getIndexes()</span><br><span class="line">	db.demo.insert(obj)</span><br><span class="line">	db.demo.insertOne( obj, &lt;optional params&gt; ) - insert a document, optional parameters are: w, wtimeout, j</span><br><span class="line">	db.demo.insertMany( [objects], &lt;optional params&gt; ) - insert multiple documents, optional parameters are: w, wtimeout, j</span><br><span class="line">	db.demo.mapReduce( mapFunction , reduceFunction , &lt;optional params&gt; )</span><br><span class="line">	db.demo.aggregate( [pipeline], &lt;optional params&gt; ) - performs an aggregation on a collection; returns a cursor</span><br><span class="line">	db.demo.remove(query)</span><br><span class="line">	db.demo.replaceOne( filter, replacement, &lt;optional params&gt; ) - replace the first matching document, optional parameters are: upsert, w, wtimeout, j</span><br><span class="line">	db.demo.renameCollection( newName , &lt;dropTarget&gt; ) renames the collection.</span><br><span class="line">	db.demo.runCommand( name , &lt;options&gt; ) runs a db command with the given name where the first param is the collection name</span><br><span class="line">	db.demo.save(obj)</span><br><span class="line">	db.demo.stats(&#123;scale: N, indexDetails: true/false, indexDetailsKey: &lt;index key&gt;, indexDetailsName: &lt;index name&gt;&#125;)</span><br><span class="line">	db.demo.storageSize() - includes free space allocated to this collection</span><br><span class="line">	db.demo.totalIndexSize() - size in bytes of all the indexes</span><br><span class="line">	db.demo.totalSize() - storage allocated for all data and indexes</span><br><span class="line">	db.demo.update( query, &lt;update object or pipeline&gt;[, upsert_bool, multi_bool] ) - instead of two flags, you can pass an object with fields: upsert, multi, hint</span><br><span class="line">	db.demo.updateOne( filter, &lt;update object or pipeline&gt;, &lt;optional params&gt; ) - update the first matching document, optional parameters are: upsert, w, wtimeout, j, hint</span><br><span class="line">	db.demo.updateMany( filter, &lt;update object or pipeline&gt;, &lt;optional params&gt; ) - update all matching documents, optional parameters are: upsert, w, wtimeout, j, hint</span><br><span class="line">	db.demo.validate( &lt;full&gt; ) - SLOW</span><br><span class="line">	db.demo.getShardVersion() - only for use with sharding</span><br><span class="line">	db.demo.getShardDistribution() - prints statistics about data distribution in the cluster</span><br><span class="line">	db.demo.getSplitKeysForChunks( &lt;maxChunkSize&gt; ) - calculates split points over all chunks and returns splitter function</span><br><span class="line">	db.demo.getWriteConcern() - returns the write concern used for any operations on this collection, inherited from server/db if set</span><br><span class="line">	db.demo.setWriteConcern( &lt;write concern doc&gt; ) - sets the write concern for writes to the collection</span><br><span class="line">	db.demo.unsetWriteConcern( &lt;write concern doc&gt; ) - unsets the write concern for writes to the collection</span><br><span class="line">	db.demo.latencyStats() - display operation latency histograms for this collection</span><br></pre></td></tr></table></figure>
+
+<h3 id="1-4-help-keys-命令"><a href="#1-4-help-keys-命令" class="headerlink" title="1.4. help keys 命令"></a>1.4. help keys 命令</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">&gt; </span><span class="language-bash"><span class="built_in">help</span> keys</span></span><br><span class="line">Tab completion and command history is available at the command prompt.</span><br><span class="line">Some emacs keystrokes are available too:</span><br><span class="line">  Ctrl-A start of line</span><br><span class="line">  Ctrl-E end of line</span><br><span class="line">  Ctrl-K del to end of line</span><br><span class="line"></span><br><span class="line">Multi-line commands</span><br><span class="line">You can enter a multi line javascript expression.  If parens, braces, etc. are not closed, you will see a new line </span><br><span class="line">beginning with &#x27;...&#x27; characters.  Type the rest of your expression.  Press Ctrl-C to abort the data entry if you</span><br><span class="line">get stuck.</span><br></pre></td></tr></table></figure>
+
+<p>翻译为中文：</p>
+<p>在命令提示符处可以使用制表符补全和命令历史记录。<br>一些emacs按键也可用:</p>
+<ul>
+<li>Ctrl-A 去到行开始</li>
+<li>Ctrl-E 去到行结束</li>
+<li>Ctrl-K 删除整行</li>
+</ul>
+<p>多行命令<br>您可以输入多行javascript表达式。如果括号、大括号等没有关闭，你会看到一个新行开始的……的字符。输入表达式的其余部分。按Ctrl-C中止数据输入，如果您被卡住了。</p>
+<h3 id="1-5-db-collection-find-help-命令"><a href="#1-5-db-collection-find-help-命令" class="headerlink" title="1.5. db.collection.find().help() 命令"></a>1.5. db.collection.find().help() 命令</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">&gt; </span><span class="language-bash">db.HouseHold.find().<span class="built_in">help</span>()</span></span><br><span class="line">find(&lt;predicate&gt;, &lt;projection&gt;) modifiers</span><br><span class="line">	.sort(&#123;...&#125;)</span><br><span class="line">	.limit(&lt;n&gt;)</span><br><span class="line">	.skip(&lt;n&gt;)</span><br><span class="line">	.batchSize(&lt;n&gt;) - sets the number of docs to return per getMore</span><br><span class="line">	.collation(&#123;...&#125;)</span><br><span class="line">	.hint(&#123;...&#125;)</span><br><span class="line">	.readConcern(&lt;level&gt;)</span><br><span class="line">	.readPref(&lt;mode&gt;, &lt;tagset&gt;)</span><br><span class="line">	.count(&lt;applySkipLimit&gt;) - total # of objects matching query. by default ignores skip,limit</span><br><span class="line">	.size() - total # of objects cursor would return, honors skip,limit</span><br><span class="line">	.explain(&lt;verbosity&gt;) - accepted verbosities are &#123;&#x27;queryPlanner&#x27;, &#x27;executionStats&#x27;, &#x27;allPlansExecution&#x27;&#125;</span><br><span class="line">	.min(&#123;...&#125;)</span><br><span class="line">	.max(&#123;...&#125;)</span><br><span class="line">	.maxTimeMS(&lt;n&gt;)</span><br><span class="line">	.comment(&lt;comment&gt;)</span><br><span class="line">	.tailable(&lt;isAwaitData&gt;)</span><br><span class="line">	.noCursorTimeout()</span><br><span class="line">	.allowPartialResults()</span><br><span class="line">	.returnKey()</span><br><span class="line">	.showRecordId() - adds a $recordId field to each returned object</span><br><span class="line">	.allowDiskUse() - allow using disk in completing the query</span><br><span class="line"></span><br><span class="line">Cursor methods</span><br><span class="line">	.toArray() - iterates through docs and returns an array of the results</span><br><span class="line">	.forEach(&lt;func&gt;)</span><br><span class="line">	.map(&lt;func&gt;)</span><br><span class="line">	.hasNext()</span><br><span class="line">	.next()</span><br><span class="line">	.close()</span><br><span class="line">	.objsLeftInBatch() - returns count of docs left in current batch (when exhausted, a new getMore will be issued)</span><br><span class="line">	.itcount() - iterates through documents and counts them</span><br><span class="line">	.pretty() - pretty print each document, possibly over multiple lines</span><br></pre></td></tr></table></figure>
+
+<h2 id="MongoDB用户操作"><a href="#MongoDB用户操作" class="headerlink" title="MongoDB用户操作"></a>MongoDB用户操作</h2><blockquote>
+<p>转载自：<a target="_blank" rel="noopener" href="https://blog.csdn.net/hbtj_1216/article/details/120875957">https://blog.csdn.net/hbtj_1216/article/details/120875957</a></p>
+</blockquote>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">use admin</span><br><span class="line"></span><br><span class="line">db.createUser(&#123;</span><br><span class="line">  <span class="keyword">user</span>: <span class="string">&#x27;admin&#x27;</span>,    <span class="operator">/</span><span class="operator">/</span> 用户名（自定义）</span><br><span class="line">  pwd: <span class="string">&#x27;Abc123++&#x27;</span>,  <span class="operator">/</span><span class="operator">/</span> 密码（自定义）</span><br><span class="line">  roles:[&#123;</span><br><span class="line">    role: <span class="string">&#x27;root&#x27;</span>,   <span class="operator">/</span><span class="operator">/</span> 使用超级用户角色</span><br><span class="line">    db: <span class="string">&#x27;admin&#x27;</span>     <span class="operator">/</span><span class="operator">/</span> 指定数据库</span><br><span class="line">  &#125;]</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<p>设置完成，可以通过指令 <code>show users</code> 查看是否设置成功。</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"># 查看当前库下的用户</span><br><span class="line"><span class="keyword">show</span> users</span><br><span class="line"># 删除用户</span><br><span class="line">db.dropUser(<span class="string">&#x27;testadmin&#x27;</span>)</span><br><span class="line"># 修改用户密码</span><br><span class="line">db.updateUser(<span class="string">&#x27;admin&#x27;</span>, &#123;pwd: <span class="string">&#x27;654321&#x27;</span>&#125;)</span><br><span class="line"># 密码认证</span><br><span class="line">db.auth(<span class="string">&#x27;admin&#x27;</span>, <span class="string">&#x27;654321&#x27;</span>)</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<table>
+<thead>
+<tr>
+<th><strong>角色描述</strong></th>
+<th>角色标识</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>数据库用户角色</td>
+<td>read、readWrite</td>
+</tr>
+<tr>
+<td>数据库管理角色</td>
+<td>dbAdmin、dbOwner、userAdmin</td>
+</tr>
+<tr>
+<td>集群管理角色</td>
+<td>clusterAdmin、clusterManager、clusterMonitor、hostManager</td>
+</tr>
+<tr>
+<td>备份恢复角色</td>
+<td>backup、restore</td>
+</tr>
+<tr>
+<td>所有数据库角色</td>
+<td>readAnyDatabase、readWriteAnyDatabase、userAdminAnyDatabase、 dbAdminAnyDatabase</td>
+</tr>
+<tr>
+<td>超级用户角色</td>
+<td>root</td>
+</tr>
+</tbody></table>
+<h2 id="查询-find"><a href="#查询-find" class="headerlink" title="查询 find()"></a>查询 find()</h2><h3 id="查询函数"><a href="#查询函数" class="headerlink" title="查询函数"></a>查询函数</h3><table>
+<thead>
+<tr>
+<th>函数</th>
+<th>描述</th>
+<th>🌰</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>find()</code></td>
+<td>查询方法，可在方法内规定查询规则。<br></td>
+<td>可以使用两种方式查询。<br> <code>db.表名.find();  </code><br> <code>db.getCollection(&#39;表名&#39;).find()</code></td>
+</tr>
+<tr>
+<td><code>find(&#123;&#125;,&#123;&#125;)</code></td>
+<td>参数一：查询条件。<br>参数二：规定返回哪些参数，类似于select age from 表名重中的age。<br> <code> &#123;&#39;age&#39;: 1,&#39;name&#39;: 0&#125;</code>值为1返回字段，值为0不返回字段。默认为0。</td>
+<td><code>db.col.find(&#123;&#39;name&#39;:&#39;小明&#39;&#125;,&#123;&#39;name&#39;:1,&#39;_id&#39;:0&#125;)</code></td>
+</tr>
+<tr>
+<td><code>pretty()</code></td>
+<td>使得查询出来的数据在命令行中更加美观的显示，不至于太紧凑。</td>
+<td><code>db.col.find().pretty()</code></td>
+</tr>
+<tr>
+<td><code>limit()</code></td>
+<td>参数：数字。想要读取的数据条数。不填写默认返回全部数据。</td>
+<td><code>db.col.find().limit(1)</code></td>
+</tr>
+<tr>
+<td><code>skip()</code></td>
+<td>参数：数字。跳过多少数据开始查询。默认值为0。</td>
+<td><code>db.col.find().skip(1)</code></td>
+</tr>
+</tbody></table>
+<h3 id="查询操作符"><a href="#查询操作符" class="headerlink" title="查询操作符"></a>查询操作符</h3><blockquote>
+<p>可以单字段多条件组合查询。如：<code>db.col.find(&#123;age : &#123;$lt :18, $gt : 38, $ne : 20&#125;&#125;)</code></p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th align="left">表达式</th>
+<th align="left">描述</th>
+<th align="left">实例</th>
+<th align="left">RDBMS中的类似语句</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">😊</td>
+<td align="left"><code>&#123;&lt;key&gt;:&lt;value&gt;</code>}<br>等于</td>
+<td align="left"><code>db.col.find(&#123;&quot;name&quot;:&quot;小明&quot;&#125;)</code></td>
+<td align="left"><code>where name = &#39;小明&#39;</code></td>
+</tr>
+<tr>
+<td align="left"><code>$lt</code></td>
+<td align="left"><code>&#123;&lt;key&gt;:&#123;$lt:&lt;value&gt;&#125;&#125;</code><br>小于</td>
+<td align="left"><code>db.col.find(&#123;&quot;likes&quot;:&#123;$lt:50&#125;&#125;)</code></td>
+<td align="left"><code>where likes &lt; 50</code></td>
+</tr>
+<tr>
+<td align="left"><code>$lte</code></td>
+<td align="left"><code>&#123;&lt;key&gt;:&#123;$lte:&lt;value&gt;&#125;&#125;</code><br>小于等于</td>
+<td align="left"><code>db.col.find(&#123;&quot;likes&quot;:&#123;$lte:50&#125;&#125;)</code></td>
+<td align="left"><code>where likes &lt;= 50</code></td>
+</tr>
+<tr>
+<td align="left"><code>$gt</code></td>
+<td align="left"><code>&#123;&lt;key&gt;:&#123;$gt:&lt;value&gt;&#125;&#125;</code><br>大于</td>
+<td align="left"><code>db.col.find(&#123;&quot;likes&quot;:&#123;$gt:50&#125;&#125;)</code></td>
+<td align="left"><code>where likes &gt; 50</code></td>
+</tr>
+<tr>
+<td align="left"><code>$gte</code></td>
+<td align="left"><code>&#123;&lt;key&gt;:&#123;$gte:&lt;value&gt;&#125;&#125;</code><br>大于等于</td>
+<td align="left"><code>db.col.find(&#123;&quot;likes&quot;:&#123;$gte:50&#125;&#125;)</code></td>
+<td align="left"><code>where likes &gt;= 50</code></td>
+</tr>
+<tr>
+<td align="left"><code>$in</code></td>
+<td align="left"><code>&#123; &lt;key&gt;: &#123; $in: [&lt;value1&gt;, &lt;value2&gt;, ... &lt;valueN&gt; ] &#125; &#125;</code><br> 包含</td>
+<td align="left"><code>db.col.find( &#123; item : &#123; $in: false &#125; &#125; )</code></td>
+<td align="left"><code>where likes in () </code></td>
+</tr>
+<tr>
+<td align="left"><code>$nin</code></td>
+<td align="left"><code>&#123; &lt;key&gt;: &#123; $nin: [ &lt;value1&gt;, &lt;value2&gt; ... &lt;valueN&gt; ]&#125; &#125;</code><br> 不包含</td>
+<td align="left"><code>db.col.find( &#123; item : &#123; $nin: false &#125; &#125; )</code></td>
+<td align="left"><code>where likes not in () </code></td>
+</tr>
+<tr>
+<td align="left"><code>$ne</code></td>
+<td align="left"><code>&#123;&lt;key&gt;:&#123;$ne:&lt;value&gt;&#125;&#125;</code><br> 不等于</td>
+<td align="left"><code>db.col.find(&#123;&quot;likes&quot;:&#123;$ne:50&#125;&#125;)</code></td>
+<td align="left"><code>where likes != 50</code></td>
+</tr>
+<tr>
+<td align="left"><code>$or</code></td>
+<td align="left"><code>&#123;$or:&#123;&lt;key:&lt;value&gt;,&lt;key&gt;:&lt;value&gt;&gt;&#125;&#125;</code><br>多条件查询，可以组合其他查询条件使用。</td>
+<td align="left"><code>db.col.find(&#123;$or:[&#123;&quot;name&quot;:&quot;小明&quot;&#125;,&#123;&quot;age&quot;: &quot;18&quot;&#125;]&#125;)</code></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left"><code>$type</code></td>
+<td align="left"><code>&#123;&lt;key&gt;:&#123;$type:&lt;value&gt;&#125;&#125;</code><br>类型比较，<strong>Mongodb中存在的类型。</strong></td>
+<td align="left"><code>db.col.find(&#123;&quot;title&quot; : &#123;$type : &#39;string&#39;&#125;&#125;)</code></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left"><code>$exists</code></td>
+<td align="left"><code>&#123;&lt;key&gt;:&#123;$exists:&lt;value&gt;&#125;&#125;</code><br>字段是否存在。</td>
+<td align="left"><code>db.col.find( &#123; item : &#123; $exists: false &#125; &#125; )</code></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">模糊查询</td>
+<td align="left">没有操作符，根据书写规则来决定是否是模糊查询。<br> 和普通is查询一样，但是值需要加<code>//</code>。<br> like：<code>&#123;name:/小/&#125;</code><br> likeBegin: <code>&#123;name:/^小/&#125;</code><br> likeEnd:<code>&#123;name:/小^/&#125;</code></td>
+<td align="left"><code>db.col.find( &#123; item : /小/&#125; &#125; )</code></td>
+<td align="left"><code>where name like &quot;%小%&quot;</code></td>
+</tr>
+</tbody></table>
+<h3 id="特殊查询"><a href="#特殊查询" class="headerlink" title="特殊查询"></a>特殊查询</h3><h4 id="嵌套文档-x2F-文档数组查询"><a href="#嵌套文档-x2F-文档数组查询" class="headerlink" title="嵌套文档&#x2F;文档数组查询"></a>嵌套文档&#x2F;文档数组查询</h4><blockquote>
+<p>字段是数组或对象都可以使用size.uom来进行操作。</p>
+</blockquote>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"># 新增数据</span><br><span class="line">db.inventory.insertMany( [</span><br><span class="line">    &#123; item: &quot;journal&quot;, qty: <span class="number">25</span>, size: &#123; h: <span class="number">14</span>, w: <span class="number">21</span>, uom: &quot;cm&quot; &#125;, status: &quot;A&quot; &#125;,</span><br><span class="line">    &#123; item: &quot;notebook&quot;, qty: <span class="number">50</span>, size: &#123; h: <span class="number">8.5</span>, w: <span class="number">11</span>, uom: &quot;in&quot; &#125;, status: &quot;A&quot; &#125;,</span><br><span class="line">    &#123; item: &quot;paper&quot;, qty: <span class="number">100</span>, size: &#123; h: <span class="number">8.5</span>, w: <span class="number">11</span>, uom: &quot;in&quot; &#125;, status: &quot;D&quot; &#125;,</span><br><span class="line">    &#123; item: &quot;planner&quot;, qty: <span class="number">75</span>, size: &#123; h: <span class="number">22.85</span>, w: <span class="number">30</span>, uom: &quot;cm&quot; &#125;, status: &quot;D&quot; &#125;,</span><br><span class="line">    &#123; item: &quot;postcard&quot;, qty: <span class="number">45</span>, size: &#123; h: <span class="number">10</span>, w: <span class="number">15.25</span>, uom: &quot;cm&quot; &#125;, status: &quot;A&quot; &#125;</span><br><span class="line">]);</span><br><span class="line"></span><br><span class="line"># 嵌套文档查询，size必须完全匹配</span><br><span class="line">db.inventory.find( &#123; size: &#123; h: <span class="number">14</span>, w: <span class="number">21</span>, uom: &quot;cm&quot; &#125; &#125; )</span><br><span class="line"># 嵌套字段查询，直接查询size.uom。</span><br><span class="line">db.inventory.find( &#123; &quot;size.uom&quot;: &quot;in&quot; &#125; )</span><br></pre></td></tr></table></figure>
+
+<h2 id="聚合查询-aggregate"><a href="#聚合查询-aggregate" class="headerlink" title="聚合查询 aggregate()"></a>聚合查询 aggregate()</h2><h3 id="管道的概念"><a href="#管道的概念" class="headerlink" title="管道的概念"></a>管道的概念</h3><blockquote>
+<p>管道在Unix和Linux中一般用于将当前命令的输出结果作为下一个命令的参数。</p>
+<p>MongoDB的聚合管道将MongoDB文档在<strong>一个管道处理完毕后将结果传递给下一个管道处理</strong>。管道操作是可以重复的。</p>
+<p>表达式：处理输入文档并输出。表达式是无状态的，只能用于计算当前聚合管道的文档，不能处理其它的文档。</p>
+<p>这里我们介绍一下聚合框架中常用的几个操作：</p>
+<ul>
+<li><code>$project</code>：修改输入文档的结构。可以用来重命名、增加或删除域，也可以用于创建计算结果以及嵌套文档。</li>
+<li><code>$match</code>：用于过滤数据，只输出符合条件的文档。<code>$​match</code>使用MongoDB的标准查询操作。</li>
+<li><code>$limit</code>：用来限制MongoDB聚合管道返回的文档数。</li>
+<li><code>$skip</code>：在聚合管道中跳过指定数量的文档，并返回余下的文档。</li>
+<li><code>$unwind</code>：将文档中的某一个数组类型字段拆分成多条，每条包含数组中的一个值。</li>
+<li><code>$group</code>：将集合中的文档分组，可用于统计结果。</li>
+<li><code>$sort</code>：将输入文档排序后输出。</li>
+<li><code>$geoNear</code>：输出接近某一地理位置的有序文档。</li>
+</ul>
+</blockquote>
+<h3 id="project"><a href="#project" class="headerlink" title="$project"></a><code>$project</code></h3><blockquote>
+<p><code>$project</code>：修改输入文档的结构。可以用来重命名、增加或删除域，也可以用于创建计算结果以及嵌套文档。</p>
+</blockquote>
+<h4 id="操作符"><a href="#操作符" class="headerlink" title="操作符"></a>操作符</h4><table>
+<thead>
+<tr>
+<th>表达式</th>
+<th>描述</th>
+<th>实例</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>$unwind</code></td>
+<td>将集合字段平铺。数据会从<code>&#123;&quot;data&quot;:[&#123;count:1&#125;,&#123;count:2&#125;]&#125;</code>，变为<code>&#123;&quot;data&quot;:&#123;count:1&#125;&#125;,&#123;&quot;data&quot;:&#123;count:2&#125;&#125;</code></td>
+<td><code>db.col.aggregate([&#123;$unwind:&#39;$data&#39;&#125;])</code></td>
+</tr>
+<tr>
+<td><a target="_blank" rel="noopener" href="https://links.jianshu.com/go?to=https://docs.mongodb.com/manual/reference/operator/aggregation/add/">$add</a></td>
+<td><code>&#123; $add ： [ &lt; expression1 &gt; ， &lt; expression2 &gt; ， ... ] &#125;</code><br>多值相加，值可以是指定的值，也可以是字段。</td>
+<td><code>db.col.aggregate([&#123;$project:&#123;size:&#123;$add:[&#39;$size1&#39;,&#39;$size2&#39;,&#39;$size3&#39;]&#125;&#125;&#125;])</code></td>
+</tr>
+<tr>
+<td><a target="_blank" rel="noopener" href="https://links.jianshu.com/go?to=https://docs.mongodb.com/manual/reference/operator/aggregation/subtract/index.html">$subtract</a></td>
+<td><code>&#123; $subtract: [ &lt;expression1&gt;, &lt;expression2&gt; ] &#125;</code><br>expression1减去expression2，值可以是指定的值，也可以是字段。<em>只能两值相减，多值相减需要嵌套使用。</em></td>
+<td><code>db.col.aggregate([&#123;$project:&#123;size:&#123;$subtract:[&#39;$size1&#39;,&#39;$size2&#39;]&#125;&#125;&#125;])</code></td>
+</tr>
+<tr>
+<td><a target="_blank" rel="noopener" href="https://links.jianshu.com/go?to=https://docs.mongodb.com/manual/reference/operator/aggregation/multiply/%23exp._S_multiply">$multiply</a></td>
+<td><code>&#123; $multiply ： [ &lt; expression1 &gt; ， &lt; expression2 &gt; ， ... ] &#125;</code><br>多值相乘，值可以是指定的值，也可以是字段。</td>
+<td><code>db.size_test.aggregate([&#123;$project:&#123;size:&#123;$multiply:[&#39;$size1&#39;,&#39;$size2&#39;,&#39;$size3&#39;,100]&#125;&#125;&#125;])</code></td>
+</tr>
+<tr>
+<td><a target="_blank" rel="noopener" href="https://links.jianshu.com/go?to=https://docs.mongodb.com/manual/reference/operator/aggregation/divide/index.html">$divide</a></td>
+<td><code>&#123; $divide: [ &lt;expression1&gt;, &lt;expression2&gt; ] &#125;</code><br>expression1为被除数，expression2为除数，值可以是指定的值，也可以是字段。<em>只能两值相除，多值相除需要嵌套使用。</em></td>
+<td><code>db.col.aggregate([&#123;$project:&#123;size:&#123;$divide:[&#39;$size1&#39;,&#39;$size2&#39;]&#125;&#125;&#125;])</code></td>
+</tr>
+<tr>
+<td><code>$ifNull</code></td>
+<td><code>&#123; $ifNull: [ expression, replacement-expression-if-null ] &#125;</code>：用于判断第一个<a target="_blank" rel="noopener" href="https://so.csdn.net/so/search?q=%E8%A1%A8%E8%BE%BE%E5%BC%8F&spm=1001.2101.3001.7020">表达式</a>是否为 null，如果为 null 则返回第二个参数的值，如果不为 null 则返回第一个参数的值。</td>
+<td><code>db.col.aggregate([&#123;$project:&#123;size:&#123;$ifNull:[&#39;$size1&#39;,100]&#125;&#125;&#125;])</code></td>
+</tr>
+</tbody></table>
+<h4 id="时间转换操作符"><a href="#时间转换操作符" class="headerlink" title="时间转换操作符"></a>时间转换操作符</h4><table>
+<thead>
+<tr>
+<th>表达式</th>
+<th>描述</th>
+<th>实例</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>new Date()</code></td>
+<td>时间创建，必须按照标准的日期格式。<br><font color="#FF000"><strong>日期格式：yyyy-MM-ddThh:mm:ssZ</strong></font></td>
+<td><code>new Date()</code></td>
+</tr>
+<tr>
+<td><code>ISODate</code></td>
+<td><font color="#FF000"><strong>可以不按照标准的日期格式</strong></font></td>
+<td><code>db.col.find(&#123;time:&#123;$gt:ISODate(&quot;20210101&quot;)&#125;&#125;)</code></td>
+</tr>
+<tr>
+<td><code>$year</code></td>
+<td>时间转换为年。</td>
+<td><code>db.HouseHold.aggregate([&#123;$project: &#123;createTime:&#123;$year:&#39;$createTime&#39;&#125;&#125;&#125;])</code></td>
+</tr>
+<tr>
+<td><code>$month</code></td>
+<td>时间转换为月。</td>
+<td><code>db.HouseHold.aggregate([&#123;$project: &#123;createTime:&#123;$month:&#39;$createTime&#39;&#125;&#125;&#125;])</code></td>
+</tr>
+<tr>
+<td><code>$week</code></td>
+<td>时间转换为周，当年的第几周。</td>
+<td><code>db.HouseHold.aggregate([&#123;$project: &#123;createTime:&#123;$week:&#39;$createTime&#39;&#125;&#125;&#125;])</code></td>
+</tr>
+<tr>
+<td><code>$dayOfYear</code></td>
+<td>时间转换为日，当年的第几天。</td>
+<td><code>db.HouseHold.aggregate([&#123;$project: &#123;createTime:&#123;$dayOfYear:&#39;$createTime&#39;&#125;&#125;&#125;])</code></td>
+</tr>
+<tr>
+<td><code>$dayOfMonth</code></td>
+<td>时间转换为日，当月的第几天。</td>
+<td><code>db.HouseHold.aggregate([&#123;$project: &#123;createTime:&#123;$dayOfMonth:&#39;$createTime&#39;&#125;&#125;&#125;])</code></td>
+</tr>
+<tr>
+<td><code>$dayOfWeek</code></td>
+<td>时间转换为日，当周的第几天。<br>星期日为1，星期六为7。</td>
+<td><code>db.HouseHold.aggregate([&#123;$project: &#123;createTime:&#123;$dayOfWeek:&#39;$createTime&#39;&#125;&#125;&#125;])</code></td>
+</tr>
+<tr>
+<td><code>$hour</code></td>
+<td>时间转换为小时，当天的第几小时。</td>
+<td><code>db.HouseHold.aggregate([&#123;$project: &#123;createTime:&#123;$hour:&#39;$createTime&#39;&#125;&#125;&#125;])</code></td>
+</tr>
+<tr>
+<td><code>$minute</code></td>
+<td>时间转换为分钟，当前小时的第几分钟。</td>
+<td><code>db.HouseHold.aggregate([&#123;$project: &#123;createTime:&#123;$minute:&#39;$createTime&#39;&#125;&#125;&#125;])</code></td>
+</tr>
+<tr>
+<td><code>$second</code></td>
+<td>时间转换为秒，当前分钟的第几秒。</td>
+<td><code>db.HouseHold.aggregate([&#123;$project: &#123;createTime:&#123;$second:&#39;$createTime&#39;&#125;&#125;&#125;])</code></td>
+</tr>
+<tr>
+<td><code>$millisecond</code></td>
+<td>时间转换为毫秒，当前秒的第几毫秒。</td>
+<td>&#96;db.HouseHold.aggregate([{$project: {createTime:{$millisecond:’$createTime’}}}])</td>
+</tr>
+</tbody></table>
+<p><a target="_blank" rel="noopener" href="https://mongodb.net.cn/manual/reference/operator/aggregation/dateToString/">$dateToString</a></p>
+<blockquote>
+<p><code>$dateToString</code>:自定义时间转换</p>
+</blockquote>
+<p>参数描述</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&#123; $dateToString: &#123;</span><br><span class="line">    <span class="type">date</span>: <span class="operator">&lt;</span>dateExpression<span class="operator">&gt;</span>,</span><br><span class="line">    format: <span class="operator">&lt;</span>formatString<span class="operator">&gt;</span>,</span><br><span class="line">    timezone: <span class="operator">&lt;</span>tzExpression<span class="operator">&gt;</span>,</span><br><span class="line">    onNull: <span class="operator">&lt;</span>expression<span class="operator">&gt;</span></span><br><span class="line">&#125; &#125;</span><br></pre></td></tr></table></figure>
+
+<p>例子</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">db.getCollection(<span class="string">&#x27;HouseHold&#x27;</span>).aggregate([</span><br><span class="line">    &#123;$project:</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">year</span>:&#123;$dateToString: &#123; format: &quot;%Y&quot;, <span class="type">date</span>: &quot;$createTime&quot; &#125;&#125;,</span><br><span class="line">            dayofweek:&#123;$dateToString: &#123; format: &quot;%w&quot;, <span class="type">date</span>: &quot;$createTime&quot; &#125;&#125;,</span><br><span class="line">            weekofyear:&#123;$dateToString: &#123; format: &quot;%U&quot;, <span class="type">date</span>: &quot;$createTime&quot; &#125;&#125;,</span><br><span class="line">            <span class="keyword">year</span>:&#123;$dateToString: &#123; format: &quot;%Y-%m-%dT%H:%M&quot;, <span class="type">date</span>: &quot;$createTime&quot; &#125;&#125;,</span><br><span class="line">            onNull:&#123;$dateToString: &#123; <span class="type">date</span>: <span class="keyword">null</span>, onNull: &quot;No date supplied&quot; &#125; &#125;</span><br><span class="line">        &#125;&#125;</span><br><span class="line">]).pretty()</span><br></pre></td></tr></table></figure>
+
+<p>结果</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;_id&quot;</span> <span class="punctuation">:</span> ObjectId(<span class="string">&quot;60fa3b3635f8c5790b880297&quot;</span>)<span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;year&quot;</span> <span class="punctuation">:</span> <span class="string">&quot;2021&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;dayofweek&quot;</span> <span class="punctuation">:</span> <span class="string">&quot;5&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;weekofyear&quot;</span> <span class="punctuation">:</span> <span class="string">&quot;30&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;UTC&quot;</span> <span class="punctuation">:</span> <span class="string">&quot;2021-07-29T09:10&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;onNull&quot;</span> <span class="punctuation">:</span> <span class="string">&quot;No date supplied&quot;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="https://file.pandacode.cn//blog/202109111301481.png" alt="img"></p>
+<p>扩展</p>
+<blockquote>
+<p>可以使用<code>$dateToString</code>从 ObjectId 返回日期字符串。</p>
+<p>ObjectId 值是 12 字节的十六进制值，包括：</p>
+<ul>
+<li>一个 4 字节的时间戳值，表示 ObjectId 的创建，以 Unix 纪元以来的秒数为单位。</li>
+<li>一个 5 字节是一个随机值</li>
+<li>一个 3 字节递增计数器，初始化为随机值。</li>
+</ul>
+<p>回顾一下，我们的第一个文档如下所示：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">	&quot;_id&quot; : ObjectId(&quot;600631c7c8eb4369cf6ad9c8&quot;),</span><br><span class="line">	&quot;name&quot; : &quot;获取&quot;,</span><br><span class="line">	“出生”：ISODate（“2020-12-31T23：30：15.123Z”）</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>该文档包含一个 ObjectId。因此，我们可以<code>$dateToString</code>根据文档的创建日期（或更具体地说，<code>_id</code>字段的 ObjectId 值的创建日期）返回一个日期字符串。</p>
+<p>例子：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">db.pets.aggregate(</span><br><span class="line">   [</span><br><span class="line">     &#123;</span><br><span class="line">       $project: &#123;</span><br><span class="line">          timestamp: &#123; $toDate: &quot;$_id&quot; &#125;,</span><br><span class="line">          dateString: &#123; $dateToString: &#123; format: &quot;%d-%m-%Y&quot;, date: &quot;$_id&quot; &#125; &#125;</span><br><span class="line">       &#125;</span><br><span class="line">     &#125;</span><br><span class="line">   ]</span><br><span class="line">).pretty()</span><br></pre></td></tr></table></figure>
+
+<p>结果：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">	&quot;_id&quot; : ObjectId(&quot;600631c7c8eb4369cf6ad9c8&quot;),</span><br><span class="line">	&quot;时间戳&quot; : ISODate(&quot;2021-01-19T01:11:35Z&quot;),</span><br><span class="line">	“日期字符串”：“19-01-2021”</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>在这种情况下，我决定只返回日期部分（而不是时间部分）。我还改变了天、月和年的顺序，以证明如果需要，您当然可以这样做。</p>
+</blockquote>
+<h3 id="group"><a href="#group" class="headerlink" title="$group"></a><code>$group</code></h3><blockquote>
+<p><code>$group</code>：将集合中的文档分组，可用于统计结果。</p>
+<p><code>db.col.aggregate([&#123;$group : &#123;_id : &quot;$by_user&quot;, ........&#125;&#125;])</code></p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th align="left">表达式</th>
+<th align="left">描述</th>
+<th align="left">实例</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><code>$sum</code></td>
+<td align="left">计算总和。</td>
+<td align="left"><code>db.col.aggregate([&#123;$group : &#123;_id : &quot;$by_user&quot;, num_tutorial : &#123;$sum : &quot;$likes&quot;&#125;&#125;&#125;])</code></td>
+</tr>
+<tr>
+<td align="left"><code>$avg</code></td>
+<td align="left">计算平均值</td>
+<td align="left"><code>db.col.aggregate([&#123;$group : &#123;_id : &quot;$by_user&quot;, num_tutorial : &#123;$avg : &quot;$likes&quot;&#125;&#125;&#125;])</code></td>
+</tr>
+<tr>
+<td align="left"><code>$min</code></td>
+<td align="left">获取集合中所有文档对应值得最小值。</td>
+<td align="left"><code>db.col.aggregate([&#123;$group : &#123;_id : &quot;$by_user&quot;, num_tutorial : &#123;$min : &quot;$likes&quot;&#125;&#125;&#125;])</code></td>
+</tr>
+<tr>
+<td align="left"><code>$max</code></td>
+<td align="left">获取集合中所有文档对应值得最大值。</td>
+<td align="left"><code>db.col.aggregate([&#123;$group : &#123;_id : &quot;$by_user&quot;, num_tutorial : &#123;$max : &quot;$likes&quot;&#125;&#125;&#125;])</code></td>
+</tr>
+<tr>
+<td align="left"><code>$push</code></td>
+<td align="left">在结果文档中插入值到一个数组中。</td>
+<td align="left"><code>db.col.aggregate([&#123;$group : &#123;_id : &quot;$by_user&quot;, url : &#123;$push: &quot;$url&quot;&#125;&#125;&#125;])</code></td>
+</tr>
+<tr>
+<td align="left"><code>$addToSet</code></td>
+<td align="left">在结果文档中插入值到一个数组中，但不创建副本。</td>
+<td align="left"><code>db.col.aggregate([&#123;$group : &#123;_id : &quot;$by_user&quot;, url : &#123;$addToSet : &quot;$url&quot;&#125;&#125;&#125;])</code></td>
+</tr>
+<tr>
+<td align="left"><code>$first</code></td>
+<td align="left">根据资源文档的排序获取第一个文档数据。</td>
+<td align="left"><code>db.col.aggregate([&#123;$group : &#123;_id : &quot;$by_user&quot;, first_url : &#123;$first : &quot;$url&quot;&#125;&#125;&#125;])</code></td>
+</tr>
+<tr>
+<td align="left"><code>$last</code></td>
+<td align="left">根据资源文档的排序获取最后一个文档数据</td>
+<td align="left"><code>db.col.aggregate([&#123;$group : &#123;_id : &quot;$by_user&quot;, last_url : &#123;$last : &quot;$url&quot;&#125;&#125;&#125;])</code></td>
+</tr>
+</tbody></table>
+<h2 id="新增"><a href="#新增" class="headerlink" title="新增"></a>新增</h2><h3 id="新增函数"><a href="#新增函数" class="headerlink" title="新增函数"></a>新增函数</h3><table>
+<thead>
+<tr>
+<th>函数</th>
+<th>描述</th>
+<th>实例</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>insertOne()</code></td>
+<td>新增一条。</td>
+<td><code>db.col.insertOne(&#123;&quot;name&quot;:&quot;123&quot;&#125;)</code></td>
+</tr>
+<tr>
+<td><code>insertMany()</code></td>
+<td>新增多条。</td>
+<td><code>db.col.insertMany([&#123;&quot;name&quot;:&quot;小明&quot;,&quot;age&quot;:29&#125;,&#123;&quot;name&quot;:&quot;小红&quot;,&quot;age&quot;:32&#125;])</code></td>
+</tr>
+<tr>
+<td><code>save()</code></td>
+<td>可同时添加多个文档。<br>也能够更新数据，但只能更新一条。</td>
+<td><code>db.col.save(&#123;&quot;name&quot;:&quot;123&quot;&#125;)</code></td>
+</tr>
+</tbody></table>
+<h2 id="修改"><a href="#修改" class="headerlink" title="修改"></a>修改</h2><h3 id="修改函数"><a href="#修改函数" class="headerlink" title="修改函数"></a>修改函数</h3><table>
+<thead>
+<tr>
+<th>函数</th>
+<th>描述</th>
+<th>实例</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>update()</code></td>
+<td><code>db.collection.update(&lt;query&gt;,&lt;update&gt;,&#123;upsert: &lt;boolean&gt;,multi: &lt;boolean&gt;,writeConcern:&lt;document&gt;&#125;)</code><br> 参数说明：<br><strong>query</strong> : update的查询条件，类似sql update查询内where后面的。<br> <strong>update</strong> : update的对象和一些更新的操作符（如$,$inc…）等，也可以理解为sql update查询内set后面的<br> <strong>upsert</strong> : 可选，这个参数的意思是，如果不存在update的记录，是否插入objNew,true为插入，默认是false，不插入。<br> <strong>multi</strong> : 可选，mongodb 默认是false,只更新找到的第一条记录，如果这个参数为true,就把按条件查出来多条记录全部更新。<br> <strong>writeConcern</strong> :可选，抛出异常的级别。</td>
+<td><code>db.col.update( &#123; &quot;count&quot; : &#123; $gt : 3 &#125; &#125; , &#123; $set : &#123; &quot;test2&quot; : &quot;OK&quot;&#125; &#125;,false,true );</code></td>
+</tr>
+<tr>
+<td><code>updateOne()</code></td>
+<td>即使多个文档可能与指定的过滤器匹配，最多更新与指定的过滤器匹配的单个文档。</td>
+<td></td>
+</tr>
+<tr>
+<td><code>updateMany()</code></td>
+<td>更新所有与指定过滤器匹配的文档。</td>
+<td></td>
+</tr>
+<tr>
+<td><code>replaceOne()</code></td>
+<td>即使多个文档可能与指定过滤器匹配，也最多替换一个与指定过滤器匹配的文档。</td>
+<td></td>
+</tr>
+</tbody></table>
+<h3 id="修改操作符"><a href="#修改操作符" class="headerlink" title="修改操作符"></a>修改操作符</h3><h4 id="set"><a href="#set" class="headerlink" title="$set"></a><code>$set</code></h4><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">&#123; $<span class="keyword">set</span>: &#123; <span class="operator">&lt;</span>field1<span class="operator">&gt;</span>: <span class="operator">&lt;</span>value1<span class="operator">&gt;</span>, ... &#125; &#125;</span><br><span class="line"># 例子</span><br><span class="line">db.col.update(</span><br><span class="line">   &#123; _id: <span class="number">100</span> &#125;,</span><br><span class="line">   &#123; $<span class="keyword">set</span>:</span><br><span class="line">      &#123;</span><br><span class="line">        quantity: <span class="number">500</span>,</span><br><span class="line">        details: &#123; model: &quot;14Q3&quot;, make: &quot;xyz&quot; &#125;,</span><br><span class="line">        tags: [ &quot;coats&quot;, &quot;outerwear&quot;, &quot;clothing&quot; ]</span><br><span class="line">      &#125;</span><br><span class="line">   &#125;</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="删除"><a href="#删除" class="headerlink" title="删除"></a>删除</h2><h3 id="普通删除"><a href="#普通删除" class="headerlink" title="普通删除"></a>普通删除</h3><h4 id="remove"><a href="#remove" class="headerlink" title="remove()"></a>remove()</h4><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"># api</span><br><span class="line">db.collection.remove(</span><br><span class="line">   <span class="operator">&lt;</span>query<span class="operator">&gt;</span>,</span><br><span class="line">   &#123;</span><br><span class="line">     justOne: <span class="operator">&lt;</span><span class="type">boolean</span><span class="operator">&gt;</span>,</span><br><span class="line">     writeConcern: <span class="operator">&lt;</span>document<span class="operator">&gt;</span></span><br><span class="line">   &#125;</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+
+<p><strong>参数说明：</strong></p>
+<ul>
+<li><strong>query</strong> :（可选）删除的文档的条件。</li>
+<li><strong>justOne</strong> : （可选）如果设为 true 或 1，则只删除一个文档，如果不设置该参数，或使用默认值 false，则删除所有匹配条件的文档。</li>
+<li><strong>writeConcern</strong> :（可选）抛出异常的级别。</li>
+</ul>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># 例子</span><br><span class="line">db.col.remove(&#123;<span class="string">&#x27;title&#x27;</span>:<span class="string">&#x27;abc&#x27;</span>&#125;)</span><br></pre></td></tr></table></figure>
+
+<h4 id="deleteOne"><a href="#deleteOne" class="headerlink" title="deleteOne()"></a>deleteOne()</h4><blockquote>
+<p>即使多个文档可能与指定过滤器匹配，也最多删除一个与指定过滤器匹配的文档。</p>
+</blockquote>
+<h4 id="deleteMany"><a href="#deleteMany" class="headerlink" title="deleteMany()"></a>deleteMany()</h4><blockquote>
+<p>删除所有与指定过滤器匹配的文档。</p>
+</blockquote>
+
+      
+    </div>
+    <div class="article-footer">
+      <blockquote class="mt-2x">
+  <ul class="post-copyright list-unstyled">
+    
+    <li class="post-copyright-link hidden-xs">
+      <strong>本文链接：</strong>
+      <a href="https://guoshunfa.com/2022/07/MongoDB-%E5%91%BD%E4%BB%A4%E8%AE%B0%E5%BD%95/" title="MongoDB 命令记录" target="_blank" rel="external">https://guoshunfa.com/2022/07/MongoDB-命令记录/</a>
+    </li>
+    
+    <li class="post-copyright-license">
+      <strong>版权声明： </strong> 本博客所有文章除特别声明外，均采用 <a href="http://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank" rel="external">CC BY 4.0 CN协议</a> 许可协议。转载请注明出处！
+    </li>
+  </ul>
+</blockquote>
+
+
+<div class="panel panel-default panel-badger">
+  <div class="panel-body">
+    <figure class="media">
+      <div class="media-left">
+        <a href="https://github.com/guoshunfa" target="_blank" class="img-burn thumb-sm visible-lg">
+          <img src="/images/avatar.jpg" class="img-rounded w-full" alt="">
+        </a>
+      </div>
+      <div class="media-body">
+        <h3 class="media-heading"><a href="https://github.com/guoshunfa" target="_blank"><span class="text-dark">郭顺发</span><small class="ml-1x">创业中......</small></a></h3>
+        <div>承接：小程序开发、APP开发、网站开发、爬虫开发</div>
+      </div>
+    </figure>
+  </div>
+</div>
+
+
+    </div>
+  </article>
+  
+    
+  <section id="comments">
+  	
+           
+    
+  </section>
+
+
+  
+</div>
+
+  <nav class="bar bar-footer clearfix" data-stick-bottom>
+  <div class="bar-inner">
+  
+  <ul class="pager pull-left">
+    
+    <li class="prev">
+      <a href="/2022/07/MongoDB-%E9%94%99%E8%AF%AF%E8%AE%B0%E5%BD%95/" title="MongoDB 错误记录"><i class="icon icon-angle-left" aria-hidden="true"></i><span>&nbsp;&nbsp;上一篇</span></a>
+    </li>
+    
+    
+    <li class="next">
+      <a href="/2022/07/MongoDB-%E4%BB%8B%E7%BB%8D/" title="MongoDB 介绍"><span>下一篇&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
+    </li>
+    
+    
+  </ul>
+  
+  
+  
+  <div class="bar-right">
+    
+    <div class="share-component" data-sites="weibo,qq,wechat,facebook,twitter" data-mobile-sites="weibo,qq,qzone"></div>
+    
+  </div>
+  </div>
+</nav>
+  
+
+
+</main>
+
+  <footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
+	
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/guoshunfa" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="https://gitee.com/guoshunfa" target="_blank" title="Gitee" data-toggle=tooltip data-placement=top><i class="icon icon-gitee"></i></a></li>
+        
+        <li><a href="https://juejin.cn/user/166781500267015" target="_blank" title="Juejin" data-toggle=tooltip data-placement=top><i class="icon icon-juejin"></i></a></li>
+        
+        <li><a href="https://cloud.tencent.com/developer/user/7784141" target="_blank" title="Code" data-toggle=tooltip data-placement=top><i class="icon icon-code"></i></a></li>
+        
+        <li><a href="/atom.xml" target="_blank" title="Rss" data-toggle=tooltip data-placement=top><i class="icon icon-rss"></i></a></li>
+        
+    </ul>
+
+    <div class="copyright">
+    	
+        &copy; 2024 guoshunfa
+        
+        <!-- <div class="publishby">
+        	Theme by <a href="https://github.com/cofess" target="_blank"> cofess </a>base on <a href="https://github.com/cofess/hexo-theme-pure" target="_blank">pure</a>.
+        </div> -->
+    </div>
+</footer>
+  <script src="//cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
+<script>
+window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
+</script>
+
+<script src="/js/plugin.min.js"></script>
+
+
+<script src="/js/application.js"></script>
+
+
+    <script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(未命名)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+
+<script src="/js/insight.js"></script>
+
+
+
+    <script>
+(function ($) {
+    $('.search-form').on('submit', function (e) {
+        var keyword = $('.search-form-input[name="wd"]').val();
+        window.location = 'https://www.baidu.com/s?wd=site:guoshunfa.com ' + keyword;
+        return false;
+    });
+})(jQuery);
+</script>
+
+
+
+
+   
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+   
+    
+  <!-- <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css"> -->
+  <script src="//cdn.jsdelivr.net/npm/gitalk@1.7.2/dist/gitalk.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/blueimp-md5@2.10.0/js/md5.min.js"></script>
+  <script type="text/javascript">
+  var gitalk = new Gitalk({
+    clientID: '328529f408a5d1041fe1',
+    clientSecret: '43872fab04fe0accb98439ac77ff71ff81f7b9dd',
+    repo: 'guoshunfa-comment',
+    owner: 'guoshunfa',
+    admin: ['guoshunfa'],
+    id: md5(location.pathname),
+    distractionFreeMode: true,
+    language: 'zh-CN',
+    enableHotKey: 'true'
+  })
+  gitalk.render('comments')
+  </script>
+      
+
+
+
+  <script src="//cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.3.5/dist/jquery.fancybox.min.js"></script>
+  <script>
+  //利用 FancyBox 实现点击图片放大
+  $(document).ready(function() {
+    $('article img').not('[hidden]').not('.panel-body img').each(function() {
+      var $image = $(this);
+      var imageCaption = $image.attr('alt');
+      var $imageWrapLink = $image.parent('a');
+      if ($imageWrapLink.length < 1) {
+        var src = this.getAttribute('src');
+        var idx = src.lastIndexOf('?');
+        if (idx != -1) {
+          src = src.substring(0, idx);
+        }
+        $imageWrapLink = $image.wrap('<a href="' + src + '"></a>').parent('a');
+      }
+      $imageWrapLink.attr('data-fancybox', 'images');
+      if (imageCaption) {
+        $imageWrapLink.attr('data-caption', imageCaption);
+      }
+    });
+    $().fancybox({
+      selector: '[data-fancybox="images"]',
+      hash: false,
+      loop: false,
+    });
+  });
+  </script>
+
+
+
+
+
+</body>
+</html>

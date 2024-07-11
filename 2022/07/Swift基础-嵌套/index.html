@@ -1,0 +1,846 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+  <meta charset="utf-8">
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-transform" />
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="format-detection" content="telephone=no,email=no,adress=no">
+  <!-- Color theme for statusbar -->
+  <meta name="theme-color" content="#000000" />
+  <!-- 强制页面在当前窗口以独立页面显示,防止别人在框架里调用页面 -->
+  <meta http-equiv="window-target" content="_top" />
+  
+  
+  <title>Swift基础 嵌套 | guoshunfa</title>
+  <meta name="description" content="翻译自：https:&#x2F;&#x2F;docs.swift.org&#x2F;swift-book&#x2F;LanguageGuide&#x2F;Closures.html#ID102 嵌套是自包含的功能块，可以在代码中传递和使用。Swift中的闭包类似于C和Objective-C中的块以及其他编程语言中的lambdas。 闭包可以从定义常量和变量的上下文中捕获和存储对任何常量和变量的引用。这被称为关闭这些常量和变量。Swift为您处理捕">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Swift基础 嵌套">
+<meta property="og:url" content="https://guoshunfa.com/2022/07/Swift%E5%9F%BA%E7%A1%80-%E5%B5%8C%E5%A5%97/index.html">
+<meta property="og:site_name" content="guoshunfa">
+<meta property="og:description" content="翻译自：https:&#x2F;&#x2F;docs.swift.org&#x2F;swift-book&#x2F;LanguageGuide&#x2F;Closures.html#ID102 嵌套是自包含的功能块，可以在代码中传递和使用。Swift中的闭包类似于C和Objective-C中的块以及其他编程语言中的lambdas。 闭包可以从定义常量和变量的上下文中捕获和存储对任何常量和变量的引用。这被称为关闭这些常量和变量。Swift为您处理捕">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2022-07-01T04:01:01.000Z">
+<meta property="article:modified_time" content="2024-01-28T11:41:39.289Z">
+<meta property="article:author" content="guoshunfa">
+<meta property="article:tag" content="Swift">
+<meta property="article:tag" content="基础">
+<meta name="twitter:card" content="summary">
+  <!-- Canonical links -->
+  <link rel="canonical" href="https://guoshunfa.com/2022/07/Swift%E5%9F%BA%E7%A1%80-%E5%B5%8C%E5%A5%97/index.html">
+  
+    <link rel="alternate" href="/atom.xml" title="guoshunfa" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="favicon.jpg" type="image/x-icon">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  
+  
+    <link href="//cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.3.5/dist/jquery.fancybox.min.css" rel="stylesheet">
+  
+  
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1.7.2/dist/gitalk.min.css">
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body class="main-center" itemscope itemtype="http://schema.org/WebPage">
+  <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+  <div class="slimContent">
+    <div class="navbar-header">
+      
+      
+      <div class="profile-block text-center">
+        <a id="avatar" href="https://github.com/guoshunfa" target="_blank">
+          <img class="img-circle img-rotate" src="/images/avatar.jpg" width="200" height="200">
+        </a>
+        <h2 id="name" class="hidden-xs hidden-sm">郭顺发</h2>
+        <h3 id="title" class="hidden-xs hidden-sm hidden-md">创业中......</h3>
+        <small id="location" class="text-muted hidden-xs hidden-sm"><i class="icon icon-map-marker"></i> 深圳, China</small>
+      </div>
+      
+      <div class="search" id="search-form-wrap">
+
+    <form class="search-form sidebar-form">
+        <div class="input-group">
+            <input type="text" class="search-form-input form-control" placeholder="搜索" />
+            <span class="input-group-btn">
+                <button type="submit" class="search-form-submit btn btn-flat" onclick="return false;"><i class="icon icon-search"></i></button>
+            </span>
+        </div>
+    </form>
+    <div class="ins-search">
+  <div class="ins-search-mask"></div>
+  <div class="ins-search-container">
+    <div class="ins-input-wrapper">
+      <input type="text" class="ins-search-input" placeholder="想要查找什么..." x-webkit-speech />
+      <button type="button" class="close ins-close ins-selectable" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="ins-section-wrapper">
+      <div class="ins-section-container"></div>
+    </div>
+  </div>
+</div>
+
+
+</div>
+      <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <nav id="main-navbar" class="collapse navbar-collapse" itemscope itemtype="http://schema.org/SiteNavigationElement" role="navigation">
+      <ul class="nav navbar-nav main-nav menu-highlight">
+        
+        
+        <li class="menu-item menu-item-首页">
+          <a href="/.">
+            
+            <i class="icon icon-home-fill"></i>
+            
+            <span class="menu-title">首页</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-归档">
+          <a href="/archives">
+            
+            <i class="icon icon-archives-fill"></i>
+            
+            <span class="menu-title">归档</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-分类">
+          <a href="/categories">
+            
+            <i class="icon icon-folder"></i>
+            
+            <span class="menu-title">分类</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-标签">
+          <a href="/tags">
+            
+            <i class="icon icon-tags"></i>
+            
+            <span class="menu-title">标签</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-github仓库">
+          <a href="/repository">
+            
+            <i class="icon icon-project"></i>
+            
+            <span class="menu-title">github仓库</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-工具箱">
+          <a href="/tools">
+            
+            <i class="icon icon-book-fill"></i>
+            
+            <span class="menu-title">工具箱</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-友链">
+          <a href="/links">
+            
+            <i class="icon icon-friendship"></i>
+            
+            <span class="menu-title">友链</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-关于">
+          <a href="/about">
+            
+            <i class="icon icon-cup-fill"></i>
+            
+            <span class="menu-title">关于</span>
+          </a>
+        </li>
+        
+      </ul>
+      
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/guoshunfa" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="https://gitee.com/guoshunfa" target="_blank" title="Gitee" data-toggle=tooltip data-placement=top><i class="icon icon-gitee"></i></a></li>
+        
+        <li><a href="https://juejin.cn/user/166781500267015" target="_blank" title="Juejin" data-toggle=tooltip data-placement=top><i class="icon icon-juejin"></i></a></li>
+        
+        <li><a href="https://cloud.tencent.com/developer/user/7784141" target="_blank" title="Code" data-toggle=tooltip data-placement=top><i class="icon icon-code"></i></a></li>
+        
+        <li><a href="/atom.xml" target="_blank" title="Rss" data-toggle=tooltip data-placement=top><i class="icon icon-rss"></i></a></li>
+        
+    </ul>
+
+    </nav>
+  </div>
+</header>
+
+  
+    <aside class="sidebar" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    
+      <div class="widget">
+    <h3 class="widget-title">公告</h3>
+    <div class="widget-body">
+        <div id="board">
+            <div class="content">
+                <p>欢迎来到www.guoshunfa.com。</p><hr/><a target="_blank" rel="noopener" href="https://www.oracle.com/cn/java/">前往Java官网<a/><br/><a target="_blank" rel="noopener" href="https://spring.io/">前往Spring官网<a/>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget-body">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/HTML-CSS-JavaScript/">HTML/CSS/JavaScript</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Java/">Java</a><span class="category-list-count">17</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Python/">Python</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/SpringBoot/">SpringBoot</a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Swift/">Swift</a><span class="category-list-count">29</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%88%9B%E4%B8%9A/">创业</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%A4%8D%E7%9B%98/">复盘</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%A8%B1%E4%B9%90/">娱乐</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%8A%80%E6%9C%AF/">技术</a><span class="category-list-count">27</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%8A%80%E6%9C%AF/%E6%90%AD%E5%BB%BA%E5%8D%95%E4%BD%93SpringBoot%E9%A1%B9%E7%9B%AE/">搭建单体SpringBoot项目</a><span class="category-list-count">21</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%90%AD%E5%BB%BA%E5%8D%95%E4%BD%93SpringBoot%E9%A1%B9%E7%9B%AE/">搭建单体SpringBoot项目</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/">数据库</a><span class="category-list-count">17</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%9C%8D%E5%8A%A1/">服务</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%9C%8D%E5%8A%A1-%E7%BB%84%E4%BB%B6/">服务&组件</a><span class="category-list-count">27</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%AE%A1%E7%90%86/">服务器管理</a><span class="category-list-count">21</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E7%AE%97%E6%B3%95/">算法</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E8%BD%AF%E4%BB%B6%E4%BD%BF%E7%94%A8/">软件使用</a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E8%BD%AF%E4%BB%B6%E6%8A%80%E6%9C%AF%E6%A1%86%E6%9E%B6/">软件技术框架</a><span class="category-list-count">44</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E9%98%85%E8%AF%BB/">阅读</a><span class="category-list-count">2</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget-body">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/AJAX/" rel="tag">AJAX</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Activiti7/" rel="tag">Activiti7</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Arthas/" rel="tag">Arthas</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CSS/" rel="tag">CSS</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Curl/" rel="tag">Curl</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Debug/" rel="tag">Debug</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Docker/" rel="tag">Docker</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Druid/" rel="tag">Druid</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Electron/" rel="tag">Electron</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Expect/" rel="tag">Expect</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/FastJson/" rel="tag">FastJson</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/FreeMarker/" rel="tag">FreeMarker</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Git/" rel="tag">Git</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Gitlab/" rel="tag">Gitlab</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/GitlabRunner/" rel="tag">GitlabRunner</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/HTML-CSS-JavaScript/" rel="tag">HTML&#x2F;CSS&#x2F;JavaScript</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hook/" rel="tag">Hook</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Http/" rel="tag">Http</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hutool/" rel="tag">Hutool</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/IDEA/" rel="tag">IDEA</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JS/" rel="tag">JS</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JVM/" rel="tag">JVM</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Jar/" rel="tag">Jar</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java/" rel="tag">Java</a><span class="tag-list-count">27</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Jdk/" rel="tag">Jdk</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Jenkins/" rel="tag">Jenkins</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Jmeter/" rel="tag">Jmeter</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Json/" rel="tag">Json</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Jsoup/" rel="tag">Jsoup</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Kafka/" rel="tag">Kafka</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Leetcode/" rel="tag">Leetcode</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux/" rel="tag">Linux</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Logback/" rel="tag">Logback</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Mac/" rel="tag">Mac</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Maven/" rel="tag">Maven</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MongoDB/" rel="tag">MongoDB</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MyBatis/" rel="tag">MyBatis</a><span class="tag-list-count">7</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Mybatis/" rel="tag">Mybatis</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MybatisPlus/" rel="tag">MybatisPlus</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Mysql/" rel="tag">Mysql</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Nano/" rel="tag">Nano</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Nexus/" rel="tag">Nexus</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Nginx/" rel="tag">Nginx</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Opengrok/" rel="tag">Opengrok</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Oracle/" rel="tag">Oracle</a><span class="tag-list-count">22</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Profile/" rel="tag">Profile</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/PubSubJS/" rel="tag">PubSubJS</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Python/" rel="tag">Python</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Quartz/" rel="tag">Quartz</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/RESTful/" rel="tag">RESTful</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/React/" rel="tag">React</a><span class="tag-list-count">7</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Redis/" rel="tag">Redis</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SQL/" rel="tag">SQL</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SVN/" rel="tag">SVN</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Scheduled/" rel="tag">Scheduled</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Scrapy/" rel="tag">Scrapy</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Shell/" rel="tag">Shell</a><span class="tag-list-count">9</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Spel%E8%A1%A8%E8%BE%BE%E5%BC%8F/" rel="tag">Spel表达式</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Spring/" rel="tag">Spring</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SpringBoot/" rel="tag">SpringBoot</a><span class="tag-list-count">34</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SpringEvent/" rel="tag">SpringEvent</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SpringMVC/" rel="tag">SpringMVC</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SpringSecurity/" rel="tag">SpringSecurity</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Stream/" rel="tag">Stream</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Swagger/" rel="tag">Swagger</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Swift/" rel="tag">Swift</a><span class="tag-list-count">29</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/TestNG/" rel="tag">TestNG</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Tomcat/" rel="tag">Tomcat</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/UI%E7%BB%84%E4%BB%B6%E5%BA%93/" rel="tag">UI组件库</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Validator/" rel="tag">Validator</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Vue/" rel="tag">Vue</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Vuepress/" rel="tag">Vuepress</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Wordpress/" rel="tag">Wordpress</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/XML/" rel="tag">XML</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/assert/" rel="tag">assert</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/docker/" rel="tag">docker</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/gitlab/" rel="tag">gitlab</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/homebrew/" rel="tag">homebrew</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/iframe/" rel="tag">iframe</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java/" rel="tag">java</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/lambda/" rel="tag">lambda</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/less/" rel="tag">less</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/" rel="tag">linux</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mac/" rel="tag">mac</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mybatis-plus/" rel="tag">mybatis-plus</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mysql/" rel="tag">mysql</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/oracle/" rel="tag">oracle</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/pom-xml/" rel="tag">pom.xml</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/quartz/" rel="tag">quartz</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/settings-xml/" rel="tag">settings.xml</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/spring-boot/" rel="tag">spring-boot</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ssh/" rel="tag">ssh</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sshpass/" rel="tag">sshpass</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/yum/" rel="tag">yum</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%B9%90%E8%A7%82%E9%94%81/" rel="tag">乐观锁</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BB%8B%E7%BB%8D/" rel="tag">介绍</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%86%85%E7%BD%91/" rel="tag">内网</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%86%85%E7%BD%91%E7%A9%BF%E9%80%8F/" rel="tag">内网穿透</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%8A%A0%E5%AF%86/" rel="tag">加密</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%8F%8D%E7%BC%96%E8%AF%91%E5%B7%A5%E5%85%B7/" rel="tag">反编译工具</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%9B%BE%E5%BA%8A/" rel="tag">图床</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%9F%BA%E7%A1%80/" rel="tag">基础</a><span class="tag-list-count">29</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%AD%98%E5%82%A8%E5%87%BD%E6%95%B0/" rel="tag">存储函数</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%AD%98%E5%82%A8%E8%BF%87%E7%A8%8B/" rel="tag">存储过程</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%AE%9A%E6%97%B6%E5%99%A8/" rel="tag">定时器</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%AE%9D%E5%A1%94/" rel="tag">宝塔</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%B9%B6%E5%8F%91/" rel="tag">并发</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%BC%82%E5%B8%B8/" rel="tag">异常</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%BF%83%E7%90%86/" rel="tag">心理</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%80%BB%E7%BB%93/" rel="tag">总结</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%8C%81%E4%B9%85%E5%B1%82%E6%A1%86%E6%9E%B6/" rel="tag">持久层框架</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%8E%A5%E5%8F%A3/" rel="tag">接口</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%8F%92%E4%BB%B6/" rel="tag">插件</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/" rel="tag">数据库</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%96%AD%E8%A8%80/" rel="tag">断言</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%A0%91%E8%8E%93%E6%B4%BE/" rel="tag">树莓派</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%A0%91%E8%8E%93%E6%B4%BE4B/" rel="tag">树莓派4B</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%A6%82%E5%BF%B5/" rel="tag">概念</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%A8%A1%E7%89%88%E5%BC%95%E6%93%8E/" rel="tag">模版引擎</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%B3%9B%E5%9E%8B/" rel="tag">泛型</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%B5%8B%E8%AF%95/" rel="tag">测试</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%88%AC%E8%99%AB/" rel="tag">爬虫</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%94%A8%E6%88%B7%E6%9D%83%E9%99%90%E9%AA%8C%E8%AF%81/" rel="tag">用户权限验证</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%9F%A5%E8%AF%86/" rel="tag">知识</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%AE%97%E6%B3%95/" rel="tag">算法</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%B1%BB/" rel="tag">类</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BB%84%E4%BB%B6%E5%BA%93/" rel="tag">组件库</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%84%9A%E6%9C%AC/" rel="tag">脚本</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%87%AA%E5%8A%A8%E5%8C%96%E6%B5%8B%E8%AF%95/" rel="tag">自动化测试</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%8B%A5%E4%BE%9D/" rel="tag">若依</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/" rel="tag">解决方案</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" rel="tag">设计模式</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/" rel="tag">读书笔记</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%B7%A8%E5%9F%9F/" rel="tag">跨域</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%83%A8%E7%BD%B2/" rel="tag">部署</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9B%86%E6%88%90/" rel="tag">集成</a><span class="tag-list-count">14</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1/" rel="tag">面向对象</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9F%A9%E5%89%A7/" rel="tag">韩剧</a><span class="tag-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget-body tagcloud">
+      <a href="/tags/AJAX/" style="font-size: 13px;">AJAX</a> <a href="/tags/Activiti7/" style="font-size: 13.17px;">Activiti7</a> <a href="/tags/Arthas/" style="font-size: 13px;">Arthas</a> <a href="/tags/CSS/" style="font-size: 13px;">CSS</a> <a href="/tags/Curl/" style="font-size: 13px;">Curl</a> <a href="/tags/Debug/" style="font-size: 13px;">Debug</a> <a href="/tags/Docker/" style="font-size: 13.42px;">Docker</a> <a href="/tags/Druid/" style="font-size: 13px;">Druid</a> <a href="/tags/Electron/" style="font-size: 13.08px;">Electron</a> <a href="/tags/Expect/" style="font-size: 13px;">Expect</a> <a href="/tags/FastJson/" style="font-size: 13px;">FastJson</a> <a href="/tags/FreeMarker/" style="font-size: 13px;">FreeMarker</a> <a href="/tags/Git/" style="font-size: 13.08px;">Git</a> <a href="/tags/Gitlab/" style="font-size: 13.25px;">Gitlab</a> <a href="/tags/GitlabRunner/" style="font-size: 13.08px;">GitlabRunner</a> <a href="/tags/HTML-CSS-JavaScript/" style="font-size: 13.17px;">HTML/CSS/JavaScript</a> <a href="/tags/Hook/" style="font-size: 13px;">Hook</a> <a href="/tags/Http/" style="font-size: 13px;">Http</a> <a href="/tags/Hutool/" style="font-size: 13px;">Hutool</a> <a href="/tags/IDEA/" style="font-size: 13.25px;">IDEA</a> <a href="/tags/JS/" style="font-size: 13.08px;">JS</a> <a href="/tags/JVM/" style="font-size: 13px;">JVM</a> <a href="/tags/Jar/" style="font-size: 13.08px;">Jar</a> <a href="/tags/Java/" style="font-size: 13.83px;">Java</a> <a href="/tags/Jdk/" style="font-size: 13px;">Jdk</a> <a href="/tags/Jenkins/" style="font-size: 13px;">Jenkins</a> <a href="/tags/Jmeter/" style="font-size: 13px;">Jmeter</a> <a href="/tags/Json/" style="font-size: 13px;">Json</a> <a href="/tags/Jsoup/" style="font-size: 13px;">Jsoup</a> <a href="/tags/Kafka/" style="font-size: 13.25px;">Kafka</a> <a href="/tags/Leetcode/" style="font-size: 13.33px;">Leetcode</a> <a href="/tags/Linux/" style="font-size: 13px;">Linux</a> <a href="/tags/Logback/" style="font-size: 13px;">Logback</a> <a href="/tags/Mac/" style="font-size: 13px;">Mac</a> <a href="/tags/Maven/" style="font-size: 13.42px;">Maven</a> <a href="/tags/MongoDB/" style="font-size: 13.42px;">MongoDB</a> <a href="/tags/MyBatis/" style="font-size: 13.5px;">MyBatis</a> <a href="/tags/Mybatis/" style="font-size: 13.17px;">Mybatis</a> <a href="/tags/MybatisPlus/" style="font-size: 13.08px;">MybatisPlus</a> <a href="/tags/Mysql/" style="font-size: 13.25px;">Mysql</a> <a href="/tags/Nano/" style="font-size: 13px;">Nano</a> <a href="/tags/Nexus/" style="font-size: 13.08px;">Nexus</a> <a href="/tags/Nginx/" style="font-size: 13.08px;">Nginx</a> <a href="/tags/Opengrok/" style="font-size: 13px;">Opengrok</a> <a href="/tags/Oracle/" style="font-size: 13.75px;">Oracle</a> <a href="/tags/Profile/" style="font-size: 13px;">Profile</a> <a href="/tags/PubSubJS/" style="font-size: 13px;">PubSubJS</a> <a href="/tags/Python/" style="font-size: 13.17px;">Python</a> <a href="/tags/Quartz/" style="font-size: 13.08px;">Quartz</a> <a href="/tags/RESTful/" style="font-size: 13px;">RESTful</a> <a href="/tags/React/" style="font-size: 13.5px;">React</a> <a href="/tags/Redis/" style="font-size: 13.17px;">Redis</a> <a href="/tags/SQL/" style="font-size: 13.25px;">SQL</a> <a href="/tags/SVN/" style="font-size: 13px;">SVN</a> <a href="/tags/Scheduled/" style="font-size: 13px;">Scheduled</a> <a href="/tags/Scrapy/" style="font-size: 13px;">Scrapy</a> <a href="/tags/Shell/" style="font-size: 13.58px;">Shell</a> <a href="/tags/Spel%E8%A1%A8%E8%BE%BE%E5%BC%8F/" style="font-size: 13px;">Spel表达式</a> <a href="/tags/Spring/" style="font-size: 13.33px;">Spring</a> <a href="/tags/SpringBoot/" style="font-size: 14px;">SpringBoot</a> <a href="/tags/SpringEvent/" style="font-size: 13px;">SpringEvent</a> <a href="/tags/SpringMVC/" style="font-size: 13px;">SpringMVC</a> <a href="/tags/SpringSecurity/" style="font-size: 13.17px;">SpringSecurity</a> <a href="/tags/Stream/" style="font-size: 13px;">Stream</a> <a href="/tags/Swagger/" style="font-size: 13.08px;">Swagger</a> <a href="/tags/Swift/" style="font-size: 13.92px;">Swift</a> <a href="/tags/TestNG/" style="font-size: 13px;">TestNG</a> <a href="/tags/Tomcat/" style="font-size: 13px;">Tomcat</a> <a href="/tags/UI%E7%BB%84%E4%BB%B6%E5%BA%93/" style="font-size: 13px;">UI组件库</a> <a href="/tags/Validator/" style="font-size: 13px;">Validator</a> <a href="/tags/Vue/" style="font-size: 13px;">Vue</a> <a href="/tags/Vuepress/" style="font-size: 13.25px;">Vuepress</a> <a href="/tags/Wordpress/" style="font-size: 13px;">Wordpress</a> <a href="/tags/XML/" style="font-size: 13px;">XML</a> <a href="/tags/assert/" style="font-size: 13px;">assert</a> <a href="/tags/docker/" style="font-size: 13px;">docker</a> <a href="/tags/gitlab/" style="font-size: 13px;">gitlab</a> <a href="/tags/homebrew/" style="font-size: 13px;">homebrew</a> <a href="/tags/iframe/" style="font-size: 13px;">iframe</a> <a href="/tags/java/" style="font-size: 13px;">java</a> <a href="/tags/lambda/" style="font-size: 13px;">lambda</a> <a href="/tags/less/" style="font-size: 13px;">less</a> <a href="/tags/linux/" style="font-size: 13.25px;">linux</a> <a href="/tags/mac/" style="font-size: 13.25px;">mac</a> <a href="/tags/mybatis-plus/" style="font-size: 13px;">mybatis-plus</a> <a href="/tags/mysql/" style="font-size: 13px;">mysql</a> <a href="/tags/oracle/" style="font-size: 13px;">oracle</a> <a href="/tags/pom-xml/" style="font-size: 13px;">pom.xml</a> <a href="/tags/quartz/" style="font-size: 13px;">quartz</a> <a href="/tags/settings-xml/" style="font-size: 13px;">settings.xml</a> <a href="/tags/spring-boot/" style="font-size: 13px;">spring-boot</a> <a href="/tags/ssh/" style="font-size: 13px;">ssh</a> <a href="/tags/sshpass/" style="font-size: 13px;">sshpass</a> <a href="/tags/yum/" style="font-size: 13px;">yum</a> <a href="/tags/%E4%B9%90%E8%A7%82%E9%94%81/" style="font-size: 13px;">乐观锁</a> <a href="/tags/%E4%BB%8B%E7%BB%8D/" style="font-size: 13px;">介绍</a> <a href="/tags/%E5%86%85%E7%BD%91/" style="font-size: 13px;">内网</a> <a href="/tags/%E5%86%85%E7%BD%91%E7%A9%BF%E9%80%8F/" style="font-size: 13px;">内网穿透</a> <a href="/tags/%E5%8A%A0%E5%AF%86/" style="font-size: 13.08px;">加密</a> <a href="/tags/%E5%8F%8D%E7%BC%96%E8%AF%91%E5%B7%A5%E5%85%B7/" style="font-size: 13px;">反编译工具</a> <a href="/tags/%E5%9B%BE%E5%BA%8A/" style="font-size: 13px;">图床</a> <a href="/tags/%E5%9F%BA%E7%A1%80/" style="font-size: 13.92px;">基础</a> <a href="/tags/%E5%AD%98%E5%82%A8%E5%87%BD%E6%95%B0/" style="font-size: 13px;">存储函数</a> <a href="/tags/%E5%AD%98%E5%82%A8%E8%BF%87%E7%A8%8B/" style="font-size: 13.08px;">存储过程</a> <a href="/tags/%E5%AE%9A%E6%97%B6%E5%99%A8/" style="font-size: 13px;">定时器</a> <a href="/tags/%E5%AE%9D%E5%A1%94/" style="font-size: 13.08px;">宝塔</a> <a href="/tags/%E5%B9%B6%E5%8F%91/" style="font-size: 13px;">并发</a> <a href="/tags/%E5%BC%82%E5%B8%B8/" style="font-size: 13px;">异常</a> <a href="/tags/%E5%BF%83%E7%90%86/" style="font-size: 13.08px;">心理</a> <a href="/tags/%E6%80%BB%E7%BB%93/" style="font-size: 13px;">总结</a> <a href="/tags/%E6%8C%81%E4%B9%85%E5%B1%82%E6%A1%86%E6%9E%B6/" style="font-size: 13.17px;">持久层框架</a> <a href="/tags/%E6%8E%A5%E5%8F%A3/" style="font-size: 13px;">接口</a> <a href="/tags/%E6%8F%92%E4%BB%B6/" style="font-size: 13px;">插件</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/" style="font-size: 13.33px;">数据库</a> <a href="/tags/%E6%96%AD%E8%A8%80/" style="font-size: 13px;">断言</a> <a href="/tags/%E6%A0%91%E8%8E%93%E6%B4%BE/" style="font-size: 13.08px;">树莓派</a> <a href="/tags/%E6%A0%91%E8%8E%93%E6%B4%BE4B/" style="font-size: 13px;">树莓派4B</a> <a href="/tags/%E6%A6%82%E5%BF%B5/" style="font-size: 13px;">概念</a> <a href="/tags/%E6%A8%A1%E7%89%88%E5%BC%95%E6%93%8E/" style="font-size: 13px;">模版引擎</a> <a href="/tags/%E6%B3%9B%E5%9E%8B/" style="font-size: 13.08px;">泛型</a> <a href="/tags/%E6%B5%8B%E8%AF%95/" style="font-size: 13.33px;">测试</a> <a href="/tags/%E7%88%AC%E8%99%AB/" style="font-size: 13.08px;">爬虫</a> <a href="/tags/%E7%94%A8%E6%88%B7%E6%9D%83%E9%99%90%E9%AA%8C%E8%AF%81/" style="font-size: 13px;">用户权限验证</a> <a href="/tags/%E7%9F%A5%E8%AF%86/" style="font-size: 13px;">知识</a> <a href="/tags/%E7%AE%97%E6%B3%95/" style="font-size: 13.08px;">算法</a> <a href="/tags/%E7%B1%BB/" style="font-size: 13px;">类</a> <a href="/tags/%E7%BB%84%E4%BB%B6%E5%BA%93/" style="font-size: 13px;">组件库</a> <a href="/tags/%E8%84%9A%E6%9C%AC/" style="font-size: 13.25px;">脚本</a> <a href="/tags/%E8%87%AA%E5%8A%A8%E5%8C%96%E6%B5%8B%E8%AF%95/" style="font-size: 13px;">自动化测试</a> <a href="/tags/%E8%8B%A5%E4%BE%9D/" style="font-size: 13px;">若依</a> <a href="/tags/%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/" style="font-size: 13.08px;">解决方案</a> <a href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" style="font-size: 13px;">设计模式</a> <a href="/tags/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/" style="font-size: 13.08px;">读书笔记</a> <a href="/tags/%E8%B7%A8%E5%9F%9F/" style="font-size: 13px;">跨域</a> <a href="/tags/%E9%83%A8%E7%BD%B2/" style="font-size: 13px;">部署</a> <a href="/tags/%E9%9B%86%E6%88%90/" style="font-size: 13.67px;">集成</a> <a href="/tags/%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1/" style="font-size: 13px;">面向对象</a> <a href="/tags/%E9%9F%A9%E5%89%A7/" style="font-size: 13px;">韩剧</a>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget-body">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/07/">七月 2024</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/07/">七月 2023</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/06/">六月 2023</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/01/">一月 2023</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/11/">十一月 2022</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/10/">十月 2022</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/07/">七月 2022</a><span class="archive-list-count">181</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/06/">六月 2022</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/07/">七月 2020</a><span class="archive-list-count">17</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget-body">
+      <ul class="recent-post-list list-unstyled ">
+        
+          <li>
+            
+            <div class="item-thumb">
+              <a href="/2024/07/%E4%B8%8D%E5%8D%B7%E5%AD%A6%E5%8E%86%E5%92%8C%E8%83%8C%E6%99%AF%E7%9A%84%E8%B5%9B%E9%81%93%EF%BC%8C%E4%B9%9F%E8%83%BD%E6%9C%88%E5%85%A5%E8%BF%87%E4%B8%87%EF%BC%9F/" class="thumb">
+    
+    
+        <span class="thumb-image thumb-none"></span>
+    
+</a>
+
+            </div>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/%E5%88%9B%E4%B8%9A/">创业</a>
+              </p>
+              <p class="item-title">
+                <a href="/2024/07/%E4%B8%8D%E5%8D%B7%E5%AD%A6%E5%8E%86%E5%92%8C%E8%83%8C%E6%99%AF%E7%9A%84%E8%B5%9B%E9%81%93%EF%BC%8C%E4%B9%9F%E8%83%BD%E6%9C%88%E5%85%A5%E8%BF%87%E4%B8%87%EF%BC%9F/" class="title">不卷学历和背景的赛道，也能月入过万？</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2024-07-11T05:45:20.000Z" itemprop="datePublished">2024-07-11</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-thumb">
+              <a href="/2024/07/%E5%9B%9E%E9%A1%BE%E5%B7%A5%E4%BD%9C%E8%BF%99%E5%87%A0%E5%B9%B4/" class="thumb">
+    
+    
+        <span class="thumb-image thumb-none"></span>
+    
+</a>
+
+            </div>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/%E5%A4%8D%E7%9B%98/">复盘</a>
+              </p>
+              <p class="item-title">
+                <a href="/2024/07/%E5%9B%9E%E9%A1%BE%E5%B7%A5%E4%BD%9C%E8%BF%99%E5%87%A0%E5%B9%B4/" class="title">回顾工作这几年</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2024-07-09T06:19:23.000Z" itemprop="datePublished">2024-07-09</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-thumb">
+              <a href="/2023/07/SpringBoot3%E9%9B%86%E6%88%90Quartz%E6%9E%81%E7%AE%80%E7%89%88/" class="thumb">
+    
+    
+        <span style="background-image:url(/2023/07/SpringBoot3集成Quartz极简版/logo-quartz-scheduler.png)" alt="SpringBoot3集成Quartz极简版" class="thumb-image"></span>
+    
+</a>
+
+            </div>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/SpringBoot/">SpringBoot</a>
+              </p>
+              <p class="item-title">
+                <a href="/2023/07/SpringBoot3%E9%9B%86%E6%88%90Quartz%E6%9E%81%E7%AE%80%E7%89%88/" class="title">SpringBoot3集成Quartz极简版</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2023-07-18T01:14:01.000Z" itemprop="datePublished">2023-07-18</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-thumb">
+              <a href="/2023/07/SpringBoot3%E9%9B%86%E6%88%90Quartz%E8%AF%A6%E7%BB%86%E7%89%88/" class="thumb">
+    
+    
+        <span style="background-image:url(/2023/07/SpringBoot3集成Quartz极简版/logo-quartz-scheduler.png)" alt="SpringBoot3集成Quartz详细版" class="thumb-image"></span>
+    
+</a>
+
+            </div>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/SpringBoot/">SpringBoot</a>
+              </p>
+              <p class="item-title">
+                <a href="/2023/07/SpringBoot3%E9%9B%86%E6%88%90Quartz%E8%AF%A6%E7%BB%86%E7%89%88/" class="title">SpringBoot3集成Quartz详细版</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2023-07-18T01:14:01.000Z" itemprop="datePublished">2023-07-18</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-thumb">
+              <a href="/2023/07/SpringBoot3%E9%9B%86%E6%88%90Swagger/" class="thumb">
+    
+    
+        <span style="background-image:url(/2023/07/SpringBoot3集成Swagger/swagger_logo.svg)" alt="SpringBoot3集成Swagger" class="thumb-image"></span>
+    
+</a>
+
+            </div>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/SpringBoot/">SpringBoot</a>
+              </p>
+              <p class="item-title">
+                <a href="/2023/07/SpringBoot3%E9%9B%86%E6%88%90Swagger/" class="title">SpringBoot3集成Swagger</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2023-07-11T06:52:01.000Z" itemprop="datePublished">2023-07-11</time>
+              </p>
+            </div>
+          </li>
+          
+      </ul>
+    </div>
+  </div>
+  
+
+    
+  </div>
+</aside>
+
+  
+  
+<main class="main" role="main">
+  <div class="content">
+  <article id="post-软件开发/技术/编程语言/swift/Swift基础-嵌套" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
+    
+    <div class="article-header">
+      
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Swift基础 嵌套
+    </h1>
+  
+
+      
+      <div class="article-meta">
+        <span class="article-date">
+    <i class="icon icon-calendar-check"></i>
+	<a href="/2022/07/Swift%E5%9F%BA%E7%A1%80-%E5%B5%8C%E5%A5%97/" class="article-date">
+	  <time datetime="2022-07-01T04:01:01.000Z" itemprop="datePublished">2022-07-01</time>
+	</a>
+</span>
+        
+  <span class="article-category">
+    <i class="icon icon-folder"></i>
+    <a class="article-category-link" href="/categories/Swift/">Swift</a>
+  </span>
+
+        
+  <span class="article-tag">
+    <i class="icon icon-tags"></i>
+	<a class="article-tag-link-link" href="/tags/Swift/" rel="tag">Swift</a>, <a class="article-tag-link-link" href="/tags/%E5%9F%BA%E7%A1%80/" rel="tag">基础</a>
+  </span>
+
+
+        
+	<span class="article-read hidden-xs">
+	    <i class="icon icon-eye-fill" aria-hidden="true"></i>
+	    <span id="busuanzi_container_page_pv">
+			<span id="busuanzi_value_page_pv">0</span>
+		</span>
+	</span>
+
+
+        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2022/07/Swift%E5%9F%BA%E7%A1%80-%E5%B5%8C%E5%A5%97/#comments" class="article-comment-link">评论</a></span>
+        
+	
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">字数统计: 6.3k(字)</span>
+	
+	
+		<span class="post-readcount hidden-xs" itemprop="timeRequired">阅读时长: 24(分)</span>
+	
+
+      </div>
+    </div>
+    <div class="article-entry marked-body" itemprop="articleBody">
+      
+        <p>翻译自：<a target="_blank" rel="noopener" href="https://docs.swift.org/swift-book/LanguageGuide/Closures.html#ID102">https://docs.swift.org/swift-book/LanguageGuide/Closures.html#ID102</a></p>
+<p><em>嵌套</em>是自包含的功能块，可以在代码中传递和使用。Swift中的闭包类似于C和Objective-C中的块以及其他编程语言中的lambdas。</p>
+<p>闭包可以从定义常量和变量的上下文中捕获和存储对任何常量和变量的引用。这被称为<em>关闭</em>这些常量和变量。Swift为您处理捕获的所有内存管理。</p>
+<blockquote>
+<p>注意</p>
+<p>如果您不熟悉捕获的概念，请不要担心。下文在《<a target="_blank" rel="noopener" href="https://docs.swift.org/swift-book/LanguageGuide/Closures.html#ID103">捕捉价值观》</a>中对此进行了详细解释。</p>
+</blockquote>
+<p><a target="_blank" rel="noopener" href="https://docs.swift.org/swift-book/LanguageGuide/Functions.html">函数</a>中引入的全局和嵌套函数实际上是闭包的特殊情况。关闭采取三种形式之一：</p>
+<ul>
+<li>全局函数是具有名称且不捕获任何值的闭包。</li>
+<li>嵌套函数是具有名称的闭包，可以从其封闭函数中捕获值。</li>
+<li>闭包表达式是用轻量级语法编写的未命名闭包，可以从其周围上下文中捕获值。</li>
+</ul>
+<p>Swift的闭包表达式具有干净、清晰的风格，优化鼓励在常见场景中进行简短、无杂乱的语法。这些优化包括：</p>
+<ul>
+<li>从上下文推断参数和返回值类型</li>
+<li>来自单表达式闭包的隐式回报</li>
+<li>速记参数名称</li>
+<li>尾随闭包语法</li>
+</ul>
+<h2 id="嵌套表达式"><a href="#嵌套表达式" class="headerlink" title="嵌套表达式"></a>嵌套表达式</h2><p>Nested <a target="_blank" rel="noopener" href="https://docs.swift.org/swift-book/LanguageGuide/Functions.html#ID178">Functions</a>中引入的嵌套函数是命名和定义自包含代码块作为更大函数的一部分的便捷手段。然而，在没有完整声明和名称的情况下编写类似函数的构造的较短版本有时是有用的。当您使用将函数作为一个或多个参数的函数或方法时，尤其如此。</p>
+<p><em>闭包表达式</em>是一种以简短、聚焦的语法编写内联闭包的方法。闭包表达式提供了几种语法优化，用于以缩短的形式编写闭包，而不会失去清晰度或意图。下面的闭包表达式示例通过在几次迭代中完善<code>sorted(by:)</code>方法的单个示例来说明这些优化，每个迭代都以更简洁的方式表达相同的功能。</p>
+<h3 id="排序方法"><a href="#排序方法" class="headerlink" title="排序方法"></a>排序方法</h3><p>Swift的标准库提供了一个名为<code>sorted(by:)</code>的方法，该方法根据您提供的排序闭包的输出对已知类型的值数组进行排序。完成排序过程后，<code>sorted(by:)</code>方法返回与旧数组类型和大小相同的新数组，其元素按正确的排序顺序排列。原始数组不会被<code>sorted(by:)</code>方法修改。</p>
+<p>下面的闭包表达式示例使用<code>sorted(by:)</code>方法按反向字母顺序对<code>String</code>值数组进行排序。以下是要排序的初始数组：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> names <span class="operator">=</span> [<span class="string">&quot;Chris&quot;</span>, <span class="string">&quot;Alex&quot;</span>, <span class="string">&quot;Ewa&quot;</span>, <span class="string">&quot;Barry&quot;</span>, <span class="string">&quot;Daniella&quot;</span>]</span><br></pre></td></tr></table></figure>
+
+<p><code>sorted(by:)</code>方法接受一个闭包，该闭包接受两个与数组内容相同的类型参数，并返回一个<code>Bool</code>值，说明对值进行排序后，第一个值应该出现在第二个值之前还是之后。如果第一个值出现在第二个值<em>之前</em>，排序闭包需要返回<code>true</code>，否则返回<code>false</code>。</p>
+<p>这个例子是对一个’ String ‘值的数组进行排序，因此排序闭包需要是一个类型为’ (String, String) -&gt; Bool ‘的函数。</p>
+<p>提供排序闭包的一种方法是编写正确类型的正常函数，并将其作为参数传递给<code>sorted(by:)</code>方法：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">func</span> <span class="title function_">backward</span>(<span class="keyword">_</span> <span class="params">s1</span>: <span class="type">String</span>, <span class="keyword">_</span> <span class="params">s2</span>: <span class="type">String</span>) -&gt; <span class="type">Bool</span> &#123;</span><br><span class="line">   <span class="keyword">return</span> s1 <span class="operator">&gt;</span> s2</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">var</span> reversedNames <span class="operator">=</span> names.sorted(by: backward)</span><br><span class="line"><span class="comment">// reversedNames is equal to [&quot;Ewa&quot;, &quot;Daniella&quot;, &quot;Chris&quot;, &quot;Barry&quot;, &quot;Alex&quot;]</span></span><br></pre></td></tr></table></figure>
+
+<p>如果第一个字符串（<code>s1</code>）大于第二个字符串（<code>s2</code>），则 <code>backward(_:_:)</code>函数将返回<code>true</code>，表明<code>s1</code>应该出现在排序数组的<code>s2</code>之前。对于字符串中的字符，“大于”意味着“在字母表中出现得晚于”。这意味着字母<code>&quot;B&quot;</code>大于字母<code>&quot;A&quot;</code>字符串<code>&quot;Tom&quot;</code>大于字符串<code>&quot;Tim&quot;</code>这给出了一个反向字母排序，将<code>&quot;Barry&quot;</code>放在<code>&quot;Alex&quot;</code>之前，以此类过。</p>
+<p>然而，这是一种相当冗长的方式来编写本质上是一个单表达式函数(‘ a &gt;b ‘)。在这个例子中，最好使用闭包表达式语法内联编写排序闭包。</p>
+<h3 id="嵌套表达式语法"><a href="#嵌套表达式语法" class="headerlink" title="嵌套表达式语法"></a>嵌套表达式语法</h3><p>嵌套表达式语法具有以下一般形式：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&#123; (parameters) -&gt; <span class="keyword">return</span> type <span class="keyword">in</span></span><br><span class="line">   statements</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>嵌套表达式语法中的<em>参数</em>可以是输入输出参数，但它们不能有默认值。如果您命名变量参数，则可以使用变量参数。元组也可以用作参数类型和返回类型。</p>
+<p>下面的示例显示了上面的向<code>backward(_:_:)</code>函数的闭包表达式版本：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">reversedNames <span class="operator">=</span> names.sorted(by: &#123; (s1: <span class="type">String</span>, s2: <span class="type">String</span>) -&gt; <span class="type">Bool</span> <span class="keyword">in</span></span><br><span class="line">   <span class="keyword">return</span> s1 <span class="operator">&gt;</span> s2</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<p>请注意，这个内联闭包的形参声明和返回类型与’ backward(::) ‘函数的声明相同。在这两种情况下，它都被写成’ (s1: String, s2: String) -&gt; Bool ‘。但是，对于内联闭包表达式，参数和返回类型写在花括号的*内部，而不是在花括号的外面。</p>
+<p>闭包正文的开头由关键字引入。此关键字表示闭包参数和返回类型的定义已经完成，闭包的主体即将开始。</p>
+<p>由于闭包的主体太短，它甚至可以写在一行上：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">reversedNames <span class="operator">=</span> names.sorted(by: &#123; (s1: <span class="type">String</span>, s2: <span class="type">String</span>) -&gt; <span class="type">Bool</span> <span class="keyword">in</span> <span class="keyword">return</span> s1 <span class="operator">&gt;</span> s2 &#125; )</span><br></pre></td></tr></table></figure>
+
+<p>这表明对<code>sorted(by:)</code>方法的总体调用保持不变。一对括号仍然包裹着方法的整个参数。然而，这个论点现在是一个内联闭包。</p>
+<h3 id="从上下文推断类型"><a href="#从上下文推断类型" class="headerlink" title="从上下文推断类型"></a>从上下文推断类型</h3><p>因为排序闭包是作为参数传递给方法的，所以Swift可以推断出其参数的类型以及返回值的类型。’ sorted(by:) ‘方法是在一个字符串数组上调用的，所以它的参数必须是一个类型为’ (String, String) -&gt; Bool ‘的函数。这意味着’ (String, String) ‘和’ Bool ‘类型不需要作为闭包表达式定义的一部分编写。因为所有类型都可以被推断，所以返回箭头(‘ -&gt; ‘)和形参名称周围的括号也可以被省略:</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">reversedNames <span class="operator">=</span> names.sorted(by: &#123; s1, s2 <span class="keyword">in</span> <span class="keyword">return</span> s1 <span class="operator">&gt;</span> s2 &#125; )</span><br></pre></td></tr></table></figure>
+
+<p>当将闭包作为内联闭包表达式传递给函数或方法时，始终可以推断参数类型和返回类型。因此，当闭包用作函数或方法参数时，您永远不需要以最完整的形式编写内联闭包。</p>
+<p>尽管如此，如果您愿意，您仍然可以明确这些类型，如果这能避免代码读者的歧义，则鼓励这样做。在<code>sorted(by:)</code>方法的情况下，从正在进行排序的事实中可以清楚地看出闭包的目的，读者可以安全地假设闭包可能与<code>String</code>值一起工作，因为它有助于对字符串数组进行排序。</p>
+<h3 id="单表达式关闭的隐式返回"><a href="#单表达式关闭的隐式返回" class="headerlink" title="单表达式关闭的隐式返回"></a>单表达式关闭的隐式返回</h3><p>单表达式闭包可以通过从声明中省略<code>return</code>关键字来隐式返回其单个表达式的结果，如上一个示例的这个版本：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">reversedNames <span class="operator">=</span> names.sorted(by: &#123; s1, s2 <span class="keyword">in</span> s1 <span class="operator">&gt;</span> s2 &#125; )</span><br></pre></td></tr></table></figure>
+
+<p>这里，’ sorted(by:) ‘方法的参数的函数类型明确表示闭包必须返回’ Bool ‘值。因为闭包的主体包含一个返回’ Bool ‘值的表达式(‘ s1 &gt; s2 ‘)，所以没有歧义，并且’ return ‘关键字可以被省略。</p>
+<h3 id="运算符方法"><a href="#运算符方法" class="headerlink" title="运算符方法"></a>运算符方法</h3><p>实际上，有更<em>短</em>的方法来编写上面的闭包表达式。Swift的<code>String</code>类型将其大于运算符（<code>&gt;</code>）的字符串特定实现定义为具有两个<code>String</code>类型参数的方法，并返回<code>Bool</code>类型的值。这完全符合<code>sorted(by:)</code>方法所需的方法类型。因此，您可以简单地传递大于运算符，Swift将推断您想要使用其字符串特定的实现：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">reversedNames <span class="operator">=</span> names.sorted(by: <span class="operator">&gt;</span>)</span><br></pre></td></tr></table></figure>
+
+<p>有关运算符方法的更多信息，请参阅<a target="_blank" rel="noopener" href="https://docs.swift.org/swift-book/LanguageGuide/AdvancedOperators.html#ID42">运算符方法</a>。</p>
+<h2 id="尾随关闭"><a href="#尾随关闭" class="headerlink" title="尾随关闭"></a>尾随关闭</h2><p>如果您需要将闭包表达式传递给函数作为函数的最终参数，并且闭包表达式很长，则将其写为<em>尾随闭包</em>可能会有用。您在函数调用的括号后写一个尾随闭包，即使尾随闭包仍然是函数的参数。当您使用尾随闭包语法时，您不会将第一个闭包的参数标签作为函数调用的一部分。函数调用可以包括多个尾随闭包；然而，以下前几个示例使用单个尾随闭包。</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">func</span> <span class="title function_">someFunctionThatTakesAClosure</span>(<span class="params">closure</span>: () -&gt; <span class="type">Void</span>) &#123;</span><br><span class="line">   <span class="comment">// function body goes here</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 下面是如何在不使用末尾闭包的情况下调用这个函数:</span></span><br><span class="line"></span><br><span class="line">someFunctionThatTakesAClosure(closure: &#123;</span><br><span class="line">   <span class="comment">// 结束的身体在这里</span></span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="comment">// 下面是如何使用末尾闭包来调用这个函数:</span></span><br><span class="line"></span><br><span class="line">someFunctionThatTakesAClosure() &#123;</span><br><span class="line">   <span class="comment">// trailing closure&#x27;s body goes here</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>上面的<a target="_blank" rel="noopener" href="https://docs.swift.org/swift-book/LanguageGuide/Closures.html#ID97">闭包表达式语法</a>部分的字符串排序闭包可以在<code>sorted(by:)</code>方法的括号之外写成尾随闭包：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">reversedNames <span class="operator">=</span> names.sorted() &#123; <span class="variable">$0</span> <span class="operator">&gt;</span> <span class="variable">$1</span> &#125;</span><br></pre></td></tr></table></figure>
+
+<p>如果闭包表达式作为函数或方法的唯一参数提供，并且您将该表达式作为尾随闭包提供，则在调用函数时，您无需在函数或方法名称后写一对括号<code>()</code>）：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">reversedNames <span class="operator">=</span> names.sorted &#123; <span class="variable">$0</span> <span class="operator">&gt;</span> <span class="variable">$1</span> &#125;</span><br></pre></td></tr></table></figure>
+
+<p>当闭包足够长，无法将其内联写在一行上时，尾随闭包最有用。例如，Swift的<code>Array</code>类型有一个<code>map(_:)</code>方法，该方法以闭包表达式为单个参数。为数组中的每个项目调用一次闭包，并返回该项目的替代映射值（可能是其他类型）。您通过在传递给<code>map(_:)</code>的闭包中编写代码来指定映射的性质和返回值的类型。</p>
+<p>将提供的闭包应用于每个数组元素后，<code>map(_:)</code>方法返回一个包含所有新映射值的新数组，顺序与原始数组中的相应值相同。</p>
+<p>下面介绍如何使用带有尾随闭包的’ map(:) ‘方法将’ Int ‘值的数组转换为’ String ‘值的数组。数组[16,58,510]被用来创建新的数组[“OneSix”， “FiveEight”， “FiveOneZero”]:</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> digitNames <span class="operator">=</span> [</span><br><span class="line">   <span class="number">0</span>: <span class="string">&quot;Zero&quot;</span>, <span class="number">1</span>: <span class="string">&quot;One&quot;</span>, <span class="number">2</span>: <span class="string">&quot;Two&quot;</span>,   <span class="number">3</span>: <span class="string">&quot;Three&quot;</span>, <span class="number">4</span>: <span class="string">&quot;Four&quot;</span>,</span><br><span class="line">   <span class="number">5</span>: <span class="string">&quot;Five&quot;</span>, <span class="number">6</span>: <span class="string">&quot;Six&quot;</span>, <span class="number">7</span>: <span class="string">&quot;Seven&quot;</span>, <span class="number">8</span>: <span class="string">&quot;Eight&quot;</span>, <span class="number">9</span>: <span class="string">&quot;Nine&quot;</span></span><br><span class="line">]</span><br><span class="line"><span class="keyword">let</span> numbers <span class="operator">=</span> [<span class="number">16</span>, <span class="number">58</span>, <span class="number">510</span>]</span><br></pre></td></tr></table></figure>
+
+<p>上面的代码创建了整数数字与其名称的英语版本之间的映射词典。它还定义了一个整数数数组，准备转换为字符串。</p>
+<p>您现在可以使用<code>numbers</code>数组创建<code>String</code>值数组，方法是将闭包表达式作为尾随闭包传递到数组的<code>map(_:)</code>方法：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> strings <span class="operator">=</span> numbers.map &#123; (number) -&gt; <span class="type">String</span> <span class="keyword">in</span></span><br><span class="line">   <span class="keyword">var</span> number <span class="operator">=</span> number</span><br><span class="line">   <span class="keyword">var</span> output <span class="operator">=</span> <span class="string">&quot;&quot;</span></span><br><span class="line">   <span class="keyword">repeat</span> &#123;</span><br><span class="line">       output <span class="operator">=</span> digitNames[number <span class="operator">%</span> <span class="number">10</span>]<span class="operator">!</span> <span class="operator">+</span> output</span><br><span class="line">       number <span class="operator">/=</span> <span class="number">10</span></span><br><span class="line">   &#125; <span class="keyword">while</span> number <span class="operator">&gt;</span> <span class="number">0</span></span><br><span class="line">   <span class="keyword">return</span> output</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// strings is inferred to be of type [String]</span></span><br><span class="line"><span class="comment">// its value is [&quot;OneSix&quot;, &quot;FiveEight&quot;, &quot;FiveOneZero&quot;]</span></span><br></pre></td></tr></table></figure>
+
+<p><code>map(_:)</code>方法为数组中的每个项调用闭包表达式一次。您不需要指定闭包输入参数<code>number</code>的类型，因为类型可以从要映射的数组中的值中推断出来。</p>
+<p>在本例中，变量<code>number</code>使用闭包<code>number</code>参数的值初始化，以便可以在闭包主体内修改该值。（函数和闭包的参数始终是常量。）闭包表达式还指定了<code>String</code>的返回类型，以指示将存储在映射输出数组中的类型。</p>
+<p>闭包表达式每次调用时都会构建一个名为<code>output</code>的字符串。它使用剩余运算符（<code>number%10</code>）计算<code>number</code>的最后一个数字，并使用此数字在<code>digitNames</code>字典中查找适当的字符串。闭包可用于创建任何大于零的整数的字符串表示形式。</p>
+<p>注意</p>
+<p>对<code>digitNames</code>字典下标的调用后是感叹号（<code>!</code>），因为字典下标返回一个可选值，表示如果键不存在，字典查找可能会失败。在上面的示例中，保证<code>number%10</code>始终是<code>digitNames</code>字典的有效下标键，因此使用感叹号来强制解开存储在下标可选返回值中的<code>String</code>值。</p>
+<p>从<code>digitNames</code>字典中检索到的字符串被添加到<code>output</code>的<em>前面</em>，有效地反向构建数字的字符串版本。（表达式<code>number%10</code>对16、<code>58</code>为<code>8</code>，对<code>510</code>值为<code>0</code>。）</p>
+<p>然后将<code>number</code>变量除以10。因为它是一个整数，所以它在分区期间四舍五入，所以<code>16</code>变成1，<code>58</code>变成5，<code>510</code>变成51。</p>
+<p>重复该过程，直到<code>number</code>等于<code>0</code>，此时<code>output</code>字符串由闭包返回，并通过<code>map(_:)</code>方法添加到输出数组中。</p>
+<p>在上述示例中使用尾随闭包语法，在闭包支持的函数之后立即整齐地封装闭包的功能，而无需将整个闭包包包在<code>map(_:)</code>方法的外括号中。</p>
+<p>如果一个函数需要多个闭包，则省略第一个尾随闭包的参数标签，并标记剩余的尾随闭包。例如，下面的功能加载照片库的图片：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">func</span> <span class="title function_">loadPicture</span>(<span class="params">from</span> <span class="params">server</span>: <span class="type">Server</span>, <span class="params">completion</span>: (<span class="type">Picture</span>) -&gt; <span class="type">Void</span>, <span class="params">onFailure</span>: () -&gt; <span class="type">Void</span>) &#123;</span><br><span class="line">   <span class="keyword">if</span> <span class="keyword">let</span> picture <span class="operator">=</span> download(<span class="string">&quot;photo.jpg&quot;</span>, from: server) &#123;</span><br><span class="line">       completion(picture)</span><br><span class="line">   &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">       onFailure()</span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>当您调用此函数加载图片时，您提供了两个闭包。第一个闭包是一个完成处理程序，在成功下载后显示图片。第二个闭包是一个错误处理程序，向用户显示错误。</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">loadPicture(from: someServer) &#123; picture <span class="keyword">in</span></span><br><span class="line">   someView.currentPicture <span class="operator">=</span> picture</span><br><span class="line">&#125; onFailure: &#123;</span><br><span class="line">   <span class="built_in">print</span>(<span class="string">&quot;Couldn&#x27;t download the next picture.&quot;</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>在本例中，<code>loadPicture(from:completion:onFailure:)</code>函数将其网络任务发送到后台，并在网络任务完成后调用两个完成处理程序之一。以这种方式编写该功能可以让您干净地将负责处理网络故障的代码与成功下载后更新用户界面的代码分开，而不是只使用一个处理这两种情况的闭包。</p>
+<h2 id="捕捉价值观"><a href="#捕捉价值观" class="headerlink" title="捕捉价值观"></a>捕捉价值观</h2><p>闭包可以从定义它的周围上下文中<em>捕获</em>常量和变量。然后，闭包可以从其主体内引用和修改这些常量和变量的值，即使定义常量和变量的原始范围不再存在。</p>
+<p>在Swift中，可以捕获值的最简单闭包形式是写在另一个函数主体中的嵌套函数。嵌套函数可以捕获其外部函数的任何参数，也可以捕获外部函数中定义的任何常量和变量。</p>
+<p>这里有一个名为<code>makeIncrementer</code>的函数的示例，它包含一个名为<code>incrementer</code>嵌套函数。嵌套<code>incrementer()</code>函数从其周围的上下文捕获两个值，<code>runningTotal</code>和<code>amount</code>。捕获这些值后，<code>makeIncrementer</code>将作为闭包返回，每次调用时按<code>amount</code>增加<code>runningTotal</code>。</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">func</span> <span class="title function_">makeIncrementer</span>(<span class="params">forIncrement</span> <span class="params">amount</span>: <span class="type">Int</span>) -&gt; () -&gt; <span class="type">Int</span> &#123;</span><br><span class="line">   <span class="keyword">var</span> runningTotal <span class="operator">=</span> <span class="number">0</span></span><br><span class="line">   <span class="keyword">func</span> <span class="title function_">incrementer</span>() -&gt; <span class="type">Int</span> &#123;</span><br><span class="line">       runningTotal <span class="operator">+=</span> amount</span><br><span class="line">       <span class="keyword">return</span> runningTotal</span><br><span class="line">   &#125;</span><br><span class="line">   <span class="keyword">return</span> incrementer</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>‘ makeIncrementer ‘的返回类型是’ ()-&gt; Int ‘。这意味着它返回一个<em>函数</em>，而不是一个简单的值。它返回的函数没有参数，每次调用都返回一个’ Int ‘值。要了解函数如何返回其他函数，请参阅<a target="_blank" rel="noopener" href="https://docs.swift.org/swift-book/LanguageGuide/Functions.html#ID177">函数类型作为返回类型</a>。</p>
+<p><code>makeIncrementer(forIncrement:)</code>函数定义了一个名为<code>runningTotal</code>的整数变量，以存储将返回的增量的当前运行总数。此变量初始化值为<code>0</code>。</p>
+<p><code>makeIncrementer(forIncrement:)</code>函数具有单个<code>Int</code>参数，参数标签为<code>forIncrement</code>，参数名称为<code>amount</code>。传递给此参数的参数值指定每次调用返回的增量函数时，<code>runningTotal</code>应该增加多少。<code>makeIncrementer</code>函数定义了一个名为<code>incrementer</code>的嵌套函数，该函数执行实际增量。此函数只需为<code>runningTotal</code>添加<code>amount</code>，然后返回结果。</p>
+<p>当孤立地考虑时，嵌套<code>incrementer()</code>函数可能看起来不寻常：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">func</span> <span class="title function_">incrementer</span>() -&gt; <span class="type">Int</span> &#123;</span><br><span class="line">   runningTotal <span class="operator">+=</span> amount</span><br><span class="line">   <span class="keyword">return</span> runningTotal</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><code>incrementer()</code>函数没有任何参数，但它指的是在其函数主体内<code>runningTotal</code>和<code>amount</code>。它通过捕获对周围函数中<code>runningTotal</code>和<code>amount</code>的<em>引用</em>，并在自己的功能体中使用它们来做到这一点。通过引用捕获确保在<code>makeIncrementer</code>调用结束时，<code>runningTotal</code>和<code>amount</code>不会消失，并确保下次调用<code>incrementer</code>函数时<code>runningTotal</code>可用。</p>
+<blockquote>
+<p>注意</p>
+<p>作为优化，如果值没有被闭包突变，并且值在闭包创建后没有突变，则可以捕获和存储该值<em>的副本</em>。</p>
+</blockquote>
+<p>Swift 还负责处理不再需要的变量时涉及的所有内存管理。</p>
+<p>以下是<code>makeIncrementer</code>在起作用的一个例子：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> incrementByTen <span class="operator">=</span> makeIncrementer(forIncrement: <span class="number">10</span>)</span><br></pre></td></tr></table></figure>
+
+<p>此示例设置了一个名为<code>incrementByTen</code>的常量，以引用每次调用时为其<code>runningTotal</code>变量添加<code>10</code>增量函数。多次调用函数会显示此行为：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">incrementByTen()</span><br><span class="line"><span class="comment">// returns a value of 10</span></span><br><span class="line">incrementByTen()</span><br><span class="line"><span class="comment">// returns a value of 20</span></span><br><span class="line">incrementByTen()</span><br><span class="line"><span class="comment">// returns a value of 30</span></span><br></pre></td></tr></table></figure>
+
+<p>如果您创建第二个增量器，它将对一个新的单独<code>runningTotal</code>变量有自己的存储引用：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> incrementBySeven <span class="operator">=</span> makeIncrementer(forIncrement: <span class="number">7</span>)</span><br><span class="line">incrementBySeven()</span><br><span class="line"><span class="comment">// returns a value of 7</span></span><br></pre></td></tr></table></figure>
+
+<p>调用原始增量器（<code>incrementByTen</code>）继续增加自己的<code>runningTotal</code>变量，并且不影响<code>incrementBySeven</code>捕获的变量：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">incrementByTen()</span><br><span class="line"><span class="comment">// returns a value of 40</span></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>注意</p>
+<p>如果您为类实例的属性分配闭包，并且闭包通过引用实例或其成员来捕获该实例，您将在闭包和实例之间创建一个强大的引用周期。Swift 使用<em>采集列表</em>来打破这些强大的参考周期。有关更多信息，请参阅<a target="_blank" rel="noopener" href="https://docs.swift.org/swift-book/LanguageGuide/AutomaticReferenceCounting.html#ID56">关闭的强参考周期</a>。</p>
+</blockquote>
+<h2 id="关闭是参考类型"><a href="#关闭是参考类型" class="headerlink" title="关闭是参考类型"></a>关闭是参考类型</h2><p>在上面的例子中，’ incrementBySeven ‘和’ incrementByTen ‘是常量，但是这些常量所引用的闭包仍然能够增加它们捕获的’ runningTotal ‘变量。这是因为函数和闭包都是引用类型。</p>
+<p>每当您将函数或闭包分配给常量或变量时，您实际上都会将该常量或变量设置为对函数或闭包的<em>引用</em>。在上面的示例中，<code>incrementByTen</code><em>指的是</em>闭包的选择是常量，而不是闭包本身的内容。</p>
+<p>这也意味着，如果您将闭包分配给两个不同的常量或变量，这两个常量或变量都引用相同的闭包。</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> alsoIncrementByTen <span class="operator">=</span> incrementByTen</span><br><span class="line">alsoIncrementByTen()</span><br><span class="line"><span class="comment">// returns a value of 50</span></span><br><span class="line"></span><br><span class="line">incrementByTen()</span><br><span class="line"><span class="comment">// returns a value of 60</span></span><br></pre></td></tr></table></figure>
+
+<p>上面的示例表明，调用<code>alsoIncrementByTen</code>与调用<code>incrementByTen</code>相同。由于它们都引用相同的闭包，因此它们都会增加并返回相同的运行总数。</p>
+<h2 id="逃避关闭"><a href="#逃避关闭" class="headerlink" title="逃避关闭"></a>逃避关闭</h2><p>当闭包作为参数传递给函数时，闭包被称为<em>转义</em>函数，但在函数返回后调用闭包。当您声明一个以闭包作为其参数之一的函数时，您可以在参数类型之前编写<code>@escaping</code>，以指示允许闭包转义。</p>
+<p>闭包可以转义的一种方法是存储在函数之外定义的变量中。例如，许多启动异步操作的函数将闭包参数作为完成处理程序。该函数在开始操作后返回，但在操作完成之前不会调用闭包——闭包需要转义，以便稍后调用。例如：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> completionHandlers: [() -&gt; <span class="type">Void</span>] <span class="operator">=</span> []</span><br><span class="line"><span class="keyword">func</span> <span class="title function_">someFunctionWithEscapingClosure</span>(<span class="params">completionHandler</span>: <span class="keyword">@escaping</span> () -&gt; <span class="type">Void</span>) &#123;</span><br><span class="line">   completionHandlers.append(completionHandler)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><code>someFunctionWithEscapingClosure(_:)</code>函数以闭包为参数，并将其添加到函数之外声明的数组中。如果您没有用<code>@escaping</code>标记此函数的参数，您将收到编译时错误。</p>
+<p>如果<code>self</code>引用类的实例，则引用<code>self</code>的转义闭包需要特殊考虑。在逃逸闭合中捕获<code>self</code>很容易意外地创建一个强大的参考周期。有关参考周期的信息，请参阅<a target="_blank" rel="noopener" href="https://docs.swift.org/swift-book/LanguageGuide/AutomaticReferenceCounting.html">自动参考计数</a>。</p>
+<p>通常，闭包通过在闭包正文中使用变量来隐式捕获变量，但在这种情况下，您需要显式变量。如果您想捕获<code>self</code>，请在使用它时显式写入<code>self</code>，或将<code>self</code>包含在闭包的捕获列表中。写<code>self</code>明确可以让您表达自己的意图，并提醒您确认没有参考周期。例如，在下面的代码中，传递给<code>someFunctionWithEscapingClosure(_:)</code>的闭包显式引用<code>self</code>显式。相比之下，传递给<code>someFunctionWithNonescapingClosure(_:)</code>的闭包是一个不可转义闭包，这意味着它可以隐式引用<code>self</code>。</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">func</span> <span class="title function_">someFunctionWithNonescapingClosure</span>(<span class="params">closure</span>: () -&gt; <span class="type">Void</span>) &#123;</span><br><span class="line">   closure()</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">SomeClass</span> &#123;</span><br><span class="line">   <span class="keyword">var</span> x <span class="operator">=</span> <span class="number">10</span></span><br><span class="line">   <span class="keyword">func</span> <span class="title function_">doSomething</span>() &#123;</span><br><span class="line">       someFunctionWithEscapingClosure &#123; <span class="keyword">self</span>.x <span class="operator">=</span> <span class="number">100</span> &#125;</span><br><span class="line">       someFunctionWithNonescapingClosure &#123; x <span class="operator">=</span> <span class="number">200</span> &#125;</span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> instance <span class="operator">=</span> <span class="type">SomeClass</span>()</span><br><span class="line">instance.doSomething()</span><br><span class="line"><span class="built_in">print</span>(instance.x)</span><br><span class="line"><span class="comment">// Prints &quot;200&quot;</span></span><br><span class="line"></span><br><span class="line">completionHandlers.first<span class="operator">?</span>()</span><br><span class="line"><span class="built_in">print</span>(instance.x)</span><br><span class="line"><span class="comment">// Prints &quot;100&quot;</span></span><br></pre></td></tr></table></figure>
+
+
+
+<p>以下是<code>doSomething()</code>的一个版本，通过将其包含在闭包的捕获列表中来捕获<code>self</code>，然后隐含地引用<code>self</code>：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">SomeOtherClass</span> &#123;</span><br><span class="line">   <span class="keyword">var</span> x <span class="operator">=</span> <span class="number">10</span></span><br><span class="line">   <span class="keyword">func</span> <span class="title function_">doSomething</span>() &#123;</span><br><span class="line">       someFunctionWithEscapingClosure &#123; [<span class="keyword">self</span>] <span class="keyword">in</span> x <span class="operator">=</span> <span class="number">100</span> &#125;</span><br><span class="line">       someFunctionWithNonescapingClosure &#123; x <span class="operator">=</span> <span class="number">200</span> &#125;</span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>如果<code>self</code>是结构或枚举的实例，您可以始终隐式引用<code>self</code>。然而，当<code>self</code>是结构或枚举的实例时，转义闭包无法捕获对<code>self</code>的可变引用。结构和枚举不允许共享可变性，正如<a target="_blank" rel="noopener" href="https://docs.swift.org/swift-book/LanguageGuide/ClassesAndStructures.html#ID88">结构和枚举是值类型</a>中讨论的那样。</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">struct</span> <span class="title class_">SomeStruct</span> &#123;</span><br><span class="line">   <span class="keyword">var</span> x <span class="operator">=</span> <span class="number">10</span></span><br><span class="line">   <span class="keyword">mutating</span> <span class="keyword">func</span> <span class="title function_">doSomething</span>() &#123;</span><br><span class="line">       someFunctionWithNonescapingClosure &#123; x <span class="operator">=</span> <span class="number">200</span> &#125;  <span class="comment">// Ok</span></span><br><span class="line">       someFunctionWithEscapingClosure &#123; x <span class="operator">=</span> <span class="number">100</span> &#125;     <span class="comment">// Error</span></span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>上面示例中对<code>someFunctionWithEscapingClosure</code>函数的调用是一个错误，因为它位于突变方法中，因此<code>self</code>是可变的。这违反了规逃逸闭包不能捕获结构对<code>self</code>的可变引用的规则。</p>
+<h2 id="自动关闭"><a href="#自动关闭" class="headerlink" title="自动关闭"></a>自动关闭</h2><p><em>自动闭包</em>是自动创建的闭包，用于包装作为参数传递给函数的表达式。它不需要任何参数，当调用它时，它会返回包裹在里面的表达式的值。这种语法便利性允许您通过编写正态表达式而不是显式闭包来省略函数参数周围的大括号。</p>
+<p>通常<em>调用</em>带有自动闭包的函数，但<em>实现</em>这类函数并不常见。例如，<code>assert(condition:message:file:line:)</code>函数的<code>condition</code>和<code>message</code>参数接受一个自动闭包;它的“condition”参数仅在调试版本中计算，而它的“message”参数仅在“condition”为“false”时计算。</p>
+<p>自动关闭允许您延迟评估，因为在您调用关闭之前，内部代码不会运行。延迟评估对于具有副作用或计算成本的代码非常有用，因为它允许您控制代码何时进行评估。以下代码显示了关闭如何延迟评估。</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> customersInLine <span class="operator">=</span> [<span class="string">&quot;Chris&quot;</span>, <span class="string">&quot;Alex&quot;</span>, <span class="string">&quot;Ewa&quot;</span>, <span class="string">&quot;Barry&quot;</span>, <span class="string">&quot;Daniella&quot;</span>]</span><br><span class="line"><span class="built_in">print</span>(customersInLine.count)</span><br><span class="line"><span class="comment">// Prints &quot;5&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> customerProvider <span class="operator">=</span> &#123; customersInLine.remove(at: <span class="number">0</span>) &#125;</span><br><span class="line"><span class="built_in">print</span>(customersInLine.count)</span><br><span class="line"><span class="comment">// Prints &quot;5&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;Now serving <span class="subst">\(customerProvider())</span>!&quot;</span>)</span><br><span class="line"><span class="comment">// Prints &quot;Now serving Chris!&quot;</span></span><br><span class="line"><span class="built_in">print</span>(customersInLine.count)</span><br><span class="line"><span class="comment">// Prints &quot;4&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>即使闭包内的代码删除了<code>customersInLine</code>数组的第一个元素，但在实际调用闭包之前，数组元素也不会被删除。如果从未调用闭包，则永远不会计算闭包内的表达式，这意味着永远不会删除数组元素。请注意，<code>customerProvider</code>的类型不是<code>String</code>，而是<code>()-&gt;String</code>——一个没有返回字符串的参数的函数。</p>
+<p>当您将闭包作为参数传递给函数时，您将获得相同的延迟评估行为。</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// customersInLine is [&quot;Alex&quot;, &quot;Ewa&quot;, &quot;Barry&quot;, &quot;Daniella&quot;]</span></span><br><span class="line"><span class="keyword">func</span> <span class="title function_">serve</span>(<span class="params">customer</span> <span class="params">customerProvider</span>: () -&gt; <span class="type">String</span>) &#123;</span><br><span class="line">   <span class="built_in">print</span>(<span class="string">&quot;Now serving <span class="subst">\(customerProvider())</span>!&quot;</span>)</span><br><span class="line">&#125;</span><br><span class="line">serve(customer: &#123; customersInLine.remove(at: <span class="number">0</span>) &#125; )</span><br><span class="line"><span class="comment">// Prints &quot;Now serving Alex!&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>上面清单中的’ serve(customer:) ‘函数接受一个显式的闭包，该闭包返回客户的名字。下面的’ serve(customer:) ‘版本执行了相同的操作，但它没有采用显式闭包，而是通过使用’ @autoclosure ‘属性标记其参数的类型来接受一个自动闭包。现在你可以调用这个函数，就好像它有一个’ String ‘参数而不是一个闭包一样。参数会自动转换为闭包，因为’ customerProvider ‘参数的类型是用’ @autoclosure ‘属性标记的。</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// customersInLine is [&quot;Ewa&quot;, &quot;Barry&quot;, &quot;Daniella&quot;]</span></span><br><span class="line"><span class="keyword">func</span> <span class="title function_">serve</span>(<span class="params">customer</span> <span class="params">customerProvider</span>: <span class="keyword">@autoclosure</span> () -&gt; <span class="type">String</span>) &#123;</span><br><span class="line">   <span class="built_in">print</span>(<span class="string">&quot;Now serving <span class="subst">\(customerProvider())</span>!&quot;</span>)</span><br><span class="line">&#125;</span><br><span class="line">serve(customer: customersInLine.remove(at: <span class="number">0</span>))</span><br><span class="line"><span class="comment">// Prints &quot;Now serving Ewa!&quot;</span></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>注意</p>
+<p>过度使用自动关闭可能会使您的代码难以理解。上下文和函数名称应明确表示正在推迟评估。</p>
+</blockquote>
+<p>如果您想要一个允许转义的自动关闭，请使用<code>@autoclosure</code>和<code>@escaping</code>属性。<code>@escaping</code>属性在上文的<a target="_blank" rel="noopener" href="https://docs.swift.org/swift-book/LanguageGuide/Closures.html#ID546">“逃避关闭”</a>中进行了描述。</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// customersInLine is [&quot;Barry&quot;, &quot;Daniella&quot;]</span></span><br><span class="line"><span class="keyword">var</span> customerProviders: [() -&gt; <span class="type">String</span>] <span class="operator">=</span> []</span><br><span class="line"><span class="keyword">func</span> <span class="title function_">collectCustomerProviders</span>(<span class="keyword">_</span> <span class="params">customerProvider</span>: <span class="keyword">@autoclosure</span> <span class="keyword">@escaping</span> () -&gt; <span class="type">String</span>) &#123;</span><br><span class="line">   customerProviders.append(customerProvider)</span><br><span class="line">&#125;</span><br><span class="line">collectCustomerProviders(customersInLine.remove(at: <span class="number">0</span>))</span><br><span class="line">collectCustomerProviders(customersInLine.remove(at: <span class="number">0</span>))</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;Collected <span class="subst">\(customerProviders.count)</span> closures.&quot;</span>)</span><br><span class="line"><span class="comment">// Prints &quot;Collected 2 closures.&quot;</span></span><br><span class="line"><span class="keyword">for</span> customerProvider <span class="keyword">in</span> customerProviders &#123;</span><br><span class="line">   <span class="built_in">print</span>(<span class="string">&quot;Now serving <span class="subst">\(customerProvider())</span>!&quot;</span>)</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// Prints &quot;Now serving Barry!&quot;</span></span><br><span class="line"><span class="comment">// Prints &quot;Now serving Daniella!&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>在上面的代码中，<code>collectCustomerProviders(_:)</code>函数将闭包附加到<code>customerProviders</code>数组中，而不是将传递给它的闭包作为其<code>customerProvider</code>参数。数组声明在函数范围之外，这意味着数组中的闭包可以在函数返回后执行。因此，必须允许<code>customerProvider</code>参数的值转义函数的范围。</p>
+
+      
+    </div>
+    <div class="article-footer">
+      <blockquote class="mt-2x">
+  <ul class="post-copyright list-unstyled">
+    
+    <li class="post-copyright-link hidden-xs">
+      <strong>本文链接：</strong>
+      <a href="https://guoshunfa.com/2022/07/Swift%E5%9F%BA%E7%A1%80-%E5%B5%8C%E5%A5%97/" title="Swift基础 嵌套" target="_blank" rel="external">https://guoshunfa.com/2022/07/Swift基础-嵌套/</a>
+    </li>
+    
+    <li class="post-copyright-license">
+      <strong>版权声明： </strong> 本博客所有文章除特别声明外，均采用 <a href="http://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank" rel="external">CC BY 4.0 CN协议</a> 许可协议。转载请注明出处！
+    </li>
+  </ul>
+</blockquote>
+
+
+<div class="panel panel-default panel-badger">
+  <div class="panel-body">
+    <figure class="media">
+      <div class="media-left">
+        <a href="https://github.com/guoshunfa" target="_blank" class="img-burn thumb-sm visible-lg">
+          <img src="/images/avatar.jpg" class="img-rounded w-full" alt="">
+        </a>
+      </div>
+      <div class="media-body">
+        <h3 class="media-heading"><a href="https://github.com/guoshunfa" target="_blank"><span class="text-dark">郭顺发</span><small class="ml-1x">创业中......</small></a></h3>
+        <div>承接：小程序开发、APP开发、网站开发、爬虫开发</div>
+      </div>
+    </figure>
+  </div>
+</div>
+
+
+    </div>
+  </article>
+  
+    
+  <section id="comments">
+  	
+           
+    
+  </section>
+
+
+  
+</div>
+
+  <nav class="bar bar-footer clearfix" data-stick-bottom>
+  <div class="bar-inner">
+  
+  <ul class="pager pull-left">
+    
+    <li class="prev">
+      <a href="/2022/07/Swift%E5%9F%BA%E7%A1%80-%E5%B1%9E%E6%80%A7/" title="Swift基础 属性"><i class="icon icon-angle-left" aria-hidden="true"></i><span>&nbsp;&nbsp;上一篇</span></a>
+    </li>
+    
+    
+    <li class="next">
+      <a href="/2022/07/Swift%E5%9F%BA%E7%A1%80-%E5%B5%8C%E5%A5%97%E7%B1%BB%E5%9E%8B/" title="Swift基础 嵌套类型"><span>下一篇&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
+    </li>
+    
+    
+  </ul>
+  
+  
+  
+  <div class="bar-right">
+    
+    <div class="share-component" data-sites="weibo,qq,wechat,facebook,twitter" data-mobile-sites="weibo,qq,qzone"></div>
+    
+  </div>
+  </div>
+</nav>
+  
+
+
+</main>
+
+  <footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
+	
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/guoshunfa" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="https://gitee.com/guoshunfa" target="_blank" title="Gitee" data-toggle=tooltip data-placement=top><i class="icon icon-gitee"></i></a></li>
+        
+        <li><a href="https://juejin.cn/user/166781500267015" target="_blank" title="Juejin" data-toggle=tooltip data-placement=top><i class="icon icon-juejin"></i></a></li>
+        
+        <li><a href="https://cloud.tencent.com/developer/user/7784141" target="_blank" title="Code" data-toggle=tooltip data-placement=top><i class="icon icon-code"></i></a></li>
+        
+        <li><a href="/atom.xml" target="_blank" title="Rss" data-toggle=tooltip data-placement=top><i class="icon icon-rss"></i></a></li>
+        
+    </ul>
+
+    <div class="copyright">
+    	
+        &copy; 2024 guoshunfa
+        
+        <!-- <div class="publishby">
+        	Theme by <a href="https://github.com/cofess" target="_blank"> cofess </a>base on <a href="https://github.com/cofess/hexo-theme-pure" target="_blank">pure</a>.
+        </div> -->
+    </div>
+</footer>
+  <script src="//cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
+<script>
+window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
+</script>
+
+<script src="/js/plugin.min.js"></script>
+
+
+<script src="/js/application.js"></script>
+
+
+    <script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(未命名)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+
+<script src="/js/insight.js"></script>
+
+
+
+    <script>
+(function ($) {
+    $('.search-form').on('submit', function (e) {
+        var keyword = $('.search-form-input[name="wd"]').val();
+        window.location = 'https://www.baidu.com/s?wd=site:guoshunfa.com ' + keyword;
+        return false;
+    });
+})(jQuery);
+</script>
+
+
+
+
+   
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+   
+    
+  <!-- <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css"> -->
+  <script src="//cdn.jsdelivr.net/npm/gitalk@1.7.2/dist/gitalk.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/blueimp-md5@2.10.0/js/md5.min.js"></script>
+  <script type="text/javascript">
+  var gitalk = new Gitalk({
+    clientID: '328529f408a5d1041fe1',
+    clientSecret: '43872fab04fe0accb98439ac77ff71ff81f7b9dd',
+    repo: 'guoshunfa-comment',
+    owner: 'guoshunfa',
+    admin: ['guoshunfa'],
+    id: md5(location.pathname),
+    distractionFreeMode: true,
+    language: 'zh-CN',
+    enableHotKey: 'true'
+  })
+  gitalk.render('comments')
+  </script>
+      
+
+
+
+  <script src="//cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.3.5/dist/jquery.fancybox.min.js"></script>
+  <script>
+  //利用 FancyBox 实现点击图片放大
+  $(document).ready(function() {
+    $('article img').not('[hidden]').not('.panel-body img').each(function() {
+      var $image = $(this);
+      var imageCaption = $image.attr('alt');
+      var $imageWrapLink = $image.parent('a');
+      if ($imageWrapLink.length < 1) {
+        var src = this.getAttribute('src');
+        var idx = src.lastIndexOf('?');
+        if (idx != -1) {
+          src = src.substring(0, idx);
+        }
+        $imageWrapLink = $image.wrap('<a href="' + src + '"></a>').parent('a');
+      }
+      $imageWrapLink.attr('data-fancybox', 'images');
+      if (imageCaption) {
+        $imageWrapLink.attr('data-caption', imageCaption);
+      }
+    });
+    $().fancybox({
+      selector: '[data-fancybox="images"]',
+      hash: false,
+      loop: false,
+    });
+  });
+  </script>
+
+
+
+
+
+</body>
+</html>
